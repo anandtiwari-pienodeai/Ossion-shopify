@@ -1,0 +1,220 @@
+<div
+  class="ossian-newsletter section"
+  style="background: #1e3a5f; padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="page-width">
+    <div class="ossian-newsletter__container">
+      <div class="ossian-newsletter__icon" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#bedbff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      </div>
+
+      {% if section.settings.heading != blank %}
+        <h2 class="ossian-newsletter__heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+
+      {% if section.settings.subheading != blank %}
+        <p class="ossian-newsletter__subheading">{{ section.settings.subheading }}</p>
+      {% endif %}
+
+      {%- form 'customer', id: 'ossian-newsletter-form', class: 'ossian-newsletter__form' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <div class="ossian-newsletter__input-group">
+          <label for="ossian-newsletter-email" class="visually-hidden">
+            {{- section.settings.placeholder | default: 'Enter your email' -}}
+          </label>
+          <input
+            type="email"
+            name="contact[email]"
+            id="ossian-newsletter-email"
+            class="ossian-newsletter__input"
+            placeholder="{{ section.settings.placeholder | default: 'Enter your email' }}"
+            required
+            autocomplete="email"
+          >
+          <button type="submit" class="ossian-newsletter__btn">
+            {{- section.settings.button_label | default: 'Subscribe' -}}
+          </button>
+        </div>
+      {%- endform -%}
+
+      {% if section.settings.privacy_note != blank %}
+        <p class="ossian-newsletter__privacy">{{ section.settings.privacy_note }}</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .ossian-newsletter__container {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .ossian-newsletter__icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ossian-newsletter__heading {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .ossian-newsletter__subheading {
+    font-size: 1rem;
+    color: #bedbff;
+    margin: 0;
+    max-width: 520px;
+    line-height: 1.6;
+  }
+
+  .ossian-newsletter__form {
+    width: 100%;
+    max-width: 448px;
+  }
+
+  .ossian-newsletter__input-group {
+    display: flex;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .ossian-newsletter__input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 16px 20px;
+    font-size: 1rem;
+    color: #111827;
+    background: transparent;
+    min-width: 0;
+  }
+
+  .ossian-newsletter__input::placeholder {
+    color: #9ca3af;
+  }
+
+  .ossian-newsletter__btn {
+    background: #1e3a5f;
+    color: #fff;
+    border: none;
+    padding: 16px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease;
+  }
+
+  .ossian-newsletter__btn:hover {
+    background: #152d4a;
+  }
+
+  .ossian-newsletter__privacy {
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.55);
+    margin: 0;
+  }
+
+  @media screen and (max-width: 499px) {
+    .ossian-newsletter__heading {
+      font-size: 1.5rem;
+    }
+
+    .ossian-newsletter__input-group {
+      flex-direction: column;
+      border-radius: 10px;
+      overflow: visible;
+      background: transparent;
+      gap: 12px;
+    }
+
+    .ossian-newsletter__input {
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .ossian-newsletter__btn {
+      border-radius: 10px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Join Our Community"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Get exclusive offers, expert tips, and be the first to discover new OSSION products."
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Email placeholder",
+      "default": "Enter your email"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "text",
+      "id": "privacy_note",
+      "label": "Privacy note",
+      "default": "We respect your privacy. Unsubscribe anytime."
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
+{% endschema %}
