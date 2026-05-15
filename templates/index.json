@@ -68,8 +68,16 @@
           "type": "category",
           "settings": {
             "image": "shopify://shop_images/Ossion2.jpg",
+            "title": "Category Name-1",
+            "link": "shopify://products/ossion-backwash-conditioner"
+          }
+        },
+        "category_A6GCDL": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Ossion2.jpg",
             "title": "Category Name",
-            "link": ""
+            "link": "shopify://products/ossion-heat-protector"
           }
         },
         "category_EPww6Y": {
@@ -99,6 +107,7 @@
       },
       "block_order": [
         "category_F6FNLp",
+        "category_A6GCDL",
         "category_EPww6Y",
         "category_TT8nWg",
         "category_cmcM89"
