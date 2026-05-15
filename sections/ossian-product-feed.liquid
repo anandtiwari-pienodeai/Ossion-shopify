@@ -1,0 +1,315 @@
+<div
+  class="ossian-product-feed section color-{{ section.settings.color_scheme }}"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="page-width">
+    {% if section.settings.heading != blank or section.settings.subheading != blank %}
+      <div class="ossian-product-feed__header">
+        {% if section.settings.heading != blank %}
+          <h2 class="ossian-product-feed__title">{{ section.settings.heading }}</h2>
+        {% endif %}
+        {% if section.settings.subheading != blank %}
+          <p class="ossian-product-feed__subtitle">{{ section.settings.subheading }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="ossian-product-feed__scroll-area">
+    <div class="ossian-product-feed__track">
+      {% for block in section.blocks %}
+        <a href="{{ block.settings.product_url }}" class="ossian-product-feed__card" {{ block.shopify_attributes }}>
+          <div class="ossian-product-feed__image-wrap">
+            {% if block.settings.image != blank %}
+              {{ block.settings.image | image_url: width: 520 | image_tag: loading: 'lazy', class: 'ossian-product-feed__image', alt: block.settings.title }}
+            {% else %}
+              <div class="ossian-product-feed__image-placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
+            {% endif %}
+            <div class="ossian-product-feed__overlay" aria-hidden="true"></div>
+            {% if block.settings.tag != blank %}
+              <div class="ossian-product-feed__tag">{{ block.settings.tag }}</div>
+            {% endif %}
+            <div class="ossian-product-feed__card-info">
+              <p class="ossian-product-feed__product-title">{{ block.settings.title }}</p>
+              <div class="ossian-product-feed__meta">
+                <span class="ossian-product-feed__price">{{ block.settings.price }}</span>
+                {% if block.settings.rating != blank %}
+                  <div class="ossian-product-feed__rating">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="0.5" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon></svg>
+                    <span>{{ block.settings.rating }}</span>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% if section.settings.view_all_label != blank and section.settings.view_all_url != blank %}
+    <div class="ossian-product-feed__footer">
+      <a href="{{ section.settings.view_all_url }}" class="ossian-product-feed__view-all">
+        {{ section.settings.view_all_label }}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </a>
+    </div>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .ossian-product-feed__header {
+    text-align: center;
+    margin-bottom: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .ossian-product-feed__title {
+    font-size: 3rem;
+    font-weight: 500;
+    margin: 0;
+    color: #1e3a5f;
+    letter-spacing: 0.005em;
+  }
+
+  .ossian-product-feed__subtitle {
+    font-size: 1.125rem;
+    color: #4a5565;
+    margin: 0;
+  }
+
+  @media screen and (max-width: 499px) {
+    .ossian-product-feed__title { font-size: 2rem; }
+  }
+
+  .ossian-product-feed__scroll-area {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0 32px;
+  }
+
+  .ossian-product-feed__scroll-area::-webkit-scrollbar { display: none; }
+
+  .ossian-product-feed__track {
+    display: flex;
+    gap: 16px;
+    width: max-content;
+    padding-bottom: 8px;
+  }
+
+  .ossian-product-feed__card {
+    display: block;
+    text-decoration: none;
+    flex-shrink: 0;
+    width: 260px;
+  }
+
+  .ossian-product-feed__image-wrap {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    aspect-ratio: 260 / 462;
+  }
+
+  .ossian-product-feed__image,
+  .ossian-product-feed__image-placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s;
+  }
+
+  .ossian-product-feed__card:hover .ossian-product-feed__image {
+    transform: scale(1.04);
+  }
+
+  .ossian-product-feed__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%);
+  }
+
+  .ossian-product-feed__tag {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 999px;
+  }
+
+  .ossian-product-feed__card-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ossian-product-feed__product-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ossian-product-feed__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .ossian-product-feed__price {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .ossian-product-feed__rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: #fff;
+  }
+
+  .ossian-product-feed__footer {
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .ossian-product-feed__view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1e3a5f;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+
+  .ossian-product-feed__view-all:hover { border-color: #1e3a5f; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product Feed",
+  "tag": "section",
+  "class": "section-wrapper",
+  "max_blocks": 10,
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "Tag label (e.g. Trending)",
+          "default": "Trending"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Product Title",
+          "default": "Product Name"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Price",
+          "default": "₹1999"
+        },
+        {
+          "type": "text",
+          "id": "rating",
+          "label": "Rating (e.g. 4.8)",
+          "default": "4.8"
+        },
+        {
+          "type": "url",
+          "id": "product_url",
+          "label": "Product URL"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "#OssionFeed"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Discover our complete range of professional hair care solutions"
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "View all label",
+      "default": "View All Products"
+    },
+    {
+      "type": "url",
+      "id": "view_all_url",
+      "label": "View all URL"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Feed"
+    }
+  ]
+}
+{% endschema %}

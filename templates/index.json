@@ -11,10 +11,11 @@
   "sections": {
     "hero_jVaWmY": {
       "type": "hero",
+      "disabled": true,
       "name": "t:names.hero",
       "settings": {
         "media_type_1": "image",
-        "image_1": "shopify://shop_images/WhatsApp_Image_2026-05-01_at_02.48.06.jpg",
+        "image_1": "shopify://shop_images/something-carzy-banner-for-ossion-brand.png",
         "media_type_2": "image",
         "stack_media_on_mobile": false,
         "custom_mobile_media": false,
@@ -44,527 +45,300 @@
         "padding-block-end": 72
       }
     },
-    "ossian_benefits": {
-      "type": "ossian-benefits",
-      "blocks": {
-        "benefit_1": {
-          "type": "benefit",
-          "settings": {
-            "icon": "truck",
-            "heading": "Free Shipping",
-            "subtext": "Orders over $100"
-          }
-        },
-        "benefit_2": {
-          "type": "benefit",
-          "settings": {
-            "icon": "shield-check",
-            "heading": "100% Authentic",
-            "subtext": "Certified products"
-          }
-        },
-        "benefit_3": {
-          "type": "benefit",
-          "settings": {
-            "icon": "headphones",
-            "heading": "Expert Support",
-            "subtext": "24/7 assistance"
-          }
-        },
-        "benefit_4": {
-          "type": "benefit",
-          "settings": {
-            "icon": "award",
-            "heading": "Professional Grade",
-            "subtext": "Salon quality"
-          }
-        }
-      },
-      "block_order": [
-        "benefit_1",
-        "benefit_2",
-        "benefit_3",
-        "benefit_4"
-      ],
-      "name": "Benefits Bar",
+    "ossian_hero_banner_rjjMTG": {
+      "type": "ossian-hero-banner",
+      "name": "Hero Banner",
       "settings": {
-        "color_scheme": "scheme-1",
-        "padding_top": 48,
-        "padding_bottom": 48
-      }
-    },
-    "collection_list_EQGYKr": {
-      "type": "collection-list",
-      "blocks": {
-        "group_dKg6KG": {
-          "type": "group",
-          "name": "Header",
-          "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "center",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "link": "",
-            "open_in_new_tab": false,
-            "placeholder": "",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "text_jwPVpj": {
-              "type": "text",
-              "name": "Section Header",
-              "settings": {
-                "text": "<h2>Shop by Category</h2><p>Discover our complete range of professional hair care products</p>",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "center",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 16,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "text_jwPVpj"
-          ]
-        },
-        "static-collection-card": {
-          "type": "_collection-card",
-          "name": "t:names.collection_card",
-          "static": true,
-          "settings": {
-            "placement": "on_image",
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "flex-end",
-            "collection_card_gap": 8,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0
-          },
-          "blocks": {
-            "collection_title_hkQ9ky": {
-              "type": "collection-title",
-              "name": "t:names.collection_title",
-              "settings": {
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": true,
-                "background_color": "#ffffff",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 4,
-                "padding-inline-start": 8,
-                "padding-inline-end": 8
-              },
-              "blocks": {}
-            },
-            "collection-card-image": {
-              "type": "_collection-card-image",
-              "name": "t:names.collection_card_image",
-              "static": true,
-              "settings": {
-                "image_ratio": "portrait",
-                "toggle_overlay": true,
-                "overlay_color": "#00000033",
-                "overlay_style": "gradient",
-                "gradient_direction": "to top",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "collection_title_hkQ9ky"
-          ]
-        }
-      },
-      "block_order": [
-        "group_dKg6KG"
-      ],
-      "name": "Shop by Category",
-      "settings": {
-        "collection_list": [],
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "columns": 4,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 24,
-        "bento_gap": 8,
-        "rows_gap": 8,
-        "max_collections": 4,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
-        "gap": 16,
-        "color_scheme": "scheme-1",
-        "padding-block-start": 64,
-        "padding-block-end": 64
-      }
-    },
-    "product_list_fa6P9H": {
-      "type": "product-list",
-      "blocks": {
-        "static-header": {
-          "type": "_product-list-content",
-          "name": "Header",
-          "static": true,
-          "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": false,
-            "horizontal_alignment": "space-between",
-            "vertical_alignment": "center",
-            "align_baseline": true,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_list_text_YFtzcL": {
-              "type": "_product-list-text",
-              "name": "Collection title",
-              "settings": {
-                "text": "<h2>Featured Products</h2><p>Our most popular professional solutions</p>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_list_button_MWeP9V": {
-              "type": "_product-list-button",
-              "name": "t:names.product_list_button",
-              "settings": {
-                "label": "View All",
-                "open_in_new_tab": false,
-                "style_class": "link",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_list_text_YFtzcL",
-            "product_list_button_MWeP9V"
-          ]
-        },
-        "static-product-card": {
-          "type": "_product-card",
-          "name": "t:names.product_card",
-          "static": true,
-          "settings": {
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "solid",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 8,
-            "padding-block-start": 10,
-            "padding-block-end": 10,
-            "padding-inline-start": 10,
-            "padding-inline-end": 10
-          },
-          "blocks": {
-            "product_card_gallery_677WP3": {
-              "type": "_product-card-gallery",
-              "name": "t:names.product_card_media",
-              "settings": {
-                "image_ratio": "adapt",
-                "border": "none",
-                "border_width": 0,
-                "border_opacity": 100,
-                "border_radius": 8,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_YXxMTj": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 8,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "price_JQzVV4": {
-              "type": "price",
-              "name": "t:names.product_price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "color": "var(--color-foreground)",
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_card_gallery_677WP3",
-            "product_title_YXxMTj",
-            "price_JQzVV4"
-          ]
-        }
-      },
-      "name": "Featured Products",
-      "settings": {
-        "collection": "all",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "max_products": 4,
-        "columns": 4,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 24,
-        "rows_gap": 24,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
-        "horizontal_alignment": "flex-start",
-        "gap": 28,
-        "color_scheme": "scheme-1",
-        "padding-block-start": 64,
-        "padding-block-end": 64
-      }
-    },
-    "ossian_features": {
-      "type": "ossian-features",
-      "blocks": {
-        "feature_1": {
-          "type": "feature",
-          "settings": {
-            "icon": "leaf",
-            "heading": "Vegan & Cruelty-Free",
-            "text": "Ethically formulated without animal testing or ingredients, because beauty should never come at a cost."
-          }
-        },
-        "feature_2": {
-          "type": "feature",
-          "settings": {
-            "icon": "scissors",
-            "heading": "Salon Professional",
-            "text": "Professional-grade formulas trusted by stylists and salons worldwide for exceptional, consistent results."
-          }
-        },
-        "feature_3": {
-          "type": "feature",
-          "settings": {
-            "icon": "wave",
-            "heading": "Marine Technology",
-            "text": "Ocean-sourced ingredients provide deep nourishment and lasting results that transform hair health."
-          }
-        },
-        "feature_4": {
-          "type": "feature",
-          "settings": {
-            "icon": "droplet",
-            "heading": "Gentle Formulas",
-            "text": "Sulfate-free, paraben-free, and petrolatum-free products that care for your hair and the environment."
-          }
-        }
-      },
-      "block_order": [
-        "feature_1",
-        "feature_2",
-        "feature_3",
-        "feature_4"
-      ],
-      "name": "Why Choose OSSION",
-      "settings": {
-        "heading": "Why Choose OSSION?",
-        "subheading": "Experience the power of ocean-inspired formulas designed by professionals, for professionals.",
-        "color_scheme": "scheme-1",
-        "padding_top": 64,
-        "padding_bottom": 64
-      }
-    },
-    "ossian_testimonials": {
-      "type": "ossian-testimonials",
-      "blocks": {
-        "testimonial_1": {
-          "type": "testimonial",
-          "settings": {
-            "quote": "The Chromatic Dream line gives me consistent, vibrant results every single time. My clients always leave the salon thrilled with the colour longevity.",
-            "name": "Maria Rodriguez",
-            "role": "Senior Colorist"
-          }
-        },
-        "testimonial_2": {
-          "type": "testimonial",
-          "settings": {
-            "quote": "OSSION's Nano Silk Protein has transformed our straightening services. The results are smoother, shinier, and last significantly longer than anything we've tried before.",
-            "name": "James Chen",
-            "role": "Salon Owner"
-          }
-        },
-        "testimonial_3": {
-          "type": "testimonial",
-          "settings": {
-            "quote": "Finally, a professional line that delivers salon-quality results at home too. My clients rave about how healthy their hair feels between appointments.",
-            "name": "Sophie Laurent",
-            "role": "Master Stylist"
-          }
-        }
-      },
-      "block_order": [
-        "testimonial_1",
-        "testimonial_2",
-        "testimonial_3"
-      ],
-      "disabled": true,
-      "name": "Testimonials",
-      "settings": {
-        "heading": "Loved by Professionals",
-        "subheading": "See what salon experts say about OSSION",
-        "color_scheme": "scheme-1",
-        "padding_top": 64,
-        "padding_bottom": 64
-      }
-    },
-    "ossian_newsletter": {
-      "type": "ossian-newsletter",
-      "name": "Newsletter",
-      "settings": {
-        "heading": "Join Our Community",
-        "subheading": "Get exclusive offers, expert tips, and be the first to discover new OSSION products.",
-        "placeholder": "Enter your email",
-        "button_label": "Subscribe",
-        "privacy_note": "We respect your privacy. Unsubscribe anytime.",
+        "badge": "✨ New Innovation",
+        "heading": "GO GLOW DE-TAN",
+        "subtext": "Kojic & Milk Illuminate formula that reveals your skin's natural radiance. Professional tan removal with visible results.",
+        "primary_button_label": "Shop Now",
+        "primary_button_url": "",
+        "secondary_button_label": "Learn More",
+        "secondary_button_url": "",
+        "image": "shopify://shop_images/Ossion2.jpg",
         "padding_top": 80,
         "padding_bottom": 80
+      }
+    },
+    "ossian_category_grid_fiGmAQ": {
+      "type": "ossian-category-grid",
+      "blocks": {
+        "category_F6FNLp": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Ossion2.jpg",
+            "title": "Category Name",
+            "link": ""
+          }
+        },
+        "category_EPww6Y": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Ossion1.webp",
+            "title": "Hair Color",
+            "link": ""
+          }
+        },
+        "category_TT8nWg": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Ossion2.jpg",
+            "title": "Lightening",
+            "link": ""
+          }
+        },
+        "category_cmcM89": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Ossian3.jpg",
+            "title": "Straightening",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "category_F6FNLp",
+        "category_EPww6Y",
+        "category_TT8nWg",
+        "category_cmcM89"
+      ],
+      "name": "Category Grid",
+      "settings": {
+        "heading": "Shop by Category",
+        "subheading": "Discover the perfect products for your hair care needs",
+        "color_scheme": "",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "ossian_featured_collection_jnxbBD": {
+      "type": "ossian-featured-collection",
+      "name": "Featured Collection",
+      "settings": {
+        "label": "Hair Color Collection",
+        "heading": "Vibrant Color, Lasting Shine",
+        "description": "Professional-grade hair color formulas for salon-quality results at home",
+        "bullet_1": "3 Products Available",
+        "bullet_2": "Professional Quality",
+        "button_label": "Shop Now",
+        "button_url": "",
+        "image": "shopify://shop_images/Ossion6.jpg",
+        "price_label": "Starting at",
+        "price": "₹1999",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "ossian_best_sellers_DUrf9w": {
+      "type": "ossian-best-sellers",
+      "blocks": {
+        "product_FpPVYH": {
+          "type": "product",
+          "settings": {
+            "image": "shopify://shop_images/Ossion2.jpg",
+            "title": "Product Name",
+            "price": "₹1999",
+            "rating": "4.8",
+            "product_url": ""
+          }
+        },
+        "product_dN3gaj": {
+          "type": "product",
+          "settings": {
+            "image": "shopify://shop_images/Ossion2.jpg",
+            "title": "Product Name",
+            "price": "₹1999",
+            "rating": "4.8",
+            "product_url": ""
+          }
+        },
+        "product_cGfJpk": {
+          "type": "product",
+          "settings": {
+            "image": "shopify://shop_images/Ossion6.jpg",
+            "title": "Product Name",
+            "price": "₹1999",
+            "rating": "4.8",
+            "product_url": ""
+          }
+        },
+        "product_9bTAHh": {
+          "type": "product",
+          "settings": {
+            "image": "shopify://shop_images/Ossian5.jpg",
+            "title": "Product Name",
+            "price": "₹1999",
+            "rating": "4.8",
+            "product_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "product_FpPVYH",
+        "product_dN3gaj",
+        "product_cGfJpk",
+        "product_9bTAHh"
+      ],
+      "name": "Best Sellers",
+      "settings": {
+        "heading": "Best Sellers",
+        "subheading": "Best sellers loved by professionals worldwide",
+        "collection": "",
+        "products_count": 4,
+        "color_scheme": "",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "ossian_product_feed_PA6fVk": {
+      "type": "ossian-product-feed",
+      "blocks": {
+        "product_t9f9VM": {
+          "type": "product",
+          "settings": {
+            "image": "shopify://shop_images/1_3e41f8d6-2c87-4691-9c7d-f9a43c86826d.jpg",
+            "tag": "Trending",
+            "title": "Product Name",
+            "price": "₹1999",
+            "rating": "4.8",
+            "product_url": ""
+          }
+        },
+        "product_FD7FPD": {
+          "type": "product",
+          "settings": {
+            "image": "shopify://shop_images/Ossion2.jpg",
+            "tag": "Trending",
+            "title": "Product Name",
+            "price": "₹1999",
+            "rating": "4.8",
+            "product_url": ""
+          }
+        },
+        "product_VRexXE": {
+          "type": "product",
+          "settings": {
+            "image": "shopify://shop_images/3_a52c00c8-7787-4bea-a7c8-4f58135272dc.jpg",
+            "tag": "Trending",
+            "title": "Product Name",
+            "price": "₹1999",
+            "rating": "4.8",
+            "product_url": ""
+          }
+        },
+        "product_fPHinM": {
+          "type": "product",
+          "settings": {
+            "image": "shopify://shop_images/Ossion2.jpg",
+            "tag": "Trending",
+            "title": "Product Name",
+            "price": "₹1999",
+            "rating": "4.8",
+            "product_url": ""
+          }
+        },
+        "product_raYRrL": {
+          "type": "product",
+          "settings": {
+            "image": "shopify://shop_images/Ossion6.jpg",
+            "tag": "Trending",
+            "title": "Product Name",
+            "price": "₹1999",
+            "rating": "4.8",
+            "product_url": ""
+          }
+        },
+        "product_Y68WPy": {
+          "type": "product",
+          "settings": {
+            "image": "shopify://shop_images/Ossion1.webp",
+            "tag": "Trending",
+            "title": "Product Name",
+            "price": "₹1999",
+            "rating": "4.8",
+            "product_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "product_t9f9VM",
+        "product_FD7FPD",
+        "product_VRexXE",
+        "product_fPHinM",
+        "product_raYRrL",
+        "product_Y68WPy"
+      ],
+      "name": "Product Feed",
+      "settings": {
+        "heading": "#OssionFeed",
+        "subheading": "Discover our complete range of professional hair care solutions",
+        "view_all_label": "View All Products",
+        "view_all_url": "",
+        "color_scheme": "",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "ossian_why_choose_XpkfUa": {
+      "type": "ossian-why-choose",
+      "blocks": {
+        "item_xgbynE": {
+          "type": "item",
+          "settings": {
+            "emoji": "🛡️",
+            "title": "Quality Guaranteed",
+            "description": "100% authentic professional products"
+          }
+        },
+        "item_bxE8Te": {
+          "type": "item",
+          "settings": {
+            "emoji": "🚚",
+            "title": "Free Shipping",
+            "description": "On orders over ₹4000"
+          }
+        },
+        "item_dehdqY": {
+          "type": "item",
+          "settings": {
+            "emoji": "🏆",
+            "title": "Award Winning",
+            "description": "Trusted by professionals worldwide"
+          }
+        },
+        "item_HwxbWd": {
+          "type": "item",
+          "settings": {
+            "emoji": "🎧",
+            "title": "24/7 Support",
+            "description": "Expert help when you need it"
+          }
+        }
+      },
+      "block_order": [
+        "item_xgbynE",
+        "item_bxE8Te",
+        "item_dehdqY",
+        "item_HwxbWd"
+      ],
+      "name": "Why Choose Us",
+      "settings": {
+        "heading": "Why Choose OSSION?",
+        "subheading": "Professional quality you can trust",
+        "color_scheme": "",
+        "padding_top": 64,
+        "padding_bottom": 64
       }
     }
   },
   "order": [
     "hero_jVaWmY",
-    "ossian_benefits",
-    "collection_list_EQGYKr",
-    "product_list_fa6P9H",
-    "ossian_features",
-    "ossian_testimonials",
-    "ossian_newsletter"
+    "ossian_hero_banner_rjjMTG",
+    "ossian_category_grid_fiGmAQ",
+    "ossian_featured_collection_jnxbBD",
+    "ossian_best_sellers_DUrf9w",
+    "ossian_product_feed_PA6fVk",
+    "ossian_why_choose_XpkfUa"
   ]
 }

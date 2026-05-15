@@ -1,0 +1,347 @@
+<div
+  class="ossian-best-sellers section color-{{ section.settings.color_scheme }}"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="page-width">
+    {% if section.settings.heading != blank or section.settings.subheading != blank %}
+      <div class="ossian-best-sellers__header">
+        {% if section.settings.heading != blank %}
+          <h2 class="ossian-best-sellers__title">{{ section.settings.heading }}</h2>
+        {% endif %}
+        {% if section.settings.subheading != blank %}
+          <p class="ossian-best-sellers__subtitle">{{ section.settings.subheading }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="ossian-best-sellers__grid">
+      {%- assign source_collection = collections[section.settings.collection] -%}
+      {% if source_collection != blank and source_collection.products.size > 0 %}
+        {% for product in source_collection.products limit: section.settings.products_count %}
+          <div class="ossian-best-sellers__card">
+            <a href="{{ product.url }}" class="ossian-best-sellers__image-link">
+              <div class="ossian-best-sellers__image-wrap">
+                {% if product.featured_image != blank %}
+                  {{ product.featured_image | image_url: width: 560 | image_tag: loading: 'lazy', class: 'ossian-best-sellers__image', alt: product.featured_image.alt }}
+                {% else %}
+                  <div class="ossian-best-sellers__image-placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
+                {% endif %}
+              </div>
+              {% if product.metafields.reviews.rating.value != blank %}
+                <div class="ossian-best-sellers__rating">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="0.5" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon></svg>
+                  <span>{{ product.metafields.reviews.rating.value }}</span>
+                </div>
+              {% endif %}
+            </a>
+            <div class="ossian-best-sellers__info">
+              <a href="{{ product.url }}" class="ossian-best-sellers__product-title">{{ product.title }}</a>
+              <div class="ossian-best-sellers__bottom">
+                <span class="ossian-best-sellers__price">{{ product.price | money }}</span>
+                {% form 'product', product, class: 'ossian-best-sellers__form' %}
+                  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                  <button
+                    type="submit"
+                    class="ossian-best-sellers__atc-btn"
+                    {% unless product.available %}disabled{% endunless %}
+                  >
+                    {% if product.available %}Add to Cart{% else %}Sold Out{% endif %}
+                  </button>
+                {% endform %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        {% for block in section.blocks %}
+          <div class="ossian-best-sellers__card" {{ block.shopify_attributes }}>
+            <a href="{{ block.settings.product_url }}" class="ossian-best-sellers__image-link">
+              <div class="ossian-best-sellers__image-wrap">
+                {% if block.settings.image != blank %}
+                  {{ block.settings.image | image_url: width: 560 | image_tag: loading: 'lazy', class: 'ossian-best-sellers__image', alt: block.settings.title }}
+                {% else %}
+                  <div class="ossian-best-sellers__image-placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
+                {% endif %}
+              </div>
+              {% if block.settings.rating != blank %}
+                <div class="ossian-best-sellers__rating">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="0.5" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon></svg>
+                  <span>{{ block.settings.rating }}</span>
+                </div>
+              {% endif %}
+            </a>
+            <div class="ossian-best-sellers__info">
+              <a href="{{ block.settings.product_url }}" class="ossian-best-sellers__product-title">{{ block.settings.title }}</a>
+              <div class="ossian-best-sellers__bottom">
+                <span class="ossian-best-sellers__price">{{ block.settings.price }}</span>
+                <a href="{{ block.settings.product_url }}" class="ossian-best-sellers__atc-btn">Add to Cart</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .ossian-best-sellers__header {
+    text-align: center;
+    margin-bottom: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .ossian-best-sellers__title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin: 0;
+    color: #101828;
+  }
+
+  .ossian-best-sellers__subtitle {
+    font-size: 1.125rem;
+    color: #4a5565;
+    margin: 0;
+  }
+
+  .ossian-best-sellers__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ossian-best-sellers__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 499px) {
+    .ossian-best-sellers__grid {
+      gap: 12px;
+    }
+    .ossian-best-sellers__title {
+      font-size: 1.75rem;
+    }
+  }
+
+  .ossian-best-sellers__card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ossian-best-sellers__card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.15);
+  }
+
+  .ossian-best-sellers__image-link {
+    position: relative;
+    display: block;
+    text-decoration: none;
+  }
+
+  .ossian-best-sellers__image-wrap {
+    aspect-ratio: 1 / 1;
+    background: #f3f4f6;
+    overflow: hidden;
+  }
+
+  .ossian-best-sellers__image,
+  .ossian-best-sellers__image-placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s;
+  }
+
+  .ossian-best-sellers__card:hover .ossian-best-sellers__image {
+    transform: scale(1.04);
+  }
+
+  .ossian-best-sellers__rating {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: #fff;
+    border-radius: 999px;
+    padding: 4px 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #0a0a0a;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  }
+
+  .ossian-best-sellers__info {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .ossian-best-sellers__product-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #101828;
+    line-height: 1.4;
+    text-decoration: none;
+    display: block;
+  }
+
+  .ossian-best-sellers__product-title:hover {
+    color: #1e3a5f;
+  }
+
+  .ossian-best-sellers__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    gap: 8px;
+  }
+
+  .ossian-best-sellers__price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e3a5f;
+    white-space: nowrap;
+  }
+
+  .ossian-best-sellers__form { display: contents; }
+
+  .ossian-best-sellers__atc-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #1e3a5f;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+
+  .ossian-best-sellers__atc-btn:hover { opacity: 0.85; }
+  .ossian-best-sellers__atc-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Best Sellers",
+  "tag": "section",
+  "class": "section-wrapper",
+  "max_blocks": 8,
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Product Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Product Title",
+          "default": "Product Name"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Price",
+          "default": "₹1999"
+        },
+        {
+          "type": "text",
+          "id": "rating",
+          "label": "Rating (e.g. 4.8)",
+          "default": "4.8"
+        },
+        {
+          "type": "url",
+          "id": "product_url",
+          "label": "Product URL"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section heading",
+      "default": "Best Sellers"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Section subheading",
+      "default": "Best sellers loved by professionals worldwide"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection (overrides manual blocks when set)"
+    },
+    {
+      "type": "range",
+      "id": "products_count",
+      "label": "Products to show (when using collection)",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "Best Sellers"
+    }
+  ]
+}
+{% endschema %}
