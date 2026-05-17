@@ -27,9 +27,8 @@ jobs:
         continue-on-error: true
 
       - name: Deploy theme to Shopify
-        run: |
-          shopify theme push \
-            --store t16izc-v5.myshopify.com \
-            --theme ${{ secrets.SHOPIFY_THEME_ID }} \
-            --password ${{ secrets.SHOPIFY_THEME_TOKEN }} \
-            --no-color
+        env:
+          SHOPIFY_STORE: t16izc-v5.myshopify.com
+          SHOPIFY_THEME_TOKEN: ${{ secrets.SHOPIFY_THEME_TOKEN }}
+          SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}
+        run: node .github/scripts/deploy.js
