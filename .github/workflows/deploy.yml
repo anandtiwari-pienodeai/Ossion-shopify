@@ -28,8 +28,10 @@ jobs:
           flags: '--fail-level error'
 
       - name: Deploy theme to Shopify
-        uses: tibor19/shopify-theme-deploy@v2
-        with:
-          store: t16izc-v5.myshopify.com
-          theme_token: ${{ secrets.SHOPIFY_THEME_TOKEN }}
-          theme_id: ${{ secrets.SHOPIFY_THEME_ID }}
+        env:
+          SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_THEME_TOKEN }}
+        run: |
+          shopify theme push \
+            --store t16izc-v5.myshopify.com \
+            --theme ${{ secrets.SHOPIFY_THEME_ID }} \
+            --no-color
