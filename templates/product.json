@@ -62,7 +62,7 @@
               "type": "text",
               "name": "Brand tag",
               "settings": {
-                "text": "<span class=\"pdp-vendor-tag\">by {{ closest.product.vendor }}</span>",
+                "text": "<p>by {{ closest.product.vendor }}</p>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
