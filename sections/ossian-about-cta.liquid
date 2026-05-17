@@ -1,0 +1,183 @@
+<div
+  class="ossian-about-cta-wrap"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="ossian-about-cta">
+    {% if section.settings.heading != blank %}
+      <h2 class="ossian-about-cta__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+    {% if section.settings.subtext != blank %}
+      <p class="ossian-about-cta__subtext">{{ section.settings.subtext }}</p>
+    {% endif %}
+    <div class="ossian-about-cta__actions">
+      {% if section.settings.primary_label != blank %}
+        <a href="{{ section.settings.primary_url }}" class="ossian-about-cta__btn ossian-about-cta__btn--primary">
+          {{ section.settings.primary_label }}
+        </a>
+      {% endif %}
+      {% if section.settings.secondary_label != blank %}
+        <a href="{{ section.settings.secondary_url }}" class="ossian-about-cta__btn ossian-about-cta__btn--secondary">
+          {{ section.settings.secondary_label }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .ossian-about-cta-wrap {
+    background: #f8fafc;
+  }
+
+  .ossian-about-cta {
+    max-width: 832px;
+    margin: 0 auto;
+    padding: 64px 48px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 32px rgba(30, 58, 95, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .ossian-about-cta__heading {
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+  }
+
+  .ossian-about-cta__subtext {
+    font-size: 1rem;
+    color: #6b7280;
+    line-height: 1.65;
+    margin: 0;
+    max-width: 560px;
+  }
+
+  .ossian-about-cta__actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  .ossian-about-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 32px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.15s;
+    min-width: 180px;
+  }
+
+  .ossian-about-cta__btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .ossian-about-cta__btn--primary {
+    background: #1e3a5f;
+    color: #ffffff;
+    box-shadow: 0 8px 24px rgba(30, 58, 95, 0.25);
+  }
+
+  .ossian-about-cta__btn--secondary {
+    background: transparent;
+    color: #1e3a5f;
+    border: 2px solid #1e3a5f;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ossian-about-cta {
+      padding: 40px 24px;
+      border-radius: 12px;
+      margin: 0 20px;
+    }
+    .ossian-about-cta__actions {
+      flex-direction: column;
+      width: 100%;
+    }
+    .ossian-about-cta__btn {
+      width: 100%;
+      min-width: unset;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "About - Experience CTA",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Experience OSSION Beauty"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Join millions of satisfied customers who have discovered the transformative power of our science-backed beauty solutions."
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primary button label",
+      "default": "Shop Our Products"
+    },
+    {
+      "type": "url",
+      "id": "primary_url",
+      "label": "Primary button URL"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary button label",
+      "default": "Discover Our Rituals"
+    },
+    {
+      "type": "url",
+      "id": "secondary_url",
+      "label": "Secondary button URL"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "About - Experience CTA"
+    }
+  ]
+}
+{% endschema %}

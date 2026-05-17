@@ -1,0 +1,237 @@
+<div
+  class="ossian-about-journey"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="ossian-about-journey__inner">
+    {% if section.settings.heading != blank %}
+      <h2 class="ossian-about-journey__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+    <div class="ossian-about-journey__timeline">
+      {% for block in section.blocks %}
+        <div class="ossian-about-journey__item{% if forloop.last %} ossian-about-journey__item--last{% endif %}" {{ block.shopify_attributes }}>
+          <div class="ossian-about-journey__year">{{ block.settings.year }}</div>
+          <div class="ossian-about-journey__connector">
+            <div class="ossian-about-journey__dot"></div>
+            {% unless forloop.last %}
+              <div class="ossian-about-journey__line"></div>
+            {% endunless %}
+          </div>
+          <div class="ossian-about-journey__content">
+            <h3 class="ossian-about-journey__milestone">{{ block.settings.milestone }}</h3>
+            <p class="ossian-about-journey__description">{{ block.settings.description }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .ossian-about-journey {
+    background: linear-gradient(149deg, #1e3a5f 0%, #2d4a6f 100%);
+  }
+
+  .ossian-about-journey__inner {
+    max-width: 896px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .ossian-about-journey__heading {
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: 700;
+    color: #ffffff;
+    text-align: center;
+    margin: 0;
+  }
+
+  .ossian-about-journey__timeline {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ossian-about-journey__item {
+    display: grid;
+    grid-template-columns: 80px 40px 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .ossian-about-journey__year {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+    padding-top: 2px;
+    text-align: right;
+    line-height: 1.4;
+  }
+
+  .ossian-about-journey__connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 4px;
+  }
+
+  .ossian-about-journey__dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+    flex-shrink: 0;
+  }
+
+  .ossian-about-journey__line {
+    width: 2px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.15);
+    margin-top: 6px;
+  }
+
+  .ossian-about-journey__content {
+    padding-bottom: 24px;
+  }
+
+  .ossian-about-journey__item--last .ossian-about-journey__content {
+    padding-bottom: 0;
+  }
+
+  .ossian-about-journey__milestone {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0 0 8px;
+    line-height: 1.4;
+  }
+
+  .ossian-about-journey__description {
+    font-size: 0.9375rem;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ossian-about-journey__inner {
+      padding: 0 20px;
+      gap: 32px;
+    }
+    .ossian-about-journey__item {
+      grid-template-columns: 52px 32px 1fr;
+      gap: 12px;
+    }
+    .ossian-about-journey__year {
+      font-size: 0.875rem;
+    }
+    .ossian-about-journey__line {
+      height: 72px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "About - Our Journey",
+  "tag": "section",
+  "class": "section-wrapper",
+  "max_blocks": 10,
+  "blocks": [
+    {
+      "type": "milestone",
+      "name": "Milestone",
+      "settings": [
+        {
+          "type": "text",
+          "id": "year",
+          "label": "Year",
+          "default": "2010"
+        },
+        {
+          "type": "text",
+          "id": "milestone",
+          "label": "Milestone title",
+          "default": "Foundation"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "OSSION Beauty was founded with a vision to revolutionise professional beauty care."
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section heading",
+      "default": "Our Journey"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "About - Our Journey",
+      "settings": { "heading": "Our Journey" },
+      "blocks": [
+        {
+          "type": "milestone",
+          "settings": {
+            "year": "2010",
+            "milestone": "Foundation",
+            "description": "OSSION Beauty was founded with a vision to revolutionise professional beauty care."
+          }
+        },
+        {
+          "type": "milestone",
+          "settings": {
+            "year": "2015",
+            "milestone": "Global Expansion",
+            "description": "Expanded to international markets across Asia and Europe, reaching 30+ countries."
+          }
+        },
+        {
+          "type": "milestone",
+          "settings": {
+            "year": "2020",
+            "milestone": "GO GLOW Launch",
+            "description": "Introduced our revolutionary GO GLOW DE-TAN technology, setting a new standard in skincare."
+          }
+        },
+        {
+          "type": "milestone",
+          "settings": {
+            "year": "2024",
+            "milestone": "Award Winner",
+            "description": "Recognised as Top Beauty Innovation Brand of the Year at the Global Beauty Awards."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

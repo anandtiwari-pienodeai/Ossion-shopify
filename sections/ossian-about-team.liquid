@@ -1,0 +1,224 @@
+<div
+  class="ossian-about-team"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="ossian-about-team__inner">
+    {% if section.settings.heading != blank %}
+      <h2 class="ossian-about-team__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+    {% if section.settings.subtext != blank %}
+      <p class="ossian-about-team__subtext">{{ section.settings.subtext }}</p>
+    {% endif %}
+    {% if section.blocks.size > 0 %}
+      <div class="ossian-about-team__grid">
+        {% for block in section.blocks %}
+          <div class="ossian-about-team__member" {{ block.shopify_attributes }}>
+            <div class="ossian-about-team__photo-wrap">
+              {% if block.settings.photo != blank %}
+                {{ block.settings.photo | image_url: width: 400 | image_tag:
+                  loading: 'lazy',
+                  class: 'ossian-about-team__photo',
+                  alt: block.settings.name
+                }}
+              {% else %}
+                <div class="ossian-about-team__photo-placeholder" aria-hidden="true">
+                  <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+              {% endif %}
+            </div>
+            {% if block.settings.name != blank %}
+              <h3 class="ossian-about-team__name">{{ block.settings.name }}</h3>
+            {% endif %}
+            {% if block.settings.role != blank %}
+              <p class="ossian-about-team__role">{{ block.settings.role }}</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .ossian-about-team {
+    background: #ffffff;
+  }
+
+  .ossian-about-team__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .ossian-about-team__heading {
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: 700;
+    color: #111827;
+    text-align: center;
+    margin: 0;
+  }
+
+  .ossian-about-team__subtext {
+    font-size: 1rem;
+    color: #6b7280;
+    text-align: center;
+    max-width: 640px;
+    line-height: 1.65;
+    margin: 0 0 24px;
+  }
+
+  .ossian-about-team__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .ossian-about-team__member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .ossian-about-team__photo-wrap {
+    width: 192px;
+    height: 192px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #eff6ff;
+    flex-shrink: 0;
+    border: 3px solid #bfdbfe;
+  }
+
+  .ossian-about-team__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ossian-about-team__photo-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1e3a5f;
+  }
+
+  .ossian-about-team__name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+  }
+
+  .ossian-about-team__role {
+    font-size: 0.9375rem;
+    color: #6b7280;
+    margin: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ossian-about-team__inner {
+      padding: 0 20px;
+    }
+    .ossian-about-team__grid {
+      grid-template-columns: 1fr;
+      max-width: 320px;
+    }
+    .ossian-about-team__photo-wrap {
+      width: 160px;
+      height: 160px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "About - Meet Our Experts",
+  "tag": "section",
+  "class": "section-wrapper",
+  "max_blocks": 6,
+  "blocks": [
+    {
+      "type": "member",
+      "name": "Team Member",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "photo",
+          "label": "Photo"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Dr. Sarah Johnson"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Role / Title",
+          "default": "Chief Scientific Officer"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section heading",
+      "default": "Meet Our Experts"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Our team of dedicated scientists, researchers, and beauty experts bring decades of combined experience to every product we create."
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "About - Meet Our Experts",
+      "settings": {
+        "heading": "Meet Our Experts",
+        "subtext": "Our team of dedicated scientists, researchers, and beauty experts bring decades of combined experience to every product we create."
+      },
+      "blocks": [
+        { "type": "member", "settings": { "name": "Dr. Sarah Johnson", "role": "Chief Scientific Officer" } },
+        { "type": "member", "settings": { "name": "Michael Chen", "role": "Head of Product Development" } },
+        { "type": "member", "settings": { "name": "Emma Williams", "role": "Director of Research" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
