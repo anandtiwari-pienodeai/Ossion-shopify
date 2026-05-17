@@ -57,6 +57,116 @@
         "padding-block-end": 80
       }
     },
+    "hero_eat7Vj": {
+      "type": "hero",
+      "blocks": {
+        "text_KQ6nN7": {
+          "type": "text",
+          "disabled": true,
+          "settings": {
+            "text": "<h2>New arrivals</h2>",
+            "width": "fit-content",
+            "max_width": "narrow",
+            "alignment": "left",
+            "type_preset": "h1",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "text_GrLBgj": {
+          "type": "text",
+          "disabled": true,
+          "settings": {
+            "text": "<p>Made with care and unconditionally loved by our customers.</p>",
+            "width": "fit-content",
+            "max_width": "narrow",
+            "alignment": "left",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 32,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "button_dGbxTX": {
+          "type": "button",
+          "name": "t:names.button",
+          "disabled": true,
+          "settings": {
+            "label": "Shop now",
+            "link": "shopify://collections/all",
+            "open_in_new_tab": false,
+            "style_class": "button",
+            "width": "fit-content",
+            "custom_width": 100,
+            "width_mobile": "fit-content",
+            "custom_width_mobile": 100
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "text_KQ6nN7",
+        "text_GrLBgj",
+        "button_dGbxTX"
+      ],
+      "name": "t:names.hero",
+      "settings": {
+        "media_type_1": "image",
+        "image_1": "shopify://shop_images/ossion_professional_banner.png",
+        "media_type_2": "image",
+        "stack_media_on_mobile": false,
+        "custom_mobile_media": false,
+        "media_type_1_mobile": "image",
+        "media_type_2_mobile": "image",
+        "link": "",
+        "open_in_new_tab": false,
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "center",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 16,
+        "section_width": "page-width",
+        "section_height": "large",
+        "section_height_custom": 50,
+        "color_scheme": "scheme-5",
+        "toggle_overlay": true,
+        "overlay_color": "#00000026",
+        "overlay_style": "gradient",
+        "gradient_direction": "to top",
+        "blurred_reflection": false,
+        "reflection_opacity": 75,
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
+    },
     "ossian_about_stats_WhxBba": {
       "type": "ossian-about-stats",
       "blocks": {
@@ -97,55 +207,6 @@
       ],
       "name": "About - Stats Bar",
       "settings": {
-        "padding_top": 64,
-        "padding_bottom": 64
-      }
-    },
-    "ossian_about_journey_8QYUNy": {
-      "type": "ossian-about-journey",
-      "blocks": {
-        "milestone_yX7RRp": {
-          "type": "milestone",
-          "settings": {
-            "year": "2010",
-            "milestone": "Foundation",
-            "description": "OSSION Beauty was founded with a vision to revolutionise professional beauty care."
-          }
-        },
-        "milestone_GEWpMp": {
-          "type": "milestone",
-          "settings": {
-            "year": "2015",
-            "milestone": "Global Expansion",
-            "description": "Expanded to international markets across Asia and Europe, reaching 30+ countries."
-          }
-        },
-        "milestone_QVAFtH": {
-          "type": "milestone",
-          "settings": {
-            "year": "2020",
-            "milestone": "GO GLOW Launch",
-            "description": "Introduced our revolutionary GO GLOW DE-TAN technology, setting a new standard in skincare."
-          }
-        },
-        "milestone_7Catd8": {
-          "type": "milestone",
-          "settings": {
-            "year": "2024",
-            "milestone": "Award Winner",
-            "description": "Recognised as Top Beauty Innovation Brand of the Year at the Global Beauty Awards."
-          }
-        }
-      },
-      "block_order": [
-        "milestone_yX7RRp",
-        "milestone_GEWpMp",
-        "milestone_QVAFtH",
-        "milestone_7Catd8"
-      ],
-      "name": "About - Our Journey",
-      "settings": {
-        "heading": "Our Journey",
         "padding_top": 64,
         "padding_bottom": 64
       }
@@ -254,6 +315,7 @@
         "member_RxprHp": {
           "type": "member",
           "settings": {
+            "photo": "shopify://shop_images/Ossian5_92a8c1c2-c006-42dd-adfe-404aa2a9b2e3.jpg",
             "name": "Dr. Sarah Johnson",
             "role": "Chief Scientific Officer"
           }
@@ -261,6 +323,7 @@
         "member_MUi9qC": {
           "type": "member",
           "settings": {
+            "photo": "shopify://shop_images/Ossian3_5aa027cc-cfa1-49b9-8b55-e9cd6da7a3bf.jpg",
             "name": "Michael Chen",
             "role": "Head of Product Development"
           }
@@ -268,6 +331,7 @@
         "member_7dr76b": {
           "type": "member",
           "settings": {
+            "photo": "shopify://shop_images/Ossian5_92a8c1c2-c006-42dd-adfe-404aa2a9b2e3.jpg",
             "name": "Emma Williams",
             "role": "Director of Research"
           }
@@ -341,8 +405,8 @@
   },
   "order": [
     "main",
+    "hero_eat7Vj",
     "ossian_about_stats_WhxBba",
-    "ossian_about_journey_8QYUNy",
     "ossian_about_pillars_kmGWBM",
     "ossian_about_journey_mWrkzg",
     "ossian_about_team_NJpQm9",
