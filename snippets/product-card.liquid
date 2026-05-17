@@ -124,4 +124,86 @@
       display: none;
     }
   }
+
+  /* Ossian PLP product card */
+  .product-card__content {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  }
+
+  .ossian-product-desc {
+    margin: 0;
+    font-size: 0.75rem;
+    color: #888;
+    padding: 2px 12px 0;
+    line-height: 1.4;
+    font-family: var(--font-body--family);
+  }
+
+  .ossian-price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 12px 2px;
+    gap: 8px;
+  }
+
+  .ossian-price-wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .ossian-price,
+  .ossian-price--sale {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e3a5f;
+    font-family: var(--font-body--family);
+  }
+
+  .ossian-price--compare {
+    font-size: 0.78rem;
+    color: #aaa;
+    font-weight: 400;
+  }
+
+  .ossian-stock {
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+    font-family: var(--font-body--family);
+    flex-shrink: 0;
+  }
+
+  .ossian-stock--in {
+    background: #e6f4ea;
+    color: #2d7a37;
+  }
+
+  .ossian-stock--out {
+    background: #fce4ec;
+    color: #b71c1c;
+  }
+
+  /* Add to Cart button — navy blue, full width */
+  .product-grid__item .product-form-buttons .add-to-cart-button {
+    width: 100%;
+    background-color: #1e3a5f;
+    color: #ffffff;
+    border-color: #1e3a5f;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    padding-block: 10px;
+  }
+
+  .product-grid__item .product-form-buttons .add-to-cart-button:hover {
+    background-color: #2a4f80;
+    border-color: #2a4f80;
+    color: #ffffff;
+  }
 {% endstylesheet %}
