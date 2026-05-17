@@ -1,0 +1,35 @@
+name: Deploy to Shopify
+
+on:
+  push:
+    branches:
+      - production-ossion
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Shopify CLI
+        run: npm install -g @shopify/cli @shopify/theme
+
+      - name: Run Theme Check
+        uses: Shopify/theme-check-action@v1
+        with:
+          flags: '--fail-level error'
+
+      - name: Deploy theme to Shopify
+        uses: tibor19/shopify-theme-deploy@v2
+        with:
+          store: t16izc-v5.myshopify.com
+          theme_token: ${{ secrets.SHOPIFY_THEME_TOKEN }}
+          theme_id: ${{ secrets.SHOPIFY_THEME_ID }}
