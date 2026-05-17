@@ -9,6 +9,22 @@
  */
 {
   "sections": {
+    "ossian_hero_banner_VM3pbt": {
+      "type": "ossian-hero-banner",
+      "name": "Hero Banner",
+      "settings": {
+        "badge": "✨ New Innovation",
+        "heading": "GO GLOW DE-TAN",
+        "subtext": "Kojic & Milk Illuminate formula that reveals your skin's natural radiance. Professional tan removal with visible results.",
+        "primary_button_label": "Shop Now",
+        "primary_button_url": "",
+        "secondary_button_label": "Learn More",
+        "secondary_button_url": "",
+        "image": "{{ collection.metafields.custom.desktop_image.value }}",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
     "section": {
       "type": "section",
       "blocks": {
@@ -185,13 +201,15 @@
               "type": "custom-liquid",
               "settings": {
                 "custom_liquid": "{% if closest.product.description != blank %}<p class=\"ossian-product-desc\">{{ closest.product.description | strip_html | truncate: 55 }}</p>{% endif %}"
-              }
+              },
+              "blocks": {}
             },
             "ossian_price_stock": {
               "type": "custom-liquid",
               "settings": {
                 "custom_liquid": "<div class=\"ossian-price-row\">{% if closest.product.compare_at_price > closest.product.price %}<div class=\"ossian-price-wrapper\"><span class=\"ossian-price ossian-price--sale\">{{ closest.product.price | money }}</span><s class=\"ossian-price--compare\">{{ closest.product.compare_at_price | money }}</s></div>{% else %}<span class=\"ossian-price\">{{ closest.product.price | money }}</span>{% endif %}{% if closest.product.available %}<span class=\"ossian-stock ossian-stock--in\">In Stock</span>{% else %}<span class=\"ossian-stock ossian-stock--out\">Out of Stock</span>{% endif %}</div>"
-              }
+              },
+              "blocks": {}
             },
             "ossian_buy": {
               "type": "buy-buttons",
@@ -205,12 +223,25 @@
                 "padding-inline-end": 12
               },
               "blocks": {
+                "quantity": {
+                  "type": "quantity",
+                  "static": true,
+                  "settings": {},
+                  "blocks": {}
+                },
                 "add-to-cart": {
                   "type": "add-to-cart",
                   "static": true,
                   "settings": {
                     "style_class": "button"
-                  }
+                  },
+                  "blocks": {}
+                },
+                "accelerated-checkout": {
+                  "type": "accelerated-checkout",
+                  "static": true,
+                  "settings": {},
+                  "blocks": {}
                 }
               },
               "block_order": []
@@ -227,11 +258,11 @@
       },
       "settings": {
         "layout_type": "grid",
-        "product_card_size": "medium",
+        "product_card_size": "large",
         "mobile_product_card_size": "small",
         "enable_infinite_scroll": true,
         "products_per_page": 24,
-        "product_grid_width": "centered",
+        "product_grid_width": "full-width",
         "full_width_on_mobile": true,
         "columns_gap_horizontal": 16,
         "columns_gap_vertical": 24,
@@ -244,6 +275,7 @@
     }
   },
   "order": [
+    "ossian_hero_banner_VM3pbt",
     "section",
     "main"
   ]
