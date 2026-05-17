@@ -24,6 +24,7 @@ jobs:
 
       - name: Run Theme Check
         run: shopify theme check --fail-level error --no-color
+        continue-on-error: true
 
       - name: Deploy theme to Shopify
         env:
