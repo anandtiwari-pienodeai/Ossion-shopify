@@ -1,0 +1,413 @@
+{%- liquid
+  assign features_content = product.metafields.custom.key_features
+  assign how_to_use_content = product.metafields.custom.how_to_use
+  assign ingredients_content = product.metafields.custom.ingredients
+  assign rating = product.metafields.reviews.rating.value.rating
+  assign rating_count = product.metafields.reviews.rating_count
+-%}
+
+<div
+  class="ossian-pdp-tabs section color-{{ section.settings.color_scheme }}"
+  style="padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="page-width">
+    <div class="pdp-tabs" data-section-id="{{ section.id }}">
+
+      <div class="pdp-tabs__nav" role="tablist" aria-label="{{ section.settings.tab_1_label | default: 'Features' }}, {{ section.settings.tab_2_label | default: 'How to Use' }}, {{ section.settings.tab_3_label | default: 'Reviews' }}">
+        <button
+          class="pdp-tabs__btn is-active"
+          role="tab"
+          aria-selected="true"
+          aria-controls="pdp-tab-features-{{ section.id }}"
+          data-target="pdp-tab-features-{{ section.id }}"
+        >{{ section.settings.tab_1_label | default: 'Features' }}</button>
+
+        <button
+          class="pdp-tabs__btn"
+          role="tab"
+          aria-selected="false"
+          aria-controls="pdp-tab-how-to-use-{{ section.id }}"
+          data-target="pdp-tab-how-to-use-{{ section.id }}"
+        >{{ section.settings.tab_2_label | default: 'How to Use' }}</button>
+
+        <button
+          class="pdp-tabs__btn"
+          role="tab"
+          aria-selected="false"
+          aria-controls="pdp-tab-reviews-{{ section.id }}"
+          data-target="pdp-tab-reviews-{{ section.id }}"
+        >{{ section.settings.tab_3_label | default: 'Reviews' }}</button>
+      </div>
+
+      <div class="pdp-tabs__panels">
+
+        <div
+          class="pdp-tabs__panel is-active"
+          id="pdp-tab-features-{{ section.id }}"
+          role="tabpanel"
+          tabindex="0"
+        >
+          {%- if features_content != blank -%}
+            <div class="pdp-tabs__content rte">{{ features_content }}</div>
+          {%- elsif product.description != blank -%}
+            <div class="pdp-tabs__content rte">
+              <h4>{{ section.settings.features_heading | default: 'Key Features' }}</h4>
+              {{ product.description }}
+              {%- if ingredients_content != blank -%}
+                <h4>{{ section.settings.ingredients_heading | default: 'Ingredients' }}</h4>
+                <p>{{ ingredients_content }}</p>
+              {%- elsif section.settings.default_ingredients != blank -%}
+                <h4>{{ section.settings.ingredients_heading | default: 'Ingredients' }}</h4>
+                <p>{{ section.settings.default_ingredients }}</p>
+              {%- endif -%}
+            </div>
+          {%- else -%}
+            <div class="pdp-tabs__content rte">
+              <h4>{{ section.settings.features_heading | default: 'Key Features' }}</h4>
+              {{ section.settings.default_features }}
+            </div>
+          {%- endif -%}
+        </div>
+
+        <div
+          class="pdp-tabs__panel"
+          id="pdp-tab-how-to-use-{{ section.id }}"
+          role="tabpanel"
+          tabindex="0"
+          hidden
+        >
+          <div class="pdp-tabs__content rte">
+            {%- if how_to_use_content != blank -%}
+              {{ how_to_use_content }}
+            {%- elsif section.settings.default_how_to_use != blank -%}
+              {{ section.settings.default_how_to_use }}
+            {%- else -%}
+              <p>How to use instructions coming soon.</p>
+            {%- endif -%}
+          </div>
+        </div>
+
+        <div
+          class="pdp-tabs__panel"
+          id="pdp-tab-reviews-{{ section.id }}"
+          role="tabpanel"
+          tabindex="0"
+          hidden
+        >
+          <div class="pdp-tabs__content">
+            {%- if rating != blank -%}
+              <div class="pdp-tabs__reviews-summary">
+                <span class="pdp-tabs__reviews-score">{{ rating | round: 1 }}</span>
+                <div class="pdp-tabs__reviews-stars" aria-label="{{ rating | round: 1 }} out of 5 stars">
+                  {%- assign filled_stars = rating | floor -%}
+                  {%- assign decimal_part = rating | modulo: 1 -%}
+                  {%- assign next_star = filled_stars | plus: 1 -%}
+                  {%- for i in (1..5) -%}
+                    {%- if i <= filled_stars -%}
+                      <span class="pdp-tabs__star pdp-tabs__star--filled" aria-hidden="true">&#9733;</span>
+                    {%- elsif i == next_star and decimal_part >= 0.5 -%}
+                      <span class="pdp-tabs__star pdp-tabs__star--half" aria-hidden="true">&#9733;</span>
+                    {%- else -%}
+                      <span class="pdp-tabs__star" aria-hidden="true">&#9733;</span>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+                {%- if rating_count != blank -%}
+                  <span class="pdp-tabs__reviews-count">{{ rating_count }} {{ 'content.reviews' | t | default: 'reviews' }}</span>
+                {%- endif -%}
+              </div>
+            {%- else -%}
+              <p class="pdp-tabs__no-reviews">{{ section.settings.no_reviews_text | default: 'No reviews yet. Be the first to review this product.' }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    function initPdpTabs(tabsEl) {
+      var btns = tabsEl.querySelectorAll('.pdp-tabs__btn');
+
+      btns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var targetId = btn.dataset.target;
+
+          btns.forEach(function (b) {
+            b.classList.remove('is-active');
+            b.setAttribute('aria-selected', 'false');
+          });
+
+          tabsEl.querySelectorAll('.pdp-tabs__panel').forEach(function (panel) {
+            panel.classList.remove('is-active');
+            panel.hidden = true;
+          });
+
+          btn.classList.add('is-active');
+          btn.setAttribute('aria-selected', 'true');
+
+          var target = document.getElementById(targetId);
+          if (target) {
+            target.classList.add('is-active');
+            target.hidden = false;
+            target.focus({ preventScroll: true });
+          }
+        });
+      });
+    }
+
+    document.querySelectorAll('.ossian-pdp-tabs').forEach(initPdpTabs);
+  })();
+</script>
+
+{% stylesheet %}
+  .ossian-pdp-tabs {
+    border-top: 1px solid #e5e7eb;
+  }
+
+  .pdp-tabs__nav {
+    display: flex;
+    border-bottom: 2px solid #e5e7eb;
+    gap: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .pdp-tabs__nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pdp-tabs__btn {
+    position: relative;
+    padding: 16px 28px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: #6b7280;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.2s;
+    font-family: inherit;
+  }
+
+  .pdp-tabs__btn:hover {
+    color: #1e3a5f;
+  }
+
+  .pdp-tabs__btn.is-active {
+    color: #1e3a5f;
+    border-bottom-color: #1e3a5f;
+    font-weight: 600;
+  }
+
+  .pdp-tabs__panels {
+    padding: 32px 0 0;
+  }
+
+  .pdp-tabs__panel {
+    outline: none;
+  }
+
+  .pdp-tabs__content {
+    max-width: 720px;
+  }
+
+  .pdp-tabs__content h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 12px;
+    margin-top: 24px;
+  }
+
+  .pdp-tabs__content h4:first-child {
+    margin-top: 0;
+  }
+
+  .pdp-tabs__content ul {
+    padding-left: 20px;
+    margin: 0 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .pdp-tabs__content li {
+    font-size: 0.9375rem;
+    color: #374151;
+    line-height: 1.5;
+  }
+
+  .pdp-tabs__content p {
+    font-size: 0.9375rem;
+    color: #374151;
+    line-height: 1.65;
+    margin: 0 0 12px;
+  }
+
+  .pdp-tabs__reviews-summary {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .pdp-tabs__reviews-score {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #1e3a5f;
+    line-height: 1;
+  }
+
+  .pdp-tabs__reviews-stars {
+    display: flex;
+    gap: 3px;
+  }
+
+  .pdp-tabs__star {
+    font-size: 1.375rem;
+    color: #d1d5db;
+    line-height: 1;
+  }
+
+  .pdp-tabs__star--filled,
+  .pdp-tabs__star--half {
+    color: #f59e0b;
+  }
+
+  .pdp-tabs__reviews-count {
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+
+  .pdp-tabs__no-reviews {
+    font-size: 0.9375rem;
+    color: #6b7280;
+    margin: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .pdp-tabs__btn {
+      padding: 14px 20px;
+      font-size: 0.875rem;
+    }
+
+    .pdp-tabs__panels {
+      padding-top: 24px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Tabs",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Tab labels"
+    },
+    {
+      "type": "text",
+      "id": "tab_1_label",
+      "label": "Tab 1 label",
+      "default": "Features"
+    },
+    {
+      "type": "text",
+      "id": "tab_2_label",
+      "label": "Tab 2 label",
+      "default": "How to Use"
+    },
+    {
+      "type": "text",
+      "id": "tab_3_label",
+      "label": "Tab 3 label",
+      "default": "Reviews"
+    },
+    {
+      "type": "header",
+      "content": "Features tab"
+    },
+    {
+      "type": "text",
+      "id": "features_heading",
+      "label": "Features heading",
+      "default": "Key Features"
+    },
+    {
+      "type": "richtext",
+      "id": "default_features",
+      "label": "Default features content (shown if product description is empty)",
+      "default": "<ul><li>Professional salon quality formula</li><li>Safe for all skin types</li><li>Enriched with active ingredients</li></ul>"
+    },
+    {
+      "type": "text",
+      "id": "ingredients_heading",
+      "label": "Ingredients heading",
+      "default": "Ingredients"
+    },
+    {
+      "type": "textarea",
+      "id": "default_ingredients",
+      "label": "Default ingredients (shown if metafield is empty)"
+    },
+    {
+      "type": "header",
+      "content": "How to Use tab"
+    },
+    {
+      "type": "richtext",
+      "id": "default_how_to_use",
+      "label": "Default how to use content",
+      "default": "<p>Apply generously to the affected area. Leave on for 15–20 minutes, then rinse thoroughly with water. Use 2–3 times a week for best results.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Reviews tab"
+    },
+    {
+      "type": "text",
+      "id": "no_reviews_text",
+      "label": "No reviews message",
+      "default": "No reviews yet. Be the first to review this product."
+    },
+    {
+      "type": "header",
+      "content": "Section settings"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP Tabs"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}
