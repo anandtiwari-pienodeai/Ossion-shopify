@@ -114,6 +114,7 @@
     },
     "ossian_featured_collection_jnxbBD": {
       "type": "ossian-featured-collection",
+      "custom_css": [],
       "name": "Featured Collection",
       "settings": {
         "label": "Hair Color Collection",
@@ -187,8 +188,8 @@
         "collection": "",
         "products_count": 4,
         "color_scheme": "",
-        "padding_top": 64,
-        "padding_bottom": 64
+        "padding_top": 40,
+        "padding_bottom": 40
       }
     },
     "ossian_product_feed_PA6fVk": {
