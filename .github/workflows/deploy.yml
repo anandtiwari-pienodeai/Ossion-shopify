@@ -23,9 +23,7 @@ jobs:
         run: npm install -g @shopify/cli @shopify/theme
 
       - name: Run Theme Check
-        uses: Shopify/theme-check-action@v1
-        with:
-          flags: '--fail-level error'
+        run: shopify theme check --fail-level error --no-color
 
       - name: Deploy theme to Shopify
         env:
