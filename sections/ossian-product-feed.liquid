@@ -1,256 +1,1000 @@
+
+
 <div
-  class="ossian-product-feed section color-{{ section.settings.color_scheme }}"
+  class="ossiongram section color-{{ section.settings.color_scheme }}"
   style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
 >
-  <div class="page-width">
-    {% if section.settings.heading != blank or section.settings.subheading != blank %}
-      <div class="ossian-product-feed__header">
-        {% if section.settings.heading != blank %}
-          <h2 class="ossian-product-feed__title">{{ section.settings.heading }}</h2>
-        {% endif %}
-        {% if section.settings.subheading != blank %}
-          <p class="ossian-product-feed__subtitle">{{ section.settings.subheading }}</p>
-        {% endif %}
-      </div>
-    {% endif %}
-  </div>
 
-  <div class="ossian-product-feed__scroll-area">
-    <div class="ossian-product-feed__track">
-      {% for block in section.blocks %}
-        <a href="{{ block.settings.product_url }}" class="ossian-product-feed__card" {{ block.shopify_attributes }}>
-          <div class="ossian-product-feed__image-wrap">
-            {% if block.settings.image != blank %}
-              {{ block.settings.image | image_url: width: 520 | image_tag: loading: 'lazy', class: 'ossian-product-feed__image', alt: block.settings.title }}
-            {% else %}
-              <div class="ossian-product-feed__image-placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
-            {% endif %}
-            <div class="ossian-product-feed__overlay" aria-hidden="true"></div>
-            {% if block.settings.tag != blank %}
-              <div class="ossian-product-feed__tag">{{ block.settings.tag }}</div>
-            {% endif %}
-            <div class="ossian-product-feed__card-info">
-              <p class="ossian-product-feed__product-title">{{ block.settings.title }}</p>
-              <div class="ossian-product-feed__meta">
-                <span class="ossian-product-feed__price">{{ block.settings.price }}</span>
-                {% if block.settings.rating != blank %}
-                  <div class="ossian-product-feed__rating">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="0.5" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon></svg>
-                    <span>{{ block.settings.rating }}</span>
-                  </div>
-                {% endif %}
-              </div>
+  {%- if section.settings.heading != blank -%}
+    <div class="ossiongram__header">
+      <h2 class="ossiongram__heading">{{ section.settings.heading }}</h2>
+    </div>
+  {%- endif -%}
+
+  <div class="ossiongram__scroll-area">
+    <div class="ossiongram__track">
+
+      {%- for block in section.blocks -%}
+        {%- assign bi = forloop.index0 -%}
+        {%- assign mid = section.id | append: '-' | append: bi -%}
+
+        {%- assign p1 = all_products[block.settings.product_1] -%}
+        {%- assign p2 = all_products[block.settings.product_2] -%}
+        {%- assign p3 = all_products[block.settings.product_3] -%}
+        {%- assign p4 = all_products[block.settings.product_4] -%}
+
+        {%- assign slot_count = 0 -%}
+        {%- if p1.title != blank or block.settings.p1_name != blank -%}{%- assign slot_count = slot_count | plus: 1 -%}{%- endif -%}
+        {%- if p2.title != blank or block.settings.p2_name != blank -%}{%- assign slot_count = slot_count | plus: 1 -%}{%- endif -%}
+        {%- if p3.title != blank or block.settings.p3_name != blank -%}{%- assign slot_count = slot_count | plus: 1 -%}{%- endif -%}
+        {%- if p4.title != blank or block.settings.p4_name != blank -%}{%- assign slot_count = slot_count | plus: 1 -%}{%- endif -%}
+
+        <div class="ossiongram__reel-wrap" {{ block.shopify_attributes }}>
+
+          <!-- Reel Card -->
+          <div class="ossiongram__card" data-modal="ossiongram-modal-{{ mid }}" role="button" tabindex="0" aria-label="Open reel viewer">
+            <div class="ossiongram__card-media">
+              {%- if block.settings.video_url != blank -%}
+                <video
+                  class="ossiongram__card-video"
+                  src="{{ block.settings.video_url }}"
+                  autoplay muted loop playsinline
+                  preload="metadata"
+                ></video>
+              {%- elsif block.settings.thumbnail != blank -%}
+                {{
+                  block.settings.thumbnail
+                  | image_url: width: 520
+                  | image_tag: loading: 'lazy', class: 'ossiongram__card-img', alt: block.settings.overlay_text
+                }}
+              {%- else -%}
+                <div class="ossiongram__card-placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
+              {%- endif -%}
+              <div class="ossiongram__card-overlay" aria-hidden="true"></div>
+              {%- if block.settings.overlay_text != blank -%}
+                <p class="ossiongram__card-text">{{ block.settings.overlay_text }}</p>
+              {%- endif -%}
             </div>
           </div>
-        </a>
-      {% endfor %}
+
+          <!-- Below Card - product info with cycling -->
+          {%- if slot_count > 0 -%}
+            <div class="ossiongram__below" data-current="0" data-total="{{ slot_count }}">
+
+              {%- if p1.title != blank or block.settings.p1_name != blank -%}
+                <div class="ossiongram__slot ossiongram__slot--active">
+                  <div class="ossiongram__slot-row">
+                    {%- if block.settings.p1_img != blank -%}
+                      <div class="ossiongram__thumb-wrap">
+                        {{ block.settings.p1_img | image_url: width: 80 | image_tag: loading: 'lazy', class: 'ossiongram__thumb-img', alt: '' }}
+                      </div>
+                    {%- elsif p1.featured_image != blank -%}
+                      <div class="ossiongram__thumb-wrap">
+                        {{ p1.featured_image | image_url: width: 80 | image_tag: loading: 'lazy', class: 'ossiongram__thumb-img', alt: '' }}
+                      </div>
+                    {%- endif -%}
+                    <div class="ossiongram__slot-info">
+                      <p class="ossiongram__slot-name">{% if p1.title != blank %}{{ p1.title }}{% else %}{{ block.settings.p1_name }}{% endif %}</p>
+                      <p class="ossiongram__slot-price">{% if p1.title != blank %}{{ p1.price | money }}{% else %}{{ block.settings.p1_price }}{% endif %}</p>
+                    </div>
+                  </div>
+                </div>
+              {%- endif -%}
+
+              {%- if p2.title != blank or block.settings.p2_name != blank -%}
+                <div class="ossiongram__slot">
+                  <div class="ossiongram__slot-row">
+                    {%- if block.settings.p2_img != blank -%}
+                      <div class="ossiongram__thumb-wrap">
+                        {{ block.settings.p2_img | image_url: width: 80 | image_tag: loading: 'lazy', class: 'ossiongram__thumb-img', alt: '' }}
+                      </div>
+                    {%- elsif p2.featured_image != blank -%}
+                      <div class="ossiongram__thumb-wrap">
+                        {{ p2.featured_image | image_url: width: 80 | image_tag: loading: 'lazy', class: 'ossiongram__thumb-img', alt: '' }}
+                      </div>
+                    {%- endif -%}
+                    <div class="ossiongram__slot-info">
+                      <p class="ossiongram__slot-name">{% if p2.title != blank %}{{ p2.title }}{% else %}{{ block.settings.p2_name }}{% endif %}</p>
+                      <p class="ossiongram__slot-price">{% if p2.title != blank %}{{ p2.price | money }}{% else %}{{ block.settings.p2_price }}{% endif %}</p>
+                    </div>
+                  </div>
+                </div>
+              {%- endif -%}
+
+              {%- if p3.title != blank or block.settings.p3_name != blank -%}
+                <div class="ossiongram__slot">
+                  <div class="ossiongram__slot-row">
+                    {%- if block.settings.p3_img != blank -%}
+                      <div class="ossiongram__thumb-wrap">
+                        {{ block.settings.p3_img | image_url: width: 80 | image_tag: loading: 'lazy', class: 'ossiongram__thumb-img', alt: '' }}
+                      </div>
+                    {%- elsif p3.featured_image != blank -%}
+                      <div class="ossiongram__thumb-wrap">
+                        {{ p3.featured_image | image_url: width: 80 | image_tag: loading: 'lazy', class: 'ossiongram__thumb-img', alt: '' }}
+                      </div>
+                    {%- endif -%}
+                    <div class="ossiongram__slot-info">
+                      <p class="ossiongram__slot-name">{% if p3.title != blank %}{{ p3.title }}{% else %}{{ block.settings.p3_name }}{% endif %}</p>
+                      <p class="ossiongram__slot-price">{% if p3.title != blank %}{{ p3.price | money }}{% else %}{{ block.settings.p3_price }}{% endif %}</p>
+                    </div>
+                  </div>
+                </div>
+              {%- endif -%}
+
+              {%- if p4.title != blank or block.settings.p4_name != blank -%}
+                <div class="ossiongram__slot">
+                  <div class="ossiongram__slot-row">
+                    {%- if block.settings.p4_img != blank -%}
+                      <div class="ossiongram__thumb-wrap">
+                        {{ block.settings.p4_img | image_url: width: 80 | image_tag: loading: 'lazy', class: 'ossiongram__thumb-img', alt: '' }}
+                      </div>
+                    {%- elsif p4.featured_image != blank -%}
+                      <div class="ossiongram__thumb-wrap">
+                        {{ p4.featured_image | image_url: width: 80 | image_tag: loading: 'lazy', class: 'ossiongram__thumb-img', alt: '' }}
+                      </div>
+                    {%- endif -%}
+                    <div class="ossiongram__slot-info">
+                      <p class="ossiongram__slot-name">{% if p4.title != blank %}{{ p4.title }}{% else %}{{ block.settings.p4_name }}{% endif %}</p>
+                      <p class="ossiongram__slot-price">{% if p4.title != blank %}{{ p4.price | money }}{% else %}{{ block.settings.p4_price }}{% endif %}</p>
+                    </div>
+                  </div>
+                </div>
+              {%- endif -%}
+
+              {%- if slot_count > 1 -%}
+                <div class="ossiongram__product-nav">
+                  <button class="ossiongram__nav-btn ossiongram__nav-prev" aria-label="Previous product">&#9664;</button>
+                  <button class="ossiongram__nav-btn ossiongram__nav-next" aria-label="Next product">&#9654;</button>
+                </div>
+              {%- endif -%}
+
+            </div>
+          {%- endif -%}
+
+        </div>
+
+        <!-- Modal Popup -->
+        <div
+          class="ossiongram__modal"
+          id="ossiongram-modal-{{ mid }}"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Reel viewer"
+          hidden
+        >
+          <div class="ossiongram__modal-overlay" aria-hidden="true"></div>
+          <div class="ossiongram__modal-container">
+
+            <button class="ossiongram__modal-close" aria-label="Close reel viewer">&times;</button>
+
+            <!-- Left panel - video -->
+            <div class="ossiongram__modal-left">
+              <div class="ossiongram__modal-media-wrap">
+                {%- if block.settings.video_url != blank -%}
+                  <video
+                    class="ossiongram__modal-video"
+                    src="{{ block.settings.video_url }}"
+                    autoplay muted loop playsinline
+                  ></video>
+                {%- elsif block.settings.thumbnail != blank -%}
+                  {{
+                    block.settings.thumbnail
+                    | image_url: width: 700
+                    | image_tag: loading: 'lazy', class: 'ossiongram__modal-img', alt: ''
+                  }}
+                {%- else -%}
+                  <div class="ossiongram__modal-placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
+                {%- endif -%}
+
+                <div class="ossiongram__modal-video-overlay" aria-hidden="true"></div>
+
+                {%- if block.settings.video_url != blank -%}
+                  <button class="ossiongram__mute-btn" aria-label="Toggle mute">
+                    <svg class="ossiongram__icon-muted" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                      <line x1="23" y1="9" x2="17" y2="15"></line>
+                      <line x1="17" y1="9" x2="23" y2="15"></line>
+                    </svg>
+                    <svg class="ossiongram__icon-unmuted" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                    </svg>
+                  </button>
+                {%- endif -%}
+
+                {%- if block.settings.modal_text != blank -%}
+                  <p class="ossiongram__modal-text">{{ block.settings.modal_text }}</p>
+                {%- endif -%}
+              </div>
+            </div>
+
+            <!-- Right panel - products grid -->
+            <div class="ossiongram__modal-right">
+              {%- if slot_count > 0 -%}
+                <div class="ossiongram__modal-products">
+
+                  {%- if p1.title != blank or block.settings.p1_name != blank -%}
+                    <div class="ossiongram__modal-product">
+                      {%- if block.settings.p1_img != blank -%}
+                        {{ block.settings.p1_img | image_url: width: 400 | image_tag: loading: 'lazy', class: 'ossiongram__modal-product-img', alt: '' }}
+                      {%- elsif p1.featured_image != blank -%}
+                        {{ p1.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', class: 'ossiongram__modal-product-img', alt: '' }}
+                      {%- else -%}
+                        <div class="ossiongram__modal-product-img ossiongram__modal-product-img--placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
+                      {%- endif -%}
+                      <p class="ossiongram__modal-product-name">{% if p1.title != blank %}{{ p1.title }}{% else %}{{ block.settings.p1_name }}{% endif %}</p>
+                      <p class="ossiongram__modal-product-price">{% if p1.title != blank %}{{ p1.price | money }}{% else %}{{ block.settings.p1_price }}{% endif %}</p>
+                      {%- if p1.title != blank -%}<a href="{{ p1.url }}" class="ossiongram__modal-product-btn">View Product</a>{%- elsif block.settings.p1_url != blank -%}<a href="{{ block.settings.p1_url }}" class="ossiongram__modal-product-btn">View Product</a>{%- endif -%}
+                    </div>
+                  {%- endif -%}
+
+                  {%- if p2.title != blank or block.settings.p2_name != blank -%}
+                    <div class="ossiongram__modal-product">
+                      {%- if block.settings.p2_img != blank -%}
+                        {{ block.settings.p2_img | image_url: width: 400 | image_tag: loading: 'lazy', class: 'ossiongram__modal-product-img', alt: '' }}
+                      {%- elsif p2.featured_image != blank -%}
+                        {{ p2.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', class: 'ossiongram__modal-product-img', alt: '' }}
+                      {%- else -%}
+                        <div class="ossiongram__modal-product-img ossiongram__modal-product-img--placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
+                      {%- endif -%}
+                      <p class="ossiongram__modal-product-name">{% if p2.title != blank %}{{ p2.title }}{% else %}{{ block.settings.p2_name }}{% endif %}</p>
+                      <p class="ossiongram__modal-product-price">{% if p2.title != blank %}{{ p2.price | money }}{% else %}{{ block.settings.p2_price }}{% endif %}</p>
+                      {%- if p2.title != blank -%}<a href="{{ p2.url }}" class="ossiongram__modal-product-btn">View Product</a>{%- elsif block.settings.p2_url != blank -%}<a href="{{ block.settings.p2_url }}" class="ossiongram__modal-product-btn">View Product</a>{%- endif -%}
+                    </div>
+                  {%- endif -%}
+
+                  {%- if p3.title != blank or block.settings.p3_name != blank -%}
+                    <div class="ossiongram__modal-product">
+                      {%- if block.settings.p3_img != blank -%}
+                        {{ block.settings.p3_img | image_url: width: 400 | image_tag: loading: 'lazy', class: 'ossiongram__modal-product-img', alt: '' }}
+                      {%- elsif p3.featured_image != blank -%}
+                        {{ p3.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', class: 'ossiongram__modal-product-img', alt: '' }}
+                      {%- else -%}
+                        <div class="ossiongram__modal-product-img ossiongram__modal-product-img--placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
+                      {%- endif -%}
+                      <p class="ossiongram__modal-product-name">{% if p3.title != blank %}{{ p3.title }}{% else %}{{ block.settings.p3_name }}{% endif %}</p>
+                      <p class="ossiongram__modal-product-price">{% if p3.title != blank %}{{ p3.price | money }}{% else %}{{ block.settings.p3_price }}{% endif %}</p>
+                      {%- if p3.title != blank -%}<a href="{{ p3.url }}" class="ossiongram__modal-product-btn">View Product</a>{%- elsif block.settings.p3_url != blank -%}<a href="{{ block.settings.p3_url }}" class="ossiongram__modal-product-btn">View Product</a>{%- endif -%}
+                    </div>
+                  {%- endif -%}
+
+                  {%- if p4.title != blank or block.settings.p4_name != blank -%}
+                    <div class="ossiongram__modal-product">
+                      {%- if block.settings.p4_img != blank -%}
+                        {{ block.settings.p4_img | image_url: width: 400 | image_tag: loading: 'lazy', class: 'ossiongram__modal-product-img', alt: '' }}
+                      {%- elsif p4.featured_image != blank -%}
+                        {{ p4.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', class: 'ossiongram__modal-product-img', alt: '' }}
+                      {%- else -%}
+                        <div class="ossiongram__modal-product-img ossiongram__modal-product-img--placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
+                      {%- endif -%}
+                      <p class="ossiongram__modal-product-name">{% if p4.title != blank %}{{ p4.title }}{% else %}{{ block.settings.p4_name }}{% endif %}</p>
+                      <p class="ossiongram__modal-product-price">{% if p4.title != blank %}{{ p4.price | money }}{% else %}{{ block.settings.p4_price }}{% endif %}</p>
+                      {%- if p4.title != blank -%}<a href="{{ p4.url }}" class="ossiongram__modal-product-btn">View Product</a>{%- elsif block.settings.p4_url != blank -%}<a href="{{ block.settings.p4_url }}" class="ossiongram__modal-product-btn">View Product</a>{%- endif -%}
+                    </div>
+                  {%- endif -%}
+
+                </div>
+              {%- endif -%}
+            </div>
+
+          </div>
+        </div>
+
+      {%- endfor -%}
     </div>
   </div>
 
-  {% if section.settings.view_all_label != blank and section.settings.view_all_url != blank %}
-    <div class="ossian-product-feed__footer">
-      <a href="{{ section.settings.view_all_url }}" class="ossian-product-feed__view-all">
-        {{ section.settings.view_all_label }}
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-      </a>
-    </div>
-  {% endif %}
 </div>
 
 {% stylesheet %}
-  .ossian-product-feed__header {
+
+  .ossiongram {
+    background: #fff;
+    overflow: hidden;
+  }
+
+
+  .ossiongram__header {
     text-align: center;
-    margin-bottom: 48px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    padding: 0 24px 48px;
   }
 
-  .ossian-product-feed__title {
-    font-size: 3rem;
-    font-weight: 500;
+  .ossiongram__heading {
+    font-family: var(--font-h2--family, Georgia, serif);
+    font-style: var(--font-h2--style, normal);
+    font-weight: 300;
+    font-size: clamp(2rem, 4vw, 3rem);
+    letter-spacing: 0.06em;
+    color: #101828;
     margin: 0;
-    color: #1e3a5f;
-    letter-spacing: 0.005em;
+    line-height: 1.2;
   }
 
-  .ossian-product-feed__subtitle {
-    font-size: 1.125rem;
-    color: #4a5565;
-    margin: 0;
-  }
-
-  @media screen and (max-width: 499px) {
-    .ossian-product-feed__title { font-size: 2rem; }
-  }
-
-  .ossian-product-feed__scroll-area {
+ 
+  .ossiongram__scroll-area {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding: 0 32px;
+    padding: 0 40px 16px;
   }
 
-  .ossian-product-feed__scroll-area::-webkit-scrollbar { display: none; }
+  .ossiongram__scroll-area::-webkit-scrollbar { display: none; }
 
-  .ossian-product-feed__track {
+  .ossiongram__track {
     display: flex;
-    gap: 16px;
+    gap: 20px;
     width: max-content;
-    padding-bottom: 8px;
+    align-items: flex-start;
   }
 
-  .ossian-product-feed__card {
-    display: block;
-    text-decoration: none;
+  /* -- Reel wrap (card + below) -------------------------- */
+  .ossiongram__reel-wrap {
     flex-shrink: 0;
-    width: 260px;
+    width: 230px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
   }
 
-  .ossian-product-feed__image-wrap {
+
+  .ossiongram__card {
     position: relative;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-    aspect-ratio: 260 / 462;
+    cursor: pointer;
+    display: block;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
 
-  .ossian-product-feed__image,
-  .ossian-product-feed__image-placeholder {
+  .ossiongram__card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.15), 0 4px 8px -2px rgba(0, 0, 0, 0.08);
+  }
+
+  .ossiongram__card-media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    background: #101828;
+  }
+
+  .ossiongram__card-video,
+  .ossiongram__card-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.3s;
+    transition: transform 0.35s ease;
   }
 
-  .ossian-product-feed__card:hover .ossian-product-feed__image {
-    transform: scale(1.04);
+  .ossiongram__card:hover .ossiongram__card-video,
+  .ossiongram__card:hover .ossiongram__card-img {
+    transform: scale(1.03);
   }
 
-  .ossian-product-feed__overlay {
+  .ossiongram__card-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ossiongram__card-placeholder svg { width: 72px; height: 72px; opacity: 0.2; }
+
+  .ossiongram__card-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%);
+    background: linear-gradient(to top, rgba(16, 24, 40, 0.72) 0%, rgba(16, 24, 40, 0.12) 45%, rgba(16, 24, 40, 0) 72%);
+    pointer-events: none;
   }
 
-  .ossian-product-feed__tag {
+  .ossiongram__card-text {
     position: absolute;
-    top: 16px;
-    left: 16px;
-    background: rgba(0, 0, 0, 0.5);
+    bottom: 20px;
+    left: 14px;
+    right: 14px;
+    margin: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.01em;
     color: #fff;
-    font-size: 0.75rem;
-    font-weight: 500;
-    padding: 6px 12px;
-    border-radius: 999px;
+    pointer-events: none;
   }
 
-  .ossian-product-feed__card-info {
+  
+  .ossiongram__slot { display: none; }
+  .ossiongram__slot--active { display: block; }
+
+  .ossiongram__slot-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .ossiongram__thumb-wrap {
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+  }
+
+  .ossiongram__thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ossiongram__slot-info { flex: 1; min-width: 0; }
+
+  .ossiongram__slot-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #101828;
+    margin: 0 0 4px;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .ossiongram__slot-price {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: #1e3a5f;
+    margin: 0;
+  }
+
+  .ossiongram__product-nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .ossiongram__nav-btn {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    font-size: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #374151;
+    transition: background 0.18s, border-color 0.18s, color 0.18s;
+    padding: 0;
+  }
+
+  .ossiongram__nav-btn:hover {
+    background: #f3f4f6;
+    border-color: #1e3a5f;
+    color: #1e3a5f;
+  }
+
+  /* -- Modal --------------------------------------------- */
+  .ossiongram__modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .ossiongram__modal[hidden] { display: none; }
+
+  .ossiongram__modal-overlay {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 16px;
+    inset: 0;
+    background: rgba(16, 24, 40, 0.85);
+    cursor: pointer;
+  }
+
+  .ossiongram__modal-container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: stretch;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 880px;
+    max-height: 88vh;
+    box-shadow: 0 25px 50px -12px rgba(16, 24, 40, 0.45);
+  }
+
+  /* Close button */
+  .ossiongram__modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 20;
+    background: rgba(16, 24, 40, 0.45);
+    border: none;
+    color: #fff;
+    font-size: 1.25rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: background 0.2s;
+  }
+
+  .ossiongram__modal-close:hover { background: rgba(16, 24, 40, 0.7); }
+
+  /* Left panel */
+  .ossiongram__modal-left {
+    flex-shrink: 0;
+    width: 320px;
+    background: #101828;
+    position: relative;
+  }
+
+  .ossiongram__modal-media-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .ossiongram__modal-video,
+  .ossiongram__modal-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ossiongram__modal-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #1a2535;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ossiongram__modal-placeholder svg { width: 80px; height: 80px; opacity: 0.18; }
+
+  .ossiongram__modal-video-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(16, 24, 40, 0.55) 0%, rgba(16, 24, 40, 0) 55%);
+    pointer-events: none;
+  }
+
+  /* Mute button - top-center of video */
+  .ossiongram__mute-btn {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    background: rgba(16, 24, 40, 0.5);
+    border: none;
+    color: #fff;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, opacity 0.2s;
+  }
+
+  .ossiongram__mute-btn:hover { background: rgba(16, 24, 40, 0.75); }
+
+  .ossiongram__modal-text {
+    position: absolute;
+    bottom: 24px;
+    left: 16px;
+    right: 16px;
+    margin: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+    color: #fff;
+    text-shadow: 0 1px 8px rgba(16, 24, 40, 0.6);
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  /* Right panel */
+  .ossiongram__modal-right {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+    padding: 28px 24px;
+    scrollbar-width: thin;
+    scrollbar-color: #e5e7eb transparent;
+  }
+
+  .ossiongram__modal-right::-webkit-scrollbar { width: 4px; }
+  .ossiongram__modal-right::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
+
+  .ossiongram__modal-products {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .ossiongram__modal-product {
     display: flex;
     flex-direction: column;
     gap: 8px;
-  }
-
-  .ossian-product-feed__product-title {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #fff;
-    margin: 0;
-    white-space: nowrap;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
     overflow: hidden;
-    text-overflow: ellipsis;
+    padding-bottom: 12px;
+    transition: box-shadow 0.2s, transform 0.2s;
   }
 
-  .ossian-product-feed__meta {
+  .ossiongram__modal-product:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .ossiongram__modal-product-img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    background: #f3f4f6;
+    display: block;
+  }
+
+  .ossiongram__modal-product-img--placeholder {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
   }
+  .ossiongram__modal-product-img--placeholder svg { width: 50px; height: 50px; opacity: 0.18; }
 
-  .ossian-product-feed__price {
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: #fff;
-  }
-
-  .ossian-product-feed__rating {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.75rem;
-    color: #fff;
-  }
-
-  .ossian-product-feed__footer {
-    text-align: center;
-    margin-top: 40px;
-  }
-
-  .ossian-product-feed__view-all {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 1rem;
+  .ossiongram__modal-product-name {
+    font-size: 0.8rem;
     font-weight: 600;
-    color: #1e3a5f;
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.2s;
+    color: #101828;
+    margin: 4px 12px 0;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
-  .ossian-product-feed__view-all:hover { border-color: #1e3a5f; }
+  .ossiongram__modal-product-price {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1e3a5f;
+    margin: 0 12px;
+  }
+
+  .ossiongram__modal-product-btn {
+    display: block;
+    margin: 4px 12px 0;
+    background: #1e3a5f;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    padding: 10px 8px;
+    border-radius: 10px;
+    transition: opacity 0.2s;
+  }
+
+  .ossiongram__modal-product-btn:hover { opacity: 0.85; color: #fff; }
+
+  /* -- Mobile -------------------------------------------- */
+  @media screen and (max-width: 749px) {
+    .ossiongram__modal-container {
+      flex-direction: column;
+      max-height: 92vh;
+    }
+
+    .ossiongram__modal-left {
+      width: 100%;
+      flex-shrink: 0;
+      height: 52vw;
+      max-height: 280px;
+      position: relative;
+    }
+
+    .ossiongram__modal-right { padding: 16px; }
+
+    .ossiongram__modal-products { gap: 12px; }
+
+    .ossiongram__reel-wrap { width: 185px; }
+
+    .ossiongram__scroll-area { padding: 0 16px 16px; }
+  }
+
+  @media screen and (max-width: 479px) {
+    .ossiongram__reel-wrap { width: 158px; }
+  }
 {% endstylesheet %}
+
+<script>
+(function () {
+  function initossiongram(scope) {
+    /* -- Product cycling below each card -- */
+    scope.querySelectorAll('.ossiongram__below').forEach(function (below) {
+      var slots = Array.from(below.querySelectorAll('.ossiongram__slot'));
+      if (slots.length < 2) return;
+
+      var current = 0;
+
+      function goTo(idx) {
+        slots[current].classList.remove('ossiongram__slot--active');
+        current = (idx + slots.length) % slots.length;
+        slots[current].classList.add('ossiongram__slot--active');
+      }
+
+      var prev = below.querySelector('.ossiongram__nav-prev');
+      var next = below.querySelector('.ossiongram__nav-next');
+      if (prev) prev.addEventListener('click', function (e) { e.stopPropagation(); goTo(current - 1); });
+      if (next) next.addEventListener('click', function (e) { e.stopPropagation(); goTo(current + 1); });
+    });
+
+    /* -- Modal open -- */
+    scope.querySelectorAll('.ossiongram__card').forEach(function (card) {
+      function openFromCard() {
+        var modal = document.getElementById(card.dataset.modal);
+        if (!modal) return;
+        openModal(modal);
+      }
+      card.addEventListener('click', openFromCard);
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openFromCard(); }
+      });
+    });
+
+    /* -- Modal close - overlay + x -- */
+    scope.querySelectorAll('.ossiongram__modal-overlay, .ossiongram__modal-close').forEach(function (el) {
+      el.addEventListener('click', function () {
+        var modal = el.closest('.ossiongram__modal');
+        if (modal) closeModal(modal);
+      });
+    });
+
+    /* -- Mute toggle -- */
+    scope.querySelectorAll('.ossiongram__mute-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var modal = btn.closest('.ossiongram__modal');
+        var video = modal && modal.querySelector('.ossiongram__modal-video');
+        if (!video) return;
+        video.muted = !video.muted;
+        setMuteIcon(modal, video.muted);
+      });
+    });
+
+    /* -- ESC to close -- */
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      scope.querySelectorAll('.ossiongram__modal:not([hidden])').forEach(closeModal);
+    });
+  }
+
+  function openModal(modal) {
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    var video = modal.querySelector('.ossiongram__modal-video');
+    if (video) {
+      video.muted = true;
+      video.currentTime = 0;
+      video.play().catch(function () {});
+      setMuteIcon(modal, true);
+    }
+  }
+
+  function closeModal(modal) {
+    modal.hidden = true;
+    document.body.style.overflow = '';
+    var video = modal.querySelector('.ossiongram__modal-video');
+    if (video) video.pause();
+  }
+
+  function setMuteIcon(modal, isMuted) {
+    var muted   = modal.querySelector('.ossiongram__icon-muted');
+    var unmuted = modal.querySelector('.ossiongram__icon-unmuted');
+    if (muted)   muted.hidden   = !isMuted;
+    if (unmuted) unmuted.hidden =  isMuted;
+  }
+
+  /* Support Shopify theme editor re-renders */
+  document.addEventListener('shopify:section:load', function (e) {
+    var section = e.target.querySelector('.ossiongram');
+    if (section) initossiongram(section);
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.ossiongram').forEach(initossiongram);
+    });
+  } else {
+    document.querySelectorAll('.ossiongram').forEach(initossiongram);
+  }
+})();
+</script>
 
 {% schema %}
 {
-  "name": "Product Feed",
+  "name": "#ossiongram Reels",
   "tag": "section",
   "class": "section-wrapper",
-  "max_blocks": 10,
+  "max_blocks": 12,
   "blocks": [
     {
-      "type": "product",
-      "name": "Product Card",
+      "type": "reel",
+      "name": "Reel Card",
       "settings": [
         {
+          "type": "header",
+          "content": "Reel Media"
+        },
+        {
+          "type": "text",
+          "id": "video_url",
+          "label": "Video URL",
+          "info": "Direct link to an .mp4 file (Shopify CDN or external). Leave blank to use the image below."
+        },
+        {
           "type": "image_picker",
-          "id": "image",
-          "label": "Image"
+          "id": "thumbnail",
+          "label": "Thumbnail / Fallback Image"
         },
         {
           "type": "text",
-          "id": "tag",
-          "label": "Tag label (e.g. Trending)",
-          "default": "Trending"
+          "id": "overlay_text",
+          "label": "Card text overlay",
+          "default": "wear something red.",
+          "info": "Italic serif text shown over the reel card"
         },
         {
           "type": "text",
-          "id": "title",
-          "label": "Product Title",
-          "default": "Product Name"
+          "id": "modal_text",
+          "label": "Modal text overlay",
+          "default": "favourite colours.",
+          "info": "Italic serif text shown at the bottom of the modal video"
+        },
+        {
+          "type": "header",
+          "content": "Product 1"
+        },
+        {
+          "type": "product",
+          "id": "product_1",
+          "label": "Product 1 (Shopify product)"
+        },
+        {
+          "type": "image_picker",
+          "id": "p1_img",
+          "label": "Custom image (overrides product image)"
         },
         {
           "type": "text",
-          "id": "price",
-          "label": "Price",
-          "default": "₹1999"
+          "id": "p1_name",
+          "label": "Product name (fallback if no product selected)",
+          "default": "VelvetteKiss(TM) Featherlight Lipstick - Bare Affair"
         },
         {
           "type": "text",
-          "id": "rating",
-          "label": "Rating (e.g. 4.8)",
-          "default": "4.8"
+          "id": "p1_price",
+          "label": "Price (fallback)",
+          "default": "Rs.1099"
         },
         {
           "type": "url",
-          "id": "product_url",
-          "label": "Product URL"
+          "id": "p1_url",
+          "label": "Product URL (fallback)"
+        },
+        {
+          "type": "header",
+          "content": "Product 2"
+        },
+        {
+          "type": "product",
+          "id": "product_2",
+          "label": "Product 2 (Shopify product)"
+        },
+        {
+          "type": "image_picker",
+          "id": "p2_img",
+          "label": "Custom image (overrides product image)"
+        },
+        {
+          "type": "text",
+          "id": "p2_name",
+          "label": "Product name (fallback)"
+        },
+        {
+          "type": "text",
+          "id": "p2_price",
+          "label": "Price (fallback)"
+        },
+        {
+          "type": "url",
+          "id": "p2_url",
+          "label": "Product URL (fallback)"
+        },
+        {
+          "type": "header",
+          "content": "Product 3"
+        },
+        {
+          "type": "product",
+          "id": "product_3",
+          "label": "Product 3 (Shopify product)"
+        },
+        {
+          "type": "image_picker",
+          "id": "p3_img",
+          "label": "Custom image (overrides product image)"
+        },
+        {
+          "type": "text",
+          "id": "p3_name",
+          "label": "Product name (fallback)"
+        },
+        {
+          "type": "text",
+          "id": "p3_price",
+          "label": "Price (fallback)"
+        },
+        {
+          "type": "url",
+          "id": "p3_url",
+          "label": "Product URL (fallback)"
+        },
+        {
+          "type": "header",
+          "content": "Product 4"
+        },
+        {
+          "type": "product",
+          "id": "product_4",
+          "label": "Product 4 (Shopify product)"
+        },
+        {
+          "type": "image_picker",
+          "id": "p4_img",
+          "label": "Custom image (overrides product image)"
+        },
+        {
+          "type": "text",
+          "id": "p4_name",
+          "label": "Product name (fallback)"
+        },
+        {
+          "type": "text",
+          "id": "p4_price",
+          "label": "Price (fallback)"
+        },
+        {
+          "type": "url",
+          "id": "p4_url",
+          "label": "Product URL (fallback)"
         }
       ]
     }
@@ -259,25 +1003,8 @@
     {
       "type": "text",
       "id": "heading",
-      "label": "Heading",
-      "default": "#OssionFeed"
-    },
-    {
-      "type": "text",
-      "id": "subheading",
-      "label": "Subheading",
-      "default": "Discover our complete range of professional hair care solutions"
-    },
-    {
-      "type": "text",
-      "id": "view_all_label",
-      "label": "View all label",
-      "default": "View All Products"
-    },
-    {
-      "type": "url",
-      "id": "view_all_url",
-      "label": "View all URL"
+      "label": "Section heading",
+      "default": "#ossiongram"
     },
     {
       "type": "color_scheme",
@@ -293,7 +1020,7 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "default": 64
+      "default": 72
     },
     {
       "type": "range",
@@ -303,12 +1030,18 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "default": 64
+      "default": 72
     }
   ],
   "presets": [
     {
-      "name": "Product Feed"
+      "name": "#ossiongram Reels",
+      "blocks": [
+        { "type": "reel" },
+        { "type": "reel" },
+        { "type": "reel" },
+        { "type": "reel" }
+      ]
     }
   ]
 }

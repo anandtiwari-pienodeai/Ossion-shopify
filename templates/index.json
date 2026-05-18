@@ -195,87 +195,168 @@
     "ossian_product_feed_PA6fVk": {
       "type": "ossian-product-feed",
       "blocks": {
-        "product_t9f9VM": {
-          "type": "product",
+        "reel_3jY9dk": {
+          "type": "reel",
           "settings": {
-            "image": "shopify://shop_images/1_3e41f8d6-2c87-4691-9c7d-f9a43c86826d.jpg",
-            "tag": "Trending",
-            "title": "Product Name",
-            "price": "₹1999",
-            "rating": "4.8",
-            "product_url": ""
+            "video_url": "",
+            "thumbnail": "shopify://shop_images/Ossion6_fd0090cd-9910-4707-9a2c-dafb5c54fda0.jpg",
+            "overlay_text": "{{ block.settings.product_1.title }}",
+            "modal_text": "favourite colours.{{ block.settings.product_2.title }}",
+            "product_1": "ossion-backwash-conditioner",
+            "p1_name": "",
+            "p1_price": "₹1099",
+            "p1_url": "",
+            "product_2": "example-perfume",
+            "p2_name": "",
+            "p2_price": "",
+            "p2_url": "",
+            "product_3": "",
+            "p3_name": "",
+            "p3_price": "",
+            "p3_url": "",
+            "product_4": "",
+            "p4_name": "",
+            "p4_price": "",
+            "p4_url": ""
           }
         },
-        "product_FD7FPD": {
-          "type": "product",
+        "reel_eegYen": {
+          "type": "reel",
           "settings": {
-            "image": "shopify://shop_images/Ossion2.jpg",
-            "tag": "Trending",
-            "title": "Product Name",
-            "price": "₹1999",
-            "rating": "4.8",
-            "product_url": ""
+            "video_url": "",
+            "thumbnail": "shopify://shop_images/Ossion6_fd0090cd-9910-4707-9a2c-dafb5c54fda0.jpg",
+            "overlay_text": "{{ block.settings.product_1.title }}",
+            "modal_text": "favourite colours.{{ block.settings.product_2.title }}",
+            "product_1": "ossion-backwash-conditioner",
+            "p1_name": "",
+            "p1_price": "₹1099",
+            "p1_url": "",
+            "product_2": "example-perfume",
+            "p2_name": "",
+            "p2_price": "",
+            "p2_url": "",
+            "product_3": "",
+            "p3_name": "",
+            "p3_price": "",
+            "p3_url": "",
+            "product_4": "",
+            "p4_name": "",
+            "p4_price": "",
+            "p4_url": ""
           }
         },
-        "product_VRexXE": {
-          "type": "product",
+        "reel_UCwJAq": {
+          "type": "reel",
           "settings": {
-            "image": "shopify://shop_images/3_a52c00c8-7787-4bea-a7c8-4f58135272dc.jpg",
-            "tag": "Trending",
-            "title": "Product Name",
-            "price": "₹1999",
-            "rating": "4.8",
-            "product_url": ""
+            "video_url": "",
+            "thumbnail": "shopify://shop_images/Ossion6_fd0090cd-9910-4707-9a2c-dafb5c54fda0.jpg",
+            "overlay_text": "{{ block.settings.product_1.title }}",
+            "modal_text": "favourite colours.{{ block.settings.product_2.title }}",
+            "product_1": "ossion-backwash-conditioner",
+            "p1_name": "",
+            "p1_price": "₹1099",
+            "p1_url": "",
+            "product_2": "example-perfume",
+            "p2_name": "",
+            "p2_price": "",
+            "p2_url": "",
+            "product_3": "",
+            "p3_name": "",
+            "p3_price": "",
+            "p3_url": "",
+            "product_4": "",
+            "p4_name": "",
+            "p4_price": "",
+            "p4_url": ""
           }
         },
-        "product_fPHinM": {
-          "type": "product",
+        "reel_p7yM94": {
+          "type": "reel",
           "settings": {
-            "image": "shopify://shop_images/Ossion2.jpg",
-            "tag": "Trending",
-            "title": "Product Name",
-            "price": "₹1999",
-            "rating": "4.8",
-            "product_url": ""
+            "video_url": "",
+            "thumbnail": "shopify://shop_images/Ossion6_fd0090cd-9910-4707-9a2c-dafb5c54fda0.jpg",
+            "overlay_text": "{{ block.settings.product_1.title }}",
+            "modal_text": "favourite colours.{{ block.settings.product_2.title }}",
+            "product_1": "ossion-backwash-conditioner",
+            "p1_name": "",
+            "p1_price": "₹1099",
+            "p1_url": "",
+            "product_2": "example-perfume",
+            "p2_name": "",
+            "p2_price": "",
+            "p2_url": "",
+            "product_3": "",
+            "p3_name": "",
+            "p3_price": "",
+            "p3_url": "",
+            "product_4": "",
+            "p4_name": "",
+            "p4_price": "",
+            "p4_url": ""
           }
         },
-        "product_raYRrL": {
-          "type": "product",
+        "reel_7rcmFd": {
+          "type": "reel",
           "settings": {
-            "image": "shopify://shop_images/Ossion6.jpg",
-            "tag": "Trending",
-            "title": "Product Name",
-            "price": "₹1999",
-            "rating": "4.8",
-            "product_url": ""
+            "video_url": "",
+            "thumbnail": "shopify://shop_images/Ossion6_fd0090cd-9910-4707-9a2c-dafb5c54fda0.jpg",
+            "overlay_text": "{{ block.settings.product_1.title }}",
+            "modal_text": "favourite colours.{{ block.settings.product_2.title }}",
+            "product_1": "ossion-backwash-conditioner",
+            "p1_name": "",
+            "p1_price": "₹1099",
+            "p1_url": "",
+            "product_2": "example-perfume",
+            "p2_name": "",
+            "p2_price": "",
+            "p2_url": "",
+            "product_3": "",
+            "p3_name": "",
+            "p3_price": "",
+            "p3_url": "",
+            "product_4": "",
+            "p4_name": "",
+            "p4_price": "",
+            "p4_url": ""
           }
         },
-        "product_Y68WPy": {
-          "type": "product",
+        "reel_R7ttpe": {
+          "type": "reel",
           "settings": {
-            "image": "shopify://shop_images/Ossion1.webp",
-            "tag": "Trending",
-            "title": "Product Name",
-            "price": "₹1999",
-            "rating": "4.8",
-            "product_url": ""
+            "video_url": "",
+            "thumbnail": "shopify://shop_images/Ossion6_fd0090cd-9910-4707-9a2c-dafb5c54fda0.jpg",
+            "overlay_text": "{{ block.settings.product_1.title }}",
+            "modal_text": "favourite colours.{{ block.settings.product_2.title }}",
+            "product_1": "ossion-backwash-conditioner",
+            "p1_name": "",
+            "p1_price": "₹1099",
+            "p1_url": "",
+            "product_2": "example-perfume",
+            "p2_name": "",
+            "p2_price": "",
+            "p2_url": "",
+            "product_3": "",
+            "p3_name": "",
+            "p3_price": "",
+            "p3_url": "",
+            "product_4": "",
+            "p4_name": "",
+            "p4_price": "",
+            "p4_url": ""
           }
         }
       },
       "block_order": [
-        "product_t9f9VM",
-        "product_FD7FPD",
-        "product_VRexXE",
-        "product_fPHinM",
-        "product_raYRrL",
-        "product_Y68WPy"
+        "reel_3jY9dk",
+        "reel_eegYen",
+        "reel_UCwJAq",
+        "reel_p7yM94",
+        "reel_7rcmFd",
+        "reel_R7ttpe"
       ],
       "name": "Product Feed",
       "settings": {
         "heading": "#OssionFeed",
-        "subheading": "Discover our complete range of professional hair care solutions",
-        "view_all_label": "View All Products",
-        "view_all_url": "",
         "color_scheme": "",
         "padding_top": 40,
         "padding_bottom": 40
