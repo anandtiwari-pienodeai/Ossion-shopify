@@ -133,60 +133,13 @@
     },
     "ossian_best_sellers_DUrf9w": {
       "type": "ossian-best-sellers",
-      "blocks": {
-        "product_FpPVYH": {
-          "type": "product",
-          "settings": {
-            "image": "shopify://shop_images/Ossion2.jpg",
-            "title": "Product Name",
-            "price": "₹1999",
-            "rating": "4.8",
-            "product_url": ""
-          }
-        },
-        "product_dN3gaj": {
-          "type": "product",
-          "settings": {
-            "image": "shopify://shop_images/Ossion2.jpg",
-            "title": "Product Name",
-            "price": "₹1999",
-            "rating": "4.8",
-            "product_url": ""
-          }
-        },
-        "product_cGfJpk": {
-          "type": "product",
-          "settings": {
-            "image": "shopify://shop_images/Ossion6.jpg",
-            "title": "Product Name",
-            "price": "₹1999",
-            "rating": "4.8",
-            "product_url": ""
-          }
-        },
-        "product_9bTAHh": {
-          "type": "product",
-          "settings": {
-            "image": "shopify://shop_images/Ossian5.jpg",
-            "title": "Product Name",
-            "price": "₹1999",
-            "rating": "4.8",
-            "product_url": ""
-          }
-        }
-      },
-      "block_order": [
-        "product_FpPVYH",
-        "product_dN3gaj",
-        "product_cGfJpk",
-        "product_9bTAHh"
-      ],
       "name": "Best Sellers",
       "settings": {
         "heading": "Best Sellers",
         "subheading": "Best sellers loved by professionals worldwide",
-        "collection": "",
+        "collection": "best-sellers",
         "products_count": 4,
+        "show_view_all": true,
         "color_scheme": "",
         "padding_top": 40,
         "padding_bottom": 40
