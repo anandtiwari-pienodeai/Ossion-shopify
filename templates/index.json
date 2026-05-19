@@ -64,7 +64,7 @@
     "ossian_category_grid_fiGmAQ": {
       "type": "ossian-category-grid",
       "blocks": {
-        "category_F6FNLp": {
+        "category_kcedN9": {
           "type": "category",
           "settings": {
             "collection": "chromatic-dream-permanent-hair-color",
@@ -72,39 +72,36 @@
             "link": ""
           }
         },
-        "category_EPww6Y": {
+        "category_f3Qpqd": {
           "type": "category",
           "settings": {
-            "collection": "",
-            "image": "shopify://shop_images/Ossion1.webp",
-            "title": "Hair Color",
-            "link": "shopify://collections/chromatic-dream-permanent-hair-color"
+            "collection": "chromatic-dream-permanent-hair-color",
+            "title": "",
+            "link": ""
           }
         },
-        "category_TT8nWg": {
+        "category_tQTNCG": {
           "type": "category",
           "settings": {
-            "collection": "",
-            "image": "shopify://shop_images/Ossion2.jpg",
-            "title": "Lightening",
-            "link": "shopify://collections/chromatic-dream-permanent-hair-color"
+            "collection": "chromatic-dream-permanent-hair-color",
+            "title": "",
+            "link": ""
           }
         },
-        "category_cmcM89": {
+        "category_F6FNLp": {
           "type": "category",
           "settings": {
-            "collection": "",
-            "image": "shopify://shop_images/Ossian3.jpg",
-            "title": "Straightening",
-            "link": "shopify://collections/chromatic-dream-permanent-hair-color"
+            "collection": "chromatic-dream-permanent-hair-color",
+            "title": "",
+            "link": ""
           }
         }
       },
       "block_order": [
-        "category_F6FNLp",
-        "category_EPww6Y",
-        "category_TT8nWg",
-        "category_cmcM89"
+        "category_kcedN9",
+        "category_f3Qpqd",
+        "category_tQTNCG",
+        "category_F6FNLp"
       ],
       "name": "Category Grid",
       "settings": {
