@@ -18,6 +18,7 @@
     id: 'product-details',
     closest.product: closest.product
   %}
+  {%- render 'ossian-variant-image-picker', product: product -%}
 {% endcapture %}
 
 {% capture additional_blocks %}
@@ -177,16 +178,103 @@
 %}
 
 {% stylesheet %}
+  /* ── Vendor tag pill ─────────────────────────── */
   .text-block--text_vendor_tag p {
     display: inline-block;
-    font-size: 0.8125rem;
-    font-weight: 500;
+    font-size: 0.75rem;
+    font-weight: 600;
     color: #1e3a5f;
     background: #eff6ff;
     border: 1px solid #bfdbfe;
     border-radius: 20px;
     padding: 3px 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  /* ── Product title sizing on PDP ─────────────── */
+  .product-information .product-details h1 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    line-height: 1.25;
+    font-weight: 700;
+    color: #101828;
+    margin: 0;
+  }
+
+  /* ── Price block on PDP ──────────────────────── */
+  .product-information .price__regular .price-item,
+  .product-information .price__sale .price-item--sale {
+    font-size: 1.625rem;
+    font-weight: 700;
+    color: #1e3a5f;
+  }
+
+  .product-information .price__sale .price-item--regular {
+    font-size: 1rem;
+    color: #9ca3af;
+    text-decoration: line-through;
+  }
+
+  /* ── Description text ────────────────────────── */
+  .product-information .product-details .rte p,
+  .product-information .product-details .rte li {
+    font-size: 0.9375rem;
+    color: #4b5563;
+    line-height: 1.7;
+  }
+
+  /* ── Variant picker buttons ──────────────────── */
+  .product-information .variant-option--buttons .variant-option__button-label {
+    border-radius: 8px;
+  }
+
+  /* ── Add to cart button ──────────────────────── */
+  .product-information .add-to-cart-button.button {
+    background: #1e3a5f;
+    border-color: #1e3a5f;
+    border-radius: 10px;
+    font-weight: 600;
     letter-spacing: 0.02em;
+    min-height: 52px;
+  }
+
+  .product-information .add-to-cart-button.button:hover {
+    background: #16304f;
+    border-color: #16304f;
+  }
+
+  /* ── Media column: tighten thumbnail strip ───── */
+  .product-information .product-information__media {
+    position: relative;
+  }
+
+  /* ── Variant image picker sits flush ─────────── */
+  .ossian-vip { margin-top: 12px; }
+
+  /* ── Hide native variant picker UI (custom swatch strip replaces it) ── */
+  .product-information .variant-picker__form {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* ── Mobile: stack cleanly ───────────────────── */
+  @media screen and (max-width: 749px) {
+    .product-information .product-details h1 {
+      font-size: 1.5rem;
+    }
+
+    .product-information .price__regular .price-item,
+    .product-information .price__sale .price-item--sale {
+      font-size: 1.375rem;
+    }
+
+    .ossian-vip { margin-top: 10px; }
   }
 
   .sticky-add-to-cart__bar {
