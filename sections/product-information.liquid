@@ -252,6 +252,17 @@
   /* ── Variant image picker sits flush ─────────── */
   .ossian-vip { margin-top: 12px; }
 
+  /* ── Hide native variant picker UI (custom swatch strip replaces it) ── */
+  .product-information .variant-picker__form {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
   /* ── Mobile: stack cleanly ───────────────────── */
   @media screen and (max-width: 749px) {
     .product-information .product-details h1 {

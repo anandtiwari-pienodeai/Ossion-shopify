@@ -120,6 +120,13 @@
     font-weight: 600;
   }
 
+  .ossian-vip__swatch-placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #e5e7eb;
+  }
+
   /* Sold-out diagonal cross */
   .ossian-vip__x {
     position: absolute;
@@ -172,14 +179,8 @@
     </div>
 
     <div class="ossian-vip__scroll">
-      {%- assign _seen = '' -%}
       {%- for variant in product.variants -%}
         {%- assign vi = variant.featured_image | default: product.featured_image -%}
-        {%- if vi == blank -%}{%- continue -%}{%- endif -%}
-
-        {%- assign _key = vi.id | append: '' -%}
-        {%- if _seen contains _key -%}{%- continue -%}{%- endif -%}
-        {%- assign _seen = _seen | append: _key | append: '|' -%}
 
         <button
           type="button"
@@ -189,14 +190,18 @@
           aria-label="{{ variant.title | escape }}"
         >
           <div class="ossian-vip__swatch-img-wrap">
-            {{
-              vi
-              | image_url: width: 160
-              | image_tag:
-                loading: 'lazy',
-                class: 'ossian-vip__swatch-img',
-                alt: variant.title
-            }}
+            {%- if vi != blank -%}
+              {{
+                vi
+                | image_url: width: 160
+                | image_tag:
+                  loading: 'lazy',
+                  class: 'ossian-vip__swatch-img',
+                  alt: variant.title
+              }}
+            {%- else -%}
+              <span class="ossian-vip__swatch-placeholder"></span>
+            {%- endif -%}
             {%- unless variant.available -%}
               <span class="ossian-vip__x" aria-hidden="true"></span>
             {%- endunless -%}
