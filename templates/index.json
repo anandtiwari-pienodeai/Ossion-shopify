@@ -67,14 +67,15 @@
         "category_F6FNLp": {
           "type": "category",
           "settings": {
-            "image": "shopify://shop_images/Ossion2.jpg",
-            "title": "Category Name-1",
-            "link": "shopify://collections/chromatic-dream-permanent-hair-color"
+            "collection": "chromatic-dream-permanent-hair-color",
+            "title": "",
+            "link": ""
           }
         },
         "category_EPww6Y": {
           "type": "category",
           "settings": {
+            "collection": "",
             "image": "shopify://shop_images/Ossion1.webp",
             "title": "Hair Color",
             "link": "shopify://collections/chromatic-dream-permanent-hair-color"
@@ -83,6 +84,7 @@
         "category_TT8nWg": {
           "type": "category",
           "settings": {
+            "collection": "",
             "image": "shopify://shop_images/Ossion2.jpg",
             "title": "Lightening",
             "link": "shopify://collections/chromatic-dream-permanent-hair-color"
@@ -91,6 +93,7 @@
         "category_cmcM89": {
           "type": "category",
           "settings": {
+            "collection": "",
             "image": "shopify://shop_images/Ossian3.jpg",
             "title": "Straightening",
             "link": "shopify://collections/chromatic-dream-permanent-hair-color"
