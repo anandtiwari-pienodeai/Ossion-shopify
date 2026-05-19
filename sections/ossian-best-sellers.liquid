@@ -54,27 +54,58 @@
         {% endfor %}
       {% else %}
         {% for block in section.blocks %}
+          {% assign bp = all_products[block.settings.product] %}
+          {% if bp != blank %}
+            {% assign card_url     = bp.url %}
+            {% assign card_title   = bp.title %}
+            {% assign card_image   = bp.featured_image %}
+            {% assign card_price   = bp.price | money %}
+            {% assign card_rating  = bp.metafields.reviews.rating.value %}
+            {% assign card_variant = bp.selected_or_first_available_variant %}
+            {% assign card_avail   = bp.available %}
+          {% else %}
+            {% assign card_url     = block.settings.product_url %}
+            {% assign card_title   = block.settings.title %}
+            {% assign card_image   = block.settings.image %}
+            {% assign card_price   = block.settings.price %}
+            {% assign card_rating  = block.settings.rating %}
+            {% assign card_variant = nil %}
+            {% assign card_avail   = true %}
+          {% endif %}
           <div class="ossian-best-sellers__card" {{ block.shopify_attributes }}>
-            <a href="{{ block.settings.product_url }}" class="ossian-best-sellers__image-link">
+            <a href="{{ card_url }}" class="ossian-best-sellers__image-link">
               <div class="ossian-best-sellers__image-wrap">
-                {% if block.settings.image != blank %}
-                  {{ block.settings.image | image_url: width: 560 | image_tag: loading: 'lazy', class: 'ossian-best-sellers__image', alt: block.settings.title }}
+                {% if card_image != blank %}
+                  {{ card_image | image_url: width: 560 | image_tag: loading: 'lazy', class: 'ossian-best-sellers__image', alt: card_title }}
                 {% else %}
                   <div class="ossian-best-sellers__image-placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
                 {% endif %}
               </div>
-              {% if block.settings.rating != blank %}
+              {% if card_rating != blank %}
                 <div class="ossian-best-sellers__rating">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="0.5" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon></svg>
-                  <span>{{ block.settings.rating }}</span>
+                  <span>{{ card_rating }}</span>
                 </div>
               {% endif %}
             </a>
             <div class="ossian-best-sellers__info">
-              <a href="{{ block.settings.product_url }}" class="ossian-best-sellers__product-title">{{ block.settings.title }}</a>
+              <a href="{{ card_url }}" class="ossian-best-sellers__product-title">{{ card_title }}</a>
               <div class="ossian-best-sellers__bottom">
-                <span class="ossian-best-sellers__price">{{ block.settings.price }}</span>
-                <a href="{{ block.settings.product_url }}" class="ossian-best-sellers__atc-btn">Add to Cart</a>
+                <span class="ossian-best-sellers__price">{{ card_price }}</span>
+                {% if bp != blank %}
+                  {% form 'product', bp, class: 'ossian-best-sellers__form' %}
+                    <input type="hidden" name="id" value="{{ card_variant.id }}">
+                    <button
+                      type="submit"
+                      class="ossian-best-sellers__atc-btn"
+                      {% unless card_avail %}disabled{% endunless %}
+                    >
+                      {% if card_avail %}Add to Cart{% else %}Sold Out{% endif %}
+                    </button>
+                  {% endform %}
+                {% else %}
+                  <a href="{{ card_url }}" class="ossian-best-sellers__atc-btn">Add to Cart</a>
+                {% endif %}
               </div>
             </div>
           </div>
@@ -254,32 +285,34 @@
       "name": "Product",
       "settings": [
         {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
           "type": "image_picker",
           "id": "image",
-          "label": "Product Image"
+          "label": "Override image (optional)"
         },
         {
           "type": "text",
           "id": "title",
-          "label": "Product Title",
-          "default": "Product Name"
+          "label": "Override title (optional)"
         },
         {
           "type": "text",
           "id": "price",
-          "label": "Price",
-          "default": "₹1999"
+          "label": "Override price (optional)"
         },
         {
           "type": "text",
           "id": "rating",
-          "label": "Rating (e.g. 4.8)",
-          "default": "4.8"
+          "label": "Override rating (optional)"
         },
         {
           "type": "url",
           "id": "product_url",
-          "label": "Product URL"
+          "label": "Override URL (optional)"
         }
       ]
     }
