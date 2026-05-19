@@ -57,8 +57,8 @@
         "secondary_button_label": "Learn More",
         "secondary_button_url": "",
         "image": "shopify://shop_images/Ossion2.jpg",
-        "padding_top": 20,
-        "padding_bottom": 80
+        "padding_top": 12,
+        "padding_bottom": 12
       }
     },
     "ossian_category_grid_fiGmAQ": {
@@ -69,7 +69,7 @@
           "settings": {
             "image": "shopify://shop_images/Ossion2.jpg",
             "title": "Category Name-1",
-            "link": "shopify://collections/new-collection"
+            "link": "shopify://collections/chromatic-dream-permanent-hair-color"
           }
         },
         "category_EPww6Y": {
@@ -77,7 +77,7 @@
           "settings": {
             "image": "shopify://shop_images/Ossion1.webp",
             "title": "Hair Color",
-            "link": ""
+            "link": "shopify://collections/chromatic-dream-permanent-hair-color"
           }
         },
         "category_TT8nWg": {
@@ -85,7 +85,7 @@
           "settings": {
             "image": "shopify://shop_images/Ossion2.jpg",
             "title": "Lightening",
-            "link": ""
+            "link": "shopify://collections/chromatic-dream-permanent-hair-color"
           }
         },
         "category_cmcM89": {
@@ -93,7 +93,7 @@
           "settings": {
             "image": "shopify://shop_images/Ossian3.jpg",
             "title": "Straightening",
-            "link": ""
+            "link": "shopify://collections/chromatic-dream-permanent-hair-color"
           }
         }
       },
@@ -108,12 +108,13 @@
         "heading": "Shop by Category",
         "subheading": "Discover the perfect products for your hair care needs",
         "color_scheme": "",
-        "padding_top": 64,
-        "padding_bottom": 64
+        "padding_top": 40,
+        "padding_bottom": 40
       }
     },
     "ossian_featured_collection_jnxbBD": {
       "type": "ossian-featured-collection",
+      "custom_css": [],
       "name": "Featured Collection",
       "settings": {
         "label": "Hair Color Collection",
@@ -126,8 +127,8 @@
         "image": "shopify://shop_images/Ossion6.jpg",
         "price_label": "Starting at",
         "price": "₹1999",
-        "padding_top": 64,
-        "padding_bottom": 64
+        "padding_top": 40,
+        "padding_bottom": 40
       }
     },
     "ossian_best_sellers_DUrf9w": {
@@ -187,8 +188,8 @@
         "collection": "",
         "products_count": 4,
         "color_scheme": "",
-        "padding_top": 64,
-        "padding_bottom": 64
+        "padding_top": 40,
+        "padding_bottom": 40
       }
     },
     "ossian_product_feed_PA6fVk": {
@@ -357,8 +358,8 @@
       "settings": {
         "heading": "#OssionFeed",
         "color_scheme": "",
-        "padding_top": 64,
-        "padding_bottom": 64
+        "padding_top": 40,
+        "padding_bottom": 40
       }
     },
     "ossian_why_choose_XpkfUa": {
@@ -408,8 +409,8 @@
         "heading": "Why Choose OSSION?",
         "subheading": "Professional quality you can trust",
         "color_scheme": "",
-        "padding_top": 64,
-        "padding_bottom": 64
+        "padding_top": 40,
+        "padding_bottom": 40
       }
     },
     "section_7FcLtc": {
