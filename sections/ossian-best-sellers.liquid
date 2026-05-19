@@ -14,10 +14,16 @@
       </div>
     {% endif %}
 
+    {%- assign source_collection = collections[section.settings.collection] -%}
+
     <div class="ossian-best-sellers__grid">
-      {%- assign source_collection = collections[section.settings.collection] -%}
       {% if source_collection != blank and source_collection.products.size > 0 %}
         {% for product in source_collection.products limit: section.settings.products_count %}
+          {%- assign on_sale = false -%}
+          {%- if product.compare_at_price > product.price -%}
+            {%- assign on_sale = true -%}
+            {%- assign discount_pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
+          {%- endif -%}
           <div class="ossian-best-sellers__card">
             <a href="{{ product.url }}" class="ossian-best-sellers__image-link">
               <div class="ossian-best-sellers__image-wrap">
@@ -27,6 +33,14 @@
                   <div class="ossian-best-sellers__image-placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
                 {% endif %}
               </div>
+              <div class="ossian-best-sellers__badges">
+                {% if on_sale %}
+                  <span class="ossian-best-sellers__badge ossian-best-sellers__badge--sale">-{{ discount_pct }}%</span>
+                {% endif %}
+                {% unless product.available %}
+                  <span class="ossian-best-sellers__badge ossian-best-sellers__badge--sold-out">Sold Out</span>
+                {% endunless %}
+              </div>
               {% if product.metafields.reviews.rating.value != blank %}
                 <div class="ossian-best-sellers__rating">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="0.5" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon></svg>
@@ -35,9 +49,22 @@
               {% endif %}
             </a>
             <div class="ossian-best-sellers__info">
+              {% if product.vendor != blank %}
+                <span class="ossian-best-sellers__vendor">{{ product.vendor }}</span>
+              {% endif %}
               <a href="{{ product.url }}" class="ossian-best-sellers__product-title">{{ product.title }}</a>
+              {% if product.description != blank %}
+                <p class="ossian-best-sellers__desc">{{ product.description | strip_html | truncate: 80 }}</p>
+              {% endif %}
               <div class="ossian-best-sellers__bottom">
-                <span class="ossian-best-sellers__price">{{ product.price | money }}</span>
+                <div class="ossian-best-sellers__price-wrap">
+                  <span class="ossian-best-sellers__price{% if on_sale %} ossian-best-sellers__price--sale{% endif %}">
+                    {{ product.price | money }}
+                  </span>
+                  {% if on_sale %}
+                    <span class="ossian-best-sellers__compare-price">{{ product.compare_at_price | money }}</span>
+                  {% endif %}
+                </div>
                 {% form 'product', product, class: 'ossian-best-sellers__form' %}
                   <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
                   <button
@@ -112,6 +139,14 @@
         {% endfor %}
       {% endif %}
     </div>
+
+    {% if source_collection != blank and section.settings.show_view_all %}
+      <div class="ossian-best-sellers__footer">
+        <a href="{{ source_collection.url }}" class="ossian-best-sellers__view-all">
+          View All {{ source_collection.title }}
+        </a>
+      </div>
+    {% endif %}
   </div>
 </div>
 
@@ -196,6 +231,90 @@
 
   .ossian-best-sellers__card:hover .ossian-best-sellers__image {
     transform: scale(1.04);
+  }
+
+  .ossian-best-sellers__badges {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .ossian-best-sellers__badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .ossian-best-sellers__badge--sale {
+    background: #dc2626;
+    color: #fff;
+  }
+
+  .ossian-best-sellers__badge--sold-out {
+    background: #6b7280;
+    color: #fff;
+  }
+
+  .ossian-best-sellers__vendor {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .ossian-best-sellers__desc {
+    font-size: 0.875rem;
+    color: #6b7280;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .ossian-best-sellers__price-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .ossian-best-sellers__price--sale {
+    color: #dc2626;
+  }
+
+  .ossian-best-sellers__compare-price {
+    font-size: 0.9rem;
+    color: #9ca3af;
+    text-decoration: line-through;
+    font-weight: 500;
+  }
+
+  .ossian-best-sellers__footer {
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .ossian-best-sellers__view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 32px;
+    border: 2px solid #1e3a5f;
+    border-radius: 10px;
+    color: #1e3a5f;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .ossian-best-sellers__view-all:hover {
+    background: #1e3a5f;
+    color: #fff;
   }
 
   .ossian-best-sellers__rating {
@@ -338,11 +457,17 @@
     {
       "type": "range",
       "id": "products_count",
-      "label": "Products to show (when using collection)",
+      "label": "Products to show",
       "min": 2,
       "max": 8,
       "step": 1,
       "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View All' button",
+      "default": true
     },
     {
       "type": "color_scheme",
