@@ -148,6 +148,55 @@
     "ossian_product_feed_PA6fVk": {
       "type": "ossian-product-feed",
       "blocks": {
+        "reel_qR7EUY": {
+          "type": "reel",
+          "settings": {
+            "video_url": "",
+            "overlay_text": "wear something red.",
+            "modal_text": "favourite colours.",
+            "product_1": "",
+            "p1_name": "VelvetteKiss(TM) Featherlight Lipstick - Bare Affair",
+            "p1_price": "Rs.1099",
+            "p1_url": "",
+            "product_2": "",
+            "p2_name": "",
+            "p2_price": "",
+            "p2_url": "",
+            "product_3": "",
+            "p3_name": "",
+            "p3_price": "",
+            "p3_url": "",
+            "product_4": "",
+            "p4_name": "",
+            "p4_price": "",
+            "p4_url": ""
+          }
+        },
+        "reel_xBhaYJ": {
+          "type": "reel",
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/e83eca8092154a9e99972af2a8c4975f.mp4",
+            "thumbnail": "shopify://shop_images/Ossion2_df22d699-c7e1-44b0-8b4d-b1927876a4a1.jpg",
+            "overlay_text": "wear something red.",
+            "modal_text": "favourite colours.",
+            "product_1": "chromatic-dream-permanent-hair-color-creme-100ml",
+            "p1_name": "VelvetteKiss(TM) Featherlight Lipstick - Bare Affair",
+            "p1_price": "Rs.1099",
+            "p1_url": "",
+            "product_2": "",
+            "p2_name": "",
+            "p2_price": "",
+            "p2_url": "",
+            "product_3": "",
+            "p3_name": "",
+            "p3_price": "",
+            "p3_url": "",
+            "product_4": "",
+            "p4_name": "",
+            "p4_price": "",
+            "p4_url": ""
+          }
+        },
         "reel_gGhJBK": {
           "type": "reel",
           "settings": {
@@ -175,6 +224,8 @@
         }
       },
       "block_order": [
+        "reel_qR7EUY",
+        "reel_xBhaYJ",
         "reel_gGhJBK"
       ],
       "name": "Product Feed",
