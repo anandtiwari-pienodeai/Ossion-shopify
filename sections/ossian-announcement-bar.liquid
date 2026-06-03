@@ -1,0 +1,121 @@
+<div class="ossian-announcement-bar" style="--bar-bg: {{ section.settings.background_color }}; --bar-color: {{ section.settings.text_color }};">
+  <div class="ossian-announcement-bar__track">
+    <div class="ossian-announcement-bar__inner">
+      {%- for block in section.blocks -%}
+        <span class="ossian-announcement-bar__item" {{ block.shopify_attributes }}>
+          <span class="ossian-announcement-bar__dot"></span>
+          <span>{{ block.settings.text }}</span>
+        </span>
+      {%- endfor -%}
+    </div>
+    <div class="ossian-announcement-bar__inner" aria-hidden="true">
+      {%- for block in section.blocks -%}
+        <span class="ossian-announcement-bar__item">
+          <span class="ossian-announcement-bar__dot"></span>
+          <span>{{ block.settings.text }}</span>
+        </span>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+.ossian-announcement-bar {
+  background-color: var(--bar-bg, #1e3a5f);
+  color: var(--bar-color, #ffffff);
+  height: 40px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.ossian-announcement-bar__track {
+  display: flex;
+  width: max-content;
+  animation: ossian-marquee 30s linear infinite;
+}
+
+.ossian-announcement-bar__inner {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  padding-right: 0;
+}
+
+.ossian-announcement-bar__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 24px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.ossian-announcement-bar__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+@keyframes ossian-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ossian-announcement-bar__track { animation: none; }
+  .ossian-announcement-bar__inner[aria-hidden="true"] { display: none; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "tag": "section",
+  "class": "ossian-announcement-bar-section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#1e3a5f"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Get 1 + 1 on products above ₹1,000"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ossian Announcement Bar",
+      "blocks": [
+        { "type": "announcement", "settings": { "text": "Get 1 + 1 on products above ₹1,000" } },
+        { "type": "announcement", "settings": { "text": "Get 1 + 1 on products above ₹1,000" } },
+        { "type": "announcement", "settings": { "text": "Get 1 + 1 on products above ₹1,000" } },
+        { "type": "announcement", "settings": { "text": "Get 1 + 1 on products above ₹1,000" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

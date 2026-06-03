@@ -1,167 +1,261 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "hero_jVaWmY": {
-      "type": "hero",
-      "disabled": true,
-      "name": "t:names.hero",
+    "ossian_announcement_bar": {
+      "type": "ossian-announcement-bar",
+      "blocks": {
+        "ann_1": { "type": "announcement", "settings": { "text": "Get 1 + 1 on products above ₹1,000" } },
+        "ann_2": { "type": "announcement", "settings": { "text": "Free shipping on orders above ₹999" } },
+        "ann_3": { "type": "announcement", "settings": { "text": "Professional grade beauty solutions" } },
+        "ann_4": { "type": "announcement", "settings": { "text": "Get 1 + 1 on products above ₹1,000" } }
+      },
+      "block_order": ["ann_1", "ann_2", "ann_3", "ann_4"],
+      "name": "Announcement Bar",
       "settings": {
-        "media_type_1": "image",
-        "image_1": "shopify://shop_images/something-carzy-banner-for-ossion-brand.png",
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "link": "",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "space-between",
-        "vertical_alignment": "flex-end",
-        "align_baseline": true,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "flex-end",
-        "gap": 24,
-        "section_width": "page-width",
-        "section_height": "medium",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-1",
-        "toggle_overlay": true,
-        "overlay_color": "rgba(0,0,0,0)",
-        "overlay_style": "solid",
-        "gradient_direction": "to bottom",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 100,
-        "padding-block-end": 72
+        "background_color": "#1e3a5f",
+        "text_color": "#ffffff"
       }
     },
-    "section_7FcLtc": {
-      "type": "section",
+    "ossian_hero_slider": {
+      "type": "ossian-hero-slider",
       "blocks": {
-        "text_RUhxxh": {
-          "type": "text",
-          "name": "t:names.heading",
+        "slide_1": {
+          "type": "slide",
           "settings": {
-            "text": "<h2>Subscribe to our emails</h2>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "text_bCB6RR": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Be the first to know about new collections and special offers. </p>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "paragraph",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "email_signup_nMBmgk": {
-          "type": "email-signup",
-          "settings": {
-            "width": "custom",
-            "custom_width": 50,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "heading": "",
-            "heading_preset": "h3",
-            "border_style": "all",
-            "border_width": 1,
-            "border_radius": 100,
-            "input_type_preset": "paragraph",
-            "style_class": "button-unstyled",
-            "display_type": "arrow",
-            "label": "Sign up",
-            "integrated_button": true,
-            "button_type_preset": "paragraph",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "brand_label": "OSSION PROFESSIONAL",
+            "heading": "BLONDER\nFIBER PLEX",
+            "subheading": "UP TO 9 LEVELS LIFT",
+            "feature_1": "ANTI - YELLOW TECHNOLOGY",
+            "feature_2": "FIBER PLEX PROTECTION",
+            "feature_3": "NON - DAMAGING FORMULA",
+            "button_label": "SHOP NOW",
+            "overlay_opacity": 40
+          }
         }
       },
-      "block_order": [
-        "text_RUhxxh",
-        "text_bCB6RR",
-        "email_signup_nMBmgk"
-      ],
-      "name": "t:names.email_signup",
+      "block_order": ["slide_1"],
+      "name": "Hero Slider",
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 16,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-2",
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 40,
-        "padding-block-end": 40
+        "autoplay": true,
+        "autoplay_speed": "5000"
       }
+    },
+    "ossian_hair_needs": {
+      "type": "ossian-product-showcase",
+      "blocks": {
+        "card_1": {
+          "type": "product_card",
+          "settings": {
+            "custom_name": "Straighten",
+            "tag_label": "Hair Treatment",
+            "descriptor": "SILK-SMOOTH, FRIZZ-FREE FINISH"
+          }
+        },
+        "card_2": {
+          "type": "product_card",
+          "settings": {
+            "custom_name": "Developer",
+            "tag_label": "Hair Color",
+            "descriptor": "PRECISION COLOR, ZERO DAMAGE"
+          }
+        },
+        "card_3": {
+          "type": "product_card",
+          "settings": {
+            "custom_name": "Hair Mask",
+            "tag_label": "Hair Care",
+            "descriptor": "UP TO 10X REPAIR"
+          }
+        }
+      },
+      "block_order": ["card_1", "card_2", "card_3"],
+      "name": "Hair Needs Showcase",
+      "settings": {
+        "heading": "Only what your Hair Needs",
+        "category_label": "EXPLORE BY CATEGORY"
+      }
+    },
+    "ossian_skin_needs": {
+      "type": "ossian-product-showcase",
+      "blocks": {
+        "card_1": {
+          "type": "product_card",
+          "settings": {
+            "custom_name": "Peel - Off Mask",
+            "tag_label": "Skin Care",
+            "descriptor": "COOLING HYDRO GLOW"
+          }
+        },
+        "card_2": {
+          "type": "product_card",
+          "settings": {
+            "custom_name": "Pre - Wax Prep Gel",
+            "tag_label": "Skin Care",
+            "descriptor": "SOFT SKIN, ZERO FUSS"
+          }
+        },
+        "card_3": {
+          "type": "product_card",
+          "settings": {
+            "custom_name": "Facial Kit",
+            "tag_label": "Skin Care",
+            "descriptor": "BRIGHTEN • NOURISH • GLOW"
+          }
+        }
+      },
+      "block_order": ["card_1", "card_2", "card_3"],
+      "name": "Skin Needs Showcase",
+      "settings": {
+        "heading": "Only what your Skin Needs",
+        "category_label": "EXPLORE BY CATEGORY"
+      }
+    },
+    "ossian_best_sellers": {
+      "type": "ossian-best-sellers",
+      "blocks": {
+        "bs_1": {
+          "type": "product_card",
+          "settings": {
+            "badge": "BEST SELLER",
+            "category": "SKIN CARE",
+            "name": "Ossion Essentials De-Tan Illuminate Tan Removal Pack",
+            "rating": "4.8 (230)",
+            "tags": "KOJIC & MILK, TAN REMOVAL, ALL SKIN TYPES",
+            "price": "₹1,499",
+            "compare_price": "₹1,999",
+            "discount": "18% off"
+          }
+        },
+        "bs_2": {
+          "type": "product_card",
+          "settings": {
+            "badge": "TOP RATED",
+            "category": "LIGHTENING & BLEACHING",
+            "name": "Blonder Fibre Plex Extra+ | 500gm | Max Lift Formula",
+            "rating": "4.9 (210)",
+            "tags": "MAX LIFT, FIBER PLEX, 500 GM",
+            "price": "₹2,499",
+            "compare_price": "₹2,999",
+            "discount": "16% off"
+          }
+        },
+        "bs_3": {
+          "type": "product_card",
+          "settings": {
+            "badge": "TRENDING",
+            "category": "HAIR CARE",
+            "name": "Ossion Nano Silk Protein Supreme Straight | 1000ml",
+            "rating": "4.9 (312)",
+            "tags": "NANO SILK PROTEIN, FRIZZ-FREE, SILK SMOOTH",
+            "price": "₹2,499",
+            "compare_price": "₹3,299",
+            "discount": "24% off"
+          }
+        },
+        "bs_4": {
+          "type": "product_card",
+          "settings": {
+            "category": "SKIN CARE",
+            "name": "Algae Peel-Off Mask | 500g | Professional Hydro Powder",
+            "rating": "4.8 (185)",
+            "tags": "PEEL-OFF, HYDRO MASK, 500G",
+            "price": "₹1,299",
+            "compare_price": "₹1,599",
+            "discount": "19% off"
+          }
+        }
+      },
+      "block_order": ["bs_1", "bs_2", "bs_3", "bs_4"],
+      "name": "Best Sellers",
+      "settings": {
+        "heading": "BEST SELLERS",
+        "products_count": 4
+      }
+    },
+    "ossian_science": {
+      "type": "ossian-science",
+      "blocks": {
+        "badge_1": { "type": "badge", "settings": { "label": "DERMAT TESTED", "icon_type": "check" } },
+        "badge_2": { "type": "badge", "settings": { "label": "VEGAN FORMULA", "icon_type": "leaf" } },
+        "badge_3": { "type": "badge", "settings": { "label": "MARINE TECHNOLOGY", "icon_type": "droplet" } }
+      },
+      "block_order": ["badge_1", "badge_2", "badge_3"],
+      "name": "Ossion Science",
+      "settings": {
+        "heading": "OSSION SCIENCE",
+        "description": "Lorem ipsum dolor sit amet consectetur. Non metus praesent enim diam fringilis. Sagittis nec convallis virra non risus auctor prom. Quis duam dui curabitur pharetra amet enim.",
+        "button_label": "LEARN MORE",
+        "button_url": ""
+      }
+    },
+    "ossian_shop_by_category": {
+      "type": "ossian-shop-by-category",
+      "blocks": {
+        "cat_1": { "type": "category", "settings": { "name": "Heat Protector", "description": "Smooth | Shield | Style" } },
+        "cat_2": { "type": "category", "settings": { "name": "Permanent Hair Color", "description": "Enriched with Amino Acids" } },
+        "cat_3": { "type": "category", "settings": { "name": "Red Wine Wax", "description": "Enriched with Wine Polyphenol Extract" } },
+        "cat_4": { "type": "category", "settings": { "name": "After-Wax Calming Oil", "description": "Leaves the skin soft, smooth and nourished" } }
+      },
+      "block_order": ["cat_1", "cat_2", "cat_3", "cat_4"],
+      "name": "Shop by Category",
+      "settings": {
+        "eyebrow": "OSSION SALONE",
+        "heading": "Shop by Category",
+        "tagline": "MARINE - BASED TECHNOLOGY  |  PROFESSIONAL USE  |  FREE SHIPPING ABOVE ₹999"
+      }
+    },
+    "ossian_instagram": {
+      "type": "ossian-instagram",
+      "blocks": {
+        "post_1": { "type": "post" },
+        "post_2": { "type": "post" },
+        "post_3": { "type": "post" },
+        "post_4": { "type": "post" },
+        "post_5": { "type": "post" },
+        "post_6": { "type": "post" }
+      },
+      "block_order": ["post_1", "post_2", "post_3", "post_4", "post_5", "post_6"],
+      "name": "Ossion Instagram",
+      "settings": {
+        "heading": "OSSION gram",
+        "subheading": "Real people. Real results. Real stories",
+        "instagram_handle": "ossion.care"
+      }
+    },
+    "ossian_salon_choice": {
+      "type": "ossian-salon-choice",
+      "blocks": {
+        "sc_1": { "type": "product_card", "settings": { "product_name": "JAPANESE GLOW FACIAL KIT", "product_descriptor": "Used by 10,000+ customers", "discount_badge": "50% off", "rating": "4.8", "play_icon": true } },
+        "sc_2": { "type": "product_card", "settings": { "product_name": "ALOEVERA LIPOSOLUBLE WAX", "product_descriptor": "Smooth Waxing. Less Pain", "discount_badge": "50% off", "rating": "4.8", "play_icon": true } },
+        "sc_3": { "type": "product_card", "settings": { "product_name": "DE-TAN ILLUMINATE", "product_descriptor": "Tan Removal & Brightening", "discount_badge": "50% off", "rating": "4.8", "play_icon": true } },
+        "sc_4": { "type": "product_card", "settings": { "product_name": "SUPREME STRAIGHT", "product_descriptor": "Hair Straightening System", "discount_badge": "50% off", "rating": "4.8", "play_icon": true } }
+      },
+      "block_order": ["sc_1", "sc_2", "sc_3", "sc_4"],
+      "name": "Salon Choice",
+      "settings": { "heading": "SALON CHOICE" }
+    },
+    "ossian_available_on": {
+      "type": "ossian-available-on",
+      "blocks": {
+        "plat_1": { "type": "platform", "settings": { "platform_name": "Blinkit" } },
+        "plat_2": { "type": "platform", "settings": { "platform_name": "Amazon" } },
+        "plat_3": { "type": "platform", "settings": { "platform_name": "Zepto" } },
+        "plat_4": { "type": "platform", "settings": { "platform_name": "Swiggy Instamart" } }
+      },
+      "block_order": ["plat_1", "plat_2", "plat_3", "plat_4"],
+      "name": "Available On",
+      "settings": { "heading": "WE'RE ALSO AVAILABLE ON" }
     }
   },
   "order": [
-    "hero_jVaWmY",
-    "section_7FcLtc"
+    "ossian_announcement_bar",
+    "ossian_hero_slider",
+    "ossian_hair_needs",
+    "ossian_skin_needs",
+    "ossian_best_sellers",
+    "ossian_science",
+    "ossian_shop_by_category",
+    "ossian_instagram",
+    "ossian_salon_choice",
+    "ossian_available_on"
   ]
 }

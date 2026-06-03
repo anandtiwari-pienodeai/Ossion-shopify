@@ -1,0 +1,452 @@
+<div
+  class="ossian-hero-slider"
+  id="ossian-hero-{{ section.id }}"
+  data-autoplay="{{ section.settings.autoplay }}"
+  data-autoplay-speed="{{ section.settings.autoplay_speed }}"
+>
+  <div class="ossian-hero-slider__slides" id="ossian-slides-{{ section.id }}">
+    {%- for block in section.blocks -%}
+      <div
+        class="ossian-hero-slider__slide{% if forloop.first %} is-active{% endif %}"
+        data-index="{{ forloop.index0 }}"
+        {{ block.shopify_attributes }}
+        style="
+          {%- if block.settings.background_image != blank -%}
+            --slide-bg: url('{{ block.settings.background_image | image_url: width: 1920 }}');
+          {%- else -%}
+            --slide-bg: none;
+          {%- endif -%}
+          --slide-overlay: {{ block.settings.overlay_opacity | divided_by: 100.0 }};
+        "
+      >
+        <div class="ossian-hero-slider__overlay"></div>
+        <div class="ossian-hero-slider__inner page-width">
+          <div class="ossian-hero-slider__content">
+            {%- if block.settings.brand_label != blank -%}
+              <span class="ossian-hero-slider__brand">{{ block.settings.brand_label }}</span>
+            {%- endif -%}
+            {%- if block.settings.heading != blank -%}
+              <h2 class="ossian-hero-slider__heading">{{ block.settings.heading }}</h2>
+            {%- endif -%}
+            {%- if block.settings.subheading != blank -%}
+              <p class="ossian-hero-slider__sub">{{ block.settings.subheading }}</p>
+            {%- endif -%}
+            {%- if block.settings.feature_1 != blank or block.settings.feature_2 != blank or block.settings.feature_3 != blank -%}
+              <ul class="ossian-hero-slider__features">
+                {%- if block.settings.feature_1 != blank -%}
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    {{ block.settings.feature_1 }}
+                  </li>
+                {%- endif -%}
+                {%- if block.settings.feature_2 != blank -%}
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    {{ block.settings.feature_2 }}
+                  </li>
+                {%- endif -%}
+                {%- if block.settings.feature_3 != blank -%}
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    {{ block.settings.feature_3 }}
+                  </li>
+                {%- endif -%}
+              </ul>
+            {%- endif -%}
+            {%- if block.settings.button_label != blank -%}
+              <a
+                href="{{ block.settings.button_url | default: '#' }}"
+                class="ossian-hero-slider__cta"
+              >
+                {{ block.settings.button_label }}
+                <svg width="20" height="12" viewBox="0 0 20 12" fill="none"><path d="M0 6h18M13 1l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            {%- endif -%}
+          </div>
+          <div class="ossian-hero-slider__media">
+            {%- if block.settings.product_image != blank -%}
+              {{
+                block.settings.product_image
+                | image_url: width: 700
+                | image_tag:
+                  class: 'ossian-hero-slider__image',
+                  loading: 'eager',
+                  widths: '400,600,700',
+                  sizes: '(min-width: 990px) 50vw, 100vw'
+              }}
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- if section.blocks.size > 1 -%}
+    <button class="ossian-hero-slider__arrow ossian-hero-slider__arrow--prev" aria-label="Previous slide" data-slider-id="{{ section.id }}">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="ossian-hero-slider__arrow ossian-hero-slider__arrow--next" aria-label="Next slide" data-slider-id="{{ section.id }}">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="ossian-hero-slider__dots">
+      {%- for block in section.blocks -%}
+        <button
+          class="ossian-hero-slider__dot{% if forloop.first %} is-active{% endif %}"
+          aria-label="Go to slide {{ forloop.index }}"
+          data-slide="{{ forloop.index0 }}"
+          data-slider-id="{{ section.id }}"
+        ></button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>
+
+<script>
+(function() {
+  function initSlider(sectionId) {
+    var slider = document.getElementById('ossian-hero-' + sectionId);
+    if (!slider) return;
+    var slides = slider.querySelectorAll('.ossian-hero-slider__slide');
+    var dots = slider.querySelectorAll('.ossian-hero-slider__dot');
+    var current = 0;
+    var autoplay = slider.dataset.autoplay === 'true';
+    var speed = parseInt(slider.dataset.autoplaySpeed) || 5000;
+    var timer;
+
+    function goTo(n) {
+      slides[current].classList.remove('is-active');
+      if (dots[current]) dots[current].classList.remove('is-active');
+      current = (n + slides.length) % slides.length;
+      slides[current].classList.add('is-active');
+      if (dots[current]) dots[current].classList.add('is-active');
+    }
+
+    function startTimer() {
+      if (!autoplay) return;
+      timer = setInterval(function() { goTo(current + 1); }, speed);
+    }
+
+    function stopTimer() { clearInterval(timer); }
+
+    slider.querySelectorAll('.ossian-hero-slider__arrow--next').forEach(function(btn) {
+      btn.addEventListener('click', function() { stopTimer(); goTo(current + 1); startTimer(); });
+    });
+    slider.querySelectorAll('.ossian-hero-slider__arrow--prev').forEach(function(btn) {
+      btn.addEventListener('click', function() { stopTimer(); goTo(current - 1); startTimer(); });
+    });
+    dots.forEach(function(dot) {
+      dot.addEventListener('click', function() { stopTimer(); goTo(parseInt(dot.dataset.slide)); startTimer(); });
+    });
+
+    startTimer();
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    initSlider('{{ section.id }}');
+  });
+})();
+</script>
+
+{% stylesheet %}
+.ossian-hero-slider {
+  position: relative;
+  overflow: hidden;
+  background: #0d1b2e;
+}
+
+.ossian-hero-slider__slides {
+  position: relative;
+  width: 100%;
+}
+
+.ossian-hero-slider__slide {
+  display: none;
+  min-height: 540px;
+  background-color: #0d1b2e;
+  background-image: var(--slide-bg);
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.ossian-hero-slider__slide.is-active { display: block; }
+
+.ossian-hero-slider__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 27, 46, var(--slide-overlay, 0.5));
+  pointer-events: none;
+}
+
+.ossian-hero-slider__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 40px;
+  padding-top: 60px;
+  padding-bottom: 60px;
+  position: relative;
+  z-index: 1;
+}
+
+.ossian-hero-slider__brand {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 12px;
+}
+
+.ossian-hero-slider__heading {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1.05;
+  color: #ffffff;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.ossian-hero-slider__sub {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.85);
+  margin: 0 0 24px;
+}
+
+.ossian-hero-slider__features {
+  list-style: none;
+  margin: 0 0 32px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+}
+
+.ossian-hero-slider__features li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.9);
+}
+
+.ossian-hero-slider__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1.5px solid currentColor;
+  padding-bottom: 4px;
+  transition: opacity 0.2s;
+}
+
+.ossian-hero-slider__cta:hover { opacity: 0.75; }
+
+.ossian-hero-slider__media {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.ossian-hero-slider__image {
+  max-height: 460px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.ossian-hero-slider__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(255,255,255,0.1);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.2s;
+}
+
+.ossian-hero-slider__arrow:hover { background: rgba(255,255,255,0.25); }
+.ossian-hero-slider__arrow--prev { left: 20px; }
+.ossian-hero-slider__arrow--next { right: 20px; }
+
+.ossian-hero-slider__dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.ossian-hero-slider__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.ossian-hero-slider__dot.is-active {
+  background: #ffffff;
+  transform: scale(1.3);
+}
+
+@media (max-width: 768px) {
+  .ossian-hero-slider__inner {
+    grid-template-columns: 1fr;
+    padding-top: 40px;
+    padding-bottom: 100px;
+  }
+  .ossian-hero-slider__media { display: none; }
+  .ossian-hero-slider__slide { min-height: 400px; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Hero Slider",
+  "tag": "section",
+  "class": "ossian-hero-slider-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotate slides",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "autoplay_speed",
+      "label": "Change slides every",
+      "options": [
+        { "value": "3000", "label": "3 seconds" },
+        { "value": "4000", "label": "4 seconds" },
+        { "value": "5000", "label": "5 seconds" },
+        { "value": "7000", "label": "7 seconds" },
+        { "value": "9000", "label": "9 seconds" }
+      ],
+      "default": "5000"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "background_image",
+          "label": "Background image"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "Overlay opacity",
+          "min": 0,
+          "max": 80,
+          "step": 5,
+          "default": 40
+        },
+        {
+          "type": "text",
+          "id": "brand_label",
+          "label": "Brand label",
+          "default": "OSSION PROFESSIONAL"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "BLONDER FIBER PLEX"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "UP TO 9 LEVELS LIFT"
+        },
+        {
+          "type": "text",
+          "id": "feature_1",
+          "label": "Feature 1",
+          "default": "ANTI - YELLOW TECHNOLOGY"
+        },
+        {
+          "type": "text",
+          "id": "feature_2",
+          "label": "Feature 2",
+          "default": "FIBER PLEX PROTECTION"
+        },
+        {
+          "type": "text",
+          "id": "feature_3",
+          "label": "Feature 3",
+          "default": "NON - DAMAGING FORMULA"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "SHOP NOW"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button URL"
+        },
+        {
+          "type": "image_picker",
+          "id": "product_image",
+          "label": "Product image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ossian Hero Slider",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "brand_label": "OSSION PROFESSIONAL",
+            "heading": "BLONDER FIBER PLEX",
+            "subheading": "UP TO 9 LEVELS LIFT",
+            "feature_1": "ANTI - YELLOW TECHNOLOGY",
+            "feature_2": "FIBER PLEX PROTECTION",
+            "feature_3": "NON - DAMAGING FORMULA",
+            "button_label": "SHOP NOW"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
