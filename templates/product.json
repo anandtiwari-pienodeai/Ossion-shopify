@@ -263,21 +263,6 @@
         "padding-block-end": 48
       }
     },
-    "ossian_pdp_tabs_main": {
-      "type": "ossian-pdp-tabs",
-      "settings": {
-        "tab_1_label": "Features",
-        "tab_2_label": "How to Use",
-        "tab_3_label": "Reviews",
-        "features_heading": "Key Features",
-        "ingredients_heading": "Ingredients",
-        "default_features": "<ul><li>Professional salon quality formula</li><li>Safe for all skin types</li><li>Enriched with active ingredients</li></ul>",
-        "default_how_to_use": "<p>Apply generously to the affected area. Leave on for 15–20 minutes, then rinse thoroughly with water. Use 2–3 times a week for best results.</p>",
-        "no_reviews_text": "No reviews yet. Be the first to review this product.",
-        "color_scheme": "scheme-1",
-        "padding_bottom": 48
-      }
-    },
     "product_recommendations_qggXJq": {
       "type": "product-recommendations",
       "blocks": {
@@ -435,7 +420,6 @@
   },
   "order": [
     "main",
-    "ossian_pdp_tabs_main",
     "product_recommendations_qggXJq"
   ]
 }

@@ -9,22 +9,6 @@
  */
 {
   "sections": {
-    "ossian_hero_banner_VM3pbt": {
-      "type": "ossian-hero-banner",
-      "name": "Hero Banner",
-      "settings": {
-        "badge": "✨ New Innovation",
-        "heading": "GO GLOW DE-TAN",
-        "subtext": "Kojic & Milk Illuminate formula that reveals your skin's natural radiance. Professional tan removal with visible results.",
-        "primary_button_label": "Shop Now",
-        "primary_button_url": "",
-        "secondary_button_label": "Learn More",
-        "secondary_button_url": "",
-        "image": "{{ collection.metafields.custom.desktop_image.value }}",
-        "padding_top": 80,
-        "padding_bottom": 80
-      }
-    },
     "section": {
       "type": "section",
       "blocks": {
@@ -197,21 +181,7 @@
               },
               "blocks": {}
             },
-            "ossian_desc": {
-              "type": "custom-liquid",
-              "settings": {
-                "custom_liquid": "{% if closest.product.description != blank %}<p class=\"ossian-product-desc\">{{ closest.product.description | strip_html | truncate: 55 }}</p>{% endif %}"
-              },
-              "blocks": {}
-            },
-            "ossian_price_stock": {
-              "type": "custom-liquid",
-              "settings": {
-                "custom_liquid": "<div class=\"ossian-price-row\">{% if closest.product.compare_at_price > closest.product.price %}<div class=\"ossian-price-wrapper\"><span class=\"ossian-price ossian-price--sale\">{{ closest.product.price | money }}</span><s class=\"ossian-price--compare\">{{ closest.product.compare_at_price | money }}</s></div>{% else %}<span class=\"ossian-price\">{{ closest.product.price | money }}</span>{% endif %}{% if closest.product.available %}<span class=\"ossian-stock ossian-stock--in\">In Stock</span>{% else %}<span class=\"ossian-stock ossian-stock--out\">Out of Stock</span>{% endif %}</div>"
-              },
-              "blocks": {}
-            },
-            "ossian_buy": {
+            "buy_buttons": {
               "type": "buy-buttons",
               "settings": {
                 "stacking": false,
@@ -250,9 +220,7 @@
           "block_order": [
             "card-gallery",
             "product_title_4nY4eT",
-            "ossian_desc",
-            "ossian_price_stock",
-            "ossian_buy"
+            "buy_buttons"
           ]
         }
       },
@@ -275,7 +243,6 @@
     }
   },
   "order": [
-    "ossian_hero_banner_VM3pbt",
     "section",
     "main"
   ]
