@@ -53,7 +53,6 @@
           "settings": {
             "product": "chromatic-dream-permanent-hair-color-creme-100ml",
             "custom_name": "Straighten",
-            "tag_label": "Hair Treatment",
             "descriptor": "SILK-SMOOTH, FRIZZ-FREE FINISH",
             "link": ""
           }
@@ -63,7 +62,6 @@
           "settings": {
             "product": "chromatic-dream-permanent-hair-color-creme-100ml",
             "custom_name": "Developer",
-            "tag_label": "Hair Color",
             "descriptor": "PRECISION COLOR, ZERO DAMAGE",
             "link": ""
           }
@@ -73,7 +71,6 @@
           "settings": {
             "product": "chromatic-dream-permanent-hair-color-creme-100ml",
             "custom_name": "Hair Mask",
-            "tag_label": "Hair Care",
             "descriptor": "UP TO 10X REPAIR",
             "link": ""
           }
@@ -91,6 +88,49 @@
         "heading_italic": "Hair Needs"
       }
     },
+    "ossian_product_showcase_Qa4xiL": {
+      "type": "ossian-product-showcase",
+      "blocks": {
+        "product_card_dgd7n4": {
+          "type": "product_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
+            "custom_name": "Straighten",
+            "descriptor": "SILK-SMOOTH, FRIZZ-FREE FINISH",
+            "link": ""
+          }
+        },
+        "product_card_DqjPCC": {
+          "type": "product_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
+            "custom_name": "Developer",
+            "descriptor": "PRECISION COLOR, ZERO DAMAGE",
+            "link": ""
+          }
+        },
+        "product_card_D4ix7E": {
+          "type": "product_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
+            "custom_name": "Hair Mask",
+            "descriptor": "UP TO 10X REPAIR",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "product_card_dgd7n4",
+        "product_card_DqjPCC",
+        "product_card_D4ix7E"
+      ],
+      "name": "Hair Needs Showcase",
+      "settings": {
+        "category_label": "EXPLORE BY CATEGORY",
+        "heading_prefix": "Only what your",
+        "heading_italic": "Skin Needs"
+      }
+    },
     "ossian_skin_needs": {
       "type": "ossian-product-showcase",
       "blocks": {
@@ -99,7 +139,6 @@
           "settings": {
             "product": "",
             "custom_name": "Peel - Off Mask",
-            "tag_label": "Skin Care",
             "descriptor": "COOLING HYDRO GLOW",
             "link": ""
           }
@@ -109,7 +148,6 @@
           "settings": {
             "product": "",
             "custom_name": "Pre - Wax Prep Gel",
-            "tag_label": "Skin Care",
             "descriptor": "SOFT SKIN, ZERO FUSS",
             "link": ""
           }
@@ -119,7 +157,6 @@
           "settings": {
             "product": "",
             "custom_name": "Facial Kit",
-            "tag_label": "Skin Care",
             "descriptor": "BRIGHTEN • NOURISH • GLOW",
             "link": ""
           }
@@ -130,6 +167,7 @@
         "card_2",
         "card_3"
       ],
+      "disabled": true,
       "name": "Skin Needs Showcase",
       "settings": {
         "category_label": "EXPLORE BY CATEGORY",
@@ -139,70 +177,10 @@
     },
     "ossian_best_sellers": {
       "type": "ossian-best-sellers",
-      "blocks": {
-        "bs_1": {
-          "type": "product_card",
-          "settings": {
-            "badge": "BEST SELLER",
-            "category": "SKIN CARE",
-            "name": "Ossion Essentials De-Tan Illuminate Tan Removal Pack",
-            "rating": "4.8 (230)",
-            "tags": "KOJIC & MILK, TAN REMOVAL, ALL SKIN TYPES",
-            "price": "₹1,499",
-            "compare_price": "₹1,999",
-            "discount": "18% off"
-          }
-        },
-        "bs_2": {
-          "type": "product_card",
-          "settings": {
-            "badge": "TOP RATED",
-            "category": "LIGHTENING & BLEACHING",
-            "name": "Blonder Fibre Plex Extra+ | 500gm | Max Lift Formula",
-            "rating": "4.9 (210)",
-            "tags": "MAX LIFT, FIBER PLEX, 500 GM",
-            "price": "₹2,499",
-            "compare_price": "₹2,999",
-            "discount": "16% off"
-          }
-        },
-        "bs_3": {
-          "type": "product_card",
-          "settings": {
-            "badge": "TRENDING",
-            "category": "HAIR CARE",
-            "name": "Ossion Nano Silk Protein Supreme Straight | 1000ml",
-            "rating": "4.9 (312)",
-            "tags": "NANO SILK PROTEIN, FRIZZ-FREE, SILK SMOOTH",
-            "price": "₹2,499",
-            "compare_price": "₹3,299",
-            "discount": "24% off"
-          }
-        },
-        "bs_4": {
-          "type": "product_card",
-          "settings": {
-            "badge": "",
-            "category": "SKIN CARE",
-            "name": "Algae Peel-Off Mask | 500g | Professional Hydro Powder",
-            "rating": "4.8 (185)",
-            "tags": "PEEL-OFF, HYDRO MASK, 500G",
-            "price": "₹1,299",
-            "compare_price": "₹1,599",
-            "discount": "19% off"
-          }
-        }
-      },
-      "block_order": [
-        "bs_1",
-        "bs_2",
-        "bs_3",
-        "bs_4"
-      ],
       "name": "Best Sellers",
       "settings": {
         "heading": "BEST SELLERS",
-        "collection": "",
+        "collection": "best-sellers",
         "products_count": 4
       }
     },
@@ -454,6 +432,7 @@
   "order": [
     "ossian_hero_slider",
     "ossian_hair_needs",
+    "ossian_product_showcase_Qa4xiL",
     "ossian_skin_needs",
     "ossian_best_sellers",
     "ossian_science",
