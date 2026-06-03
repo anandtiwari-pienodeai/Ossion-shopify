@@ -190,6 +190,7 @@
         "badge_1": {
           "type": "badge",
           "settings": {
+            "icon": "shopify://shop_images/OssionSc1.png",
             "icon_type": "check",
             "label": "DERMAT TESTED"
           }
@@ -197,6 +198,7 @@
         "badge_2": {
           "type": "badge",
           "settings": {
+            "icon": "shopify://shop_images/OssionSc2.png",
             "icon_type": "leaf",
             "label": "VEGAN FORMULA"
           }
@@ -204,6 +206,7 @@
         "badge_3": {
           "type": "badge",
           "settings": {
+            "icon": "shopify://shop_images/OssionSc3.png",
             "icon_type": "droplet",
             "label": "MARINE TECHNOLOGY"
           }
@@ -216,6 +219,7 @@
       ],
       "name": "Ossion Science",
       "settings": {
+        "background_image": "shopify://shop_images/OssionScience.png",
         "heading": "OSSION SCIENCE",
         "description": "Lorem ipsum dolor sit amet consectetur. Non metus praesent enim diam fringilis. Sagittis nec convallis virra non risus auctor prom. Quis duam dui curabitur pharetra amet enim.",
         "button_label": "LEARN MORE",
@@ -228,6 +232,7 @@
         "cat_1": {
           "type": "category",
           "settings": {
+            "image": "shopify://shop_images/Caviar_Mask.png",
             "name": "Heat Protector",
             "description": "Smooth | Shield | Style",
             "link": ""
@@ -236,6 +241,7 @@
         "cat_2": {
           "type": "category",
           "settings": {
+            "image": "shopify://shop_images/DEVELOPER_GROUP_SHOT_copy.png",
             "name": "Permanent Hair Color",
             "description": "Enriched with Amino Acids",
             "link": ""
@@ -244,6 +250,7 @@
         "cat_3": {
           "type": "category",
           "settings": {
+            "image": "shopify://shop_images/Hair_Color.png",
             "name": "Red Wine Wax",
             "description": "Enriched with Wine Polyphenol Extract",
             "link": ""
@@ -252,6 +259,7 @@
         "cat_4": {
           "type": "category",
           "settings": {
+            "image": "shopify://shop_images/Hair_Repair_Spa_Silk_Amino_Acid.png",
             "name": "After-Wax Calming Oil",
             "description": "Leaves the skin soft, smooth and nourished",
             "link": ""
@@ -277,6 +285,7 @@
         "post_1": {
           "type": "post",
           "settings": {
+            "image": "shopify://shop_images/DEVELOPER_GROUP_SHOT_copy.png",
             "post_url": ""
           }
         },
@@ -319,6 +328,7 @@
         "post_5",
         "post_6"
       ],
+      "disabled": true,
       "name": "Ossion Instagram",
       "settings": {
         "heading": "OSSION gram",
@@ -392,6 +402,7 @@
           "type": "platform",
           "settings": {
             "platform_name": "Blinkit",
+            "logo": "shopify://shop_images/ossionAvl3.png",
             "url": ""
           }
         },
@@ -399,6 +410,7 @@
           "type": "platform",
           "settings": {
             "platform_name": "Amazon",
+            "logo": "shopify://shop_images/ossionAvl1.png",
             "url": ""
           }
         },
@@ -406,6 +418,7 @@
           "type": "platform",
           "settings": {
             "platform_name": "Zepto",
+            "logo": "shopify://shop_images/ossionAvl2.png",
             "url": ""
           }
         },
@@ -413,6 +426,7 @@
           "type": "platform",
           "settings": {
             "platform_name": "Swiggy Instamart",
+            "logo": "shopify://shop_images/ossionAvl1.png",
             "url": ""
           }
         }
