@@ -86,8 +86,9 @@
       ],
       "name": "Hair Needs Showcase",
       "settings": {
-        "heading": "Only what your Hair Needs",
-        "category_label": "EXPLORE BY CATEGORY"
+        "category_label": "EXPLORE BY CATEGORY",
+        "heading_prefix": "Only what your",
+        "heading_italic": "Hair Needs"
       }
     },
     "ossian_skin_needs": {
@@ -131,8 +132,9 @@
       ],
       "name": "Skin Needs Showcase",
       "settings": {
-        "heading": "Only what your Skin Needs",
-        "category_label": "EXPLORE BY CATEGORY"
+        "category_label": "EXPLORE BY CATEGORY",
+        "heading_prefix": "Only what your",
+        "heading_italic": "Skin Needs"
       }
     },
     "ossian_best_sellers": {
