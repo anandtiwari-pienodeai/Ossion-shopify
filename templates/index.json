@@ -1,26 +1,21 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "ossian_announcement_bar": {
-      "type": "ossian-announcement-bar",
-      "blocks": {
-        "ann_1": { "type": "announcement", "settings": { "text": "Get 1 + 1 on products above ₹1,000" } },
-        "ann_2": { "type": "announcement", "settings": { "text": "Free shipping on orders above ₹999" } },
-        "ann_3": { "type": "announcement", "settings": { "text": "Professional grade beauty solutions" } },
-        "ann_4": { "type": "announcement", "settings": { "text": "Get 1 + 1 on products above ₹1,000" } }
-      },
-      "block_order": ["ann_1", "ann_2", "ann_3", "ann_4"],
-      "name": "Announcement Bar",
-      "settings": {
-        "background_color": "#1e3a5f",
-        "text_color": "#ffffff"
-      }
-    },
     "ossian_hero_slider": {
       "type": "ossian-hero-slider",
       "blocks": {
         "slide_1": {
           "type": "slide",
           "settings": {
+            "overlay_opacity": 40,
             "brand_label": "OSSION PROFESSIONAL",
             "heading": "BLONDER\nFIBER PLEX",
             "subheading": "UP TO 9 LEVELS LIFT",
@@ -28,11 +23,13 @@
             "feature_2": "FIBER PLEX PROTECTION",
             "feature_3": "NON - DAMAGING FORMULA",
             "button_label": "SHOP NOW",
-            "overlay_opacity": 40
+            "button_url": ""
           }
         }
       },
-      "block_order": ["slide_1"],
+      "block_order": [
+        "slide_1"
+      ],
       "name": "Hero Slider",
       "settings": {
         "autoplay": true,
@@ -45,29 +42,39 @@
         "card_1": {
           "type": "product_card",
           "settings": {
+            "product": "",
             "custom_name": "Straighten",
             "tag_label": "Hair Treatment",
-            "descriptor": "SILK-SMOOTH, FRIZZ-FREE FINISH"
+            "descriptor": "SILK-SMOOTH, FRIZZ-FREE FINISH",
+            "link": ""
           }
         },
         "card_2": {
           "type": "product_card",
           "settings": {
+            "product": "",
             "custom_name": "Developer",
             "tag_label": "Hair Color",
-            "descriptor": "PRECISION COLOR, ZERO DAMAGE"
+            "descriptor": "PRECISION COLOR, ZERO DAMAGE",
+            "link": ""
           }
         },
         "card_3": {
           "type": "product_card",
           "settings": {
+            "product": "",
             "custom_name": "Hair Mask",
             "tag_label": "Hair Care",
-            "descriptor": "UP TO 10X REPAIR"
+            "descriptor": "UP TO 10X REPAIR",
+            "link": ""
           }
         }
       },
-      "block_order": ["card_1", "card_2", "card_3"],
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3"
+      ],
       "name": "Hair Needs Showcase",
       "settings": {
         "heading": "Only what your Hair Needs",
@@ -80,29 +87,39 @@
         "card_1": {
           "type": "product_card",
           "settings": {
+            "product": "",
             "custom_name": "Peel - Off Mask",
             "tag_label": "Skin Care",
-            "descriptor": "COOLING HYDRO GLOW"
+            "descriptor": "COOLING HYDRO GLOW",
+            "link": ""
           }
         },
         "card_2": {
           "type": "product_card",
           "settings": {
+            "product": "",
             "custom_name": "Pre - Wax Prep Gel",
             "tag_label": "Skin Care",
-            "descriptor": "SOFT SKIN, ZERO FUSS"
+            "descriptor": "SOFT SKIN, ZERO FUSS",
+            "link": ""
           }
         },
         "card_3": {
           "type": "product_card",
           "settings": {
+            "product": "",
             "custom_name": "Facial Kit",
             "tag_label": "Skin Care",
-            "descriptor": "BRIGHTEN • NOURISH • GLOW"
+            "descriptor": "BRIGHTEN • NOURISH • GLOW",
+            "link": ""
           }
         }
       },
-      "block_order": ["card_1", "card_2", "card_3"],
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3"
+      ],
       "name": "Skin Needs Showcase",
       "settings": {
         "heading": "Only what your Skin Needs",
@@ -154,6 +171,7 @@
         "bs_4": {
           "type": "product_card",
           "settings": {
+            "badge": "",
             "category": "SKIN CARE",
             "name": "Algae Peel-Off Mask | 500g | Professional Hydro Powder",
             "rating": "4.8 (185)",
@@ -164,21 +182,49 @@
           }
         }
       },
-      "block_order": ["bs_1", "bs_2", "bs_3", "bs_4"],
+      "block_order": [
+        "bs_1",
+        "bs_2",
+        "bs_3",
+        "bs_4"
+      ],
       "name": "Best Sellers",
       "settings": {
         "heading": "BEST SELLERS",
+        "collection": "",
         "products_count": 4
       }
     },
     "ossian_science": {
       "type": "ossian-science",
       "blocks": {
-        "badge_1": { "type": "badge", "settings": { "label": "DERMAT TESTED", "icon_type": "check" } },
-        "badge_2": { "type": "badge", "settings": { "label": "VEGAN FORMULA", "icon_type": "leaf" } },
-        "badge_3": { "type": "badge", "settings": { "label": "MARINE TECHNOLOGY", "icon_type": "droplet" } }
+        "badge_1": {
+          "type": "badge",
+          "settings": {
+            "icon_type": "check",
+            "label": "DERMAT TESTED"
+          }
+        },
+        "badge_2": {
+          "type": "badge",
+          "settings": {
+            "icon_type": "leaf",
+            "label": "VEGAN FORMULA"
+          }
+        },
+        "badge_3": {
+          "type": "badge",
+          "settings": {
+            "icon_type": "droplet",
+            "label": "MARINE TECHNOLOGY"
+          }
+        }
       },
-      "block_order": ["badge_1", "badge_2", "badge_3"],
+      "block_order": [
+        "badge_1",
+        "badge_2",
+        "badge_3"
+      ],
       "name": "Ossion Science",
       "settings": {
         "heading": "OSSION SCIENCE",
@@ -190,12 +236,45 @@
     "ossian_shop_by_category": {
       "type": "ossian-shop-by-category",
       "blocks": {
-        "cat_1": { "type": "category", "settings": { "name": "Heat Protector", "description": "Smooth | Shield | Style" } },
-        "cat_2": { "type": "category", "settings": { "name": "Permanent Hair Color", "description": "Enriched with Amino Acids" } },
-        "cat_3": { "type": "category", "settings": { "name": "Red Wine Wax", "description": "Enriched with Wine Polyphenol Extract" } },
-        "cat_4": { "type": "category", "settings": { "name": "After-Wax Calming Oil", "description": "Leaves the skin soft, smooth and nourished" } }
+        "cat_1": {
+          "type": "category",
+          "settings": {
+            "name": "Heat Protector",
+            "description": "Smooth | Shield | Style",
+            "link": ""
+          }
+        },
+        "cat_2": {
+          "type": "category",
+          "settings": {
+            "name": "Permanent Hair Color",
+            "description": "Enriched with Amino Acids",
+            "link": ""
+          }
+        },
+        "cat_3": {
+          "type": "category",
+          "settings": {
+            "name": "Red Wine Wax",
+            "description": "Enriched with Wine Polyphenol Extract",
+            "link": ""
+          }
+        },
+        "cat_4": {
+          "type": "category",
+          "settings": {
+            "name": "After-Wax Calming Oil",
+            "description": "Leaves the skin soft, smooth and nourished",
+            "link": ""
+          }
+        }
       },
-      "block_order": ["cat_1", "cat_2", "cat_3", "cat_4"],
+      "block_order": [
+        "cat_1",
+        "cat_2",
+        "cat_3",
+        "cat_4"
+      ],
       "name": "Shop by Category",
       "settings": {
         "eyebrow": "OSSION SALONE",
@@ -206,14 +285,51 @@
     "ossian_instagram": {
       "type": "ossian-instagram",
       "blocks": {
-        "post_1": { "type": "post" },
-        "post_2": { "type": "post" },
-        "post_3": { "type": "post" },
-        "post_4": { "type": "post" },
-        "post_5": { "type": "post" },
-        "post_6": { "type": "post" }
+        "post_1": {
+          "type": "post",
+          "settings": {
+            "post_url": ""
+          }
+        },
+        "post_2": {
+          "type": "post",
+          "settings": {
+            "post_url": ""
+          }
+        },
+        "post_3": {
+          "type": "post",
+          "settings": {
+            "post_url": ""
+          }
+        },
+        "post_4": {
+          "type": "post",
+          "settings": {
+            "post_url": ""
+          }
+        },
+        "post_5": {
+          "type": "post",
+          "settings": {
+            "post_url": ""
+          }
+        },
+        "post_6": {
+          "type": "post",
+          "settings": {
+            "post_url": ""
+          }
+        }
       },
-      "block_order": ["post_1", "post_2", "post_3", "post_4", "post_5", "post_6"],
+      "block_order": [
+        "post_1",
+        "post_2",
+        "post_3",
+        "post_4",
+        "post_5",
+        "post_6"
+      ],
       "name": "Ossion Instagram",
       "settings": {
         "heading": "OSSION gram",
@@ -224,30 +340,107 @@
     "ossian_salon_choice": {
       "type": "ossian-salon-choice",
       "blocks": {
-        "sc_1": { "type": "product_card", "settings": { "product_name": "JAPANESE GLOW FACIAL KIT", "product_descriptor": "Used by 10,000+ customers", "discount_badge": "50% off", "rating": "4.8", "play_icon": true } },
-        "sc_2": { "type": "product_card", "settings": { "product_name": "ALOEVERA LIPOSOLUBLE WAX", "product_descriptor": "Smooth Waxing. Less Pain", "discount_badge": "50% off", "rating": "4.8", "play_icon": true } },
-        "sc_3": { "type": "product_card", "settings": { "product_name": "DE-TAN ILLUMINATE", "product_descriptor": "Tan Removal & Brightening", "discount_badge": "50% off", "rating": "4.8", "play_icon": true } },
-        "sc_4": { "type": "product_card", "settings": { "product_name": "SUPREME STRAIGHT", "product_descriptor": "Hair Straightening System", "discount_badge": "50% off", "rating": "4.8", "play_icon": true } }
+        "sc_1": {
+          "type": "product_card",
+          "settings": {
+            "play_icon": true,
+            "discount_badge": "50% off",
+            "product_name": "JAPANESE GLOW FACIAL KIT",
+            "product_descriptor": "Used by 10,000+ customers",
+            "rating": "4.8",
+            "link": ""
+          }
+        },
+        "sc_2": {
+          "type": "product_card",
+          "settings": {
+            "play_icon": true,
+            "discount_badge": "50% off",
+            "product_name": "ALOEVERA LIPOSOLUBLE WAX",
+            "product_descriptor": "Smooth Waxing. Less Pain",
+            "rating": "4.8",
+            "link": ""
+          }
+        },
+        "sc_3": {
+          "type": "product_card",
+          "settings": {
+            "play_icon": true,
+            "discount_badge": "50% off",
+            "product_name": "DE-TAN ILLUMINATE",
+            "product_descriptor": "Tan Removal & Brightening",
+            "rating": "4.8",
+            "link": ""
+          }
+        },
+        "sc_4": {
+          "type": "product_card",
+          "settings": {
+            "play_icon": true,
+            "discount_badge": "50% off",
+            "product_name": "SUPREME STRAIGHT",
+            "product_descriptor": "Hair Straightening System",
+            "rating": "4.8",
+            "link": ""
+          }
+        }
       },
-      "block_order": ["sc_1", "sc_2", "sc_3", "sc_4"],
+      "block_order": [
+        "sc_1",
+        "sc_2",
+        "sc_3",
+        "sc_4"
+      ],
       "name": "Salon Choice",
-      "settings": { "heading": "SALON CHOICE" }
+      "settings": {
+        "heading": "SALON CHOICE"
+      }
     },
     "ossian_available_on": {
       "type": "ossian-available-on",
       "blocks": {
-        "plat_1": { "type": "platform", "settings": { "platform_name": "Blinkit" } },
-        "plat_2": { "type": "platform", "settings": { "platform_name": "Amazon" } },
-        "plat_3": { "type": "platform", "settings": { "platform_name": "Zepto" } },
-        "plat_4": { "type": "platform", "settings": { "platform_name": "Swiggy Instamart" } }
+        "plat_1": {
+          "type": "platform",
+          "settings": {
+            "platform_name": "Blinkit",
+            "url": ""
+          }
+        },
+        "plat_2": {
+          "type": "platform",
+          "settings": {
+            "platform_name": "Amazon",
+            "url": ""
+          }
+        },
+        "plat_3": {
+          "type": "platform",
+          "settings": {
+            "platform_name": "Zepto",
+            "url": ""
+          }
+        },
+        "plat_4": {
+          "type": "platform",
+          "settings": {
+            "platform_name": "Swiggy Instamart",
+            "url": ""
+          }
+        }
       },
-      "block_order": ["plat_1", "plat_2", "plat_3", "plat_4"],
+      "block_order": [
+        "plat_1",
+        "plat_2",
+        "plat_3",
+        "plat_4"
+      ],
       "name": "Available On",
-      "settings": { "heading": "WE'RE ALSO AVAILABLE ON" }
+      "settings": {
+        "heading": "WE'RE ALSO AVAILABLE ON"
+      }
     }
   },
   "order": [
-    "ossian_announcement_bar",
     "ossian_hero_slider",
     "ossian_hair_needs",
     "ossian_skin_needs",
