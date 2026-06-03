@@ -51,7 +51,7 @@
         "card_1": {
           "type": "product_card",
           "settings": {
-            "product": "",
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
             "custom_name": "Straighten",
             "tag_label": "Hair Treatment",
             "descriptor": "SILK-SMOOTH, FRIZZ-FREE FINISH",
@@ -61,7 +61,7 @@
         "card_2": {
           "type": "product_card",
           "settings": {
-            "product": "",
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
             "custom_name": "Developer",
             "tag_label": "Hair Color",
             "descriptor": "PRECISION COLOR, ZERO DAMAGE",
@@ -71,7 +71,7 @@
         "card_3": {
           "type": "product_card",
           "settings": {
-            "product": "",
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
             "custom_name": "Hair Mask",
             "tag_label": "Hair Care",
             "descriptor": "UP TO 10X REPAIR",
