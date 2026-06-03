@@ -12,25 +12,34 @@
     "ossian_hero_slider": {
       "type": "ossian-hero-slider",
       "blocks": {
+        "slide_6ehiiH": {
+          "type": "slide",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/OssionBannerthree.png"
+          }
+        },
         "slide_1": {
           "type": "slide",
           "settings": {
-            "overlay_opacity": 40,
-            "brand_label": "OSSION PROFESSIONAL",
-            "heading": "BLONDER\nFIBER PLEX",
-            "subheading": "UP TO 9 LEVELS LIFT",
-            "feature_1": "ANTI - YELLOW TECHNOLOGY",
-            "feature_2": "FIBER PLEX PROTECTION",
-            "feature_3": "NON - DAMAGING FORMULA",
-            "button_label": "SHOP NOW",
-            "button_url": ""
+            "media_type": "image",
+            "image": "shopify://shop_images/OssionBannertwo.png"
+          }
+        },
+        "slide_2": {
+          "type": "slide",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/OssionBannerthree.png"
           }
         }
       },
       "block_order": [
-        "slide_1"
+        "slide_6ehiiH",
+        "slide_1",
+        "slide_2"
       ],
-      "name": "Hero Slider",
+      "name": "Hero Carousel",
       "settings": {
         "autoplay": true,
         "autoplay_speed": "5000"
