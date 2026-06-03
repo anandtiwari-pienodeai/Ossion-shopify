@@ -51,7 +51,8 @@
         "card_1": {
           "type": "product_card",
           "settings": {
-            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
+            "product": "",
+            "image": "shopify://shop_images/White_Chocolate.png",
             "custom_name": "Straighten",
             "descriptor": "SILK-SMOOTH, FRIZZ-FREE FINISH",
             "link": ""
@@ -60,7 +61,8 @@
         "card_2": {
           "type": "product_card",
           "settings": {
-            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
+            "product": "",
+            "image": "shopify://shop_images/Aloe_Vera.png",
             "custom_name": "Developer",
             "descriptor": "PRECISION COLOR, ZERO DAMAGE",
             "link": ""
@@ -69,7 +71,8 @@
         "card_3": {
           "type": "product_card",
           "settings": {
-            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
+            "product": "",
+            "image": "shopify://shop_images/Blueberry.png",
             "custom_name": "Hair Mask",
             "descriptor": "UP TO 10X REPAIR",
             "link": ""
@@ -94,7 +97,8 @@
         "product_card_dgd7n4": {
           "type": "product_card",
           "settings": {
-            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
+            "product": "",
+            "image": "shopify://shop_images/Korean_Glow.png",
             "custom_name": "Straighten",
             "descriptor": "SILK-SMOOTH, FRIZZ-FREE FINISH",
             "link": ""
@@ -103,7 +107,8 @@
         "product_card_DqjPCC": {
           "type": "product_card",
           "settings": {
-            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
+            "product": "",
+            "image": "shopify://shop_images/Japanese_Glow.png",
             "custom_name": "Developer",
             "descriptor": "PRECISION COLOR, ZERO DAMAGE",
             "link": ""
@@ -112,7 +117,8 @@
         "product_card_D4ix7E": {
           "type": "product_card",
           "settings": {
-            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
+            "product": "",
+            "image": "shopify://shop_images/Lumi_Glow.png",
             "custom_name": "Hair Mask",
             "descriptor": "UP TO 10X REPAIR",
             "link": ""
