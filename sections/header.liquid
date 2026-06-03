@@ -1113,6 +1113,156 @@
     font-family: var(--menu-localization-font);
     font-size: var(--menu-localization-font-size);
   }
+
+  /* ================================================================
+     OSSION NAVBAR — custom overrides
+     ================================================================ */
+
+  /* White background */
+  #header-component .header__underlay-closed,
+  #header-component .header__underlay-open {
+    background: #fff;
+  }
+
+  #header-component .header__row--top {
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+
+  /* Bold navy nav links */
+  #header-component .menu-list__link {
+    color: #1e3a5f !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+  }
+
+  /* Search — wide pill bar */
+  #header-component .search-action {
+    min-width: 260px;
+    height: 42px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 100px;
+    background: #fff;
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: border-color 0.2s;
+  }
+
+  #header-component .search-action:hover {
+    border-color: #1e3a5f;
+  }
+
+  @media screen and (min-width: 750px) {
+    #header-component .header__column--right .search-action,
+    #header-component .header__column--left .search-action {
+      margin-inline: 0;
+    }
+  }
+
+  #header-component .search-action .header-actions__action {
+    width: 100%;
+    height: 100%;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 18px 0 14px !important;
+    gap: 10px !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    color: #9ca3af;
+  }
+
+  /* "Search" placeholder text injected via pseudo-element */
+  #header-component .search-action .header-actions__action::after {
+    content: 'Search';
+    font-size: 14px;
+    color: #9ca3af;
+    font-weight: 400;
+    flex: 1;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  #header-component .search-action .svg-wrapper {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  #header-component .search-action .svg-wrapper svg {
+    width: 18px;
+    height: 18px;
+    color: #9ca3af;
+  }
+
+  /* Action buttons — individual bordered squares */
+  #header-component .header__column--right header-actions {
+    gap: 8px;
+    margin-inline-start: 0;
+    align-items: center;
+  }
+
+  #header-component .cart-drawer {
+    margin-inline-end: 0;
+  }
+
+  #header-component header-actions .header-actions__action {
+    width: 42px !important;
+    height: 42px !important;
+    border: 1.5px solid #d1d5db !important;
+    border-radius: 10px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #1e3a5f !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    flex-shrink: 0;
+    transition: border-color 0.2s;
+  }
+
+  #header-component header-actions .header-actions__action:hover {
+    border-color: #1e3a5f !important;
+    background: transparent !important;
+  }
+
+  #header-component .account-button.header-actions__action {
+    width: 42px !important;
+    height: 42px !important;
+    border: 1.5px solid #d1d5db !important;
+    border-radius: 10px !important;
+    overflow: hidden;
+  }
+
+  #header-component .account-button.header-actions__action:hover {
+    border-color: #1e3a5f !important;
+  }
+
+  /* Wishlist button */
+  #header-component .ossian-wishlist-btn {
+    width: 42px;
+    height: 42px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1e3a5f;
+    text-decoration: none;
+    flex-shrink: 0;
+    transition: border-color 0.2s;
+  }
+
+  #header-component .ossian-wishlist-btn:hover {
+    border-color: #1e3a5f;
+  }
+
+  #header-component .ossian-wishlist-btn svg {
+    width: 20px;
+    height: 20px;
+  }
 {% endstylesheet %}
 
 {% unless request.design_mode %}
