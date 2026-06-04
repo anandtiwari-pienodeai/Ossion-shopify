@@ -1,1 +1,43 @@
-{"type":"footer","name":"Footer","sections":{"ossian_footer_main":{"type":"ossian-footer","name":"OSSION Footer","settings":{"description":"Ocean-inspired professional hair care excellence for salon professionals and enthusiasts worldwide.","quick_links_heading":"Quick Links","link_1_label":"Shop All","link_1_url":"/collections/all","link_2_label":"Hair Color","link_2_url":"/collections/hair-color","link_3_label":"Treatments","link_3_url":"/collections/treatments","link_4_label":"Shampoo & Care","link_4_url":"/collections/shampoo-care","values_heading":"Our Values","value_1":"Vegan & Cruelty-Free","value_2":"Sulfate-Free","value_3":"Paraben-Free","value_4":"Marine Technology","contact_heading":"Contact","contact_address":"OSSION BEAUTY INC\n7901 4TH St N Pinellas County\nSte 300, St. Petersburg\nFlorida, 33702, USA","copyright_text":"\u00a9 2026 OSSION Professional. All rights reserved. | Ocean-Inspired Hair Care Excellence"}}},"order":["ossian_footer_main"]}
+{
+  "type": "footer",
+  "name": "Footer",
+  "sections": {
+    "ossian_footer_main": {
+      "type": "ossian-footer",
+      "name": "OSSION Footer",
+      "settings": {
+        "brand_name": "OSSION",
+        "brand_tagline": "PROFESSIONAL",
+        "address": "address",
+        "email": "contact@ossion.com",
+        "phone": "800908199",
+        "shop_heading": "Shop",
+        "shop_link_1_label": "Hair Color",
+        "shop_link_2_label": "Hair Treatment",
+        "shop_link_3_label": "Hair Care",
+        "shop_link_4_label": "Bleach & Lightener",
+        "shop_link_5_label": "Skin Care",
+        "discover_heading": "Discover",
+        "discover_link_1_label": "About Ossion",
+        "discover_link_2_label": "Ossion Promise",
+        "discover_link_3_label": "Blogs",
+        "discover_link_4_label": "FAQ",
+        "help_heading": "Help & Policies",
+        "help_link_1_label": "Contact Us",
+        "help_link_2_label": "Shipping Policy",
+        "help_link_3_label": "Refund Policy",
+        "help_link_4_label": "Payment Policy",
+        "help_link_5_label": "Terms & Conditions",
+        "help_link_6_label": "Privacy Policy",
+        "newsletter_heading": "Newsletter",
+        "newsletter_subtext": "Get 10% Off Your First Order + Beauty Tips",
+        "email_placeholder": "Enter Your Email",
+        "subscribe_label": "Subscribe",
+        "bottom_link_1_label": "Privacy Policy",
+        "bottom_link_2_label": "Terms Of User & Disclaimers",
+        "copyright_text": "All rights reserved © Ossion 2026"
+      }
+    }
+  },
+  "order": ["ossian_footer_main"]
+}

@@ -1,0 +1,743 @@
+<footer class="ossian-footer">
+  <div class="ossian-footer__main page-width">
+
+    <!-- Col 1: Brand -->
+    <div class="ossian-footer__brand">
+      <div class="ossian-footer__logo-wrap">
+        {%- if section.settings.logo != blank -%}
+          {{
+            section.settings.logo
+            | image_url: width: 160
+            | image_tag: class: 'ossian-footer__logo-img', loading: 'lazy', alt: shop.name
+          }}
+        {%- else -%}
+          <div class="ossian-footer__logo-text">
+            <span class="ossian-footer__logo-name">{{ section.settings.brand_name | default: 'OSSION' }}</span>
+            <span class="ossian-footer__logo-sub">{{ section.settings.brand_tagline | default: 'PROFESSIONAL' }}</span>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <ul class="ossian-footer__contact-list">
+        {%- if section.settings.address != blank -%}
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>{{ section.settings.address }}</span>
+          </li>
+        {%- endif -%}
+        {%- if section.settings.email != blank -%}
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <a href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a>
+          </li>
+        {%- endif -%}
+        {%- if section.settings.phone != blank -%}
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13 19.79 19.79 0 0 1 1.62 4.38 2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.16 6.16l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 17z"/></svg>
+            <a href="tel:{{ section.settings.phone }}">{{ section.settings.phone }}</a>
+          </li>
+        {%- endif -%}
+      </ul>
+
+      <div class="ossian-footer__social">
+        {%- if section.settings.facebook != blank -%}
+          <a href="{{ section.settings.facebook }}" class="ossian-footer__social-btn" aria-label="Facebook" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+        {%- endif -%}
+        {%- if section.settings.linkedin != blank -%}
+          <a href="{{ section.settings.linkedin }}" class="ossian-footer__social-btn" aria-label="LinkedIn" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        {%- endif -%}
+        {%- if section.settings.youtube != blank -%}
+          <a href="{{ section.settings.youtube }}" class="ossian-footer__social-btn" aria-label="YouTube" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#0f2044"/></svg>
+          </a>
+        {%- endif -%}
+        {%- if section.settings.instagram != blank -%}
+          <a href="{{ section.settings.instagram }}" class="ossian-footer__social-btn" aria-label="Instagram" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <!-- Col 2: Shop -->
+    <div class="ossian-footer__col">
+      <h3 class="ossian-footer__col-heading">{{ section.settings.shop_heading | default: 'Shop' }}</h3>
+      {%- if section.settings.shop_menu != blank -%}
+        {%- assign shop_menu = linklists[section.settings.shop_menu] -%}
+        {%- if shop_menu.links.size > 0 -%}
+          <ul class="ossian-footer__links">
+            {%- for link in shop_menu.links -%}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      {%- else -%}
+        <ul class="ossian-footer__links">
+          {%- if section.settings.shop_link_1_label != blank -%}<li><a href="{{ section.settings.shop_link_1_url | default: '#' }}">{{ section.settings.shop_link_1_label }}</a></li>{%- endif -%}
+          {%- if section.settings.shop_link_2_label != blank -%}<li><a href="{{ section.settings.shop_link_2_url | default: '#' }}">{{ section.settings.shop_link_2_label }}</a></li>{%- endif -%}
+          {%- if section.settings.shop_link_3_label != blank -%}<li><a href="{{ section.settings.shop_link_3_url | default: '#' }}">{{ section.settings.shop_link_3_label }}</a></li>{%- endif -%}
+          {%- if section.settings.shop_link_4_label != blank -%}<li><a href="{{ section.settings.shop_link_4_url | default: '#' }}">{{ section.settings.shop_link_4_label }}</a></li>{%- endif -%}
+          {%- if section.settings.shop_link_5_label != blank -%}<li><a href="{{ section.settings.shop_link_5_url | default: '#' }}">{{ section.settings.shop_link_5_label }}</a></li>{%- endif -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    <!-- Col 3: Discover -->
+    <div class="ossian-footer__col">
+      <h3 class="ossian-footer__col-heading">{{ section.settings.discover_heading | default: 'Discover' }}</h3>
+      {%- if section.settings.discover_menu != blank -%}
+        {%- assign discover_menu = linklists[section.settings.discover_menu] -%}
+        {%- if discover_menu.links.size > 0 -%}
+          <ul class="ossian-footer__links">
+            {%- for link in discover_menu.links -%}
+              <li><a href="{{ link.url }}"{% if link.title == section.settings.featured_link %} class="ossian-footer__link--featured"{% endif %}>{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      {%- else -%}
+        <ul class="ossian-footer__links">
+          {%- if section.settings.discover_link_1_label != blank -%}<li><a href="{{ section.settings.discover_link_1_url | default: '#' }}">{{ section.settings.discover_link_1_label }}</a></li>{%- endif -%}
+          {%- if section.settings.discover_link_2_label != blank -%}<li><a href="{{ section.settings.discover_link_2_url | default: '#' }}" class="ossian-footer__link--featured">{{ section.settings.discover_link_2_label }}</a></li>{%- endif -%}
+          {%- if section.settings.discover_link_3_label != blank -%}<li><a href="{{ section.settings.discover_link_3_url | default: '#' }}">{{ section.settings.discover_link_3_label }}</a></li>{%- endif -%}
+          {%- if section.settings.discover_link_4_label != blank -%}<li><a href="{{ section.settings.discover_link_4_url | default: '#' }}">{{ section.settings.discover_link_4_label }}</a></li>{%- endif -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    <!-- Col 4: Help & Policies -->
+    <div class="ossian-footer__col">
+      <h3 class="ossian-footer__col-heading">{{ section.settings.help_heading | default: 'Help & Policies' }}</h3>
+      {%- if section.settings.help_menu != blank -%}
+        {%- assign help_menu = linklists[section.settings.help_menu] -%}
+        {%- if help_menu.links.size > 0 -%}
+          <ul class="ossian-footer__links">
+            {%- for link in help_menu.links -%}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      {%- else -%}
+        <ul class="ossian-footer__links">
+          {%- if section.settings.help_link_1_label != blank -%}<li><a href="{{ section.settings.help_link_1_url | default: '#' }}">{{ section.settings.help_link_1_label }}</a></li>{%- endif -%}
+          {%- if section.settings.help_link_2_label != blank -%}<li><a href="{{ section.settings.help_link_2_url | default: '#' }}">{{ section.settings.help_link_2_label }}</a></li>{%- endif -%}
+          {%- if section.settings.help_link_3_label != blank -%}<li><a href="{{ section.settings.help_link_3_url | default: '#' }}">{{ section.settings.help_link_3_label }}</a></li>{%- endif -%}
+          {%- if section.settings.help_link_4_label != blank -%}<li><a href="{{ section.settings.help_link_4_url | default: '#' }}">{{ section.settings.help_link_4_label }}</a></li>{%- endif -%}
+          {%- if section.settings.help_link_5_label != blank -%}<li><a href="{{ section.settings.help_link_5_url | default: '#' }}">{{ section.settings.help_link_5_label }}</a></li>{%- endif -%}
+          {%- if section.settings.help_link_6_label != blank -%}<li><a href="{{ section.settings.help_link_6_url | default: '#' }}">{{ section.settings.help_link_6_label }}</a></li>{%- endif -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    <!-- Col 5: Newsletter -->
+    <div class="ossian-footer__col ossian-footer__newsletter">
+      <h3 class="ossian-footer__col-heading">{{ section.settings.newsletter_heading | default: 'Newsletter' }}</h3>
+      {%- if section.settings.newsletter_subtext != blank -%}
+        <p class="ossian-footer__newsletter-sub">{{ section.settings.newsletter_subtext }}</p>
+      {%- endif -%}
+      {%- form 'customer' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <div class="ossian-footer__form">
+          <input
+            type="email"
+            name="contact[email]"
+            class="ossian-footer__email-input"
+            placeholder="{{ section.settings.email_placeholder | default: 'Enter Your Email' }}"
+            required
+            autocomplete="email"
+          >
+          <button type="submit" class="ossian-footer__subscribe-btn">
+            {{ section.settings.subscribe_label | default: 'Subscribe' }}
+          </button>
+        </div>
+        {%- if form.posted_successfully? -%}
+          <p class="ossian-footer__form-success">Thanks for subscribing!</p>
+        {%- endif -%}
+      {%- endform -%}
+    </div>
+
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="ossian-footer__bottom">
+    <div class="ossian-footer__bottom-inner page-width">
+      <div class="ossian-footer__bottom-links">
+        {%- if section.settings.bottom_link_1_label != blank -%}
+          <a href="{{ section.settings.bottom_link_1_url | default: '#' }}">{{ section.settings.bottom_link_1_label }}</a>
+        {%- endif -%}
+        {%- if section.settings.bottom_link_2_label != blank -%}
+          <a href="{{ section.settings.bottom_link_2_url | default: '#' }}">{{ section.settings.bottom_link_2_label }}</a>
+        {%- endif -%}
+        {%- if section.settings.bottom_link_3_label != blank -%}
+          <a href="{{ section.settings.bottom_link_3_url | default: '#' }}">{{ section.settings.bottom_link_3_label }}</a>
+        {%- endif -%}
+      </div>
+      <p class="ossian-footer__copyright">
+        {{ section.settings.copyright_text | default: 'All rights reserved © Ossion 2026' }}
+      </p>
+    </div>
+  </div>
+</footer>
+
+{% stylesheet %}
+/* ── Base ── */
+.ossian-footer {
+  background: #0f2044;
+  color: rgba(255,255,255,0.85);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── Main grid — desktop default ── */
+.ossian-footer__main {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr 1fr 1.5fr;
+  grid-template-areas: 'brand shop discover help newsletter';
+  gap: 40px;
+  
+  padding: 60px 40px 64px 40px;
+}
+
+.ossian-footer__brand      { grid-area: brand; }
+.ossian-footer__col:nth-child(2) { grid-area: shop; }
+.ossian-footer__col:nth-child(3) { grid-area: discover; }
+.ossian-footer__col:nth-child(4) { grid-area: help; }
+.ossian-footer__newsletter { grid-area: newsletter; }
+
+/* ── Brand col ── */
+.ossian-footer__logo-wrap { margin-bottom: 24px; }
+
+.ossian-footer__logo-img {
+  max-width: 140px;
+  height: auto;
+  display: block;
+}
+
+.ossian-footer__logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.ossian-footer__logo-name {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0.04em;
+}
+
+.ossian-footer__logo-sub {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.65);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.ossian-footer__contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ossian-footer__contact-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: rgba(255,255,255,0.75);
+  font-size: 13px;
+}
+
+.ossian-footer__contact-list svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  opacity: 0.8;
+}
+
+.ossian-footer__contact-list a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.ossian-footer__contact-list a:hover { color: #fff; }
+
+/* ── Social ── */
+.ossian-footer__social {
+  display: flex;
+  gap: 10px;
+}
+
+.ossian-footer__social-btn {
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid rgba(255,255,255,0.35);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.ossian-footer__social-btn:hover {
+  border-color: #fff;
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+}
+
+/* ── Link columns ── */
+.ossian-footer__col-heading {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 20px;
+  letter-spacing: 0.01em;
+}
+
+.ossian-footer__links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ossian-footer__links a {
+  color: rgba(255,255,255,0.72);
+  text-decoration: none;
+  font-size: 13.5px;
+  transition: color 0.2s;
+  display: inline-block;
+}
+
+.ossian-footer__links a:hover { color: #fff; }
+
+.ossian-footer__link--featured {
+  font-weight: 700 !important;
+  color: #fff !important;
+}
+
+/* ── Newsletter ── */
+.ossian-footer__newsletter-sub {
+  font-size: 13px;
+  color: rgba(255,255,255,0.72);
+  margin: 0 0 18px;
+  line-height: 1.5;
+}
+
+.ossian-footer__form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ossian-footer__email-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #1e8a9e;
+  border-radius: 6px;
+  background: transparent;
+  color: #fff;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.ossian-footer__email-input::placeholder { color: rgba(255,255,255,0.45); }
+.ossian-footer__email-input:focus { border-color: #2ab5ce; }
+
+.ossian-footer__subscribe-btn {
+  padding: 12px 20px;
+  background: #1e8a9e;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.2s;
+  letter-spacing: 0.02em;
+}
+
+.ossian-footer__subscribe-btn:hover { background: #17768a; }
+
+.ossian-footer__form-success {
+  color: #7dd6e8;
+  font-size: 13px;
+  margin: 8px 0 0;
+}
+
+/* ── Bottom bar ── */
+.ossian-footer__bottom {
+  border-top: 1px solid rgba(255,255,255,0.12);
+}
+
+.ossian-footer__bottom-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 24px;
+  padding-bottom: 28px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ossian-footer__bottom-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.ossian-footer__bottom-links a {
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.2s;
+}
+
+.ossian-footer__bottom-links a:hover { color: #fff; }
+
+.ossian-footer__copyright {
+  color: rgba(255,255,255,0.55);
+  font-size: 13px;
+  margin: 0;
+  text-align: right;
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════ */
+
+/* ── Small desktop (1024px–1199px) ── */
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .ossian-footer__main {
+    grid-template-columns: 1.2fr 1fr 1fr 1fr 1.3fr;
+    gap: 28px;
+   padding: 20px 40px 64px 40px;
+  }
+  .ossian-footer__col-heading { font-size: 0.95rem; }
+  .ossian-footer__links a { font-size: 13px; }
+}
+
+/* ── Tablet landscape (769px–1023px) ── */
+@media (min-width: 769px) and (max-width: 1023px) {
+  .ossian-footer__main {
+    /*
+      Row 1: brand | shop | discover
+      Row 2: brand | help | newsletter
+    */
+    grid-template-columns: 1.3fr 1fr 1.4fr;
+    grid-template-areas:
+      'brand shop    discover'
+      'brand help    newsletter';
+    gap: 36px 40px;
+   padding: 60px 40px 64px 40px;
+  }
+
+  /* Brand spans both rows */
+  .ossian-footer__brand {
+    grid-area: brand;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Newsletter stacked, no inline grid trick needed */
+  .ossian-footer__newsletter {
+    grid-area: newsletter;
+  }
+
+  .ossian-footer__form {
+    flex-direction: column;
+  }
+
+  .ossian-footer__col-heading { margin-bottom: 14px; }
+}
+
+/* ── Mobile (≤768px) ── */
+@media (max-width: 768px) {
+  .ossian-footer__main {
+    /*
+      Row 1: brand (full width)
+      Row 2: shop | discover
+      Row 3: help (full width)
+      Row 4: newsletter (full width)
+    */
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'brand      brand'
+      'shop       discover'
+      'help       help'
+      'newsletter newsletter';
+    gap: 32px 20px;
+padding: 60px 40px 64px 40px;
+  }
+
+  .ossian-footer__brand      { grid-area: brand; }
+  .ossian-footer__col:nth-child(2) { grid-area: shop; }
+  .ossian-footer__col:nth-child(3) { grid-area: discover; }
+  .ossian-footer__col:nth-child(4) { grid-area: help; }
+  .ossian-footer__newsletter { grid-area: newsletter; }
+
+  .ossian-footer__logo-name { font-size: 1.5rem; }
+  .ossian-footer__logo-wrap { margin-bottom: 16px; }
+  .ossian-footer__contact-list { margin-bottom: 16px; }
+
+  .ossian-footer__col-heading {
+    font-size: 0.95rem;
+    margin-bottom: 14px;
+  }
+
+  .ossian-footer__links { gap: 10px; }
+  .ossian-footer__links a { font-size: 13px; }
+
+  /* Newsletter: email + button side by side */
+  .ossian-footer__form {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+
+  .ossian-footer__email-input {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ossian-footer__subscribe-btn {
+    flex-shrink: 0;
+    padding: 11px 16px;
+    font-size: 13px;
+  }
+
+  /* Bottom bar stacks */
+  .ossian-footer__bottom-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding-top: 16px;
+    padding-bottom: 20px;
+  }
+
+  .ossian-footer__bottom-links { gap: 16px; }
+  .ossian-footer__copyright { text-align: left; }
+}
+
+/* ── Small mobile (≤480px) ── */
+@media (max-width: 480px) {
+  .ossian-footer__main {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'brand'
+      'shop'
+      'discover'
+      'help'
+      'newsletter';
+    gap: 28px;
+  padding: 60px 40px 64px 40px;
+  }
+
+  /* Email + button stack vertically on very small screens */
+  .ossian-footer__form {
+    flex-direction: column;
+  }
+
+  .ossian-footer__subscribe-btn { width: 100%; }
+
+  .ossian-footer__bottom-links { gap: 12px; }
+  .ossian-footer__bottom-links a,
+  .ossian-footer__copyright { font-size: 12px; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "OSSION Footer",
+  "tag": "section",
+  "class": "ossian-footer-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Brand"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image (leave blank for text)"
+    },
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Brand name",
+      "default": "OSSION"
+    },
+    {
+      "type": "text",
+      "id": "brand_tagline",
+      "label": "Brand tagline",
+      "default": "PROFESSIONAL"
+    },
+    {
+      "type": "text",
+      "id": "address",
+      "label": "Address",
+      "default": "address"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "contact@ossion.com"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone",
+      "default": "800908199"
+    },
+    {
+      "type": "header",
+      "content": "Social Links"
+    },
+    { "type": "url", "id": "facebook",  "label": "Facebook URL" },
+    { "type": "url", "id": "linkedin",  "label": "LinkedIn URL" },
+    { "type": "url", "id": "youtube",   "label": "YouTube URL" },
+    { "type": "url", "id": "instagram", "label": "Instagram URL" },
+    {
+      "type": "header",
+      "content": "Shop Column"
+    },
+    {
+      "type": "text",
+      "id": "shop_heading",
+      "label": "Heading",
+      "default": "Shop"
+    },
+    {
+      "type": "link_list",
+      "id": "shop_menu",
+      "label": "Menu (overrides manual links below)"
+    },
+    { "type": "text", "id": "shop_link_1_label", "label": "Link 1 label", "default": "Hair Color" },
+    { "type": "url",  "id": "shop_link_1_url",   "label": "Link 1 URL" },
+    { "type": "text", "id": "shop_link_2_label", "label": "Link 2 label", "default": "Hair Treatment" },
+    { "type": "url",  "id": "shop_link_2_url",   "label": "Link 2 URL" },
+    { "type": "text", "id": "shop_link_3_label", "label": "Link 3 label", "default": "Hair Care" },
+    { "type": "url",  "id": "shop_link_3_url",   "label": "Link 3 URL" },
+    { "type": "text", "id": "shop_link_4_label", "label": "Link 4 label", "default": "Bleach & Lightener" },
+    { "type": "url",  "id": "shop_link_4_url",   "label": "Link 4 URL" },
+    { "type": "text", "id": "shop_link_5_label", "label": "Link 5 label", "default": "Skin Care" },
+    { "type": "url",  "id": "shop_link_5_url",   "label": "Link 5 URL" },
+    {
+      "type": "header",
+      "content": "Discover Column"
+    },
+    {
+      "type": "text",
+      "id": "discover_heading",
+      "label": "Heading",
+      "default": "Discover"
+    },
+    {
+      "type": "link_list",
+      "id": "discover_menu",
+      "label": "Menu (overrides manual links below)"
+    },
+    { "type": "text", "id": "discover_link_1_label", "label": "Link 1 label", "default": "About Ossion" },
+    { "type": "url",  "id": "discover_link_1_url",   "label": "Link 1 URL" },
+    { "type": "text", "id": "discover_link_2_label", "label": "Link 2 label (featured/bold)", "default": "Ossion Promise" },
+    { "type": "url",  "id": "discover_link_2_url",   "label": "Link 2 URL" },
+    { "type": "text", "id": "discover_link_3_label", "label": "Link 3 label", "default": "Blogs" },
+    { "type": "url",  "id": "discover_link_3_url",   "label": "Link 3 URL" },
+    { "type": "text", "id": "discover_link_4_label", "label": "Link 4 label", "default": "FAQ" },
+    { "type": "url",  "id": "discover_link_4_url",   "label": "Link 4 URL" },
+    {
+      "type": "header",
+      "content": "Help & Policies Column"
+    },
+    {
+      "type": "text",
+      "id": "help_heading",
+      "label": "Heading",
+      "default": "Help & Policies"
+    },
+    {
+      "type": "link_list",
+      "id": "help_menu",
+      "label": "Menu (overrides manual links below)"
+    },
+    { "type": "text", "id": "help_link_1_label", "label": "Link 1 label", "default": "Contact Us" },
+    { "type": "url",  "id": "help_link_1_url",   "label": "Link 1 URL" },
+    { "type": "text", "id": "help_link_2_label", "label": "Link 2 label", "default": "Shipping Policy" },
+    { "type": "url",  "id": "help_link_2_url",   "label": "Link 2 URL" },
+    { "type": "text", "id": "help_link_3_label", "label": "Link 3 label", "default": "Refund Policy" },
+    { "type": "url",  "id": "help_link_3_url",   "label": "Link 3 URL" },
+    { "type": "text", "id": "help_link_4_label", "label": "Link 4 label", "default": "Payment Policy" },
+    { "type": "url",  "id": "help_link_4_url",   "label": "Link 4 URL" },
+    { "type": "text", "id": "help_link_5_label", "label": "Link 5 label", "default": "Terms & Conditions" },
+    { "type": "url",  "id": "help_link_5_url",   "label": "Link 5 URL" },
+    { "type": "text", "id": "help_link_6_label", "label": "Link 6 label", "default": "Privacy Policy" },
+    { "type": "url",  "id": "help_link_6_url",   "label": "Link 6 URL" },
+    {
+      "type": "header",
+      "content": "Newsletter Column"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Heading",
+      "default": "Newsletter"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_subtext",
+      "label": "Subtext",
+      "default": "Get 10% Off Your First Order + Beauty Tips"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email placeholder",
+      "default": "Enter Your Email"
+    },
+    {
+      "type": "text",
+      "id": "subscribe_label",
+      "label": "Subscribe button label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "header",
+      "content": "Bottom Bar"
+    },
+    { "type": "text", "id": "bottom_link_1_label", "label": "Link 1 label", "default": "Privacy Policy" },
+    { "type": "url",  "id": "bottom_link_1_url",   "label": "Link 1 URL" },
+    { "type": "text", "id": "bottom_link_2_label", "label": "Link 2 label", "default": "Terms Of User & Disclaimers" },
+    { "type": "url",  "id": "bottom_link_2_url",   "label": "Link 2 URL" },
+    { "type": "text", "id": "bottom_link_3_label", "label": "Link 3 label" },
+    { "type": "url",  "id": "bottom_link_3_url",   "label": "Link 3 URL" },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright text",
+      "default": "All rights reserved © Ossion 2026"
+    }
+  ],
+  "presets": [
+    {
+      "name": "OSSION Footer"
+    }
+  ]
+}
+{% endschema %}

@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "ossian_hero_slider": {
@@ -428,70 +437,6 @@
         "instagram_handle": "ossion.care"
       }
     },
-    "ossian_salon_choice": {
-      "type": "ossian-salon-choice",
-      "blocks": {
-        "sc_1": {
-          "type": "product_card",
-          "settings": {
-            "product": "",
-            "product_name": "JAPANESE GLOW FACIAL KIT",
-            "product_descriptor": "Used by 10,000+ customers",
-            "discount_badge": "50% off",
-            "rating": "4.8",
-            "play_icon": true,
-            "link": ""
-          }
-        },
-        "sc_2": {
-          "type": "product_card",
-          "settings": {
-            "product": "",
-            "product_name": "ALOEVERA LIPOSOLUBLE WAX",
-            "product_descriptor": "Smooth Waxing. Less Pain",
-            "discount_badge": "50% off",
-            "rating": "4.8",
-            "play_icon": true,
-            "link": ""
-          }
-        },
-        "sc_3": {
-          "type": "product_card",
-          "settings": {
-            "product": "",
-            "product_name": "DE-TAN ILLUMINATE",
-            "product_descriptor": "Tan Removal & Brightening",
-            "discount_badge": "50% off",
-            "rating": "4.8",
-            "play_icon": true,
-            "link": ""
-          }
-        },
-        "sc_4": {
-          "type": "product_card",
-          "settings": {
-            "product": "",
-            "product_name": "SUPREME STRAIGHT",
-            "product_descriptor": "Hair Straightening System",
-            "discount_badge": "50% off",
-            "rating": "4.8",
-            "play_icon": true,
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "sc_1",
-        "sc_2",
-        "sc_3",
-        "sc_4"
-      ],
-      "name": "Salon Choice",
-      "settings": {
-        "heading": "SALON CHOICE",
-        "subheading": ""
-      }
-    },
     "ossian_trust_ticker": {
       "type": "ossian-trust-ticker",
       "blocks": {
@@ -540,6 +485,70 @@
         "scroll_speed": 28,
         "padding_top": 20,
         "padding_bottom": 20
+      }
+    },
+    "ossian_salon_choice": {
+      "type": "ossian-salon-choice",
+      "blocks": {
+        "sc_1": {
+          "type": "product_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
+            "product_name": "JAPANESE GLOW FACIAL KIT",
+            "product_descriptor": "Used by 10,000+ customers",
+            "discount_badge": "50% off",
+            "rating": "4.8",
+            "play_icon": true,
+            "link": ""
+          }
+        },
+        "sc_2": {
+          "type": "product_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy",
+            "product_name": "ALOEVERA LIPOSOLUBLE WAX",
+            "product_descriptor": "Smooth Waxing. Less Pain",
+            "discount_badge": "50% off",
+            "rating": "4.8",
+            "play_icon": true,
+            "link": ""
+          }
+        },
+        "sc_3": {
+          "type": "product_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy-1",
+            "product_name": "DE-TAN ILLUMINATE",
+            "product_descriptor": "Tan Removal & Brightening",
+            "discount_badge": "50% off",
+            "rating": "4.8",
+            "play_icon": true,
+            "link": ""
+          }
+        },
+        "sc_4": {
+          "type": "product_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy",
+            "product_name": "SUPREME STRAIGHT",
+            "product_descriptor": "Hair Straightening System",
+            "discount_badge": "50% off",
+            "rating": "4.8",
+            "play_icon": true,
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "sc_1",
+        "sc_2",
+        "sc_3",
+        "sc_4"
+      ],
+      "name": "Salon Choice",
+      "settings": {
+        "heading": "SALON CHOICE",
+        "subheading": ""
       }
     },
     "ossian_available_on": {
