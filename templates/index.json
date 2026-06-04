@@ -443,44 +443,48 @@
         "sc_1": {
           "type": "product_card",
           "settings": {
-            "play_icon": true,
-            "discount_badge": "50% off",
+            "product": "",
             "product_name": "JAPANESE GLOW FACIAL KIT",
             "product_descriptor": "Used by 10,000+ customers",
+            "discount_badge": "50% off",
             "rating": "4.8",
+            "play_icon": true,
             "link": ""
           }
         },
         "sc_2": {
           "type": "product_card",
           "settings": {
-            "play_icon": true,
-            "discount_badge": "50% off",
+            "product": "",
             "product_name": "ALOEVERA LIPOSOLUBLE WAX",
             "product_descriptor": "Smooth Waxing. Less Pain",
+            "discount_badge": "50% off",
             "rating": "4.8",
+            "play_icon": true,
             "link": ""
           }
         },
         "sc_3": {
           "type": "product_card",
           "settings": {
-            "play_icon": true,
-            "discount_badge": "50% off",
+            "product": "",
             "product_name": "DE-TAN ILLUMINATE",
             "product_descriptor": "Tan Removal & Brightening",
+            "discount_badge": "50% off",
             "rating": "4.8",
+            "play_icon": true,
             "link": ""
           }
         },
         "sc_4": {
           "type": "product_card",
           "settings": {
-            "play_icon": true,
-            "discount_badge": "50% off",
+            "product": "",
             "product_name": "SUPREME STRAIGHT",
             "product_descriptor": "Hair Straightening System",
+            "discount_badge": "50% off",
             "rating": "4.8",
+            "play_icon": true,
             "link": ""
           }
         }
@@ -493,7 +497,58 @@
       ],
       "name": "Salon Choice",
       "settings": {
-        "heading": "SALON CHOICE"
+        "heading": "SALON CHOICE",
+        "subheading": ""
+      }
+    },
+    "ossian_trust_ticker": {
+      "type": "ossian-trust-ticker",
+      "blocks": {
+        "badge_leaf": {
+          "type": "badge",
+          "settings": {
+            "icon": "leaf",
+            "title": "Skin Loving Ingredients",
+            "description": "Enriched with natural extracts & nutrients."
+          }
+        },
+        "badge_shield": {
+          "type": "badge",
+          "settings": {
+            "icon": "shield",
+            "title": "Dermatologically Tested",
+            "description": "Safe and gentle for everyday use."
+          }
+        },
+        "badge_droplet": {
+          "type": "badge",
+          "settings": {
+            "icon": "droplet",
+            "title": "Professional Quality",
+            "description": "Salon trusted, expert recommended."
+          }
+        },
+        "badge_sparkle": {
+          "type": "badge",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Visible Results",
+            "description": "Healthy, glowing skin you can feel."
+          }
+        }
+      },
+      "block_order": [
+        "badge_leaf",
+        "badge_shield",
+        "badge_droplet",
+        "badge_sparkle"
+      ],
+      "name": "Trust Ticker",
+      "settings": {
+        "background_color": "#ffffff",
+        "scroll_speed": 28,
+        "padding_top": 20,
+        "padding_bottom": 20
       }
     },
     "ossian_available_on": {
@@ -553,6 +608,7 @@
     "ossian_science",
     "ossian_shop_by_category",
     "ossian_instagram",
+    "ossian_trust_ticker",
     "ossian_salon_choice",
     "ossian_available_on"
   ]

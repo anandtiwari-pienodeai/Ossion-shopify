@@ -1,0 +1,324 @@
+<div class="trust-ticker">
+  <div class="trust-ticker__track-outer">
+    <div class="trust-ticker__track" aria-hidden="false">
+      {%- assign all_items = section.blocks -%}
+      <!-- Original set -->
+      <div class="trust-ticker__set">
+        {%- for block in all_items -%}
+          <div class="trust-ticker__item" {{ block.shopify_attributes }}>
+            <div class="trust-ticker__icon">
+              {%- case block.settings.icon -%}
+                {%- when 'leaf' -%}
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="#7c5cbf" stroke-width="1.4"/><path d="M16 22c0 0-6-4-6-9a6 6 0 0 1 12 0c0 5-6 9-6 9z" stroke="#7c5cbf" stroke-width="1.4" fill="none"/><path d="M16 13v9" stroke="#7c5cbf" stroke-width="1.2" stroke-linecap="round"/></svg>
+                {%- when 'shield' -%}
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="#7c5cbf" stroke-width="1.4"/><path d="M16 8l7 3v5c0 4-3.5 7-7 8-3.5-1-7-4-7-8v-5l7-3z" stroke="#7c5cbf" stroke-width="1.4" fill="none"/><path d="M12.5 16l2.5 2.5 4.5-4.5" stroke="#7c5cbf" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                {%- when 'droplet' -%}
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="#7c5cbf" stroke-width="1.4"/><path d="M16 8c0 0-6 5.5-6 10a6 6 0 0 0 12 0c0-4.5-6-10-6-10z" stroke="#7c5cbf" stroke-width="1.4" fill="none"/></svg>
+                {%- when 'sparkle' -%}
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="#7c5cbf" stroke-width="1.4"/><path d="M16 9v4M16 19v4M9 16h4M19 16h4" stroke="#7c5cbf" stroke-width="1.3" stroke-linecap="round"/><path d="M11.5 11.5l2.8 2.8M17.7 17.7l2.8 2.8M20.5 11.5l-2.8 2.8M14.3 17.7l-2.8 2.8" stroke="#7c5cbf" stroke-width="1.1" stroke-linecap="round"/></svg>
+                {%- when 'star' -%}
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="#7c5cbf" stroke-width="1.4"/><path d="M16 10l1.8 5.4H23l-4.6 3.4 1.8 5.4L16 21l-4.2 3.2 1.8-5.4L9 15.4h5.2L16 10z" stroke="#7c5cbf" stroke-width="1.3" fill="none" stroke-linejoin="round"/></svg>
+                {%- when 'lab' -%}
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="#7c5cbf" stroke-width="1.4"/><path d="M13 9v7l-4 6h14l-4-6V9" stroke="#7c5cbf" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><line x1="13" y1="12" x2="19" y2="12" stroke="#7c5cbf" stroke-width="1.2" stroke-linecap="round"/></svg>
+                {%- when 'award' -%}
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="#7c5cbf" stroke-width="1.4"/><circle cx="16" cy="14" r="5" stroke="#7c5cbf" stroke-width="1.3" fill="none"/><path d="M12 18.5l-2 5.5 6-2 6 2-2-5.5" stroke="#7c5cbf" stroke-width="1.3" stroke-linejoin="round" fill="none"/></svg>
+                {%- when 'image' -%}
+                  {%- if block.settings.custom_icon != blank -%}
+                    {{
+                      block.settings.custom_icon
+                      | image_url: width: 64
+                      | image_tag: class: 'trust-ticker__custom-icon', loading: 'lazy'
+                    }}
+                  {%- endif -%}
+                {%- else -%}
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="#7c5cbf" stroke-width="1.4"/><path d="M16 9v4M16 19v4M9 16h4M19 16h4" stroke="#7c5cbf" stroke-width="1.3" stroke-linecap="round"/></svg>
+              {%- endcase -%}
+            </div>
+            <div class="trust-ticker__text">
+              <strong class="trust-ticker__title">{{ block.settings.title }}</strong>
+              {%- if block.settings.description != blank -%}
+                <span class="trust-ticker__desc">{{ block.settings.description }}</span>
+              {%- endif -%}
+            </div>
+          </div>
+          {%- unless forloop.last -%}
+            <div class="trust-ticker__divider" aria-hidden="true"></div>
+          {%- endunless -%}
+        {%- endfor -%}
+      </div>
+      <!-- Duplicate set for seamless loop -->
+      <div class="trust-ticker__set" aria-hidden="true">
+        {%- for block in all_items -%}
+          <div class="trust-ticker__item">
+            <div class="trust-ticker__icon">
+              {%- case block.settings.icon -%}
+                {%- when 'leaf' -%}
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="#7c5cbf" stroke-width="1.4"/><path d="M16 22c0 0-6-4-6-9a6 6 0 0 1 12 0c0 5-6 9-6 9z" stroke="#7c5cbf" stroke-width="1.4" fill="none"/><path d="M16 13v9" stroke="#7c5cbf" stroke-width="1.2" stroke-linecap="round"/></svg>
+                {%- when 'shield' -%}
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="#7c5cbf" stroke-width="1.4"/><path d="M16 8l7 3v5c0 4-3.5 7-7 8-3.5-1-7-4-7-8v-5l7-3z" stroke="#7c5cbf" stroke-width="1.4" fill="none"/><path d="M12.5 16l2.5 2.5 4.5-4.5" stroke="#7c5cbf" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                {%- when 'droplet' -%}
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="#7c5cbf" stroke-width="1.4"/><path d="M16 8c0 0-6 5.5-6 10a6 6 0 0 0 12 0c0-4.5-6-10-6-10z" stroke="#7c5cbf" stroke-width="1.4" fill="none"/></svg>
+                {%- when 'sparkle' -%}
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="#7c5cbf" stroke-width="1.4"/><path d="M16 9v4M16 19v4M9 16h4M19 16h4" stroke="#7c5cbf" stroke-width="1.3" stroke-linecap="round"/><path d="M11.5 11.5l2.8 2.8M17.7 17.7l2.8 2.8M20.5 11.5l-2.8 2.8M14.3 17.7l-2.8 2.8" stroke="#7c5cbf" stroke-width="1.1" stroke-linecap="round"/></svg>
+                {%- when 'star' -%}
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="#7c5cbf" stroke-width="1.4"/><path d="M16 10l1.8 5.4H23l-4.6 3.4 1.8 5.4L16 21l-4.2 3.2 1.8-5.4L9 15.4h5.2L16 10z" stroke="#7c5cbf" stroke-width="1.3" fill="none" stroke-linejoin="round"/></svg>
+                {%- when 'lab' -%}
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="#7c5cbf" stroke-width="1.4"/><path d="M13 9v7l-4 6h14l-4-6V9" stroke="#7c5cbf" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><line x1="13" y1="12" x2="19" y2="12" stroke="#7c5cbf" stroke-width="1.2" stroke-linecap="round"/></svg>
+                {%- when 'award' -%}
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="#7c5cbf" stroke-width="1.4"/><circle cx="16" cy="14" r="5" stroke="#7c5cbf" stroke-width="1.3" fill="none"/><path d="M12 18.5l-2 5.5 6-2 6 2-2-5.5" stroke="#7c5cbf" stroke-width="1.3" stroke-linejoin="round" fill="none"/></svg>
+                {%- when 'image' -%}
+                  {%- if block.settings.custom_icon != blank -%}
+                    {{
+                      block.settings.custom_icon
+                      | image_url: width: 64
+                      | image_tag: class: 'trust-ticker__custom-icon', loading: 'lazy'
+                    }}
+                  {%- endif -%}
+                {%- else -%}
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="#7c5cbf" stroke-width="1.4"/><path d="M16 9v4M16 19v4M9 16h4M19 16h4" stroke="#7c5cbf" stroke-width="1.3" stroke-linecap="round"/></svg>
+              {%- endcase -%}
+            </div>
+            <div class="trust-ticker__text">
+              <strong class="trust-ticker__title">{{ block.settings.title }}</strong>
+              {%- if block.settings.description != blank -%}
+                <span class="trust-ticker__desc">{{ block.settings.description }}</span>
+              {%- endif -%}
+            </div>
+          </div>
+          {%- unless forloop.last -%}
+            <div class="trust-ticker__divider" aria-hidden="true"></div>
+          {%- endunless -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+.trust-ticker {
+  padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+  background: {{ section.settings.background_color }};
+}
+
+.trust-ticker__track-outer {
+  overflow: hidden;
+  border-radius: 0;
+  background: #f5f4fb;
+  width: 100%;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.trust-ticker__track {
+  display: flex;
+  width: max-content;
+  animation: trust-ticker-scroll var(--ticker-speed, 28s) linear infinite;
+}
+
+.trust-ticker__track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes trust-ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.trust-ticker__set {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.trust-ticker__item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px clamp(16px, 3vw, 36px);
+}
+
+.trust-ticker__icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trust-ticker__icon svg {
+  width: clamp(26px, 3.5vw, 32px);
+  height: clamp(26px, 3.5vw, 32px);
+}
+
+.trust-ticker__custom-icon {
+  width: clamp(26px, 3.5vw, 32px);
+  height: clamp(26px, 3.5vw, 32px);
+  object-fit: contain;
+}
+
+.trust-ticker__text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  white-space: normal;
+  width: clamp(100px, 14vw, 180px);
+}
+
+.trust-ticker__title {
+  font-size: clamp(12px, 1.2vw, 14px);
+  font-weight: 700;
+  color: #1e1e2e;
+  line-height: 1.3;
+  display: block;
+}
+
+.trust-ticker__desc {
+  font-size: clamp(11px, 1vw, 12.5px);
+  color: #666;
+  line-height: 1.4;
+  display: block;
+}
+
+.trust-ticker__divider {
+  width: 1px;
+  height: 40px;
+  background: #d8d3ee;
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .trust-ticker__item { gap: 10px; padding: 14px 18px; }
+  .trust-ticker__text { width: 110px; }
+  .trust-ticker__divider { height: 32px; }
+}
+{% endstylesheet %}
+
+<script>
+(function() {
+  const ticker = document.querySelector('.trust-ticker__track');
+  if (!ticker) return;
+  const speed = {{ section.settings.scroll_speed | default: 28 }};
+  ticker.style.setProperty('--ticker-speed', speed + 's');
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Trust Ticker",
+  "tag": "section",
+  "class": "trust-ticker-section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "label": "Scroll speed (seconds per loop)",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Trust Badge",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "leaf",    "label": "Leaf / Plant" },
+            { "value": "shield",  "label": "Shield / Tested" },
+            { "value": "droplet", "label": "Droplet / Water" },
+            { "value": "sparkle", "label": "Sparkle / Stars" },
+            { "value": "star",    "label": "Star" },
+            { "value": "lab",     "label": "Lab / Flask" },
+            { "value": "award",   "label": "Award / Medal" },
+            { "value": "image",   "label": "Custom image" }
+          ],
+          "default": "sparkle"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom icon image (if 'Custom image' selected)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Trust Badge"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Short supporting text."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust Ticker",
+      "blocks": [
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "leaf",
+            "title": "Skin Loving Ingredients",
+            "description": "Enriched with natural extracts & nutrients."
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "shield",
+            "title": "Dermatologically Tested",
+            "description": "Safe and gentle for everyday use."
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "droplet",
+            "title": "Professional Quality",
+            "description": "Salon trusted, expert recommended."
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Visible Results",
+            "description": "Healthy, glowing skin you can feel."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
