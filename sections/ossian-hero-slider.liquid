@@ -33,16 +33,18 @@
   </div>
 
   {%- if section.blocks.size > 1 -%}
-    <button class="hero-carousel__arrow hero-carousel__arrow--prev" aria-label="Previous">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <button class="hero-carousel__arrow hero-carousel__arrow--next" aria-label="Next">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <div class="hero-carousel__dots">
-      {%- for block in section.blocks -%}
-        <button class="hero-carousel__dot{% if forloop.first %} is-active{% endif %}" aria-label="Slide {{ forloop.index }}" data-index="{{ forloop.index0 }}"></button>
-      {%- endfor -%}
+    <div class="hero-carousel__controls">
+      <button class="hero-carousel__arrow hero-carousel__arrow--prev" aria-label="Previous">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="hero-carousel__dots">
+        {%- for block in section.blocks -%}
+          <button class="hero-carousel__dot{% if forloop.first %} is-active{% endif %}" aria-label="Slide {{ forloop.index }}" data-index="{{ forloop.index0 }}"></button>
+        {%- endfor -%}
+      </div>
+      <button class="hero-carousel__arrow hero-carousel__arrow--next" aria-label="Next">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
   {%- endif -%}
 </div>
@@ -138,64 +140,86 @@
   object-fit: cover;
 }
 
-.hero-carousel__arrow {
+/* ── Controls pill bar ── */
+.hero-carousel__controls {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 10;
-  width: 48px;
-  height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  background: rgba(20, 20, 30, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 100px;
+  padding: 6px 10px;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+.hero-carousel__arrow {
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
-  background: rgba(0, 0, 0, 0.3);
+  border: none;
+  background: transparent;
   color: #fff;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
   transition: background 0.2s;
 }
 
 .hero-carousel__arrow:hover {
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(255,255,255,0.15);
 }
 
-.hero-carousel__arrow--prev { left: 16px; }
-.hero-carousel__arrow--next { right: 16px; }
-
 .hero-carousel__dots {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
-  gap: 8px;
-  z-index: 10;
+  align-items: center;
+  gap: 10px;
 }
 
 .hero-carousel__dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.45);
+  border: 1.5px solid rgba(255,255,255,0.9);
+  background: transparent;
   cursor: pointer;
   padding: 0;
-  transition: background 0.2s, transform 0.2s;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
 }
 
 .hero-carousel__dot.is-active {
-  background: #fff;
-  transform: scale(1.35);
+  background: rgba(255,255,255,0.9);
+  border-color: rgba(255,255,255,0.9);
 }
 
 @media (max-width: 768px) {
   .hero-carousel__media {
     max-height: 60vh;
   }
+
+  .hero-carousel__controls {
+    bottom: 14px;
+    padding: 5px 8px;
+    gap: 4px;
+  }
+
   .hero-carousel__arrow {
-    width: 36px;
-    height: 36px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .hero-carousel__dot {
+    width: 7px;
+    height: 7px;
   }
 }
 {% endstylesheet %}
