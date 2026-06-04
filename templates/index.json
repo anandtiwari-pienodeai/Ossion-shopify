@@ -291,28 +291,135 @@
         "reel_1": {
           "type": "reel",
           "settings": {
-            "thumbnail": "shopify://shop_images/DEVELOPER_GROUP_SHOT_copy.png"
+            "thumbnail": "shopify://shop_images/DEVELOPER_GROUP_SHOT_copy.png",
+            "video_url": "",
+            "reel_label": "",
+            "product": "",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
           }
         },
         "reel_2": {
           "type": "reel",
-          "settings": {}
+          "settings": {
+            "video_url": "",
+            "reel_label": "",
+            "product": "",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
         },
         "reel_3": {
           "type": "reel",
-          "settings": {}
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/fb8cef1258d54a89a2c7854ccb5bb2f1.mp4",
+            "reel_label": "",
+            "product": "",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
         },
         "reel_4": {
           "type": "reel",
-          "settings": {}
+          "settings": {
+            "video_url": "",
+            "reel_label": "",
+            "product": "",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
         },
         "reel_5": {
           "type": "reel",
-          "settings": {}
+          "settings": {
+            "video_url": "",
+            "reel_label": "",
+            "product": "",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
         },
         "reel_6": {
           "type": "reel",
-          "settings": {}
+          "settings": {
+            "video_url": "",
+            "reel_label": "",
+            "product": "",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
         }
       },
       "block_order": [
