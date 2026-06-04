@@ -5,19 +5,19 @@
 {%- endif -%}
 
 <section class="obs">
-  <div class="page-width">
-
+  <div class="obs__header page-width">
     {%- if section.settings.heading != blank -%}
       <h2 class="obs__heading">{{ section.settings.heading }}</h2>
     {%- endif -%}
+  </div>
 
-    <div class="obs__grid">
+  <div class="obs__carousel-wrap">
+    <div class="obs__carousel" id="obs-carousel">
 
       {%- if has_products -%}
 
         {%- for product in col.products limit: section.settings.products_count -%}
 
-          {%- comment -%} Resolve badge from product tags {%- endcomment -%}
           {%- assign badge_text = '' -%}
           {%- for tag in product.tags -%}
             {%- if badge_text == '' -%}
@@ -36,7 +36,6 @@
             {%- endif -%}
           {%- endfor -%}
 
-          {%- comment -%} Collect display tags (skip badge tags) {%- endcomment -%}
           {%- assign badge_tags = 'best seller,best-seller,top rated,top-rated,trending,new,new arrival,sale' | split: ',' -%}
           {%- assign display_tags = '' -%}
           {%- assign display_tag_count = 0 -%}
@@ -62,17 +61,6 @@
                   <span class="obs__badge">{{ badge_text }}</span>
                 {%- endif -%}
 
-                <button
-                  class="obs__wishlist"
-                  aria-label="Add to wishlist"
-                  onclick="event.preventDefault()"
-                  type="button"
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                  </svg>
-                </button>
-
                 {%- if product.featured_image != blank -%}
                   {{
                     product.featured_image
@@ -97,6 +85,8 @@
 
                 <div class="obs__rating" aria-label="4.9 stars">
                   <span class="obs__stars" aria-hidden="true">★★★★★</span>
+                  <span class="obs__rating-val">4.9</span>
+                  <span class="obs__rating-count">(210)</span>
                 </div>
 
                 {%- if display_tags != blank -%}
@@ -120,21 +110,31 @@
 
             </a>
 
-            <button
-              class="obs__atc"
-              type="button"
-              data-variant-id="{{ product.variants.first.id }}"
-              data-product-title="{{ product.title | escape }}"
-            >
-              ADD TO CART
-            </button>
+            <div class="obs__actions">
+              <button
+                class="obs__atc"
+                type="button"
+                data-variant-id="{{ product.variants.first.id }}"
+                data-product-title="{{ product.title | escape }}"
+              >
+                ADD TO CART
+              </button>
+              <button
+                class="obs__wishlist"
+                aria-label="Add to wishlist"
+                type="button"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+              </button>
+            </div>
           </div>
 
         {%- endfor -%}
 
       {%- else -%}
 
-        {%- comment -%} Placeholder grid shown in theme editor before collection is selected {%- endcomment -%}
         {%- for i in (1..section.settings.products_count) -%}
           <div class="obs__card obs__card--placeholder">
             <div class="obs__img-wrap">
@@ -143,31 +143,41 @@
             <div class="obs__info">
               <p class="obs__type">CATEGORY</p>
               <h3 class="obs__name">Select a collection above</h3>
-              <div class="obs__pricing">
-                <span class="obs__price">₹0.00</span>
-              </div>
+              <div class="obs__pricing"><span class="obs__price">₹0.00</span></div>
             </div>
-            <button class="obs__atc" disabled type="button">ADD TO CART</button>
+            <div class="obs__actions">
+              <button class="obs__atc" disabled type="button">ADD TO CART</button>
+              <button class="obs__wishlist" disabled type="button">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </button>
+            </div>
           </div>
         {%- endfor -%}
 
       {%- endif -%}
 
     </div>
+
+    <!-- Nav arrows -->
+    <button class="obs__nav obs__nav--prev" id="obs-prev" aria-label="Previous">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="obs__nav obs__nav--next" id="obs-next" aria-label="Next">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
   </div>
 </section>
 
 <script>
 (function () {
+  /* ---------- Add to cart ---------- */
   document.querySelectorAll('.obs__atc[data-variant-id]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var variantId = parseInt(btn.dataset.variantId);
       if (!variantId) return;
-
       var original = btn.textContent;
       btn.textContent = 'ADDING…';
       btn.disabled = true;
-
       fetch('/cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -177,24 +187,59 @@
         .then(function () {
           btn.textContent = 'ADDED ✓';
           document.dispatchEvent(new CustomEvent('cart:refresh'));
-          setTimeout(function () {
-            btn.textContent = original;
-            btn.disabled = false;
-          }, 2000);
+          setTimeout(function () { btn.textContent = original; btn.disabled = false; }, 2000);
         })
-        .catch(function () {
-          btn.textContent = original;
-          btn.disabled = false;
-        });
+        .catch(function () { btn.textContent = original; btn.disabled = false; });
     });
   });
+
+  /* ---------- Wishlist toggle ---------- */
+  document.querySelectorAll('.obs__wishlist').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      btn.classList.toggle('is-wished');
+    });
+  });
+
+  /* ---------- Carousel nav arrows ---------- */
+  var carousel = document.getElementById('obs-carousel');
+  var prevBtn  = document.getElementById('obs-prev');
+  var nextBtn  = document.getElementById('obs-next');
+  if (!carousel || !prevBtn || !nextBtn) return;
+
+  function getScrollAmount() {
+    var card = carousel.querySelector('.obs__card');
+    if (!card) return 280;
+    return card.offsetWidth + parseInt(getComputedStyle(carousel).gap || 20);
+  }
+
+  nextBtn.addEventListener('click', function () {
+    carousel.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+  });
+  prevBtn.addEventListener('click', function () {
+    carousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+  });
+
+  function updateArrows() {
+    prevBtn.style.opacity = carousel.scrollLeft <= 4 ? '0.35' : '1';
+    prevBtn.style.pointerEvents = carousel.scrollLeft <= 4 ? 'none' : 'auto';
+    var atEnd = carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth - 4;
+    nextBtn.style.opacity = atEnd ? '0.35' : '1';
+    nextBtn.style.pointerEvents = atEnd ? 'none' : 'auto';
+  }
+  carousel.addEventListener('scroll', updateArrows, { passive: true });
+  updateArrows();
 })();
 </script>
 
 {% stylesheet %}
+/* ===================== SECTION ===================== */
 .obs {
   padding: 64px 0;
   background: #fff;
+}
+
+.obs__header {
+  margin-bottom: 36px;
 }
 
 .obs__heading {
@@ -204,38 +249,63 @@
   text-align: center;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  margin: 0 0 48px;
+  margin: 0;
 }
 
-/* Grid */
-.obs__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+/* ===================== CAROUSEL ===================== */
+.obs__carousel-wrap {
+  position: relative;
+  padding: 0 48px;
+}
+
+.obs__carousel {
+  display: flex;
   gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 8px 4px 16px;
 }
 
-/* Card */
+.obs__carousel::-webkit-scrollbar { display: none; }
+
+/* ===================== CARD ===================== */
 .obs__card {
+  flex: 0 0 calc(25% - 16px);
+  min-width: 240px;
+  max-width: 300px;
+  scroll-snap-align: start;
   display: flex;
   flex-direction: column;
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #efefef;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  overflow: hidden;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.obs__card:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+  transform: translateY(-3px);
 }
 
 .obs__card-link {
   text-decoration: none;
   color: inherit;
-  flex: 1;
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
-/* Image */
+/* ===================== IMAGE ===================== */
 .obs__img-wrap {
   position: relative;
-  border-radius: 12px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
-  aspect-ratio: 3 / 4;
   background: #f5f0eb;
-  margin-bottom: 14px;
   flex-shrink: 0;
 }
 
@@ -250,14 +320,11 @@
 .obs__img--placeholder {
   width: 100%;
   height: 100%;
-  object-fit: cover;
 }
 
-.obs__card:hover .obs__img {
-  transform: scale(1.04);
-}
+.obs__card:hover .obs__img { transform: scale(1.04); }
 
-/* Badge */
+/* ===================== BADGE ===================== */
 .obs__badge {
   position: absolute;
   top: 12px;
@@ -267,56 +334,34 @@
   color: #fff;
   font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: 20px;
+  padding: 5px 11px;
+  border-radius: 4px;
 }
 
-/* Wishlist */
-.obs__wishlist {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 2;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.92);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #1e3a5f;
-  transition: background 0.2s;
-}
-
-.obs__wishlist:hover {
-  background: #fff;
-}
-
-/* Info */
+/* ===================== INFO ===================== */
 .obs__info {
   flex: 1;
   display: flex;
   flex-direction: column;
+  padding: 14px 16px 12px;
+  gap: 0;
 }
 
 .obs__type {
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #1e3a5f;
-  opacity: 0.55;
-  margin: 0 0 5px;
+  color: #1e8a9e;
+  margin: 0 0 6px;
 }
 
 .obs__name {
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: #1e3a5f;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #111;
   margin: 0 0 8px;
   line-height: 1.4;
   display: -webkit-box;
@@ -325,53 +370,69 @@
   overflow: hidden;
 }
 
+/* ===================== RATING ===================== */
 .obs__rating {
-  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
 }
 
 .obs__stars {
-  color: #f4c430;
+  color: #f4a623;
   font-size: 13px;
   letter-spacing: 1px;
 }
 
-/* Tags */
+.obs__rating-val {
+  font-size: 12px;
+  font-weight: 700;
+  color: #222;
+}
+
+.obs__rating-count {
+  font-size: 12px;
+  color: #888;
+}
+
+/* ===================== TAGS ===================== */
 .obs__tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
-  margin-bottom: 10px;
+  gap: 5px;
+  margin-bottom: 12px;
 }
 
 .obs__tag {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.07em;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  border: 1px solid rgba(30, 58, 95, 0.35);
-  color: #1e3a5f;
-  padding: 3px 7px;
-  border-radius: 20px;
+  border: 1px solid #ccc;
+  color: #444;
+  padding: 4px 9px;
+  border-radius: 5px;
+  background: #fff;
 }
 
-/* Pricing */
+/* ===================== PRICING ===================== */
 .obs__pricing {
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
   gap: 6px;
-  margin-bottom: 14px;
   margin-top: auto;
+  padding-top: 4px;
 }
 
 .obs__price {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #1e3a5f;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #111;
 }
 
 .obs__compare {
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   color: #aaa;
   text-decoration: line-through;
 }
@@ -379,47 +440,104 @@
 .obs__discount {
   font-size: 0.78rem;
   font-weight: 700;
-  color: #d63031;
+  color: #2e7d32;
+  background: #e8f5e9;
+  padding: 2px 7px;
+  border-radius: 4px;
 }
 
-/* Add to cart */
+/* ===================== ACTIONS ===================== */
+.obs__actions {
+  display: flex;
+  gap: 8px;
+  padding: 12px 14px 14px;
+  border-top: 1px solid #f0f0f0;
+}
+
 .obs__atc {
-  width: 100%;
+  flex: 1;
   background: #1e3a5f;
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: 13px 20px;
+  padding: 13px 12px;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   cursor: pointer;
   transition: background 0.2s;
-  margin-top: auto;
 }
 
-.obs__atc:hover:not(:disabled) {
-  background: #2d5a8f;
+.obs__atc:hover:not(:disabled) { background: #16304f; }
+
+.obs__atc:disabled { opacity: 0.5; cursor: default; }
+
+.obs__wishlist {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  border: 1.5px solid #ddd;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #888;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
 }
 
-.obs__atc:disabled {
-  opacity: 0.5;
-  cursor: default;
+.obs__wishlist:hover,
+.obs__wishlist.is-wished {
+  border-color: #e74c3c;
+  color: #e74c3c;
+  background: #fff5f5;
 }
 
-/* Responsive */
-@media (max-width: 990px) {
-  .obs__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.obs__wishlist.is-wished svg { fill: #e74c3c; }
+
+/* ===================== NAV ARROWS ===================== */
+.obs__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid #ddd;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #333;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+  z-index: 2;
 }
 
-@media (max-width: 560px) {
-  .obs__grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
+.obs__nav:hover { border-color: #1e3a5f; color: #1e3a5f; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+
+.obs__nav--prev { left: 4px; }
+.obs__nav--next { right: 4px; }
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 1100px) {
+  .obs__card { flex: 0 0 calc(33.333% - 14px); }
+}
+
+@media (max-width: 768px) {
+  .obs__carousel-wrap { padding: 0 36px; }
+  .obs__card { flex: 0 0 calc(50% - 10px); }
+  .obs__nav { width: 34px; height: 34px; }
+}
+
+@media (max-width: 480px) {
+  .obs { padding: 44px 0; }
+  .obs__carousel-wrap { padding: 0 8px; }
+  .obs__card { flex: 0 0 72vw; min-width: 200px; max-width: 260px; }
+  .obs__nav { display: none; }
 }
 {% endstylesheet %}
 
@@ -445,9 +563,9 @@
       "id": "products_count",
       "label": "Products to show",
       "min": 2,
-      "max": 8,
+      "max": 12,
       "step": 1,
-      "default": 4
+      "default": 6
     }
   ],
   "presets": [
