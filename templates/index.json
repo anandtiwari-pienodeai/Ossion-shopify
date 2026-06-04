@@ -288,53 +288,42 @@
     "ossian_instagram": {
       "type": "ossian-instagram",
       "blocks": {
-        "post_1": {
-          "type": "post",
+        "reel_1": {
+          "type": "reel",
           "settings": {
-            "image": "shopify://shop_images/DEVELOPER_GROUP_SHOT_copy.png",
-            "post_url": ""
+            "thumbnail": "shopify://shop_images/DEVELOPER_GROUP_SHOT_copy.png"
           }
         },
-        "post_2": {
-          "type": "post",
-          "settings": {
-            "post_url": ""
-          }
+        "reel_2": {
+          "type": "reel",
+          "settings": {}
         },
-        "post_3": {
-          "type": "post",
-          "settings": {
-            "post_url": ""
-          }
+        "reel_3": {
+          "type": "reel",
+          "settings": {}
         },
-        "post_4": {
-          "type": "post",
-          "settings": {
-            "post_url": ""
-          }
+        "reel_4": {
+          "type": "reel",
+          "settings": {}
         },
-        "post_5": {
-          "type": "post",
-          "settings": {
-            "post_url": ""
-          }
+        "reel_5": {
+          "type": "reel",
+          "settings": {}
         },
-        "post_6": {
-          "type": "post",
-          "settings": {
-            "post_url": ""
-          }
+        "reel_6": {
+          "type": "reel",
+          "settings": {}
         }
       },
       "block_order": [
-        "post_1",
-        "post_2",
-        "post_3",
-        "post_4",
-        "post_5",
-        "post_6"
+        "reel_1",
+        "reel_2",
+        "reel_3",
+        "reel_4",
+        "reel_5",
+        "reel_6"
       ],
-      "name": "Ossion Instagram",
+      "name": "Ossion Reels",
       "settings": {
         "heading": "OSSION gram",
         "subheading": "Real people. Real results. Real stories",
