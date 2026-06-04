@@ -523,21 +523,55 @@
 .obs__nav--next { right: 4px; }
 
 /* ===================== RESPONSIVE ===================== */
-@media (max-width: 1100px) {
-  .obs__card { flex: 0 0 calc(33.333% - 14px); }
+
+/* ── Desktop: centered grid — no scroll, no left-align ── */
+@media (min-width: 769px) {
+  .obs__carousel-wrap {
+    padding: 0;
+  }
+
+  .obs__carousel {
+    display: grid;
+    /* Cards are min 220px, max 280px; auto-fit centers them when fewer than a full row */
+    grid-template-columns: repeat(auto-fit, minmax(220px, 280px));
+    justify-content: center;
+    overflow: visible;
+    scroll-snap-type: none;
+    gap: 20px;
+    padding: 8px 0 16px;
+  }
+
+  .obs__card {
+    flex: none;
+    width: 100%;
+    min-width: unset;
+    max-width: none;
+    scroll-snap-align: none;
+  }
+
+  /* Hide scroll arrows on desktop — grid doesn't need them */
+  .obs__nav { display: none !important; }
 }
 
+/* ── Mobile: horizontal scroll carousel ── */
 @media (max-width: 768px) {
   .obs__carousel-wrap { padding: 0 36px; }
-  .obs__card { flex: 0 0 calc(50% - 10px); }
-  .obs__nav { width: 34px; height: 34px; }
+  .obs__carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 16px;
+    padding: 8px 4px 16px;
+  }
+  .obs__card { flex: 0 0 calc(50% - 8px); min-width: 200px; max-width: 280px; }
+  .obs__nav { width: 34px; height: 34px; display: flex; }
 }
 
 @media (max-width: 480px) {
-  .obs { padding: 44px 0; }
-  .obs__carousel-wrap { padding: 0 8px; }
-  .obs__card { flex: 0 0 72vw; min-width: 200px; max-width: 260px; }
-  .obs__nav { display: none; }
+  .obs { padding: 40px 0; }
+  .obs__carousel-wrap { padding: 0 10px; }
+  .obs__card { flex: 0 0 75vw; min-width: 180px; max-width: 260px; }
+  .obs__nav { display: none !important; }
 }
 {% endstylesheet %}
 

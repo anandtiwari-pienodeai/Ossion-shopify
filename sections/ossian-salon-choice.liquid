@@ -110,6 +110,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
+  padding:0px 40px
 }
 
 .salon-choice__card {
@@ -232,9 +233,11 @@
 
 @media (max-width: 480px) {
   .salon-choice { padding: 40px 0; }
-  .salon-choice__grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .salon-choice__grid { grid-template-columns: repeat(2, 1fr); gap: 12px;
+  padding: 0px 10px; }
   .salon-choice__info { padding: 10px 12px 14px; }
   .salon-choice__name { font-size: 12px; }
+
 }
 {% endstylesheet %}
 

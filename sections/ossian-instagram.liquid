@@ -41,6 +41,18 @@
               {%- else -%}
                 <div class="ossian-reels__thumb-placeholder">{{ 'image' | placeholder_svg_tag }}</div>
               {%- endif -%}
+
+              {%- if block.settings.video_url != blank -%}
+                <video
+                  class="ossian-reels__card-video"
+                  src="{{ block.settings.video_url }}"
+                  muted
+                  loop
+                  playsinline
+                  preload="none"
+                ></video>
+              {%- endif -%}
+
               <div class="ossian-reels__play-btn">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
               </div>
@@ -237,20 +249,34 @@
 
 .ossian-reels__card {
   flex-shrink: 0;
-  width: 210px;
+  width: 190px;
   border-radius: 20px;
   overflow: hidden;
   background: #000;
   cursor: pointer;
-  transform: scale(0.9);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+  /* inactive: scaled down, faded, slightly blurred */
+  transform: scale(0.82);
+  opacity: 0.45;
+  filter: brightness(0.7);
+  transition: transform 0.4s cubic-bezier(.4,0,.2,1),
+              opacity 0.4s ease,
+              filter 0.4s ease,
+              box-shadow 0.4s ease;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
 }
 
-.ossian-reels__card:hover,
 .ossian-reels__card--active {
   transform: scale(1);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.32);
+  opacity: 1;
+  filter: brightness(1);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.38);
+  z-index: 2;
+}
+
+.ossian-reels__card:hover:not(.ossian-reels__card--active) {
+  opacity: 0.75;
+  filter: brightness(0.88);
+  transform: scale(0.88);
 }
 
 .ossian-reels__card-media {
@@ -271,6 +297,23 @@
 
 .ossian-reels__card:hover .ossian-reels__thumb { transform: scale(1.05); }
 
+/* Card inline video — sits over thumbnail, hidden until active */
+.ossian-reels__card-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ossian-reels__card--active .ossian-reels__card-video.is-playing {
+  opacity: 1;
+}
+
 .ossian-reels__thumb-placeholder {
   width: 100%;
   height: 100%;
@@ -286,10 +329,11 @@
   opacity: 0;
   transition: opacity 0.2s;
   background: rgba(0,0,0,0.2);
+  z-index: 2;
 }
 
-.ossian-reels__card:hover .ossian-reels__play-btn,
-.ossian-reels__card--active .ossian-reels__play-btn {
+.ossian-reels__card--active .ossian-reels__play-btn,
+.ossian-reels__card:hover .ossian-reels__play-btn {
   opacity: 1;
 }
 
@@ -901,19 +945,271 @@
 .rp-view-product:hover { border-color: #1e3a5f; color: #1e3a5f; }
 
 /* ===================== RESPONSIVE ===================== */
-@media (max-width: 900px) {
-  .reel-popup__dialog { flex-direction: column; max-height: 95vh; }
-  .reel-popup__video-side { width: 100%; }
-  .reel-popup__video-wrap { aspect-ratio: 16/9; max-height: 280px; }
-  .rp-features { grid-template-columns: repeat(2, 1fr); }
-  .rp-description { flex-direction: column; }
+
+/* ── Large desktop (≥1400px) ── */
+@media (min-width: 1400px) {
+  .ossian-reels__card { width: 230px; }
+  .ossian-reels__track-wrap { padding: 24px 80px 48px; }
+  .ossian-reels__heading { font-size: 3.5rem; }
 }
 
-@media (max-width: 600px) {
-  .ossian-reels__card { width: 160px; }
-  .reel-popup__dialog { border-radius: 12px; }
-  .rp-product-row { flex-direction: column; }
-  .rp-product-image { width: 80px; height: 80px; }
+/* ── Standard desktop (1024px–1399px) ── */
+@media (min-width: 1024px) and (max-width: 1399px) {
+  .ossian-reels__card { width: 200px; }
+  .ossian-reels__track-wrap { padding: 20px 60px 40px; }
+}
+
+/* ── Small desktop / large tablet (769px–1023px) ── */
+@media (min-width: 769px) and (max-width: 1023px) {
+  .ossian-reels { padding: 40px 0 0; }
+  .ossian-reels__heading { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+  .ossian-reels__track-wrap { padding: 16px 32px 36px; }
+  .ossian-reels__card { width: 170px; }
+
+  /* Popup: stacked column */
+  .reel-popup__dialog {
+    flex-direction: column;
+    width: min(90vw, 560px);
+    max-height: 92vh;
+    border-radius: 16px;
+  }
+  .reel-popup__video-side { width: 100%; }
+  .reel-popup__video-wrap { aspect-ratio: 16/9; max-height: 260px; }
+  .reel-popup__product-side { max-height: 48vh; overflow-y: auto; padding: 20px; }
+  .reel-popup__thumbnails { display: none; }
+  .rp-features { grid-template-columns: repeat(2, 1fr); }
+  .rp-description { flex-direction: column; }
+  .rp-description-highlights { white-space: normal; }
+}
+
+/* ── Mobile (≤768px) ── */
+@media (max-width: 768px) {
+
+  /* ─ Section header ─ */
+  .ossian-reels { padding: 24px 0 0; }
+
+  .ossian-reels__header {
+    gap: 10px;
+    margin-bottom: 18px;
+    padding: 0 16px;
+  }
+
+  .ossian-reels__heading { font-size: clamp(1.4rem, 6vw, 2rem); }
+  .ossian-reels__sub { font-size: 0.78rem; }
+
+  .ossian-reels__follow {
+    font-size: 12px;
+    padding: 8px 14px;
+  }
+
+  /* ─ Track ─ */
+  .ossian-reels__track-wrap { padding: 10px 0 24px; }
+  .ossian-reels__track { gap: 8px; }
+
+  /* Active card = centered hero; inactive = scaled down + faded */
+  .ossian-reels__card {
+    width: 52vw;
+    min-width: 150px;
+    max-width: 200px;
+    border-radius: 16px;
+    transform: scale(0.82);
+    opacity: 0.45;
+    filter: brightness(0.7);
+  }
+
+  .ossian-reels__card--active {
+    transform: scale(1);
+    opacity: 1;
+    filter: brightness(1);
+  }
+
+  /* Always show play overlay on the active card */
+  .ossian-reels__card--active .ossian-reels__play-btn { opacity: 1; }
+  .ossian-reels__play-btn svg { width: 30px; height: 30px; }
+
+  /* Card footer */
+  .ossian-reels__card-footer { padding: 8px 10px 12px; }
+
+  .ossian-reels__product-thumb,
+  .ossian-reels__product-thumb-placeholder { width: 34px; height: 34px; border-radius: 6px; }
+
+  .ossian-reels__price-original { font-size: 11px; }
+  .ossian-reels__price-discount { font-size: 13px; }
+  .ossian-reels__product-row { gap: 6px; }
+
+  /* ─────────────────────────────────────────────────
+     MOBILE POPUP — Full-screen TikTok / Reels style
+     ───────────────────────────────────────────────── */
+
+  .reel-popup {
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 0;
+  }
+
+  /* Full-screen dialog, slides up from bottom */
+  .reel-popup__dialog {
+    width: 100vw !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden !important;
+    transform: translateY(100%) !important;
+    transition: transform 0.35s cubic-bezier(.4,0,.2,1) !important;
+  }
+
+  .reel-popup.is-open .reel-popup__dialog {
+    transform: translateY(0) !important;
+  }
+
+  /* Video layer: absolute, fills entire screen */
+  .reel-popup__video-side {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .reel-popup__video-wrap {
+    flex: 1 !important;
+    aspect-ratio: unset !important;
+    max-height: none !important;
+    height: 100% !important;
+  }
+
+  .reel-popup__video,
+  .reel-popup__video-placeholder,
+  .reel-popup__video-placeholder img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  /* Hide thumbnail strip on mobile */
+  .reel-popup__thumbnails { display: none !important; }
+
+  /* ✕ Close — top-left, dark pill */
+  .reel-popup__close {
+    position: fixed !important;
+    top: env(safe-area-inset-top, 16px) !important;
+    left: 16px !important;
+    right: unset !important;
+    width: 36px !important;
+    height: 36px !important;
+    background: rgba(0,0,0,0.55) !important;
+    color: #fff !important;
+    border: none !important;
+    z-index: 10 !important;
+    border-radius: 50% !important;
+  }
+
+  /* Share + mute icons (top-right via video-top-bar) */
+  .reel-popup__video-top-bar { z-index: 5; }
+  .reel-popup__icon-btn { width: 36px; height: 36px; }
+
+  /* Progress bar */
+  .reel-popup__controls {
+    padding: 20px 12px 12px;
+  }
+
+  /* ─ Product card: white sheet at the bottom ─ */
+  .reel-popup__product-side {
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: unset !important;
+    z-index: 4 !important;
+    background: #fff !important;
+    border-radius: 20px 20px 0 0 !important;
+    padding: 6px 16px calc(env(safe-area-inset-bottom, 0px) + 24px) !important;
+    max-height: none !important;
+    overflow: visible !important;
+    scrollbar-width: none;
+  }
+
+  /* Drag handle */
+  .reel-popup__product-side::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 4px;
+    background: #d0d0d0;
+    border-radius: 2px;
+    margin: 0 auto 12px;
+  }
+
+  /* ─ Hide desktop-only elements in product panel ─ */
+  .rp-category-tag,
+  .rp-subtitle,
+  .rp-rating,
+  .rp-tax-note,
+  .rp-features,
+  .rp-size-section,
+  .rp-tabs,
+  .rp-tab-content,
+  .rp-description,
+  .rp-view-product { display: none !important; }
+
+  /* ─ Compact product row ─ */
+  .rp-product-row {
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 12px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .rp-product-image {
+    width: 54px !important;
+    height: 54px !important;
+    border-radius: 8px !important;
+    flex-shrink: 0 !important;
+    object-fit: cover !important;
+  }
+
+  .rp-product-info { flex: 1; min-width: 0; }
+
+  .rp-title {
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    color: #111 !important;
+    margin: 0 0 3px !important;
+    line-height: 1.3 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  .rp-price-row { margin-bottom: 0 !important; gap: 5px !important; }
+  .rp-price { font-size: 1rem !important; font-weight: 800 !important; color: #111 !important; }
+  .rp-compare-price,
+  .rp-discount-badge { display: none !important; }
+
+  /* ─ Shop Now CTA ─ */
+  .rp-actions { flex-direction: column !important; gap: 0 !important; margin-top: 0 !important; }
+
+  .rp-add-to-cart {
+    width: 100% !important;
+    min-width: unset !important;
+    background: #111 !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 15px !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em !important;
+    justify-content: center !important;
+  }
+
+  .rp-add-to-cart svg { display: none !important; }
+  .rp-add-to-cart:hover { background: #000 !important; }
 }
 {% endstylesheet %}
 
@@ -1096,6 +1392,10 @@
       : '#';
 
     const viewProductUrl = data.productUrl || '#';
+    const isMobile = window.innerWidth <= 768;
+    const ctaLabel = isMobile ? 'Shop Now' : 'ADD TO CART';
+    const ctaHref  = isMobile ? viewProductUrl : addToCartUrl;
+    const ctaIcon  = isMobile ? '' : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>';
 
     productInner.innerHTML =
       categoryHtml +
@@ -1126,9 +1426,8 @@
       '<div class="rp-tab-content" data-tab-content="how-to-use"></div>' +
       '<div class="rp-tab-content" data-tab-content="suitable-for"></div>' +
       '<div class="rp-actions">' +
-        '<a href="' + addToCartUrl + '" class="rp-add-to-cart">' +
-          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>' +
-          'ADD TO CART' +
+        '<a href="' + ctaHref + '" class="rp-add-to-cart">' +
+          ctaIcon + ctaLabel +
         '</a>' +
         '<a href="' + viewProductUrl + '" class="rp-view-product">View full product →</a>' +
       '</div>';
@@ -1163,6 +1462,90 @@
     isPlaying = false;
     playCenter.classList.remove('is-playing');
   }
+
+  // ── Focused-card: update active class based on which card is nearest the track center ──
+  (function() {
+    const wrap = document.querySelector('.ossian-reels__track-wrap');
+    const track = document.getElementById('reels-track');
+    if (!wrap || !track) return;
+
+    const cards = Array.from(track.querySelectorAll('.ossian-reels__card'));
+
+    let isSnapping = false;
+    let snapTimer = null;
+    let currentActive = -1;
+
+    /* Scroll the wrap so card[index] sits exactly in the horizontal center */
+    function scrollToCenter(index, animate) {
+      const card = cards[index];
+      if (!card) return;
+      const target = card.offsetLeft - wrap.offsetWidth / 2 + card.offsetWidth / 2;
+      isSnapping = true;
+      wrap.scrollTo({ left: Math.max(0, target), behavior: animate ? 'smooth' : 'instant' });
+      /* release the snapping flag after the smooth scroll finishes (~500 ms) */
+      setTimeout(function() { isSnapping = false; }, 550);
+    }
+
+    function setActive(index) {
+      if (index === currentActive) return;
+      currentActive = index;
+
+      cards.forEach(function(c, i) {
+        const isActive = i === index;
+        c.classList.toggle('ossian-reels__card--active', isActive);
+
+        const vid = c.querySelector('.ossian-reels__card-video');
+        if (!vid) return;
+
+        if (isActive) {
+          vid.play().then(function() {
+            vid.classList.add('is-playing');
+          }).catch(function() { /* autoplay blocked — thumbnail stays */ });
+        } else {
+          vid.pause();
+          vid.currentTime = 0;
+          vid.classList.remove('is-playing');
+        }
+      });
+    }
+
+    function findCenterCard() {
+      const wrapCenter = wrap.scrollLeft + wrap.offsetWidth / 2;
+      let closest = 0;
+      let minDist = Infinity;
+      cards.forEach(function(c, i) {
+        const cardCenter = c.offsetLeft + c.offsetWidth / 2;
+        const dist = Math.abs(cardCenter - wrapCenter);
+        if (dist < minDist) { minDist = dist; closest = i; }
+      });
+      return closest;
+    }
+
+    /* While scrolling: update active highlight in real time */
+    wrap.addEventListener('scroll', function() {
+      if (isSnapping) return;
+      setActive(findCenterCard());
+
+      /* After scroll stops, snap the nearest card to exact center */
+      clearTimeout(snapTimer);
+      snapTimer = setTimeout(function() {
+        if (isSnapping) return;
+        const idx = findCenterCard();
+        setActive(idx);
+        scrollToCenter(idx, true);
+      }, 120);
+    }, { passive: true });
+
+    /* Init: center the 3rd card (index 2) on load */
+    function initActive() {
+      const targetIdx = Math.min(2, cards.length - 1);
+      scrollToCenter(targetIdx, false);
+      setTimeout(function() {
+        setActive(findCenterCard());
+      }, 30);
+    }
+    setTimeout(initActive, 80);
+  })();
 
   // Open reel on card click
   document.querySelectorAll('[data-open-reel]').forEach(function(el) {
