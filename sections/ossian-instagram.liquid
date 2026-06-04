@@ -168,18 +168,25 @@
 
 .ossian-reels__header {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
   margin-bottom: 36px;
-  flex-wrap: wrap;
+}
+
+.ossian-reels__title-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
 
 .ossian-reels__heading {
   font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 900;
   color: #1e3a5f;
-  margin: 0 0 6px;
+  margin: 0;
   font-style: italic;
   letter-spacing: -0.01em;
 }
