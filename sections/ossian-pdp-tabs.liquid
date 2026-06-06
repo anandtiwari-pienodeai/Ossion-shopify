@@ -1,0 +1,291 @@
+<section class="pdp-tabs" id="pdp-tabs-{{ section.id }}">
+  <div class="page-width pdp-tabs__inner">
+
+    <!-- Tab Navigation -->
+    <div class="pdp-tabs__nav" role="tablist" aria-label="Product information">
+      {%- assign first_block = true -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'tab' and block.settings.label != blank -%}
+          <button
+            class="pdp-tabs__nav-btn{% if first_block %} pdp-tabs__nav-btn--active{% endif %}"
+            role="tab"
+            aria-selected="{% if first_block %}true{% else %}false{% endif %}"
+            aria-controls="pdp-tab-panel-{{ section.id }}-{{ forloop.index }}"
+            id="pdp-tab-{{ section.id }}-{{ forloop.index }}"
+            data-tab-index="{{ forloop.index }}"
+            {{ block.shopify_attributes }}
+          >
+            {{ block.settings.label }}
+          </button>
+          {%- assign first_block = false -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    <!-- Tab Panels -->
+    {%- assign panel_index = 0 -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'tab' and block.settings.label != blank -%}
+        {%- assign panel_index = panel_index | plus: 1 -%}
+        <div
+          class="pdp-tabs__panel{% if panel_index == 1 %} pdp-tabs__panel--active{% endif %}"
+          role="tabpanel"
+          id="pdp-tab-panel-{{ section.id }}-{{ panel_index }}"
+          aria-labelledby="pdp-tab-{{ section.id }}-{{ panel_index }}"
+          {% if panel_index != 1 %}hidden{% endif %}
+        >
+          {%- if block.settings.use_product_description -%}
+            <div class="pdp-tabs__rte rte">
+              {{ product.description }}
+            </div>
+          {%- elsif block.settings.content != blank -%}
+            <div class="pdp-tabs__rte rte">
+              {{ block.settings.content }}
+            </div>
+          {%- endif -%}
+
+          {%- if block.settings.features_list != blank -%}
+            <ul class="pdp-tabs__features">
+              {%- assign lines = block.settings.features_list | newline_to_br | split: '<br />' -%}
+              {%- for line in lines -%}
+                {%- assign trimmed = line | strip -%}
+                {%- if trimmed != blank -%}
+                  <li class="pdp-tabs__feature-item">
+                    <span class="pdp-tabs__feature-check" aria-hidden="true">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </span>
+                    {{ trimmed }}
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+<script>
+(function() {
+  var sections = document.querySelectorAll('[id^="pdp-tabs-"]');
+  sections.forEach(function(section) {
+    var btns = section.querySelectorAll('.pdp-tabs__nav-btn');
+    var panels = section.querySelectorAll('.pdp-tabs__panel');
+    btns.forEach(function(btn, i) {
+      btn.addEventListener('click', function() {
+        btns.forEach(function(b) { b.classList.remove('pdp-tabs__nav-btn--active'); b.setAttribute('aria-selected', 'false'); });
+        panels.forEach(function(p) { p.classList.remove('pdp-tabs__panel--active'); p.hidden = true; });
+        btn.classList.add('pdp-tabs__nav-btn--active');
+        btn.setAttribute('aria-selected', 'true');
+        panels[i].classList.add('pdp-tabs__panel--active');
+        panels[i].hidden = false;
+      });
+    });
+  });
+})();
+</script>
+
+{% stylesheet %}
+.pdp-tabs {
+  background: #fff;
+  padding: 0 0 48px;
+  border-top: 1px solid #e8e8e8;
+}
+
+.pdp-tabs__inner {
+  padding-block-start: 0;
+}
+
+/* Tab navigation */
+.pdp-tabs__nav {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #e8e8e8;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.pdp-tabs__nav::-webkit-scrollbar { display: none; }
+
+.pdp-tabs__nav-btn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  padding: 16px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  font-family: var(--font-body--family, sans-serif);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.pdp-tabs__nav-btn:hover {
+  color: #1e3a5f;
+}
+
+.pdp-tabs__nav-btn--active {
+  color: #1e3a5f;
+  border-bottom-color: #1e3a5f;
+  font-weight: 700;
+}
+
+/* Tab panel */
+.pdp-tabs__panel {
+  padding-block-start: 32px;
+  max-width: 800px;
+}
+
+.pdp-tabs__rte {
+  font-size: 15px;
+  line-height: 1.75;
+  color: #444;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.pdp-tabs__rte p { margin-block-end: 1em; }
+.pdp-tabs__rte h3, .pdp-tabs__rte h4 {
+  font-weight: 700;
+  color: #1e3a5f;
+  margin-block-end: 0.5em;
+  margin-block-start: 1.25em;
+}
+.pdp-tabs__rte ul, .pdp-tabs__rte ol {
+  padding-inline-start: 20px;
+  margin-block-end: 1em;
+}
+.pdp-tabs__rte li { margin-block-end: 0.4em; }
+
+/* Feature checklist */
+.pdp-tabs__features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pdp-tabs__feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.5;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.pdp-tabs__feature-check {
+  flex-shrink: 0;
+  margin-top: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #eff6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 749px) {
+  .pdp-tabs {
+    padding-bottom: 32px;
+  }
+
+  .pdp-tabs__nav-btn {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+
+  .pdp-tabs__panel {
+    padding-block-start: 20px;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Info Tabs",
+  "tag": "section",
+  "class": "ossian-pdp-tabs-section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Tab label",
+          "default": "Description"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_product_description",
+          "label": "Use product description",
+          "default": false,
+          "info": "Pulls content from the product description in Shopify admin"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Tab content",
+          "info": "Used if 'Use product description' is off"
+        },
+        {
+          "type": "textarea",
+          "id": "features_list",
+          "label": "Feature checklist (one per line)",
+          "info": "Renders as checkmark bullet list below the content"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP Info Tabs",
+      "blocks": [
+        {
+          "type": "tab",
+          "settings": {
+            "label": "Description",
+            "use_product_description": true
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "label": "Key Benefits",
+            "features_list": "Anti-Yellow Technology for bright, clean results\nFiber Plex Protection for stronger hair\nUp to 9 levels of lift in one application\nNon-Damaging Formula with Marine Minerals\nAdvanced Plex & Sea Minerals complex"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "label": "How To Use",
+            "content": "<p><strong>Step 1:</strong> Mix the product with the developer in a 1:2 ratio.</p><p><strong>Step 2:</strong> Apply to dry, unwashed hair using a brush. Start from the roots and work towards the ends.</p><p><strong>Step 3:</strong> Leave on for 20–40 minutes depending on desired lift level.</p><p><strong>Step 4:</strong> Rinse thoroughly and follow with a toning shampoo and conditioner.</p><p><em>Professional use recommended. Always perform a strand test before full application.</em></p>"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "label": "Ingredients",
+            "content": "<p>Potassium Persulfate, Ammonium Persulfate, Sodium Persulfate, Kaolin, Sodium Silicate, Polyacrylamide, Silica, Marine Minerals Complex, Hydrolysed Keratin, Panthenol (Vitamin B5), Tocopheryl Acetate (Vitamin E).</p><p><em>Free from PPD, Resorcinol and Ammonia.</em></p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

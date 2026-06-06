@@ -1,0 +1,320 @@
+<section class="pdp-benefits" id="pdp-benefits-{{ section.id }}">
+  <div class="page-width pdp-benefits__inner">
+
+    {%- if section.settings.heading != blank -%}
+      <div class="pdp-benefits__header">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="pdp-benefits__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        <h2 class="pdp-benefits__heading">{{ section.settings.heading }}</h2>
+        {%- if section.settings.subheading != blank -%}
+          <p class="pdp-benefits__sub">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="pdp-benefits__grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'benefit' -%}
+            <div class="pdp-benefits__card" {{ block.shopify_attributes }}>
+              <div class="pdp-benefits__icon-wrap">
+                {%- if block.settings.icon_image != blank -%}
+                  {{
+                    block.settings.icon_image
+                    | image_url: width: 80
+                    | image_tag: class: 'pdp-benefits__icon-img', loading: 'lazy'
+                  }}
+                {%- else -%}
+                  <svg class="pdp-benefits__icon-svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    {%- case block.settings.icon_type -%}
+                      {%- when 'shield' -%}
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>
+                      {%- when 'leaf' -%}
+                        <path d="M2 22l10-10"/><path d="M16 8c0 4-4 8-8 8s-8-4-8-8S4 0 8 0s8 4 8 8z"/>
+                      {%- when 'drop' -%}
+                        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                      {%- when 'star' -%}
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                      {%- when 'lab' -%}
+                        <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v11l-4 4h14l-4-4V3"/>
+                      {%- when 'heart' -%}
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                      {%- else -%}
+                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    {%- endcase -%}
+                  </svg>
+                {%- endif -%}
+              </div>
+              {%- if block.settings.title != blank -%}
+                <h3 class="pdp-benefits__card-title">{{ block.settings.title }}</h3>
+              {%- endif -%}
+              {%- if block.settings.description != blank -%}
+                <p class="pdp-benefits__card-desc">{{ block.settings.description }}</p>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% stylesheet %}
+.pdp-benefits {
+  background: #f8fafc;
+  padding: 56px 0 60px;
+  border-top: 1px solid #e8e8e8;
+}
+
+.pdp-benefits__header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.pdp-benefits__eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #3b82f6;
+  margin: 0 0 10px;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.pdp-benefits__heading {
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 800;
+  color: #1e3a5f;
+  margin: 0 0 10px;
+  line-height: 1.2;
+  font-family: var(--font-primary--family, sans-serif);
+}
+
+.pdp-benefits__sub {
+  font-size: 15px;
+  color: #666;
+  margin: 0;
+  max-width: 500px;
+  margin-inline: auto;
+  line-height: 1.6;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.pdp-benefits__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.pdp-benefits__card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 28px 20px 24px;
+  text-align: center;
+  border: 1px solid #e8edf5;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.pdp-benefits__card:hover {
+  box-shadow: 0 8px 28px rgba(30, 58, 95, 0.1);
+  transform: translateY(-3px);
+}
+
+.pdp-benefits__icon-wrap {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #eff6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  color: #1e3a5f;
+  flex-shrink: 0;
+}
+
+.pdp-benefits__icon-img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.pdp-benefits__icon-svg {
+  display: block;
+}
+
+.pdp-benefits__card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e3a5f;
+  margin: 0 0 8px;
+  line-height: 1.3;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.pdp-benefits__card-desc {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+  line-height: 1.6;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+@media (max-width: 990px) {
+  .pdp-benefits__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 749px) {
+  .pdp-benefits {
+    padding: 36px 0 40px;
+  }
+
+  .pdp-benefits__header {
+    margin-bottom: 24px;
+  }
+
+  .pdp-benefits__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .pdp-benefits__card {
+    padding: 20px 14px 18px;
+    border-radius: 10px;
+  }
+
+  .pdp-benefits__icon-wrap {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 12px;
+  }
+
+  .pdp-benefits__card-title {
+    font-size: 13px;
+  }
+
+  .pdp-benefits__card-desc {
+    font-size: 12px;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Benefits",
+  "tag": "section",
+  "class": "ossian-pdp-benefits-section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "WHY CHOOSE THIS"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Makes It Different"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Powered by Marine Technology with advanced science for professional-grade results."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Icon image (optional)"
+        },
+        {
+          "type": "select",
+          "id": "icon_type",
+          "label": "Built-in icon",
+          "options": [
+            { "value": "shield", "label": "Shield / Protect" },
+            { "value": "leaf", "label": "Natural / Leaf" },
+            { "value": "drop", "label": "Water / Drop" },
+            { "value": "star", "label": "Star / Quality" },
+            { "value": "lab", "label": "Science / Lab" },
+            { "value": "heart", "label": "Care / Heart" },
+            { "value": "clock", "label": "Time / Clock" }
+          ],
+          "default": "shield"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Anti-Yellow Technology"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Neutralises unwanted yellow tones for a bright, clean blond result."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP Benefits",
+      "settings": {
+        "eyebrow": "WHY CHOOSE THIS",
+        "heading": "What Makes It Different",
+        "subheading": "Powered by Marine Technology with advanced science for professional-grade results."
+      },
+      "blocks": [
+        {
+          "type": "benefit",
+          "settings": {
+            "icon_type": "drop",
+            "title": "Anti-Yellow Technology",
+            "description": "Neutralises unwanted yellow tones for a bright, clean blond result."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon_type": "shield",
+            "title": "Fiber Plex Protection",
+            "description": "Strengthens hair bonds during the lightening process to prevent breakage."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon_type": "star",
+            "title": "Up to 9 Levels Lift",
+            "description": "Achieve dramatic lightening in a single application with maximum precision."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon_type": "lab",
+            "title": "Marine Technology",
+            "description": "Ocean-derived actives and sea minerals deliver superior colour results."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
