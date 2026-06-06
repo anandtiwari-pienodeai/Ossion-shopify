@@ -11,10 +11,9 @@
   "sections": {
     "collection_hero": {
       "type": "ossian-collection-hero",
-      "blocks": {},
-      "block_order": [],
       "settings": {
-        "banner_height": 480,
+        "banner_image": "shopify://shop_images/OssionBannertwo.png",
+        "banner_height": 300,
         "banner_height_mobile": 220
       }
     },
@@ -24,61 +23,81 @@
         "tab_1": {
           "type": "tab",
           "settings": {
-            "label": "Fundaments"
+            "collection": "",
+            "label": "Fundaments",
+            "url": ""
           }
         },
         "tab_2": {
           "type": "tab",
           "settings": {
-            "label": "Warm Brown"
+            "collection": "",
+            "label": "Warm Brown",
+            "url": ""
           }
         },
         "tab_3": {
           "type": "tab",
           "settings": {
-            "label": "Cool Brown"
+            "collection": "",
+            "label": "Cool Brown",
+            "url": ""
           }
         },
         "tab_4": {
           "type": "tab",
           "settings": {
-            "label": "Gold/Copper"
+            "collection": "",
+            "label": "Gold/Copper",
+            "url": ""
           }
         },
         "tab_5": {
           "type": "tab",
           "settings": {
-            "label": "Red"
+            "collection": "",
+            "label": "Red",
+            "url": ""
           }
         },
         "tab_6": {
           "type": "tab",
           "settings": {
-            "label": "Iridescent"
+            "collection": "",
+            "label": "Iridescent",
+            "url": ""
           }
         },
         "tab_7": {
           "type": "tab",
           "settings": {
-            "label": "High Lift"
+            "collection": "",
+            "label": "High Lift",
+            "url": ""
           }
         },
         "tab_8": {
           "type": "tab",
           "settings": {
-            "label": "Ash"
+            "collection": "",
+            "label": "Ash",
+            "url": ""
           }
         },
         "tab_9": {
           "type": "tab",
           "settings": {
-            "label": "Developer"
+            "collection": "",
+            "label": "Developer",
+            "url": ""
           }
         },
         "tab_10": {
           "type": "tab",
           "settings": {
-            "label": "Blonder"
+            "collection": "",
+            "label": "Blonder",
+            "url": ""
           }
         }
       },
@@ -94,7 +113,10 @@
         "tab_9",
         "tab_10"
       ],
-      "settings": {}
+      "disabled": true,
+      "settings": {
+        "active_tab": ""
+      }
     },
     "main": {
       "type": "main-collection",
@@ -267,7 +289,8 @@
         "powered_by_label": "POWERED BY",
         "brand_name": "MARINE TECHNOLOGY",
         "description": "Ocean derived actives work in synergy with advanced science to deliver superior lift, protection and long lasting colour results.",
-        "cta_label": "Explore Our Science"
+        "cta_label": "Explore Our Science",
+        "cta_url": ""
       }
     },
     "explore_category": {
@@ -276,45 +299,53 @@
         "cat_1": {
           "type": "category_card",
           "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy",
             "category_label": "HAIR CARE",
             "name": "Caviar Mask",
             "price": "₹1,999",
             "rating": "4.8",
             "review_count": "210",
-            "cta_label": "View all"
+            "cta_label": "View all",
+            "link": ""
           }
         },
         "cat_2": {
           "type": "category_card",
           "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy-1",
             "category_label": "HAIR CARE",
             "name": "Caviar Mask",
             "price": "₹1,999",
             "rating": "4.8",
             "review_count": "210",
-            "cta_label": "View all"
+            "cta_label": "View all",
+            "link": ""
           }
         },
         "cat_3": {
           "type": "category_card",
           "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
             "category_label": "HAIR CARE",
             "name": "Caviar Mask",
             "price": "₹1,999",
             "rating": "4.8",
             "review_count": "210",
-            "cta_label": "View all"
+            "cta_label": "View all",
+            "link": ""
           }
         },
         "cat_4": {
           "type": "category_card",
           "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy",
             "category_label": "HAIR CARE",
             "name": "Caviar Mask",
             "price": "₹1,999",
             "rating": "4.8",
             "review_count": "210",
-            "cta_label": "View all"
+            "cta_label": "View all",
+            "link": ""
           }
         }
       },
