@@ -11,46 +11,11 @@
   "sections": {
     "collection_hero": {
       "type": "ossian-collection-hero",
-      "blocks": {
-        "feat_1": {
-          "type": "feature_icon",
-          "settings": {
-            "label": "ANTI-YELLOW TECHNOLOGY"
-          }
-        },
-        "feat_2": {
-          "type": "feature_icon",
-          "settings": {
-            "label": "FIBER PLEX PROTECTION"
-          }
-        },
-        "feat_3": {
-          "type": "feature_icon",
-          "settings": {
-            "label": "UP TO 9 LEVELS UP"
-          }
-        },
-        "feat_4": {
-          "type": "feature_icon",
-          "settings": {
-            "label": "NON-DAMAGING FORMULA"
-          }
-        }
-      },
-      "block_order": [
-        "feat_1",
-        "feat_2",
-        "feat_3",
-        "feat_4"
-      ],
+      "blocks": {},
+      "block_order": [],
       "settings": {
-        "breadcrumb_parent_label": "Hair Color",
-        "breadcrumb_current": "Blonder",
-        "eyebrow": "Hair color Collection",
-        "heading_line1": "BLONDER",
-        "heading_line2": "COLLECTION",
-        "description": "Professional high lift blonder range powered by Marine Technology for perfect lift with hair protection.",
-        "cta_label": "Shop Collection"
+        "banner_height": 480,
+        "banner_height_mobile": 220
       }
     },
     "collection_tabs": {
