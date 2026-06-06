@@ -55,6 +55,7 @@
             "image": "shopify://shop_images/White_Chocolate.png",
             "custom_name": "Straighten",
             "descriptor": "SILK-SMOOTH, FRIZZ-FREE FINISH",
+            "collection": "hair-color",
             "link": ""
           }
         },
@@ -65,6 +66,7 @@
             "image": "shopify://shop_images/Aloe_Vera.png",
             "custom_name": "Developer",
             "descriptor": "PRECISION COLOR, ZERO DAMAGE",
+            "collection": "hair-texture",
             "link": ""
           }
         },
@@ -75,6 +77,7 @@
             "image": "shopify://shop_images/Blueberry.png",
             "custom_name": "Hair Mask",
             "descriptor": "UP TO 10X REPAIR",
+            "collection": "chromatic-dream-permanent-hair-color",
             "link": ""
           }
         }
@@ -101,6 +104,7 @@
             "image": "shopify://shop_images/Korean_Glow.png",
             "custom_name": "Straighten",
             "descriptor": "SILK-SMOOTH, FRIZZ-FREE FINISH",
+            "collection": "",
             "link": ""
           }
         },
@@ -111,6 +115,7 @@
             "image": "shopify://shop_images/Japanese_Glow.png",
             "custom_name": "Developer",
             "descriptor": "PRECISION COLOR, ZERO DAMAGE",
+            "collection": "",
             "link": ""
           }
         },
@@ -121,6 +126,7 @@
             "image": "shopify://shop_images/Lumi_Glow.png",
             "custom_name": "Hair Mask",
             "descriptor": "UP TO 10X REPAIR",
+            "collection": "",
             "link": ""
           }
         }
@@ -146,6 +152,7 @@
             "product": "",
             "custom_name": "Peel - Off Mask",
             "descriptor": "COOLING HYDRO GLOW",
+            "collection": "",
             "link": ""
           }
         },
@@ -155,6 +162,7 @@
             "product": "",
             "custom_name": "Pre - Wax Prep Gel",
             "descriptor": "SOFT SKIN, ZERO FUSS",
+            "collection": "",
             "link": ""
           }
         },
@@ -164,6 +172,7 @@
             "product": "",
             "custom_name": "Facial Kit",
             "descriptor": "BRIGHTEN • NOURISH • GLOW",
+            "collection": "",
             "link": ""
           }
         }
