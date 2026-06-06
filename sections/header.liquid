@@ -1113,6 +1113,356 @@
     font-family: var(--menu-localization-font);
     font-size: var(--menu-localization-font-size);
   }
+
+  /* ================================================================
+     OSSION NAVBAR — custom overrides
+     ================================================================ */
+
+  /* White background — all breakpoints */
+  #header-component .header__underlay-closed,
+  #header-component .header__underlay-open {
+    background: #fff;
+  }
+
+  #header-component .header__row--top {
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+
+  /* Bold navy nav links */
+  #header-component .menu-list__link {
+    color: #1e3a5f !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+  }
+
+  /* ── DESKTOP: wide pill search bar ── */
+  @media screen and (min-width: 750px) {
+    #header-component .search-action {
+      min-width: 240px;
+      height: 42px;
+      border: 1.5px solid #d1d5db;
+      border-radius: 100px;
+      background: #fff;
+      overflow: hidden;
+      flex-shrink: 0;
+      transition: border-color 0.2s;
+    }
+
+    #header-component .search-action:hover {
+      border-color: #1e3a5f;
+    }
+
+    #header-component .header__column--right .search-action,
+    #header-component .header__column--left .search-action {
+      margin-inline: 0;
+    }
+
+    #header-component .search-action .header-actions__action {
+      width: 100%;
+      height: 100%;
+      display: flex !important;
+      align-items: center !important;
+      padding: 0 18px 0 14px !important;
+      gap: 10px !important;
+      border: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      background: transparent !important;
+      color: #9ca3af;
+    }
+
+    /* "Search" placeholder text */
+    #header-component .search-action .header-actions__action::after {
+      content: 'Search';
+      font-size: 14px;
+      color: #9ca3af;
+      font-weight: 400;
+      flex: 1;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    #header-component .search-action .svg-wrapper {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    #header-component .search-action .svg-wrapper svg {
+      width: 18px;
+      height: 18px;
+      color: #9ca3af;
+    }
+
+    /* Action buttons — bordered squares */
+    #header-component .header__column--right header-actions {
+      gap: 8px;
+      margin-inline-start: 0;
+      align-items: center;
+    }
+
+    #header-component .cart-drawer {
+      margin-inline-end: 0;
+    }
+
+    #header-component header-actions .header-actions__action {
+      width: 42px !important;
+      height: 42px !important;
+      border: 1.5px solid #d1d5db !important;
+      border-radius: 10px !important;
+      padding: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      color: #1e3a5f !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      flex-shrink: 0;
+      transition: border-color 0.2s;
+    }
+
+    #header-component header-actions .header-actions__action:hover {
+      border-color: #1e3a5f !important;
+      background: transparent !important;
+    }
+
+    #header-component .account-button.header-actions__action {
+      width: 42px !important;
+      height: 42px !important;
+      border: 1.5px solid #d1d5db !important;
+      border-radius: 10px !important;
+      overflow: hidden;
+    }
+
+    #header-component .account-button.header-actions__action:hover {
+      border-color: #1e3a5f !important;
+    }
+
+    /* Wishlist button */
+    #header-component .ossian-wishlist-btn {
+      width: 42px;
+      height: 42px;
+      border: 1.5px solid #d1d5db;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1e3a5f;
+      text-decoration: none;
+      flex-shrink: 0;
+      transition: border-color 0.2s;
+    }
+
+    #header-component .ossian-wishlist-btn:hover {
+      border-color: #1e3a5f;
+    }
+
+    #header-component .ossian-wishlist-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  /* ── MOBILE: [≡ OSSION ············ Q A Y] ── */
+  @media screen and (max-width: 749px) {
+
+    /* ── 1. Kill the navigation-bar row — this is what inflates --header-height to 467px.
+              The row renders all nav links as block content; hide it so the JS height
+              measurement only sees the single top row (≈56px). ── */
+    #header-component .header__navigation-bar-row {
+      display: none !important;
+    }
+
+    /* ── 2. Lock the top row to a fixed height.
+              Do NOT use var(--header-height) — that variable is written by JS
+              AFTER measuring the DOM, so it picks up the inflated 467px value. ── */
+    #header-component .header__row--top {
+      height: 56px !important;
+      min-height: 56px !important;
+      max-height: 56px !important;
+      overflow: hidden !important;
+    }
+
+    #header-component .header__columns,
+    #header-component[data-menu-style='drawer'] .header__columns {
+      display: flex !important;
+      flex-wrap: nowrap !important;
+      align-items: center !important;
+      height: 56px !important;
+      max-height: 56px !important;
+      overflow: hidden !important;
+      padding: 0 !important;
+      gap: 0 !important;
+    }
+
+    /* ── 3. Flex order: [≡](1) [OSSION→grows](2) [search](3) [wishlist+account+cart](4) ── */
+    #header-component .header__columns header-menu    { order: 1 !important; flex-shrink: 0 !important; }
+    #header-component .header__columns .header-logo   { order: 2 !important; flex: 1 !important; min-width: 0 !important; }
+    #header-component .header__columns .search-action { order: 3 !important; flex-shrink: 0 !important; }
+    #header-component .header__columns header-actions { order: 4 !important; flex-shrink: 0 !important; }
+
+    /* Hide the right-column search duplicate (drawer_search in left column is the one we keep) */
+    #header-component .search-action--hidden-on-drawer { display: none !important; }
+
+    /* ── Hamburger ── */
+    #header-component .header__columns header-menu {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 48px !important;
+      height: 56px !important;
+      overflow: hidden !important;
+    }
+
+    /* Clip drawer children so nav content inside details/dialog doesn't push layout */
+    #header-component .header__columns header-menu > details,
+    #header-component .header__columns header-menu > nav,
+    #header-component .header__columns header-menu > div {
+      height: 56px !important;
+      overflow: hidden !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+
+    #header-component .header__icon--menu {
+      width: 48px !important;
+      height: 56px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      color: #1e3a5f !important;
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+      flex-shrink: 0 !important;
+    }
+
+    #header-component .header__icon--menu svg,
+    #header-component header-menu svg { width: 22px !important; height: 22px !important; }
+
+    /* ── Logo ── */
+    #header-component .header__columns .header-logo {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: flex-start !important;
+      padding-left: 4px !important;
+      height: 56px !important;
+      overflow: hidden !important;
+    }
+
+    /* ── Search icon ── */
+    #header-component .search-action {
+      min-width: unset !important;
+      width: 40px !important;
+      height: 56px !important;
+      border: none !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      overflow: hidden !important;
+    }
+
+    #header-component .search-action .header-actions__action::after { display: none !important; }
+
+    #header-component .search-action .header-actions__action {
+      width: 40px !important;
+      height: 56px !important;
+      padding: 0 !important;
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      color: #1e3a5f !important;
+    }
+
+    #header-component .search-action .svg-wrapper { display: flex !important; }
+    #header-component .search-action svg { width: 20px !important; height: 20px !important; color: #1e3a5f !important; }
+
+    /* ── header-actions ── */
+    #header-component header-actions {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0 !important;
+      height: 56px !important;
+      overflow: hidden !important;
+    }
+
+    #header-component .ossian-wishlist-btn {
+      width: 38px !important;
+      height: 56px !important;
+      border: none !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      color: #1e3a5f !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    #header-component .ossian-wishlist-btn svg { width: 20px !important; height: 20px !important; }
+
+    #header-component header-actions .header-actions__action,
+    #header-component header-actions .account-button.header-actions__action {
+      width: 40px !important;
+      height: 56px !important;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      color: #1e3a5f !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      overflow: visible !important;
+    }
+
+    /* ── Account button: force visible on mobile ── */
+    #header-component .account-button {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 40px !important;
+      height: 56px !important;
+      background: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
+      overflow: visible !important;
+    }
+
+    #header-component shopify-account {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      min-width: unset !important;
+      width: 40px !important;
+      height: 56px !important;
+      color: #1e3a5f !important;
+      background: transparent !important;
+    }
+
+    #header-component .account-button__icon,
+    #header-component .account-button__fallback {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      color: #1e3a5f !important;
+    }
+
+    #header-component .account-button__icon svg {
+      width: 20px !important;
+      height: 20px !important;
+      color: #1e3a5f !important;
+    }
+
+    #header-component header-actions svg { width: 20px !important; height: 20px !important; }
+    #header-component header-actions { padding-right: 4px; }
+    #header-component .cart-count-bubble { min-width: 16px; height: 16px; font-size: 10px; }
+  }
 {% endstylesheet %}
 
 {% unless request.design_mode %}

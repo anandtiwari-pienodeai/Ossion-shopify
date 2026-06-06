@@ -1,0 +1,290 @@
+<div class="hero-carousel" id="hero-carousel-{{ section.id }}" data-autoplay="{{ section.settings.autoplay }}" data-speed="{{ section.settings.autoplay_speed }}">
+  <div class="hero-carousel__track">
+    {%- for block in section.blocks -%}
+      <div class="hero-carousel__slide{% if forloop.first %} is-active{% endif %}" {{ block.shopify_attributes }}>
+        {%- if block.settings.media_type == 'video' and block.settings.video != blank -%}
+          <video
+            class="hero-carousel__media"
+            {% if forloop.first %}autoplay{% endif %}
+            muted
+            loop
+            playsinline
+            preload="metadata"
+          >
+            {%- for source in block.settings.video.sources -%}
+              <source src="{{ source.url }}" type="{{ source.mime_type }}">
+            {%- endfor -%}
+          </video>
+        {%- elsif block.settings.image != blank -%}
+          {{
+            block.settings.image
+            | image_url: width: 1920
+            | image_tag:
+              class: 'hero-carousel__media',
+              loading: forloop.first | ternary: 'eager', 'lazy',
+              widths: '750,1100,1500,1920',
+              sizes: '100vw'
+          }}
+        {%- else -%}
+          <div class="hero-carousel__placeholder">{{ 'lifestyle-1' | placeholder_svg_tag: 'hero-carousel__media hero-carousel__placeholder-svg' }}</div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- if section.blocks.size > 1 -%}
+    <div class="hero-carousel__controls">
+      <button class="hero-carousel__arrow hero-carousel__arrow--prev" aria-label="Previous">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="hero-carousel__dots">
+        {%- for block in section.blocks -%}
+          <button class="hero-carousel__dot{% if forloop.first %} is-active{% endif %}" aria-label="Slide {{ forloop.index }}" data-index="{{ forloop.index0 }}"></button>
+        {%- endfor -%}
+      </div>
+      <button class="hero-carousel__arrow hero-carousel__arrow--next" aria-label="Next">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  {%- endif -%}
+</div>
+
+<script>
+(function () {
+  var el = document.getElementById('hero-carousel-{{ section.id }}');
+  if (!el) return;
+
+  var slides = el.querySelectorAll('.hero-carousel__slide');
+  var dots   = el.querySelectorAll('.hero-carousel__dot');
+  var current = 0;
+  var autoplay = el.dataset.autoplay === 'true';
+  var speed = parseInt(el.dataset.speed) || 5000;
+  var timer;
+
+  function goTo(n) {
+    var outgoing = slides[current];
+    var v = outgoing.querySelector('video');
+    if (v) v.pause();
+    outgoing.classList.remove('is-active');
+    if (dots[current]) dots[current].classList.remove('is-active');
+
+    current = (n + slides.length) % slides.length;
+
+    var incoming = slides[current];
+    incoming.classList.add('is-active');
+    if (dots[current]) dots[current].classList.add('is-active');
+    var nv = incoming.querySelector('video');
+    if (nv) nv.play().catch(function () {});
+  }
+
+  function start() { if (autoplay) timer = setInterval(function () { goTo(current + 1); }, speed); }
+  function stop()  { clearInterval(timer); }
+
+  var prev = el.querySelector('.hero-carousel__arrow--prev');
+  var next = el.querySelector('.hero-carousel__arrow--next');
+  if (prev) prev.addEventListener('click', function () { stop(); goTo(current - 1); start(); });
+  if (next) next.addEventListener('click', function () { stop(); goTo(current + 1); start(); });
+
+  dots.forEach(function (dot) {
+    dot.addEventListener('click', function () { stop(); goTo(parseInt(dot.dataset.index)); start(); });
+  });
+
+  var firstVideo = slides[0] && slides[0].querySelector('video');
+  if (firstVideo) firstVideo.play().catch(function () {});
+  start();
+})();
+</script>
+
+{% stylesheet %}
+.hero-carousel {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #000;
+  line-height: 0;
+}
+
+.hero-carousel__track {
+  position: relative;
+  width: 100%;
+}
+
+.hero-carousel__slide {
+  display: none;
+}
+
+.hero-carousel__slide.is-active {
+  display: block;
+}
+
+.hero-carousel__media {
+  width: 100%;
+  height: auto;
+  max-height: 90vh;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-carousel__placeholder {
+  width: 100%;
+  height: 60vh;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-carousel__placeholder-svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Controls pill bar ── */
+.hero-carousel__controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  background: rgba(20, 20, 30, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 100px;
+  padding: 6px 10px;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+.hero-carousel__arrow {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.hero-carousel__arrow:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.hero-carousel__dots {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hero-carousel__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.9);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.hero-carousel__dot.is-active {
+  background: rgba(255,255,255,0.9);
+  border-color: rgba(255,255,255,0.9);
+}
+
+@media (max-width: 768px) {
+  .hero-carousel__media {
+    max-height: 60vh;
+  }
+
+  .hero-carousel__controls {
+    bottom: 14px;
+    padding: 5px 8px;
+    gap: 4px;
+  }
+
+  .hero-carousel__arrow {
+    width: 24px;
+    height: 24px;
+  }
+
+  .hero-carousel__dot {
+    width: 7px;
+    height: 7px;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Hero Carousel",
+  "tag": "section",
+  "class": "hero-carousel-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotate",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "autoplay_speed",
+      "label": "Change every",
+      "options": [
+        { "value": "3000", "label": "3 seconds" },
+        { "value": "4000", "label": "4 seconds" },
+        { "value": "5000", "label": "5 seconds" },
+        { "value": "7000", "label": "7 seconds" }
+      ],
+      "default": "5000"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "select",
+          "id": "media_type",
+          "label": "Media type",
+          "options": [
+            { "value": "image", "label": "Image" },
+            { "value": "video", "label": "Video" }
+          ],
+          "default": "image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Carousel",
+      "blocks": [
+        { "type": "slide", "settings": { "media_type": "image" } },
+        { "type": "slide", "settings": { "media_type": "image" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

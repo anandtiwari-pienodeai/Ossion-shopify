@@ -9,6 +9,12 @@
  */
 {
   "sections": {
+    "ossian_pdp_breadcrumb": {
+      "type": "ossian-pdp-breadcrumb",
+      "settings": {
+        "parent_label": "Hair Care"
+      }
+    },
     "main": {
       "type": "product-information",
       "blocks": {
@@ -232,9 +238,15 @@
               },
               "block_order": []
             },
-            "pdp_actions_LK7rpX": {
-              "type": "pdp-actions",
-              "settings": {},
+            "ossian_pdp_wishlist_mW8kXp": {
+              "type": "ossian-pdp-wishlist",
+              "settings": {
+                "show_compare": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
               "blocks": {}
             },
             "pdp_trust_badges_mN3wQb": {
@@ -256,7 +268,7 @@
             "text_aEtTtq",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
-            "pdp_actions_LK7rpX",
+            "ossian_pdp_wishlist_mW8kXp",
             "pdp_trust_badges_mN3wQb"
           ]
         }
@@ -272,20 +284,105 @@
         "padding-block-end": 48
       }
     },
-    "ossian_pdp_tabs_main": {
+    "ossian_pdp_tabs": {
       "type": "ossian-pdp-tabs",
+      "blocks": {
+        "tab_desc": {
+          "type": "tab",
+          "settings": {
+            "label": "Description",
+            "use_product_description": true,
+            "content": "",
+            "features_list": ""
+          }
+        },
+        "tab_benefits": {
+          "type": "tab",
+          "settings": {
+            "label": "Key Benefits",
+            "use_product_description": false,
+            "content": "",
+            "features_list": "Anti-Yellow Technology for bright, clean results\nFiber Plex Protection for stronger hair\nUp to 9 levels of lift in one application\nNon-Damaging Formula with Marine Minerals\nAdvanced Plex & Sea Minerals complex"
+          }
+        },
+        "tab_how": {
+          "type": "tab",
+          "settings": {
+            "label": "How To Use",
+            "use_product_description": false,
+            "content": "<p><strong>Step 1:</strong> Mix the product with the developer in a 1:2 ratio.</p><p><strong>Step 2:</strong> Apply to dry, unwashed hair using a brush. Start from the roots and work towards the ends.</p><p><strong>Step 3:</strong> Leave on for 20–40 minutes depending on desired lift level.</p><p><strong>Step 4:</strong> Rinse thoroughly and follow with a toning shampoo and conditioner.</p>",
+            "features_list": ""
+          }
+        },
+        "tab_ingredients": {
+          "type": "tab",
+          "settings": {
+            "label": "Ingredients",
+            "use_product_description": false,
+            "content": "<p>Potassium Persulfate, Ammonium Persulfate, Sodium Persulfate, Kaolin, Marine Minerals Complex, Hydrolysed Keratin, Panthenol (Vitamin B5), Tocopheryl Acetate (Vitamin E).</p>",
+            "features_list": ""
+          }
+        }
+      },
+      "block_order": [
+        "tab_desc",
+        "tab_benefits",
+        "tab_how",
+        "tab_ingredients"
+      ],
+      "settings": {}
+    },
+    "ossian_pdp_benefits": {
+      "type": "ossian-pdp-benefits",
+      "blocks": {
+        "benefit_1": {
+          "type": "benefit",
+          "settings": {
+            "icon_type": "drop",
+            "title": "Anti-Yellow Technology",
+            "description": "Neutralises unwanted yellow tones for a bright, clean blond result."
+          }
+        },
+        "benefit_2": {
+          "type": "benefit",
+          "settings": {
+            "icon_type": "shield",
+            "title": "Fiber Plex Protection",
+            "description": "Strengthens hair bonds during the lightening process to prevent breakage."
+          }
+        },
+        "benefit_3": {
+          "type": "benefit",
+          "settings": {
+            "icon_type": "star",
+            "title": "Up to 9 Levels Lift",
+            "description": "Achieve dramatic lightening in a single application with maximum precision."
+          }
+        },
+        "benefit_4": {
+          "type": "benefit",
+          "settings": {
+            "icon_type": "lab",
+            "title": "Marine Technology",
+            "description": "Ocean-derived actives and sea minerals deliver superior colour results."
+          }
+        }
+      },
+      "block_order": [
+        "benefit_1",
+        "benefit_2",
+        "benefit_3",
+        "benefit_4"
+      ],
       "settings": {
-        "tab_1_label": "Features",
-        "tab_2_label": "How to Use",
-        "tab_3_label": "Reviews",
-        "features_heading": "Key Features",
-        "ingredients_heading": "Ingredients",
-        "default_features": "<ul><li>Professional salon quality formula</li><li>Safe for all skin types</li><li>Enriched with active ingredients</li></ul>",
-        "default_how_to_use": "<p>Apply generously to the affected area. Leave on for 15–20 minutes, then rinse thoroughly with water. Use 2–3 times a week for best results.</p>",
-        "no_reviews_text": "No reviews yet. Be the first to review this product.",
-        "color_scheme": "scheme-1",
-        "padding_bottom": 48
+        "eyebrow": "WHY CHOOSE THIS",
+        "heading": "What Makes It Different",
+        "subheading": "Powered by Marine Technology with advanced science for professional-grade results."
       }
+    },
+    "ossian_marine_banner_pdp": {
+      "type": "ossian-marine-banner",
+      "settings": {}
     },
     "product_recommendations_qggXJq": {
       "type": "product-recommendations",
@@ -440,11 +537,19 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "ossian_explore_category_pdp": {
+      "type": "ossian-explore-category",
+      "settings": {}
     }
   },
   "order": [
+    "ossian_pdp_breadcrumb",
     "main",
-    "ossian_pdp_tabs_main",
-    "product_recommendations_qggXJq"
+    "ossian_pdp_tabs",
+    "ossian_pdp_benefits",
+    "ossian_marine_banner_pdp",
+    "product_recommendations_qggXJq",
+    "ossian_explore_category_pdp"
   ]
 }

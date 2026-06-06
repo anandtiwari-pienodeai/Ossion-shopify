@@ -1,0 +1,175 @@
+<section class="plp-tabs" id="plp-tabs-{{ section.id }}">
+  <div class="plp-tabs__inner page-width">
+    <div class="plp-tabs__scroll-wrap">
+      <ul class="plp-tabs__list" role="list">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'tab' -%}
+            {%- assign is_active = false -%}
+            {%- if block.settings.collection != blank -%}
+              {%- if collection.handle == block.settings.collection.handle -%}
+                {%- assign is_active = true -%}
+              {%- endif -%}
+            {%- elsif block.settings.label == section.settings.active_tab -%}
+              {%- assign is_active = true -%}
+            {%- endif -%}
+            <li class="plp-tabs__item" {{ block.shopify_attributes }}>
+              <a
+                href="{{ block.settings.collection.url | default: block.settings.url | default: '#' }}"
+                class="plp-tabs__pill{% if is_active %} plp-tabs__pill--active{% endif %}"
+                {% if is_active %}aria-current="page"{% endif %}
+              >
+                {{ block.settings.label | default: block.settings.collection.title }}
+              </a>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+.plp-tabs {
+  background: #fff;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 14px 0 0;
+}
+
+.plp-tabs__inner {
+  overflow: hidden;
+}
+
+.plp-tabs__scroll-wrap {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 14px;
+}
+
+.plp-tabs__scroll-wrap::-webkit-scrollbar {
+  display: none;
+}
+
+.plp-tabs__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.plp-tabs__item {
+  flex-shrink: 0;
+}
+
+.plp-tabs__pill {
+  display: inline-block;
+  padding: 7px 16px;
+  border: 1.5px solid #d0d0d0;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #444;
+  text-decoration: none;
+  font-family: var(--font-body--family, sans-serif);
+  transition: background 0.18s, color 0.18s, border-color 0.18s;
+  background: #fff;
+  letter-spacing: 0.01em;
+}
+
+.plp-tabs__pill:hover {
+  background: #f0f0f0;
+  border-color: #aaa;
+  color: #1e3a5f;
+}
+
+.plp-tabs__pill--active {
+  background: #1e3a5f;
+  border-color: #1e3a5f;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.plp-tabs__pill--active:hover {
+  background: #2a4f80;
+  border-color: #2a4f80;
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .plp-tabs {
+    padding: 10px 0 0;
+  }
+
+  .plp-tabs__scroll-wrap {
+    padding-bottom: 10px;
+  }
+
+  .plp-tabs__pill {
+    font-size: 12px;
+    padding: 6px 13px;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection Filter Tabs",
+  "tag": "section",
+  "class": "ossian-collection-tabs-section",
+  "enabled_on": {
+    "templates": ["collection", "index"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "active_tab",
+      "label": "Active tab label (manual fallback)",
+      "info": "Used when tab is not linked to a collection"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection (auto-fills label and URL)"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label override",
+          "info": "Overrides collection title"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "URL override",
+          "info": "Overrides collection URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Filter Tabs",
+      "blocks": [
+        { "type": "tab", "settings": { "label": "Fundaments" } },
+        { "type": "tab", "settings": { "label": "Warm Brown" } },
+        { "type": "tab", "settings": { "label": "Cool Brown" } },
+        { "type": "tab", "settings": { "label": "Gold/Copper" } },
+        { "type": "tab", "settings": { "label": "Red" } },
+        { "type": "tab", "settings": { "label": "Iridescent" } },
+        { "type": "tab", "settings": { "label": "High Lift" } },
+        { "type": "tab", "settings": { "label": "Ash" } },
+        { "type": "tab", "settings": { "label": "Developer" } },
+        { "type": "tab", "settings": { "label": "Blonder" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

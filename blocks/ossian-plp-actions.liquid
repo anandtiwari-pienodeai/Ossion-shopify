@@ -1,0 +1,217 @@
+{% liquid
+  assign product = closest.product
+
+  if request.visual_preview_mode and product == blank
+    assign can_add = true
+    assign btn_text = 'ADD TO CART'
+  elsif product != blank
+    assign variant = product.selected_or_first_available_variant
+    assign can_add = false
+    assign btn_text = 'UNAVAILABLE'
+
+    if variant
+      if variant.available
+        assign can_add = true
+        assign btn_text = 'ADD TO CART'
+      else
+        assign btn_text = 'SOLD OUT'
+      endif
+    endif
+  endif
+-%}
+
+<div
+  class="ossian-card-actions spacing-style"
+  style="{% render 'spacing-style', settings: block.settings %}"
+  {{ block.shopify_attributes }}
+>
+  {%- if product != blank -%}
+    {%- assign form_id = 'ossian-atc-' | append: section.id | append: '-' | append: product.id -%}
+    <product-form-component
+      data-section-id="{{ section.id }}"
+      data-product-id="{{ product.id }}"
+      data-product-url="{{ product.url }}"
+      on:submit="/handleSubmit"
+      data-quantity-default="1"
+      data-quantity-error-max="{{ 'products.product.quantity_error_max' | t }}"
+    >
+      <div class="visually-hidden" aria-live="assertive" role="status" aria-atomic="true" ref="liveRegion"></div>
+      {%- form 'product', product, id: form_id, data-type: 'add-to-cart-form' -%}
+        <input type="hidden" name="id" value="{{ variant.id }}">
+        <input type="hidden" name="quantity" value="1">
+        <div class="ossian-card-actions__row">
+          <add-to-cart-component ref="addToCartButtonContainer">
+            <button
+              type="submit"
+              name="add"
+              ref="addToCartButton"
+              on:click="/handleClick"
+              class="ossian-card-atc-btn{% unless can_add %} ossian-card-atc-btn--disabled{% endunless %}"
+              {% unless can_add %}disabled{% endunless %}
+              aria-label="{{ btn_text }} — {{ product.title | escape }}"
+            >
+              {{ btn_text }}
+            </button>
+          </add-to-cart-component>
+          <button
+            type="button"
+            class="ossian-card-wish-btn"
+            aria-label="Add {{ product.title | escape }} to wishlist"
+            data-product-id="{{ product.id }}"
+          >
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </button>
+        </div>
+      {%- endform -%}
+    </product-form-component>
+  {%- else -%}
+    <div class="ossian-card-actions__row">
+      <button type="button" class="ossian-card-atc-btn" disabled>ADD TO CART</button>
+      <button type="button" class="ossian-card-wish-btn" aria-label="Wishlist">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </button>
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+.ossian-card-actions {
+  padding: 0;
+}
+
+.ossian-card-actions__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ossian-card-actions__row add-to-cart-component {
+  flex: 1;
+  display: block;
+}
+
+.ossian-card-atc-btn {
+  display: block;
+  width: 100%;
+  background: #1e3a5f;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  padding: 10px 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: var(--font-body--family, sans-serif);
+  text-align: center;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.ossian-card-atc-btn:hover:not(:disabled) {
+  background: #2a4f80;
+}
+
+.ossian-card-atc-btn--disabled,
+.ossian-card-atc-btn:disabled {
+  background: #c8c8c8;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.ossian-card-wish-btn {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 6px;
+  border: 1.5px solid #dde0e6;
+  background: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  padding: 0;
+}
+
+.ossian-card-wish-btn:hover {
+  color: #e53935;
+  border-color: #e53935;
+  background: #fff5f5;
+}
+
+.ossian-card-wish-btn.is-wished {
+  color: #e53935;
+  border-color: #e53935;
+  background: #fff5f5;
+}
+
+.ossian-card-wish-btn.is-wished svg {
+  fill: #e53935;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PLP Card Actions",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    }
+  ],
+  "presets": [
+    {
+      "name": "PLP Card Actions",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

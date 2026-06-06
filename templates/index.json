@@ -9,407 +9,616 @@
  */
 {
   "sections": {
-    "hero_jVaWmY": {
-      "type": "hero",
-      "disabled": true,
-      "name": "t:names.hero",
-      "settings": {
-        "media_type_1": "image",
-        "image_1": "shopify://shop_images/something-carzy-banner-for-ossion-brand.png",
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "link": "",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "space-between",
-        "vertical_alignment": "flex-end",
-        "align_baseline": true,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "flex-end",
-        "gap": 24,
-        "section_width": "page-width",
-        "section_height": "medium",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-1",
-        "toggle_overlay": true,
-        "overlay_color": "rgba(0,0,0,0)",
-        "overlay_style": "solid",
-        "gradient_direction": "to bottom",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 100,
-        "padding-block-end": 72
-      }
-    },
-    "ossian_hero_banner_rjjMTG": {
-      "type": "ossian-hero-banner",
-      "name": "Hero Banner",
-      "settings": {
-        "badge": "✨ New Innovation",
-        "heading": "GO GLOW DE-TAN",
-        "subtext": "Kojic & Milk Illuminate formula that reveals your skin's natural radiance. Professional tan removal with visible results.",
-        "primary_button_label": "Shop Now",
-        "primary_button_url": "",
-        "secondary_button_label": "Learn More",
-        "secondary_button_url": "",
-        "image": "shopify://shop_images/Ossion2.jpg",
-        "padding_top": 12,
-        "padding_bottom": 12
-      }
-    },
-    "ossian_category_grid_fiGmAQ": {
-      "type": "ossian-category-grid",
+    "ossian_hero_slider": {
+      "type": "ossian-hero-slider",
       "blocks": {
-        "category_kcedN9": {
-          "type": "category",
+        "slide_6ehiiH": {
+          "type": "slide",
           "settings": {
-            "collection": "chromatic-dream-permanent-hair-color",
-            "title": "",
+            "media_type": "image",
+            "image": "shopify://shop_images/OssionBannerthree.png"
+          }
+        },
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/OssionBannertwo.png"
+          }
+        },
+        "slide_2": {
+          "type": "slide",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/OssionBannerthree.png"
+          }
+        }
+      },
+      "block_order": [
+        "slide_6ehiiH",
+        "slide_1",
+        "slide_2"
+      ],
+      "name": "Hero Carousel",
+      "settings": {
+        "autoplay": true,
+        "autoplay_speed": "5000"
+      }
+    },
+    "ossian_hair_needs": {
+      "type": "ossian-product-showcase",
+      "blocks": {
+        "card_1": {
+          "type": "product_card",
+          "settings": {
+            "product": "",
+            "image": "shopify://shop_images/White_Chocolate.png",
+            "custom_name": "Straighten",
+            "descriptor": "SILK-SMOOTH, FRIZZ-FREE FINISH",
+            "collection": "hair-color",
             "link": ""
           }
         },
-        "category_f3Qpqd": {
-          "type": "category",
+        "card_2": {
+          "type": "product_card",
           "settings": {
-            "collection": "chromatic-dream-permanent-hair-color",
-            "title": "",
+            "product": "",
+            "image": "shopify://shop_images/Aloe_Vera.png",
+            "custom_name": "Developer",
+            "descriptor": "PRECISION COLOR, ZERO DAMAGE",
+            "collection": "hair-texture",
             "link": ""
           }
         },
-        "category_tQTNCG": {
-          "type": "category",
+        "card_3": {
+          "type": "product_card",
           "settings": {
+            "product": "",
+            "image": "shopify://shop_images/Blueberry.png",
+            "custom_name": "Hair Mask",
+            "descriptor": "UP TO 10X REPAIR",
             "collection": "chromatic-dream-permanent-hair-color",
-            "title": "",
-            "link": ""
-          }
-        },
-        "category_F6FNLp": {
-          "type": "category",
-          "settings": {
-            "collection": "chromatic-dream-permanent-hair-color",
-            "title": "",
             "link": ""
           }
         }
       },
       "block_order": [
-        "category_kcedN9",
-        "category_f3Qpqd",
-        "category_tQTNCG",
-        "category_F6FNLp"
+        "card_1",
+        "card_2",
+        "card_3"
       ],
-      "name": "Category Grid",
+      "name": "Hair Needs Showcase",
       "settings": {
-        "heading": "Shop by Category",
-        "subheading": "Discover the perfect products for your hair care needs",
-        "color_scheme": "",
-        "padding_top": 40,
-        "padding_bottom": 40
+        "category_label": "EXPLORE BY CATEGORY",
+        "heading_prefix": "Only what your",
+        "heading_italic": "Hair Needs"
       }
     },
-    "ossian_featured_collection_jnxbBD": {
-      "type": "ossian-featured-collection",
-      "custom_css": [],
-      "name": "Featured Collection",
+    "ossian_product_showcase_Qa4xiL": {
+      "type": "ossian-product-showcase",
+      "blocks": {
+        "product_card_dgd7n4": {
+          "type": "product_card",
+          "settings": {
+            "product": "",
+            "image": "shopify://shop_images/Korean_Glow.png",
+            "custom_name": "Straighten",
+            "descriptor": "SILK-SMOOTH, FRIZZ-FREE FINISH",
+            "collection": "",
+            "link": ""
+          }
+        },
+        "product_card_DqjPCC": {
+          "type": "product_card",
+          "settings": {
+            "product": "",
+            "image": "shopify://shop_images/Japanese_Glow.png",
+            "custom_name": "Developer",
+            "descriptor": "PRECISION COLOR, ZERO DAMAGE",
+            "collection": "",
+            "link": ""
+          }
+        },
+        "product_card_D4ix7E": {
+          "type": "product_card",
+          "settings": {
+            "product": "",
+            "image": "shopify://shop_images/Lumi_Glow.png",
+            "custom_name": "Hair Mask",
+            "descriptor": "UP TO 10X REPAIR",
+            "collection": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "product_card_dgd7n4",
+        "product_card_DqjPCC",
+        "product_card_D4ix7E"
+      ],
+      "name": "Hair Needs Showcase",
       "settings": {
-        "label": "Hair Color Collection",
-        "heading": "Vibrant Color, Lasting Shine",
-        "description": "Professional-grade hair color formulas for salon-quality results at home",
-        "bullet_1": "3 Products Available",
-        "bullet_2": "Professional Quality",
-        "button_label": "Shop Now",
-        "button_url": "",
-        "image": "shopify://shop_images/Ossion6.jpg",
-        "price_label": "Starting at",
-        "price": "₹1999",
-        "padding_top": 40,
-        "padding_bottom": 40
+        "category_label": "EXPLORE BY CATEGORY",
+        "heading_prefix": "Only what your",
+        "heading_italic": "Skin Needs"
       }
     },
-    "ossian_best_sellers_DUrf9w": {
+    "ossian_skin_needs": {
+      "type": "ossian-product-showcase",
+      "blocks": {
+        "card_1": {
+          "type": "product_card",
+          "settings": {
+            "product": "",
+            "custom_name": "Peel - Off Mask",
+            "descriptor": "COOLING HYDRO GLOW",
+            "collection": "",
+            "link": ""
+          }
+        },
+        "card_2": {
+          "type": "product_card",
+          "settings": {
+            "product": "",
+            "custom_name": "Pre - Wax Prep Gel",
+            "descriptor": "SOFT SKIN, ZERO FUSS",
+            "collection": "",
+            "link": ""
+          }
+        },
+        "card_3": {
+          "type": "product_card",
+          "settings": {
+            "product": "",
+            "custom_name": "Facial Kit",
+            "descriptor": "BRIGHTEN • NOURISH • GLOW",
+            "collection": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3"
+      ],
+      "disabled": true,
+      "name": "Skin Needs Showcase",
+      "settings": {
+        "category_label": "EXPLORE BY CATEGORY",
+        "heading_prefix": "Only what your",
+        "heading_italic": "Skin Needs"
+      }
+    },
+    "ossian_best_sellers": {
       "type": "ossian-best-sellers",
       "name": "Best Sellers",
       "settings": {
-        "heading": "Best Sellers",
-        "subheading": "Best sellers loved by professionals worldwide",
+        "heading": "BEST SELLERS",
         "collection": "best-sellers",
-        "products_count": 4,
-        "show_view_all": true,
-        "color_scheme": "",
-        "padding_top": 40,
-        "padding_bottom": 40
+        "products_count": 4
       }
     },
-    "ossian_product_feed_PA6fVk": {
-      "type": "ossian-product-feed",
+    "ossian_science": {
+      "type": "ossian-science",
       "blocks": {
-        "reel_qR7EUY": {
+        "badge_1": {
+          "type": "badge",
+          "settings": {
+            "icon": "shopify://shop_images/OssionSc1.png",
+            "icon_type": "check",
+            "label": "DERMAT TESTED"
+          }
+        },
+        "badge_2": {
+          "type": "badge",
+          "settings": {
+            "icon": "shopify://shop_images/OssionSc2.png",
+            "icon_type": "leaf",
+            "label": "VEGAN FORMULA"
+          }
+        },
+        "badge_3": {
+          "type": "badge",
+          "settings": {
+            "icon": "shopify://shop_images/OssionSc3.png",
+            "icon_type": "droplet",
+            "label": "MARINE TECHNOLOGY"
+          }
+        }
+      },
+      "block_order": [
+        "badge_1",
+        "badge_2",
+        "badge_3"
+      ],
+      "name": "Ossion Science",
+      "settings": {
+        "background_image": "shopify://shop_images/OssionScience.png",
+        "heading": "OSSION SCIENCE",
+        "description": "Lorem ipsum dolor sit amet consectetur. Non metus praesent enim diam fringilis. Sagittis nec convallis virra non risus auctor prom. Quis duam dui curabitur pharetra amet enim.",
+        "button_label": "LEARN MORE",
+        "button_url": ""
+      }
+    },
+    "ossian_shop_by_category": {
+      "type": "ossian-shop-by-category",
+      "blocks": {
+        "cat_1": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Caviar_Mask.png",
+            "name": "Heat Protector",
+            "description": "Smooth | Shield | Style",
+            "link": ""
+          }
+        },
+        "cat_2": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/DEVELOPER_GROUP_SHOT_copy.png",
+            "name": "Permanent Hair Color",
+            "description": "Enriched with Amino Acids",
+            "link": ""
+          }
+        },
+        "cat_3": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Hair_Color.png",
+            "name": "Red Wine Wax",
+            "description": "Enriched with Wine Polyphenol Extract",
+            "link": ""
+          }
+        },
+        "cat_4": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Hair_Repair_Spa_Silk_Amino_Acid.png",
+            "name": "After-Wax Calming Oil",
+            "description": "Leaves the skin soft, smooth and nourished",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "cat_1",
+        "cat_2",
+        "cat_3",
+        "cat_4"
+      ],
+      "name": "Shop by Category",
+      "settings": {
+        "eyebrow": "OSSION SALONE",
+        "heading": "Shop by Category",
+        "tagline": "MARINE - BASED TECHNOLOGY  |  PROFESSIONAL USE  |  FREE SHIPPING ABOVE ₹999"
+      }
+    },
+    "ossian_instagram": {
+      "type": "ossian-instagram",
+      "blocks": {
+        "reel_1": {
+          "type": "reel",
+          "settings": {
+            "thumbnail": "shopify://shop_images/DEVELOPER_GROUP_SHOT_copy.png",
+            "video_url": "",
+            "reel_label": "",
+            "product": "",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
+        },
+        "reel_2": {
           "type": "reel",
           "settings": {
             "video_url": "",
-            "overlay_text": "wear something red.",
-            "modal_text": "favourite colours.",
-            "product_1": "",
-            "p1_name": "VelvetteKiss(TM) Featherlight Lipstick - Bare Affair",
-            "p1_price": "Rs.1099",
-            "p1_url": "",
-            "product_2": "",
-            "p2_name": "",
-            "p2_price": "",
-            "p2_url": "",
-            "product_3": "",
-            "p3_name": "",
-            "p3_price": "",
-            "p3_url": "",
-            "product_4": "",
-            "p4_name": "",
-            "p4_price": "",
-            "p4_url": ""
+            "reel_label": "",
+            "product": "",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
           }
         },
-        "reel_xBhaYJ": {
+        "reel_3": {
           "type": "reel",
           "settings": {
-            "video_url": "https://cdn.shopify.com/videos/c/o/v/e83eca8092154a9e99972af2a8c4975f.mp4",
-            "thumbnail": "shopify://shop_images/Ossion2_df22d699-c7e1-44b0-8b4d-b1927876a4a1.jpg",
-            "overlay_text": "wear something red.",
-            "modal_text": "favourite colours.",
-            "product_1": "chromatic-dream-permanent-hair-color-creme-100ml",
-            "p1_name": "VelvetteKiss(TM) Featherlight Lipstick - Bare Affair",
-            "p1_price": "Rs.1099",
-            "p1_url": "",
-            "product_2": "",
-            "p2_name": "",
-            "p2_price": "",
-            "p2_url": "",
-            "product_3": "",
-            "p3_name": "",
-            "p3_price": "",
-            "p3_url": "",
-            "product_4": "",
-            "p4_name": "",
-            "p4_price": "",
-            "p4_url": ""
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/fb8cef1258d54a89a2c7854ccb5bb2f1.mp4",
+            "reel_label": "",
+            "product": "",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
           }
         },
-        "reel_gGhJBK": {
+        "reel_4": {
           "type": "reel",
           "settings": {
-            "video_url": "https://cdn.shopify.com/videos/c/o/v/e83eca8092154a9e99972af2a8c4975f.mp4",
-            "thumbnail": "shopify://shop_images/Ossion2_df22d699-c7e1-44b0-8b4d-b1927876a4a1.jpg",
-            "overlay_text": "wear something red.",
-            "modal_text": "favourite colours.",
-            "product_1": "chromatic-dream-permanent-hair-color-creme-100ml",
-            "p1_name": "VelvetteKiss(TM) Featherlight Lipstick - Bare Affair",
-            "p1_price": "Rs.1099",
-            "p1_url": "",
-            "product_2": "",
-            "p2_name": "",
-            "p2_price": "",
-            "p2_url": "",
-            "product_3": "",
-            "p3_name": "",
-            "p3_price": "",
-            "p3_url": "",
-            "product_4": "",
-            "p4_name": "",
-            "p4_price": "",
-            "p4_url": ""
+            "video_url": "",
+            "reel_label": "",
+            "product": "",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
+        },
+        "reel_5": {
+          "type": "reel",
+          "settings": {
+            "video_url": "",
+            "reel_label": "",
+            "product": "",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
+        },
+        "reel_6": {
+          "type": "reel",
+          "settings": {
+            "video_url": "",
+            "reel_label": "",
+            "product": "",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
           }
         }
       },
       "block_order": [
-        "reel_qR7EUY",
-        "reel_xBhaYJ",
-        "reel_gGhJBK"
+        "reel_1",
+        "reel_2",
+        "reel_3",
+        "reel_4",
+        "reel_5",
+        "reel_6"
       ],
-      "name": "Product Feed",
+      "name": "Ossion Reels",
       "settings": {
-        "heading": "#OssionFeed",
-        "color_scheme": "",
-        "padding_top": 40,
-        "padding_bottom": 40
+        "heading": "OSSION gram",
+        "subheading": "Real people. Real results. Real stories",
+        "instagram_handle": "ossion.care"
       }
     },
-    "ossian_why_choose_XpkfUa": {
-      "type": "ossian-why-choose",
+    "ossian_trust_ticker": {
+      "type": "ossian-trust-ticker",
       "blocks": {
-        "item_xgbynE": {
-          "type": "item",
+        "badge_leaf": {
+          "type": "badge",
           "settings": {
-            "emoji": "🛡️",
-            "title": "Quality Guaranteed",
-            "description": "100% authentic professional products"
+            "icon": "leaf",
+            "title": "Skin Loving Ingredients",
+            "description": "Enriched with natural extracts & nutrients."
           }
         },
-        "item_bxE8Te": {
-          "type": "item",
+        "badge_shield": {
+          "type": "badge",
           "settings": {
-            "emoji": "🚚",
-            "title": "Free Shipping",
-            "description": "On orders over ₹4000"
+            "icon": "shield",
+            "title": "Dermatologically Tested",
+            "description": "Safe and gentle for everyday use."
           }
         },
-        "item_dehdqY": {
-          "type": "item",
+        "badge_droplet": {
+          "type": "badge",
           "settings": {
-            "emoji": "🏆",
-            "title": "Award Winning",
-            "description": "Trusted by professionals worldwide"
+            "icon": "droplet",
+            "title": "Professional Quality",
+            "description": "Salon trusted, expert recommended."
           }
         },
-        "item_HwxbWd": {
-          "type": "item",
+        "badge_sparkle": {
+          "type": "badge",
           "settings": {
-            "emoji": "🎧",
-            "title": "24/7 Support",
-            "description": "Expert help when you need it"
+            "icon": "sparkle",
+            "title": "Visible Results",
+            "description": "Healthy, glowing skin you can feel."
           }
         }
       },
       "block_order": [
-        "item_xgbynE",
-        "item_bxE8Te",
-        "item_dehdqY",
-        "item_HwxbWd"
+        "badge_leaf",
+        "badge_shield",
+        "badge_droplet",
+        "badge_sparkle"
       ],
-      "name": "Why Choose Us",
+      "name": "Trust Ticker",
       "settings": {
-        "heading": "Why Choose OSSION?",
-        "subheading": "Professional quality you can trust",
-        "color_scheme": "",
-        "padding_top": 40,
-        "padding_bottom": 40
+        "background_color": "#ffffff",
+        "scroll_speed": 28,
+        "padding_top": 20,
+        "padding_bottom": 20
       }
     },
-    "section_7FcLtc": {
-      "type": "section",
+    "ossian_salon_choice": {
+      "type": "ossian-salon-choice",
       "blocks": {
-        "text_RUhxxh": {
-          "type": "text",
-          "name": "t:names.heading",
+        "sc_1": {
+          "type": "product_card",
           "settings": {
-            "text": "<h2>Subscribe to our emails</h2>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
+            "product_name": "JAPANESE GLOW FACIAL KIT",
+            "product_descriptor": "Used by 10,000+ customers",
+            "discount_badge": "50% off",
+            "rating": "4.8",
+            "play_icon": true,
+            "link": ""
+          }
         },
-        "text_bCB6RR": {
-          "type": "text",
+        "sc_2": {
+          "type": "product_card",
           "settings": {
-            "text": "<p>Be the first to know about new collections and special offers. </p>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "paragraph",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy",
+            "product_name": "ALOEVERA LIPOSOLUBLE WAX",
+            "product_descriptor": "Smooth Waxing. Less Pain",
+            "discount_badge": "50% off",
+            "rating": "4.8",
+            "play_icon": true,
+            "link": ""
+          }
         },
-        "email_signup_nMBmgk": {
-          "type": "email-signup",
+        "sc_3": {
+          "type": "product_card",
           "settings": {
-            "width": "custom",
-            "custom_width": 50,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "heading": "",
-            "heading_preset": "h3",
-            "border_style": "all",
-            "border_width": 1,
-            "border_radius": 100,
-            "input_type_preset": "paragraph",
-            "style_class": "button-unstyled",
-            "display_type": "arrow",
-            "label": "Sign up",
-            "integrated_button": true,
-            "button_type_preset": "paragraph",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy-1",
+            "product_name": "DE-TAN ILLUMINATE",
+            "product_descriptor": "Tan Removal & Brightening",
+            "discount_badge": "50% off",
+            "rating": "4.8",
+            "play_icon": true,
+            "link": ""
+          }
+        },
+        "sc_4": {
+          "type": "product_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy",
+            "product_name": "SUPREME STRAIGHT",
+            "product_descriptor": "Hair Straightening System",
+            "discount_badge": "50% off",
+            "rating": "4.8",
+            "play_icon": true,
+            "link": ""
+          }
         }
       },
       "block_order": [
-        "text_RUhxxh",
-        "text_bCB6RR",
-        "email_signup_nMBmgk"
+        "sc_1",
+        "sc_2",
+        "sc_3",
+        "sc_4"
       ],
-      "name": "t:names.email_signup",
+      "name": "Salon Choice",
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 16,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-2",
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 40,
-        "padding-block-end": 40
+        "heading": "SALON CHOICE",
+        "subheading": ""
+      }
+    },
+    "ossian_available_on": {
+      "type": "ossian-available-on",
+      "blocks": {
+        "plat_1": {
+          "type": "platform",
+          "settings": {
+            "platform_name": "Blinkit",
+            "logo": "shopify://shop_images/ossionAvl3.png",
+            "url": ""
+          }
+        },
+        "plat_2": {
+          "type": "platform",
+          "settings": {
+            "platform_name": "Amazon",
+            "logo": "shopify://shop_images/ossionAvl1.png",
+            "url": ""
+          }
+        },
+        "plat_3": {
+          "type": "platform",
+          "settings": {
+            "platform_name": "Zepto",
+            "logo": "shopify://shop_images/ossionAvl2.png",
+            "url": ""
+          }
+        },
+        "plat_4": {
+          "type": "platform",
+          "settings": {
+            "platform_name": "Swiggy Instamart",
+            "logo": "shopify://shop_images/ossionAvl1.png",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "plat_1",
+        "plat_2",
+        "plat_3",
+        "plat_4"
+      ],
+      "name": "Available On",
+      "settings": {
+        "heading": "WE'RE ALSO AVAILABLE ON"
       }
     }
   },
   "order": [
-    "hero_jVaWmY",
-    "ossian_hero_banner_rjjMTG",
-    "ossian_category_grid_fiGmAQ",
-    "ossian_featured_collection_jnxbBD",
-    "ossian_best_sellers_DUrf9w",
-    "ossian_product_feed_PA6fVk",
-    "ossian_why_choose_XpkfUa",
-    "section_7FcLtc"
+    "ossian_hero_slider",
+    "ossian_hair_needs",
+    "ossian_product_showcase_Qa4xiL",
+    "ossian_skin_needs",
+    "ossian_best_sellers",
+    "ossian_science",
+    "ossian_shop_by_category",
+    "ossian_instagram",
+    "ossian_trust_ticker",
+    "ossian_salon_choice",
+    "ossian_available_on"
   ]
 }

@@ -1,0 +1,133 @@
+<nav class="pdp-breadcrumb" id="pdp-breadcrumb-{{ section.id }}" aria-label="breadcrumb">
+  <div class="page-width pdp-breadcrumb__inner">
+    <ol class="pdp-breadcrumb__list">
+      <li class="pdp-breadcrumb__item">
+        <a href="{{ routes.root_url }}" class="pdp-breadcrumb__link">Home</a>
+      </li>
+
+      {%- if product.type != blank -%}
+        <li class="pdp-breadcrumb__sep" aria-hidden="true">›</li>
+        <li class="pdp-breadcrumb__item">
+          {%- assign type_url = product.type | handle | prepend: '/collections/' -%}
+          <a href="{{ section.settings.collection_url | default: type_url }}" class="pdp-breadcrumb__link">
+            {{ product.type }}
+          </a>
+        </li>
+      {%- elsif section.settings.parent_label != blank -%}
+        <li class="pdp-breadcrumb__sep" aria-hidden="true">›</li>
+        <li class="pdp-breadcrumb__item">
+          <a href="{{ section.settings.parent_url | default: '#' }}" class="pdp-breadcrumb__link">
+            {{ section.settings.parent_label }}
+          </a>
+        </li>
+      {%- endif -%}
+
+      <li class="pdp-breadcrumb__sep" aria-hidden="true">›</li>
+      <li class="pdp-breadcrumb__item pdp-breadcrumb__item--current" aria-current="page">
+        {{ product.title }}
+      </li>
+    </ol>
+  </div>
+</nav>
+
+{% stylesheet %}
+.pdp-breadcrumb {
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 12px 0;
+}
+
+.pdp-breadcrumb__inner {
+  display: flex;
+  align-items: center;
+}
+
+.pdp-breadcrumb__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.pdp-breadcrumb__item {
+  font-size: 13px;
+  color: #666;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.pdp-breadcrumb__item--current {
+  font-weight: 600;
+  color: #1e3a5f;
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pdp-breadcrumb__sep {
+  color: #bbb;
+  font-size: 12px;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.pdp-breadcrumb__link {
+  color: #666;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.pdp-breadcrumb__link:hover {
+  color: #1e3a5f;
+  text-decoration: underline;
+}
+
+@media (max-width: 749px) {
+  .pdp-breadcrumb {
+    padding: 10px 0;
+  }
+
+  .pdp-breadcrumb__item--current {
+    max-width: 180px;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Breadcrumb",
+  "tag": "section",
+  "class": "ossian-pdp-breadcrumb-section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "parent_label",
+      "label": "Parent label (fallback if no product type)",
+      "default": "Hair Care"
+    },
+    {
+      "type": "url",
+      "id": "parent_url",
+      "label": "Parent URL"
+    },
+    {
+      "type": "url",
+      "id": "collection_url",
+      "label": "Collection URL override"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP Breadcrumb",
+      "settings": {
+        "parent_label": "Hair Care"
+      }
+    }
+  ]
+}
+{% endschema %}

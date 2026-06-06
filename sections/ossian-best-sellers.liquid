@@ -1,504 +1,610 @@
-<div
-  class="ossian-best-sellers section color-{{ section.settings.color_scheme }}"
-  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
->
-  <div class="page-width">
-    {% if section.settings.heading != blank or section.settings.subheading != blank %}
-      <div class="ossian-best-sellers__header">
-        {% if section.settings.heading != blank %}
-          <h2 class="ossian-best-sellers__title">{{ section.settings.heading }}</h2>
-        {% endif %}
-        {% if section.settings.subheading != blank %}
-          <p class="ossian-best-sellers__subtitle">{{ section.settings.subheading }}</p>
-        {% endif %}
-      </div>
-    {% endif %}
+{%- assign col = collections[section.settings.collection] -%}
+{%- assign has_products = false -%}
+{%- if col != blank and col.products_count > 0 -%}
+  {%- assign has_products = true -%}
+{%- endif -%}
 
-    {%- assign source_collection = collections[section.settings.collection] -%}
+<section class="obs">
+  <div class="obs__header page-width">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="obs__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+  </div>
 
-    <div class="ossian-best-sellers__grid">
-      {% if source_collection != blank and source_collection.products.size > 0 %}
-        {% for product in source_collection.products limit: section.settings.products_count %}
-          {%- assign on_sale = false -%}
-          {%- if product.compare_at_price > product.price -%}
-            {%- assign on_sale = true -%}
-            {%- assign discount_pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
-          {%- endif -%}
-          <div class="ossian-best-sellers__card">
-            <a href="{{ product.url }}" class="ossian-best-sellers__image-link">
-              <div class="ossian-best-sellers__image-wrap">
-                {% if product.featured_image != blank %}
-                  {{ product.featured_image | image_url: width: 560 | image_tag: loading: 'lazy', class: 'ossian-best-sellers__image', alt: product.featured_image.alt }}
-                {% else %}
-                  <div class="ossian-best-sellers__image-placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
-                {% endif %}
+  <div class="obs__carousel-wrap">
+    <div class="obs__carousel" id="obs-carousel">
+
+      {%- if has_products -%}
+
+        {%- for product in col.products limit: section.settings.products_count -%}
+
+          {%- assign badge_text = '' -%}
+          {%- for tag in product.tags -%}
+            {%- if badge_text == '' -%}
+              {%- assign tl = tag | downcase -%}
+              {%- if tl == 'best seller' or tl == 'best-seller' -%}
+                {%- assign badge_text = 'BEST SELLER' -%}
+              {%- elsif tl == 'top rated' or tl == 'top-rated' -%}
+                {%- assign badge_text = 'TOP RATED' -%}
+              {%- elsif tl == 'trending' -%}
+                {%- assign badge_text = 'TRENDING' -%}
+              {%- elsif tl == 'new' or tl == 'new arrival' -%}
+                {%- assign badge_text = 'NEW' -%}
+              {%- elsif tl == 'sale' -%}
+                {%- assign badge_text = 'SALE' -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- assign badge_tags = 'best seller,best-seller,top rated,top-rated,trending,new,new arrival,sale' | split: ',' -%}
+          {%- assign display_tags = '' -%}
+          {%- assign display_tag_count = 0 -%}
+          {%- for tag in product.tags -%}
+            {%- if display_tag_count < 3 -%}
+              {%- assign tl = tag | downcase -%}
+              {%- unless badge_tags contains tl -%}
+                {%- if display_tags == '' -%}
+                  {%- assign display_tags = tag -%}
+                {%- else -%}
+                  {%- assign display_tags = display_tags | append: '|||' | append: tag -%}
+                {%- endif -%}
+                {%- assign display_tag_count = display_tag_count | plus: 1 -%}
+              {%- endunless -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          <div class="obs__card">
+            <a href="{{ product.url }}" class="obs__card-link">
+
+              <div class="obs__img-wrap">
+                {%- if badge_text != blank -%}
+                  <span class="obs__badge">{{ badge_text }}</span>
+                {%- endif -%}
+
+                {%- if product.featured_image != blank -%}
+                  {{
+                    product.featured_image
+                    | image_url: width: 600
+                    | image_tag:
+                      class: 'obs__img',
+                      alt: product.title,
+                      loading: 'lazy',
+                      widths: '300,450,600'
+                  }}
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'obs__img obs__img--placeholder' }}
+                {%- endif -%}
               </div>
-              <div class="ossian-best-sellers__badges">
-                {% if on_sale %}
-                  <span class="ossian-best-sellers__badge ossian-best-sellers__badge--sale">-{{ discount_pct }}%</span>
-                {% endif %}
-                {% unless product.available %}
-                  <span class="ossian-best-sellers__badge ossian-best-sellers__badge--sold-out">Sold Out</span>
-                {% endunless %}
-              </div>
-              {% if product.metafields.reviews.rating.value != blank %}
-                <div class="ossian-best-sellers__rating">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="0.5" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon></svg>
-                  <span>{{ product.metafields.reviews.rating.value }}</span>
+
+              <div class="obs__info">
+                {%- if product.type != blank -%}
+                  <p class="obs__type">{{ product.type | upcase }}</p>
+                {%- endif -%}
+
+                <h3 class="obs__name">{{ product.title }}</h3>
+
+                <div class="obs__rating" aria-label="4.9 stars">
+                  <span class="obs__stars" aria-hidden="true">★★★★★</span>
+                  <span class="obs__rating-val">4.9</span>
+                  <span class="obs__rating-count">(210)</span>
                 </div>
-              {% endif %}
+
+                {%- if display_tags != blank -%}
+                  <div class="obs__tags">
+                    {%- assign tag_arr = display_tags | split: '|||' -%}
+                    {%- for tag in tag_arr -%}
+                      <span class="obs__tag">{{ tag }}</span>
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+
+                <div class="obs__pricing">
+                  <span class="obs__price">{{ product.price | money }}</span>
+                  {%- if product.compare_at_price > product.price -%}
+                    <s class="obs__compare">{{ product.compare_at_price | money }}</s>
+                    {%- assign pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
+                    <span class="obs__discount">{{ pct }}% off</span>
+                  {%- endif -%}
+                </div>
+              </div>
+
             </a>
-            <div class="ossian-best-sellers__info">
-              {% if product.vendor != blank %}
-                <span class="ossian-best-sellers__vendor">{{ product.vendor }}</span>
-              {% endif %}
-              <a href="{{ product.url }}" class="ossian-best-sellers__product-title">{{ product.title }}</a>
-              {% if product.description != blank %}
-                <p class="ossian-best-sellers__desc">{{ product.description | strip_html | truncate: 80 }}</p>
-              {% endif %}
-              <div class="ossian-best-sellers__bottom">
-                <div class="ossian-best-sellers__price-wrap">
-                  <span class="ossian-best-sellers__price{% if on_sale %} ossian-best-sellers__price--sale{% endif %}">
-                    {{ product.price | money }}
-                  </span>
-                  {% if on_sale %}
-                    <span class="ossian-best-sellers__compare-price">{{ product.compare_at_price | money }}</span>
-                  {% endif %}
-                </div>
-                {% form 'product', product, class: 'ossian-best-sellers__form' %}
-                  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-                  <button
-                    type="submit"
-                    class="ossian-best-sellers__atc-btn"
-                    {% unless product.available %}disabled{% endunless %}
-                  >
-                    {% if product.available %}Add to Cart{% else %}Sold Out{% endif %}
-                  </button>
-                {% endform %}
-              </div>
+
+            <div class="obs__actions">
+              <button
+                class="obs__atc"
+                type="button"
+                data-variant-id="{{ product.variants.first.id }}"
+                data-product-title="{{ product.title | escape }}"
+              >
+                ADD TO CART
+              </button>
+              <button
+                class="obs__wishlist"
+                aria-label="Add to wishlist"
+                type="button"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+              </button>
             </div>
           </div>
-        {% endfor %}
-      {% else %}
-        {% for block in section.blocks %}
-          {% assign bp = all_products[block.settings.product] %}
-          {% if bp != blank %}
-            {% assign card_url     = bp.url %}
-            {% assign card_title   = bp.title %}
-            {% assign card_image   = bp.featured_image %}
-            {% assign card_price   = bp.price | money %}
-            {% assign card_rating  = bp.metafields.reviews.rating.value %}
-            {% assign card_variant = bp.selected_or_first_available_variant %}
-            {% assign card_avail   = bp.available %}
-          {% else %}
-            {% assign card_url     = block.settings.product_url %}
-            {% assign card_title   = block.settings.title %}
-            {% assign card_image   = block.settings.image %}
-            {% assign card_price   = block.settings.price %}
-            {% assign card_rating  = block.settings.rating %}
-            {% assign card_variant = nil %}
-            {% assign card_avail   = true %}
-          {% endif %}
-          <div class="ossian-best-sellers__card" {{ block.shopify_attributes }}>
-            <a href="{{ card_url }}" class="ossian-best-sellers__image-link">
-              <div class="ossian-best-sellers__image-wrap">
-                {% if card_image != blank %}
-                  {{ card_image | image_url: width: 560 | image_tag: loading: 'lazy', class: 'ossian-best-sellers__image', alt: card_title }}
-                {% else %}
-                  <div class="ossian-best-sellers__image-placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
-                {% endif %}
-              </div>
-              {% if card_rating != blank %}
-                <div class="ossian-best-sellers__rating">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="0.5" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon></svg>
-                  <span>{{ card_rating }}</span>
-                </div>
-              {% endif %}
-            </a>
-            <div class="ossian-best-sellers__info">
-              <a href="{{ card_url }}" class="ossian-best-sellers__product-title">{{ card_title }}</a>
-              <div class="ossian-best-sellers__bottom">
-                <span class="ossian-best-sellers__price">{{ card_price }}</span>
-                {% if bp != blank %}
-                  {% form 'product', bp, class: 'ossian-best-sellers__form' %}
-                    <input type="hidden" name="id" value="{{ card_variant.id }}">
-                    <button
-                      type="submit"
-                      class="ossian-best-sellers__atc-btn"
-                      {% unless card_avail %}disabled{% endunless %}
-                    >
-                      {% if card_avail %}Add to Cart{% else %}Sold Out{% endif %}
-                    </button>
-                  {% endform %}
-                {% else %}
-                  <a href="{{ card_url }}" class="ossian-best-sellers__atc-btn">Add to Cart</a>
-                {% endif %}
-              </div>
+
+        {%- endfor -%}
+
+      {%- else -%}
+
+        {%- for i in (1..section.settings.products_count) -%}
+          <div class="obs__card obs__card--placeholder">
+            <div class="obs__img-wrap">
+              {{ 'product-1' | placeholder_svg_tag: 'obs__img obs__img--placeholder' }}
+            </div>
+            <div class="obs__info">
+              <p class="obs__type">CATEGORY</p>
+              <h3 class="obs__name">Select a collection above</h3>
+              <div class="obs__pricing"><span class="obs__price">₹0.00</span></div>
+            </div>
+            <div class="obs__actions">
+              <button class="obs__atc" disabled type="button">ADD TO CART</button>
+              <button class="obs__wishlist" disabled type="button">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </button>
             </div>
           </div>
-        {% endfor %}
-      {% endif %}
+        {%- endfor -%}
+
+      {%- endif -%}
+
     </div>
 
-    {% if source_collection != blank and section.settings.show_view_all %}
-      <div class="ossian-best-sellers__footer">
-        <a href="{{ source_collection.url }}" class="ossian-best-sellers__view-all">
-          View All {{ source_collection.title }}
-        </a>
-      </div>
-    {% endif %}
+    <!-- Nav arrows -->
+    <button class="obs__nav obs__nav--prev" id="obs-prev" aria-label="Previous">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="obs__nav obs__nav--next" id="obs-next" aria-label="Next">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
   </div>
-</div>
+</section>
+
+<script>
+(function () {
+  /* ---------- Add to cart ---------- */
+  document.querySelectorAll('.obs__atc[data-variant-id]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var variantId = parseInt(btn.dataset.variantId);
+      if (!variantId) return;
+      var original = btn.textContent;
+      btn.textContent = 'ADDING…';
+      btn.disabled = true;
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: variantId, quantity: 1 })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function () {
+          btn.textContent = 'ADDED ✓';
+          document.dispatchEvent(new CustomEvent('cart:refresh'));
+          setTimeout(function () { btn.textContent = original; btn.disabled = false; }, 2000);
+        })
+        .catch(function () { btn.textContent = original; btn.disabled = false; });
+    });
+  });
+
+  /* ---------- Wishlist toggle ---------- */
+  document.querySelectorAll('.obs__wishlist').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      btn.classList.toggle('is-wished');
+    });
+  });
+
+  /* ---------- Carousel nav arrows ---------- */
+  var carousel = document.getElementById('obs-carousel');
+  var prevBtn  = document.getElementById('obs-prev');
+  var nextBtn  = document.getElementById('obs-next');
+  if (!carousel || !prevBtn || !nextBtn) return;
+
+  function getScrollAmount() {
+    var card = carousel.querySelector('.obs__card');
+    if (!card) return 280;
+    return card.offsetWidth + parseInt(getComputedStyle(carousel).gap || 20);
+  }
+
+  nextBtn.addEventListener('click', function () {
+    carousel.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+  });
+  prevBtn.addEventListener('click', function () {
+    carousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+  });
+
+  function updateArrows() {
+    prevBtn.style.opacity = carousel.scrollLeft <= 4 ? '0.35' : '1';
+    prevBtn.style.pointerEvents = carousel.scrollLeft <= 4 ? 'none' : 'auto';
+    var atEnd = carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth - 4;
+    nextBtn.style.opacity = atEnd ? '0.35' : '1';
+    nextBtn.style.pointerEvents = atEnd ? 'none' : 'auto';
+  }
+  carousel.addEventListener('scroll', updateArrows, { passive: true });
+  updateArrows();
+})();
+</script>
 
 {% stylesheet %}
-  .ossian-best-sellers__header {
-    text-align: center;
-    margin-bottom: 48px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+/* ===================== SECTION ===================== */
+.obs {
+  padding: 64px 0;
+  background: #fff;
+}
+
+.obs__header {
+  margin-bottom: 36px;
+}
+
+.obs__heading {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 900;
+  color: #1e3a5f;
+  text-align: center;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* ===================== CAROUSEL ===================== */
+.obs__carousel-wrap {
+  position: relative;
+  padding: 0 48px;
+}
+
+.obs__carousel {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 8px 4px 16px;
+}
+
+.obs__carousel::-webkit-scrollbar { display: none; }
+
+/* ===================== CARD ===================== */
+.obs__card {
+  flex: 0 0 calc(25% - 16px);
+  min-width: 240px;
+  max-width: 300px;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #efefef;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  overflow: hidden;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.obs__card:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+  transform: translateY(-3px);
+}
+
+.obs__card-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* ===================== IMAGE ===================== */
+.obs__img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f5f0eb;
+  flex-shrink: 0;
+}
+
+.obs__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.obs__img--placeholder {
+  width: 100%;
+  height: 100%;
+}
+
+.obs__card:hover .obs__img { transform: scale(1.04); }
+
+/* ===================== BADGE ===================== */
+.obs__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  background: #1e3a5f;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 11px;
+  border-radius: 4px;
+}
+
+/* ===================== INFO ===================== */
+.obs__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 16px 12px;
+  gap: 0;
+}
+
+.obs__type {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #1e8a9e;
+  margin: 0 0 6px;
+}
+
+.obs__name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 8px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ===================== RATING ===================== */
+.obs__rating {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.obs__stars {
+  color: #f4a623;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.obs__rating-val {
+  font-size: 12px;
+  font-weight: 700;
+  color: #222;
+}
+
+.obs__rating-count {
+  font-size: 12px;
+  color: #888;
+}
+
+/* ===================== TAGS ===================== */
+.obs__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.obs__tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 1px solid #ccc;
+  color: #444;
+  padding: 4px 9px;
+  border-radius: 5px;
+  background: #fff;
+}
+
+/* ===================== PRICING ===================== */
+.obs__pricing {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.obs__price {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #111;
+}
+
+.obs__compare {
+  font-size: 0.85rem;
+  color: #aaa;
+  text-decoration: line-through;
+}
+
+.obs__discount {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #2e7d32;
+  background: #e8f5e9;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+/* ===================== ACTIONS ===================== */
+.obs__actions {
+  display: flex;
+  gap: 8px;
+  padding: 12px 14px 14px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.obs__atc {
+  flex: 1;
+  background: #1e3a5f;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 13px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.obs__atc:hover:not(:disabled) { background: #16304f; }
+
+.obs__atc:disabled { opacity: 0.5; cursor: default; }
+
+.obs__wishlist {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  border: 1.5px solid #ddd;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #888;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.obs__wishlist:hover,
+.obs__wishlist.is-wished {
+  border-color: #e74c3c;
+  color: #e74c3c;
+  background: #fff5f5;
+}
+
+.obs__wishlist.is-wished svg { fill: #e74c3c; }
+
+/* ===================== NAV ARROWS ===================== */
+.obs__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid #ddd;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #333;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+  z-index: 2;
+}
+
+.obs__nav:hover { border-color: #1e3a5f; color: #1e3a5f; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+
+.obs__nav--prev { left: 4px; }
+.obs__nav--next { right: 4px; }
+
+/* ===================== RESPONSIVE ===================== */
+
+/* ── Desktop: centered grid — no scroll, no left-align ── */
+@media (min-width: 769px) {
+  .obs__carousel-wrap {
+    padding: 0;
   }
 
-  .ossian-best-sellers__title {
-    font-size: 2.25rem;
-    font-weight: 700;
-    margin: 0;
-    color: #101828;
-  }
-
-  .ossian-best-sellers__subtitle {
-    font-size: 1.125rem;
-    color: #4a5565;
-    margin: 0;
-  }
-
-  .ossian-best-sellers__grid {
+  .obs__carousel {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-  }
-
-  @media screen and (max-width: 989px) {
-    .ossian-best-sellers__grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media screen and (max-width: 499px) {
-    .ossian-best-sellers__grid {
-      gap: 12px;
-    }
-    .ossian-best-sellers__title {
-      font-size: 1.75rem;
-    }
-  }
-
-  .ossian-best-sellers__card {
-    background: #fff;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .ossian-best-sellers__card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.15);
-  }
-
-  .ossian-best-sellers__image-link {
-    position: relative;
-    display: block;
-    text-decoration: none;
-  }
-
-  .ossian-best-sellers__image-wrap {
-    aspect-ratio: 1 / 1;
-    background: #f3f4f6;
-    overflow: hidden;
-  }
-
-  .ossian-best-sellers__image,
-  .ossian-best-sellers__image-placeholder {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.3s;
-  }
-
-  .ossian-best-sellers__card:hover .ossian-best-sellers__image {
-    transform: scale(1.04);
-  }
-
-  .ossian-best-sellers__badges {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .ossian-best-sellers__badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    line-height: 1.4;
-  }
-
-  .ossian-best-sellers__badge--sale {
-    background: #dc2626;
-    color: #fff;
-  }
-
-  .ossian-best-sellers__badge--sold-out {
-    background: #6b7280;
-    color: #fff;
-  }
-
-  .ossian-best-sellers__vendor {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #6b7280;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .ossian-best-sellers__desc {
-    font-size: 0.875rem;
-    color: #6b7280;
-    line-height: 1.5;
-    margin: 0;
-  }
-
-  .ossian-best-sellers__price-wrap {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .ossian-best-sellers__price--sale {
-    color: #dc2626;
-  }
-
-  .ossian-best-sellers__compare-price {
-    font-size: 0.9rem;
-    color: #9ca3af;
-    text-decoration: line-through;
-    font-weight: 500;
-  }
-
-  .ossian-best-sellers__footer {
-    text-align: center;
-    margin-top: 40px;
-  }
-
-  .ossian-best-sellers__view-all {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 32px;
-    border: 2px solid #1e3a5f;
-    border-radius: 10px;
-    color: #1e3a5f;
-    font-size: 1rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background 0.2s, color 0.2s;
-  }
-
-  .ossian-best-sellers__view-all:hover {
-    background: #1e3a5f;
-    color: #fff;
-  }
-
-  .ossian-best-sellers__rating {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    background: #fff;
-    border-radius: 999px;
-    padding: 4px 12px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #0a0a0a;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-  }
-
-  .ossian-best-sellers__info {
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    flex: 1;
-  }
-
-  .ossian-best-sellers__product-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #101828;
-    line-height: 1.4;
-    text-decoration: none;
-    display: block;
-  }
-
-  .ossian-best-sellers__product-title:hover {
-    color: #1e3a5f;
-  }
-
-  .ossian-best-sellers__bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: auto;
-    gap: 8px;
-  }
-
-  .ossian-best-sellers__price {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #1e3a5f;
-    white-space: nowrap;
-  }
-
-  .ossian-best-sellers__form { display: contents; }
-
-  .ossian-best-sellers__atc-btn {
-    display: inline-flex;
-    align-items: center;
+    /* Cards are min 220px, max 280px; auto-fit centers them when fewer than a full row */
+    grid-template-columns: repeat(auto-fit, minmax(220px, 280px));
     justify-content: center;
-    background: #1e3a5f;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    padding: 8px 16px;
-    font-size: 0.9375rem;
-    font-weight: 500;
-    cursor: pointer;
-    text-decoration: none;
-    transition: opacity 0.2s;
-    white-space: nowrap;
+    overflow: visible;
+    scroll-snap-type: none;
+    gap: 20px;
+    padding: 8px 0 16px;
   }
 
-  .ossian-best-sellers__atc-btn:hover { opacity: 0.85; }
-  .ossian-best-sellers__atc-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .obs__card {
+    flex: none;
+    width: 100%;
+    min-width: unset;
+    max-width: none;
+    scroll-snap-align: none;
+  }
+
+  /* Hide scroll arrows on desktop — grid doesn't need them */
+  .obs__nav { display: none !important; }
+}
+
+/* ── Mobile: horizontal scroll carousel ── */
+@media (max-width: 768px) {
+  .obs__carousel-wrap { padding: 0 36px; }
+  .obs__carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 16px;
+    padding: 8px 4px 16px;
+  }
+  .obs__card { flex: 0 0 calc(50% - 8px); min-width: 200px; max-width: 280px; }
+  .obs__nav { width: 34px; height: 34px; display: flex; }
+}
+
+@media (max-width: 480px) {
+  .obs { padding: 40px 0; }
+  .obs__carousel-wrap { padding: 0 10px; }
+  .obs__card { flex: 0 0 75vw; min-width: 180px; max-width: 260px; }
+  .obs__nav { display: none !important; }
+}
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "Best Sellers",
   "tag": "section",
-  "class": "section-wrapper",
-  "max_blocks": 8,
-  "blocks": [
-    {
-      "type": "product",
-      "name": "Product",
-      "settings": [
-        {
-          "type": "product",
-          "id": "product",
-          "label": "Product"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Override image (optional)"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Override title (optional)"
-        },
-        {
-          "type": "text",
-          "id": "price",
-          "label": "Override price (optional)"
-        },
-        {
-          "type": "text",
-          "id": "rating",
-          "label": "Override rating (optional)"
-        },
-        {
-          "type": "url",
-          "id": "product_url",
-          "label": "Override URL (optional)"
-        }
-      ]
-    }
-  ],
+  "class": "ossian-best-sellers-section",
   "settings": [
     {
       "type": "text",
       "id": "heading",
-      "label": "Section heading",
-      "default": "Best Sellers"
-    },
-    {
-      "type": "text",
-      "id": "subheading",
-      "label": "Section subheading",
-      "default": "Best sellers loved by professionals worldwide"
+      "label": "Heading",
+      "default": "BEST SELLERS"
     },
     {
       "type": "collection",
       "id": "collection",
-      "label": "Collection (overrides manual blocks when set)"
+      "label": "Collection"
     },
     {
       "type": "range",
       "id": "products_count",
       "label": "Products to show",
       "min": 2,
-      "max": 8,
+      "max": 12,
       "step": 1,
-      "default": 4
-    },
-    {
-      "type": "checkbox",
-      "id": "show_view_all",
-      "label": "Show 'View All' button",
-      "default": true
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "default": "scheme-1"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "label": "Top padding",
-      "min": 0,
-      "max": 120,
-      "step": 4,
-      "unit": "px",
-      "default": 64
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "label": "Bottom padding",
-      "min": 0,
-      "max": 120,
-      "step": 4,
-      "unit": "px",
-      "default": 64
+      "default": 6
     }
   ],
   "presets": [
     {
-      "name": "Best Sellers"
+      "name": "Ossian Best Sellers"
     }
   ]
 }

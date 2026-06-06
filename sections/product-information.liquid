@@ -181,39 +181,59 @@
   /* ── Vendor tag pill ─────────────────────────── */
   .text-block--text_vendor_tag p {
     display: inline-block;
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: 0.72rem;
+    font-weight: 700;
     color: #1e3a5f;
     background: #eff6ff;
     border: 1px solid #bfdbfe;
     border-radius: 20px;
-    padding: 3px 12px;
-    letter-spacing: 0.04em;
+    padding: 4px 14px;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     margin: 0;
   }
 
   /* ── Product title sizing on PDP ─────────────── */
   .product-information .product-details h1 {
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    line-height: 1.25;
-    font-weight: 700;
+    font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+    line-height: 1.2;
+    font-weight: 800;
     color: #101828;
     margin: 0;
+    font-family: var(--font-primary--family, sans-serif);
+  }
+
+  /* ── Rating row ─────────────────────────────── */
+  .product-information .rating-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   /* ── Price block on PDP ──────────────────────── */
   .product-information .price__regular .price-item,
   .product-information .price__sale .price-item--sale {
-    font-size: 1.625rem;
-    font-weight: 700;
+    font-size: 1.75rem;
+    font-weight: 800;
     color: #1e3a5f;
+    font-family: var(--font-body--family, sans-serif);
   }
 
   .product-information .price__sale .price-item--regular {
-    font-size: 1rem;
+    font-size: 1.05rem;
     color: #9ca3af;
     text-decoration: line-through;
+    font-weight: 400;
+  }
+
+  /* Savings badge on sale price */
+  .product-information .price__badges .price__badge-sale {
+    font-size: 12px;
+    font-weight: 700;
+    background: #fee2e2;
+    color: #b91c1c;
+    border-radius: 4px;
+    padding: 2px 8px;
   }
 
   /* ── Description text ────────────────────────── */
@@ -221,12 +241,27 @@
   .product-information .product-details .rte li {
     font-size: 0.9375rem;
     color: #4b5563;
-    line-height: 1.7;
+    line-height: 1.75;
   }
 
-  /* ── Variant picker buttons ──────────────────── */
+  /* ── Variant picker ─────────────────────────── */
   .product-information .variant-option--buttons .variant-option__button-label {
     border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .product-information .variant-option--buttons .variant-option__button-input:checked + .variant-option__button-label {
+    background: #1e3a5f;
+    border-color: #1e3a5f;
+    color: #fff;
+  }
+
+  /* ── Quantity selector ──────────────────────── */
+  .product-information .quantity__input {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e3a5f;
   }
 
   /* ── Add to cart button ──────────────────────── */
@@ -234,25 +269,49 @@
     background: #1e3a5f;
     border-color: #1e3a5f;
     border-radius: 10px;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    min-height: 52px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    min-height: 54px;
+    font-size: 14px;
+    text-transform: uppercase;
   }
 
-  .product-information .add-to-cart-button.button:hover {
+  .product-information .add-to-cart-button.button:hover:not(:disabled) {
     background: #16304f;
     border-color: #16304f;
   }
 
-  /* ── Media column: tighten thumbnail strip ───── */
+  /* ── Buy now / accelerated checkout ─────────── */
+  .product-information .shopify-payment-button__button {
+    border-radius: 10px !important;
+    min-height: 50px !important;
+  }
+
+  /* ── Divider ────────────────────────────────── */
+  .product-information .divider-block {
+    border-color: #e8edf5;
+  }
+
+  /* ── Media column image ─────────────────────── */
   .product-information .product-information__media {
     position: relative;
   }
 
-  /* ── Variant image picker sits flush ─────────── */
+  .product-information .product-media-container {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  /* ── Thumbnail strip ───────────────────────── */
+  .product-information .product-media-thumbnail {
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  /* ── Variant image picker ───────────────────── */
   .ossian-vip { margin-top: 12px; }
 
-  /* ── Hide native variant picker UI (custom swatch strip replaces it) ── */
+  /* ── Hide native variant picker UI when custom strip active ── */
   .product-information .variant-picker__form {
     position: absolute;
     width: 1px;
@@ -263,7 +322,7 @@
     white-space: nowrap;
   }
 
-  /* ── Mobile: stack cleanly ───────────────────── */
+  /* ── Mobile ────────────────────────────────── */
   @media screen and (max-width: 749px) {
     .product-information .product-details h1 {
       font-size: 1.5rem;
@@ -271,7 +330,7 @@
 
     .product-information .price__regular .price-item,
     .product-information .price__sale .price-item--sale {
-      font-size: 1.375rem;
+      font-size: 1.5rem;
     }
 
     .ossian-vip { margin-top: 10px; }

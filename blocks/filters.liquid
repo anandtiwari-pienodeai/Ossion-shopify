@@ -1308,6 +1308,128 @@
     height: var(--font-paragraph--size);
     position: absolute;
   }
+
+  /* ── Ossian PLP vertical filter sidebar ── */
+  .facets--vertical {
+    padding-block-start: 0 !important;
+  }
+
+  /* Filters header row (title + Clear All) */
+  .facets--vertical .facets--filters-title {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e3a5f;
+    padding: 14px 16px 12px;
+    border-bottom: 1.5px solid #eee;
+    margin: 0;
+    font-family: var(--font-body--family, sans-serif);
+  }
+
+  /* "Filters" label inside the vertical pane */
+  .facets-block-wrapper--vertical .facets--filters-title {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e3a5f;
+    padding: 14px 16px 12px;
+    border-bottom: 1.5px solid #eee;
+    margin: 0;
+  }
+
+  /* Clear All link inside vertical sidebar */
+  .facets--vertical .facets__clear-all-link,
+  .facets-block-wrapper--vertical .facets__clear-all-link {
+    font-size: 12px;
+    font-weight: 600;
+    color: #3b82f6 !important;
+    text-decoration: none;
+    padding: 0;
+    display: inline !important;
+  }
+
+  .facets--vertical .facets__clear-all-link:hover,
+  .facets-block-wrapper--vertical .facets__clear-all-link:hover {
+    text-decoration: underline;
+  }
+
+  /* Filter group accordion item */
+  .facets--vertical .facets__item,
+  .facets-block-wrapper--vertical .facets__item {
+    border-bottom: 1px solid #eee;
+  }
+
+  .facets--vertical .facets__item::before,
+  .facets-block-wrapper--vertical .facets__item::before {
+    display: none !important;
+  }
+
+  /* Summary / accordion heading */
+  .facets--vertical .facets__summary,
+  .facets-block-wrapper--vertical .facets__summary {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e3a5f;
+    padding: 12px 16px;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    font-family: var(--font-body--family, sans-serif);
+  }
+
+  /* Accordion body */
+  .facets--vertical .facets__panel,
+  .facets-block-wrapper--vertical .facets__panel {
+    padding: 0 16px 14px;
+  }
+
+  /* Checkboxes */
+  .facets--vertical .facets__inputs-wrapper label,
+  .facets-block-wrapper--vertical .facets__inputs-wrapper label {
+    font-size: 13px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-family: var(--font-body--family, sans-serif);
+    padding-block: 3px;
+  }
+
+  .facets--vertical input[type="checkbox"],
+  .facets-block-wrapper--vertical input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+    border: 1.5px solid #bbb;
+    accent-color: #1e3a5f;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Price range slider */
+  .facets--vertical .price-filter,
+  .facets-block-wrapper--vertical .price-filter {
+    padding: 8px 0 4px;
+  }
+
+  .facets--vertical input[type="range"],
+  .facets-block-wrapper--vertical input[type="range"] {
+    accent-color: #1e3a5f;
+    width: 100%;
+  }
+
+  /* Sidebar wrapper border */
+  .facets-block-wrapper--vertical {
+    border: 1.5px solid #e8e8e8;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+  }
 {% endstylesheet %}
 
 {% schema %}

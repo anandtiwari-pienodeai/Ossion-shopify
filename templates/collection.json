@@ -9,109 +9,113 @@
  */
 {
   "sections": {
-    "ossian_hero_banner_VM3pbt": {
-      "type": "ossian-hero-banner",
-      "name": "Hero Banner",
+    "collection_hero": {
+      "type": "ossian-collection-hero",
       "settings": {
-        "badge": "✨ New Innovation",
-        "heading": "GO GLOW DE-TAN",
-        "subtext": "Kojic & Milk Illuminate formula that reveals your skin's natural radiance. Professional tan removal with visible results.",
-        "primary_button_label": "Shop Now",
-        "primary_button_url": "",
-        "secondary_button_label": "Learn More",
-        "secondary_button_url": "",
-        "image": "{{ collection.metafields.custom.desktop_image.value }}",
-        "padding_top": 80,
-        "padding_bottom": 80
+        "banner_image": "shopify://shop_images/OssionBannertwo.png",
+        "banner_height": 300,
+        "banner_height_mobile": 220
       }
     },
-    "section": {
-      "type": "section",
+    "collection_tabs": {
+      "type": "ossian-collection-tabs",
       "blocks": {
-        "text_tqQTNE": {
-          "type": "text",
-          "name": "Title",
+        "tab_1": {
+          "type": "tab",
           "settings": {
-            "text": "<h1>{{ closest.collection.title }}</h1>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h2",
-            "font": "var(--font-primary--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "collection": "",
+            "label": "Fundaments",
+            "url": ""
+          }
         },
-        "text_twGGkJ": {
-          "type": "text",
-          "name": "Description",
+        "tab_2": {
+          "type": "tab",
           "settings": {
-            "text": "{{ closest.collection.description }}",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "rte",
-            "font": "var(--font-primary--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "collection": "",
+            "label": "Warm Brown",
+            "url": ""
+          }
+        },
+        "tab_3": {
+          "type": "tab",
+          "settings": {
+            "collection": "",
+            "label": "Cool Brown",
+            "url": ""
+          }
+        },
+        "tab_4": {
+          "type": "tab",
+          "settings": {
+            "collection": "",
+            "label": "Gold/Copper",
+            "url": ""
+          }
+        },
+        "tab_5": {
+          "type": "tab",
+          "settings": {
+            "collection": "",
+            "label": "Red",
+            "url": ""
+          }
+        },
+        "tab_6": {
+          "type": "tab",
+          "settings": {
+            "collection": "",
+            "label": "Iridescent",
+            "url": ""
+          }
+        },
+        "tab_7": {
+          "type": "tab",
+          "settings": {
+            "collection": "",
+            "label": "High Lift",
+            "url": ""
+          }
+        },
+        "tab_8": {
+          "type": "tab",
+          "settings": {
+            "collection": "",
+            "label": "Ash",
+            "url": ""
+          }
+        },
+        "tab_9": {
+          "type": "tab",
+          "settings": {
+            "collection": "",
+            "label": "Developer",
+            "url": ""
+          }
+        },
+        "tab_10": {
+          "type": "tab",
+          "settings": {
+            "collection": "",
+            "label": "Blonder",
+            "url": ""
+          }
         }
       },
       "block_order": [
-        "text_tqQTNE",
-        "text_twGGkJ"
+        "tab_1",
+        "tab_2",
+        "tab_3",
+        "tab_4",
+        "tab_5",
+        "tab_6",
+        "tab_7",
+        "tab_8",
+        "tab_9",
+        "tab_10"
       ],
-      "name": "Collection heading",
+      "disabled": true,
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 12,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-1",
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "active_tab": ""
       }
     },
     "main": {
@@ -122,17 +126,17 @@
           "static": true,
           "settings": {
             "enable_filtering": true,
-            "filter_style": "horizontal",
+            "filter_style": "vertical",
             "filter_width": "centered",
             "text_label_case": "default",
             "show_swatch_label": false,
             "show_filter_label": false,
             "enable_sorting": true,
-            "enable_grid_density": true,
+            "enable_grid_density": false,
             "inherit_color_scheme": true,
             "color_scheme": "",
-            "padding-block-start": 8,
-            "padding-block-end": 8,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
             "padding-inline-start": 0,
             "padding-inline-end": 0,
             "facets_margin_bottom": 8,
@@ -144,15 +148,15 @@
           "type": "_product-card",
           "static": true,
           "settings": {
-            "product_card_gap": 6,
+            "product_card_gap": 0,
             "inherit_color_scheme": true,
             "color_scheme": "",
             "border": "solid",
             "border_width": 1,
-            "border_opacity": 12,
-            "border_radius": 8,
+            "border_opacity": 10,
+            "border_radius": 10,
             "padding-block-start": 0,
-            "padding-block-end": 12,
+            "padding-block-end": 14,
             "padding-inline-start": 0,
             "padding-inline-end": 0
           },
@@ -172,24 +176,9 @@
               },
               "blocks": {}
             },
-            "product_title_4nY4eT": {
-              "type": "product-title",
-              "name": "t:names.product_title",
+            "product_type": {
+              "type": "ossian-product-type",
               "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "0.9rem",
-                "line_height": "1.3",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
                 "padding-block-start": 10,
                 "padding-block-end": 0,
                 "padding-inline-start": 12,
@@ -197,62 +186,83 @@
               },
               "blocks": {}
             },
-            "ossian_desc": {
-              "type": "custom-liquid",
+            "product_title": {
+              "type": "product-title",
+              "name": "Product Title",
               "settings": {
-                "custom_liquid": "{% if closest.product.description != blank %}<p class=\"ossian-product-desc\">{{ closest.product.description | strip_html | truncate: 55 }}</p>{% endif %}"
-              },
-              "blocks": {}
-            },
-            "ossian_price_stock": {
-              "type": "custom-liquid",
-              "settings": {
-                "custom_liquid": "<div class=\"ossian-price-row\">{% if closest.product.compare_at_price > closest.product.price %}<div class=\"ossian-price-wrapper\"><span class=\"ossian-price ossian-price--sale\">{{ closest.product.price | money }}</span><s class=\"ossian-price--compare\">{{ closest.product.compare_at_price | money }}</s></div>{% else %}<span class=\"ossian-price\">{{ closest.product.price | money }}</span>{% endif %}{% if closest.product.available %}<span class=\"ossian-stock ossian-stock--in\">In Stock</span>{% else %}<span class=\"ossian-stock ossian-stock--out\">Out of Stock</span>{% endif %}</div>"
-              },
-              "blocks": {}
-            },
-            "ossian_buy": {
-              "type": "buy-buttons",
-              "settings": {
-                "stacking": false,
-                "show_pickup_availability": false,
-                "gift_card_form": false,
-                "padding-block-start": 8,
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "0.85rem",
+                "line_height": "1.35",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 4,
                 "padding-block-end": 0,
                 "padding-inline-start": 12,
                 "padding-inline-end": 12
               },
-              "blocks": {
-                "quantity": {
-                  "type": "quantity",
-                  "static": true,
-                  "settings": {},
-                  "blocks": {}
-                },
-                "add-to-cart": {
-                  "type": "add-to-cart",
-                  "static": true,
-                  "settings": {
-                    "style_class": "button"
-                  },
-                  "blocks": {}
-                },
-                "accelerated-checkout": {
-                  "type": "accelerated-checkout",
-                  "static": true,
-                  "settings": {},
-                  "blocks": {}
-                }
+              "blocks": {}
+            },
+            "review": {
+              "type": "review",
+              "settings": {
+                "stars_style": "shaded",
+                "show_number": true,
+                "rating_color": "primary",
+                "type_preset": "paragraph",
+                "width": "100%",
+                "alignment": "left"
               },
-              "block_order": []
+              "blocks": {}
+            },
+            "price": {
+              "type": "price",
+              "settings": {
+                "show_sale_price_first": false,
+                "show_installments": false,
+                "show_tax_info": false,
+                "type_preset": "rte",
+                "width": "100%",
+                "alignment": "left",
+                "font": "var(--font-body--family)",
+                "font_size": "0.9rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "color": "",
+                "padding-block-start": 6,
+                "padding-block-end": 0,
+                "padding-inline-start": 12,
+                "padding-inline-end": 12
+              },
+              "blocks": {}
+            },
+            "plp_actions": {
+              "type": "ossian-plp-actions",
+              "settings": {
+                "padding-block-start": 10,
+                "padding-block-end": 0,
+                "padding-inline-start": 12,
+                "padding-inline-end": 12
+              },
+              "blocks": {}
             }
           },
           "block_order": [
             "card-gallery",
-            "product_title_4nY4eT",
-            "ossian_desc",
-            "ossian_price_stock",
-            "ossian_buy"
+            "product_type",
+            "product_title",
+            "review",
+            "price",
+            "plp_actions"
           ]
         }
       },
@@ -265,18 +275,96 @@
         "product_grid_width": "full-width",
         "full_width_on_mobile": true,
         "columns_gap_horizontal": 16,
-        "columns_gap_vertical": 24,
+        "columns_gap_vertical": 20,
         "padding-inline-start": 0,
         "padding-inline-end": 0,
         "color_scheme": "scheme-1",
-        "padding-block-start": 0,
-        "padding-block-end": 32
+        "padding-block-start": 24,
+        "padding-block-end": 40
+      }
+    },
+    "marine_banner": {
+      "type": "ossian-marine-banner",
+      "settings": {
+        "powered_by_label": "POWERED BY",
+        "brand_name": "MARINE TECHNOLOGY",
+        "description": "Ocean derived actives work in synergy with advanced science to deliver superior lift, protection and long lasting colour results.",
+        "cta_label": "Explore Our Science",
+        "cta_url": ""
+      }
+    },
+    "explore_category": {
+      "type": "ossian-explore-category",
+      "blocks": {
+        "cat_1": {
+          "type": "category_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy",
+            "category_label": "HAIR CARE",
+            "name": "Caviar Mask",
+            "price": "₹1,999",
+            "rating": "4.8",
+            "review_count": "210",
+            "cta_label": "View all",
+            "link": ""
+          }
+        },
+        "cat_2": {
+          "type": "category_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy-1",
+            "category_label": "HAIR CARE",
+            "name": "Caviar Mask",
+            "price": "₹1,999",
+            "rating": "4.8",
+            "review_count": "210",
+            "cta_label": "View all",
+            "link": ""
+          }
+        },
+        "cat_3": {
+          "type": "category_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
+            "category_label": "HAIR CARE",
+            "name": "Caviar Mask",
+            "price": "₹1,999",
+            "rating": "4.8",
+            "review_count": "210",
+            "cta_label": "View all",
+            "link": ""
+          }
+        },
+        "cat_4": {
+          "type": "category_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy",
+            "category_label": "HAIR CARE",
+            "name": "Caviar Mask",
+            "price": "₹1,999",
+            "rating": "4.8",
+            "review_count": "210",
+            "cta_label": "View all",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "cat_1",
+        "cat_2",
+        "cat_3",
+        "cat_4"
+      ],
+      "settings": {
+        "heading": "EXPLORE MORE CATEGORY"
       }
     }
   },
   "order": [
-    "ossian_hero_banner_VM3pbt",
-    "section",
-    "main"
+    "collection_hero",
+    "collection_tabs",
+    "main",
+    "marine_banner",
+    "explore_category"
   ]
 }

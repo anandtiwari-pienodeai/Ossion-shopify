@@ -1,0 +1,172 @@
+{% liquid
+  assign product = closest.product
+-%}
+
+<div
+  class="ossian-pdp-wish-row spacing-style"
+  style="{% render 'spacing-style', settings: block.settings %}"
+  {{ block.shopify_attributes }}
+>
+  <!-- Wishlist -->
+  <button
+    type="button"
+    class="ossian-pdp-wish-btn"
+    aria-label="Add {{ product.title | default: 'product' | escape }} to wishlist"
+    data-product-id="{{ product.id }}"
+    onclick="this.classList.toggle('ossian-pdp-wish-btn--active'); this.querySelector('.ossian-pdp-wish-label').textContent = this.classList.contains('ossian-pdp-wish-btn--active') ? 'Saved' : 'Wishlist';"
+  >
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+    </svg>
+    <span class="ossian-pdp-wish-label">Wishlist</span>
+  </button>
+
+  <!-- Share -->
+  <button
+    type="button"
+    class="ossian-pdp-wish-btn"
+    aria-label="Share this product"
+    onclick="if(navigator.share){navigator.share({url:window.location.href,title:document.title}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(window.location.href).then(function(){var l=this.querySelector('.ossian-pdp-wish-label');if(l){var o=l.textContent;l.textContent='Copied!';setTimeout(function(){l.textContent=o;},2000);}}.bind(this))}"
+  >
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+    </svg>
+    <span class="ossian-pdp-wish-label">Share</span>
+  </button>
+
+  <!-- Compare (optional) -->
+  {%- if block.settings.show_compare -%}
+    <button
+      type="button"
+      class="ossian-pdp-wish-btn"
+      aria-label="Compare {{ product.title | default: 'product' | escape }}"
+      data-compare-id="{{ product.id }}"
+    >
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="20" x2="18" y2="10"/>
+        <line x1="12" y1="20" x2="12" y2="4"/>
+        <line x1="6" y1="20" x2="6" y2="14"/>
+      </svg>
+      <span class="ossian-pdp-wish-label">Compare</span>
+    </button>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+.ossian-pdp-wish-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ossian-pdp-wish-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 16px;
+  border: 1.5px solid #dde0e6;
+  border-radius: 8px;
+  background: #fff;
+  color: #444;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  font-family: var(--font-body--family, sans-serif);
+  flex: 1;
+  justify-content: center;
+  min-width: 110px;
+}
+
+.ossian-pdp-wish-btn:hover {
+  border-color: #1e3a5f;
+  color: #1e3a5f;
+  background: #f8fafc;
+}
+
+.ossian-pdp-wish-btn--active {
+  border-color: #e53935;
+  color: #e53935;
+  background: #fff5f5;
+}
+
+.ossian-pdp-wish-btn--active svg {
+  fill: #e53935;
+  stroke: #e53935;
+}
+
+@media (max-width: 480px) {
+  .ossian-pdp-wish-btn {
+    font-size: 12px;
+    padding: 9px 12px;
+    min-width: 90px;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Wishlist / Share",
+  "tag": null,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_compare",
+      "label": "Show Compare button",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP Wishlist / Share",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

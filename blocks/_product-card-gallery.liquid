@@ -25,7 +25,32 @@
           {%- endif -%}
         </div>
       {%- endif -%}
+
+      {%- comment -%} Best Seller badge from product tags {%- endcomment -%}
+      {%- assign ossian_is_best_seller = false -%}
+      {%- for tag in product.tags -%}
+        {%- assign tag_lower = tag | downcase | strip -%}
+        {%- if tag_lower == 'best seller' or tag_lower == 'bestseller' or tag_lower == 'best-seller' -%}
+          {%- assign ossian_is_best_seller = true -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if ossian_is_best_seller -%}
+        <div class="product-badges__badge product-badges__badge--best-seller">Best Seller</div>
+      {%- endif -%}
     </div>
+
+    {%- comment -%} Wishlist overlay button {%- endcomment -%}
+    <button
+      class="ossian-gallery-wish"
+      type="button"
+      aria-label="Add {{ product.title | escape }} to wishlist"
+      data-product-id="{{ product.id }}"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+    </button>
+
     {%  if settings.quick_add or settings.mobile_quick_add %}
       {% render 'quick-add', product: product, section_id: section.id %}
     {% endif %}
@@ -44,6 +69,56 @@
 </div>
 
 {% render 'product-badges-styles' %}
+
+{% stylesheet %}
+/* Best Seller badge */
+.product-badges__badge--best-seller {
+  background: #1e3a5f;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+  display: inline-block;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+/* Wishlist overlay button on image */
+.ossian-gallery-wish {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.14);
+  transition: color 0.2s, transform 0.15s;
+  padding: 0;
+  line-height: 1;
+}
+
+.ossian-gallery-wish:hover {
+  color: #e53935;
+  transform: scale(1.12);
+}
+
+.ossian-gallery-wish.is-wished {
+  color: #e53935;
+}
+
+.ossian-gallery-wish.is-wished svg {
+  fill: #e53935;
+}
+{% endstylesheet %}
 
 {% schema %}
 {

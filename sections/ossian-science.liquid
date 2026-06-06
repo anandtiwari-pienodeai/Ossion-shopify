@@ -1,0 +1,260 @@
+<div
+  class="ossian-science"
+  style="
+    {%- if section.settings.background_image != blank -%}
+      --science-bg: url('{{ section.settings.background_image | image_url: width: 1920 }}');
+    {%- else -%}
+      --science-bg: none;
+    {%- endif -%}
+  "
+>
+  <div class="ossian-science__card page-width">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="ossian-science__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.description != blank -%}
+      <p class="ossian-science__description">{{ section.settings.description }}</p>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="ossian-science__badges">
+        {%- for block in section.blocks -%}
+          <div class="ossian-science__badge" {{ block.shopify_attributes }}>
+            <div class="ossian-science__badge-icon">
+              {%- if block.settings.icon != blank -%}
+                {{
+                  block.settings.icon
+                  | image_url: width: 80
+                  | image_tag:
+                    class: 'ossian-science__badge-img',
+                    loading: 'lazy'
+                }}
+              {%- else -%}
+                <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                  <circle cx="18" cy="18" r="17" stroke="currentColor" stroke-width="1.5"/>
+                  {%- case block.settings.icon_type -%}
+                    {%- when 'leaf' -%}
+                      <path d="M18 26c-4-4-8-8-4-12s12 0 8 8c-1 2-4 4-4 4z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                    {%- when 'droplet' -%}
+                      <path d="M18 10l6 9a6 6 0 01-12 0l6-9z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                    {%- else -%}
+                      <path d="M14 18l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  {%- endcase -%}
+                </svg>
+              {%- endif -%}
+            </div>
+            {%- if block.settings.label != blank -%}
+              <span class="ossian-science__badge-label">{{ block.settings.label }}</span>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank -%}
+      <a href="{{ section.settings.button_url | default: '#' }}" class="ossian-science__cta">
+        {{ section.settings.button_label }}
+        <svg width="20" height="12" viewBox="0 0 20 12" fill="none"><path d="M0 6h18M13 1l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+.ossian-science {
+  background-color: #0d2444;
+  background-image: var(--science-bg, none);
+  background-size: cover;
+  background-position: center;
+  padding: 80px 20px;
+  position: relative;
+}
+
+.ossian-science::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 22, 45, 0.65);
+  pointer-events: none;
+}
+
+.ossian-science__card {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 56px 64px;
+  text-align: center;
+  max-width: 920px;
+  margin: 0 auto;
+  backdrop-filter: blur(8px);
+}
+
+.ossian-science__heading {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin: 0 0 20px;
+}
+
+.ossian-science__description {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 auto 40px;
+  max-width: 680px;
+}
+
+.ossian-science__badges {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.ossian-science__badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.ossian-science__badge-icon {
+  width: 70px;
+  height: 70px;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.ossian-science__badge-img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.ossian-science__badge-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+}
+
+.ossian-science__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1.5px solid rgba(255,255,255,0.6);
+  padding: 14px 32px;
+  border-radius: 6px;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.ossian-science__cta:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: #fff;
+}
+
+@media (max-width: 768px) {
+  .ossian-science__card { padding: 40px 24px; }
+  .ossian-science__badges { gap: 28px; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ossion Science",
+  "tag": "section",
+  "class": "ossian-science-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image (ocean/texture)"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "OSSION SCIENCE"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Lorem ipsum dolor sit amet consectetur. Non metus praesent enim diam fringilis. Sagittis nec convallis virra non risus auctor prom. Quis duam dui curabitur pharetra amet enim."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "LEARN MORE"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button URL"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Badge",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon image"
+        },
+        {
+          "type": "select",
+          "id": "icon_type",
+          "label": "Fallback icon",
+          "options": [
+            { "value": "check", "label": "Check" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "droplet", "label": "Droplet" }
+          ],
+          "default": "check"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "DERMAT TESTED"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ossion Science",
+      "settings": {
+        "heading": "OSSION SCIENCE",
+        "button_label": "LEARN MORE"
+      },
+      "blocks": [
+        { "type": "badge", "settings": { "label": "DERMAT TESTED", "icon_type": "check" } },
+        { "type": "badge", "settings": { "label": "VEGAN FORMULA", "icon_type": "leaf" } },
+        { "type": "badge", "settings": { "label": "MARINE TECHNOLOGY", "icon_type": "droplet" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

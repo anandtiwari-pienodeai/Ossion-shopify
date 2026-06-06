@@ -1,0 +1,100 @@
+<section class="collection-hero" id="collection-hero-{{ section.id }}">
+  {%- if section.settings.banner_image != blank -%}
+    {{
+      section.settings.banner_image
+      | image_url: width: 2000
+      | image_tag:
+        class: 'collection-hero__img',
+        loading: 'eager',
+        fetchpriority: 'high',
+        widths: '750,1100,1600,2000',
+        alt: section.settings.banner_image.alt | default: collection.title
+    }}
+  {%- else -%}
+    <div class="collection-hero__placeholder"></div>
+  {%- endif -%}
+</section>
+
+{% stylesheet %}
+.collection-hero {
+  width: 100%;
+  overflow: hidden;
+  display: block;
+  line-height: 0;
+}
+
+.collection-hero__img {
+  width: 100%;
+  height: var(--collection-hero-height, 480px);
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.collection-hero__placeholder {
+  width: 100%;
+  height: var(--collection-hero-height, 480px);
+  background: linear-gradient(135deg, #0b1e35 0%, #1e3a5f 100%);
+}
+
+@media (max-width: 768px) {
+  .collection-hero__img,
+  .collection-hero__placeholder {
+    height: var(--collection-hero-height-mobile, 220px);
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection Hero Banner",
+  "tag": "section",
+  "class": "ossian-collection-hero-section",
+  "enabled_on": {
+    "templates": ["collection", "index"]
+  },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Banner image"
+    },
+    {
+      "type": "range",
+      "id": "banner_height",
+      "label": "Banner height (desktop)",
+      "min": 200,
+      "max": 700,
+      "step": 20,
+      "unit": "px",
+      "default": 480
+    },
+    {
+      "type": "range",
+      "id": "banner_height_mobile",
+      "label": "Banner height (mobile)",
+      "min": 120,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "default": 220
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Hero Banner",
+      "settings": {
+        "banner_height": 480,
+        "banner_height_mobile": 220
+      }
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  #collection-hero-{{ section.id }} {
+    --collection-hero-height: {{ section.settings.banner_height }}px;
+    --collection-hero-height-mobile: {{ section.settings.banner_height_mobile }}px;
+  }
+</style>
