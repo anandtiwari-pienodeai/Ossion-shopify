@@ -1,0 +1,89 @@
+{% liquid
+  assign product = closest.product
+  assign type_label = product.type
+  if request.visual_preview_mode and product == blank
+    assign type_label = 'LIGHTENING & BLEACHING'
+  endif
+-%}
+
+{%- if type_label != blank -%}
+  <p
+    class="ossian-product-type spacing-style"
+    style="{% render 'spacing-style', settings: block.settings %}"
+    {{ block.shopify_attributes }}
+  >
+    {{ type_label | upcase }}
+  </p>
+{%- endif -%}
+
+{% stylesheet %}
+.ossian-product-type {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #3b82f6;
+  margin: 0;
+  line-height: 1.3;
+  font-family: var(--font-body--family, sans-serif);
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product Type Label",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Type Label",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

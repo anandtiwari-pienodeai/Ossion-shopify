@@ -1,0 +1,287 @@
+<section class="marine-banner" id="marine-banner-{{ section.id }}">
+  {%- if section.settings.bg_image != blank -%}
+    {{
+      section.settings.bg_image
+      | image_url: width: 1600
+      | image_tag:
+        class: 'marine-banner__bg',
+        loading: 'lazy',
+        widths: '750,1100,1600'
+    }}
+  {%- else -%}
+    <div class="marine-banner__bg marine-banner__bg--fallback"></div>
+  {%- endif -%}
+
+  <div class="marine-banner__overlay"></div>
+
+  <div class="marine-banner__content page-width">
+    <!-- Brand / Left -->
+    <div class="marine-banner__brand">
+      <div class="marine-banner__icon-wrap">
+        {%- if section.settings.icon_image != blank -%}
+          {{
+            section.settings.icon_image
+            | image_url: width: 120
+            | image_tag: class: 'marine-banner__icon', loading: 'lazy'
+          }}
+        {%- else -%}
+          <svg class="marine-banner__icon-svg" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="24" cy="24" r="22" stroke="white" stroke-width="1.5"/>
+            <circle cx="24" cy="16" r="5" stroke="white" stroke-width="1.5"/>
+            <circle cx="14" cy="30" r="5" stroke="white" stroke-width="1.5"/>
+            <circle cx="34" cy="30" r="5" stroke="white" stroke-width="1.5"/>
+            <line x1="24" y1="21" x2="14" y2="25" stroke="white" stroke-width="1.5"/>
+            <line x1="24" y1="21" x2="34" y2="25" stroke="white" stroke-width="1.5"/>
+            <line x1="14" y1="30" x2="34" y2="30" stroke="white" stroke-width="1.5"/>
+          </svg>
+        {%- endif -%}
+      </div>
+      <div class="marine-banner__brand-text">
+        <span class="marine-banner__powered">{{ section.settings.powered_by_label | default: 'POWERED BY' }}</span>
+        <span class="marine-banner__brand-name">{{ section.settings.brand_name | default: 'MARINE TECHNOLOGY' }}</span>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="marine-banner__divider" aria-hidden="true"></div>
+
+    <!-- Description -->
+    {%- if section.settings.description != blank -%}
+      <p class="marine-banner__desc">{{ section.settings.description }}</p>
+    {%- endif -%}
+
+    <!-- CTA -->
+    {%- if section.settings.cta_label != blank -%}
+      <a href="{{ section.settings.cta_url | default: '#' }}" class="marine-banner__cta">
+        {{ section.settings.cta_label }}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+.marine-banner {
+  position: relative;
+  overflow: hidden;
+  min-height: 130px;
+  display: flex;
+  align-items: center;
+}
+
+.marine-banner__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.marine-banner__bg--fallback {
+  background: linear-gradient(90deg, #0b1e35 0%, #1a3a60 50%, #0d2644 100%);
+}
+
+.marine-banner__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 20, 40, 0.72);
+  z-index: 1;
+}
+
+.marine-banner__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding-block: 36px;
+  flex-wrap: wrap;
+}
+
+.marine-banner__brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.marine-banner__icon-wrap {
+  flex-shrink: 0;
+}
+
+.marine-banner__icon {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.marine-banner__icon-svg {
+  display: block;
+}
+
+.marine-banner__brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.marine-banner__powered {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: rgba(255,255,255,0.65);
+  text-transform: uppercase;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.marine-banner__brand-name {
+  font-size: 20px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: var(--font-primary--family, sans-serif);
+  line-height: 1.2;
+}
+
+.marine-banner__divider {
+  width: 1px;
+  height: 60px;
+  background: rgba(255,255,255,0.25);
+  flex-shrink: 0;
+}
+
+.marine-banner__desc {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.8);
+  margin: 0;
+  max-width: 420px;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.marine-banner__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #3b82f6;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 13px 24px;
+  border-radius: 6px;
+  transition: background 0.2s, transform 0.15s;
+  flex-shrink: 0;
+  font-family: var(--font-body--family, sans-serif);
+  white-space: nowrap;
+}
+
+.marine-banner__cta:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+  .marine-banner__divider {
+    display: none;
+  }
+
+  .marine-banner__desc {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .marine-banner__content {
+    gap: 20px;
+    padding-block: 28px;
+  }
+
+  .marine-banner__brand {
+    gap: 12px;
+  }
+
+  .marine-banner__brand-name {
+    font-size: 16px;
+  }
+
+  .marine-banner__desc {
+    font-size: 13px;
+  }
+
+  .marine-banner__cta {
+    font-size: 13px;
+    padding: 11px 20px;
+    width: 100%;
+    justify-content: center;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Marine Technology Banner",
+  "tag": "section",
+  "class": "ossian-marine-banner-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background image"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_image",
+      "label": "Brand icon image"
+    },
+    {
+      "type": "text",
+      "id": "powered_by_label",
+      "label": "Powered by label",
+      "default": "POWERED BY"
+    },
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Brand name",
+      "default": "MARINE TECHNOLOGY"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Ocean derived actives work in synergy with advanced science to deliver superior lift, protection and long lasting colour results."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "Explore Our Science"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marine Technology Banner",
+      "settings": {
+        "powered_by_label": "POWERED BY",
+        "brand_name": "MARINE TECHNOLOGY",
+        "description": "Ocean derived actives work in synergy with advanced science to deliver superior lift, protection and long lasting colour results.",
+        "cta_label": "Explore Our Science"
+      }
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,525 @@
+<section class="plp-hero" id="plp-hero-{{ section.id }}">
+  <!-- Breadcrumb -->
+  <nav class="plp-breadcrumb page-width" aria-label="breadcrumb">
+    <ol class="plp-breadcrumb__list">
+      <li class="plp-breadcrumb__item">
+        <a href="{{ routes.root_url }}" class="plp-breadcrumb__link">Home</a>
+      </li>
+      {%- if section.settings.breadcrumb_parent_label != blank -%}
+        <li class="plp-breadcrumb__item plp-breadcrumb__item--sep" aria-hidden="true">›</li>
+        <li class="plp-breadcrumb__item">
+          <a href="{{ section.settings.breadcrumb_parent_url | default: '#' }}" class="plp-breadcrumb__link">
+            {{ section.settings.breadcrumb_parent_label }}
+          </a>
+        </li>
+      {%- endif -%}
+      <li class="plp-breadcrumb__item plp-breadcrumb__item--sep" aria-hidden="true">›</li>
+      <li class="plp-breadcrumb__item plp-breadcrumb__item--current" aria-current="page">
+        {{ collection.title | default: section.settings.breadcrumb_current }}
+      </li>
+    </ol>
+  </nav>
+
+  <!-- Hero Banner -->
+  <div class="plp-hero__banner">
+    {%- if section.settings.bg_image != blank -%}
+      {{
+        section.settings.bg_image
+        | image_url: width: 1600
+        | image_tag:
+          class: 'plp-hero__bg-img',
+          loading: 'eager',
+          fetchpriority: 'high',
+          widths: '750,1100,1600'
+      }}
+    {%- else -%}
+      <div class="plp-hero__bg-placeholder"></div>
+    {%- endif -%}
+
+    <div class="plp-hero__overlay"></div>
+
+    <div class="plp-hero__content page-width">
+      <div class="plp-hero__text">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="plp-hero__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+
+        <h1 class="plp-hero__heading">
+          {%- if section.settings.heading_line1 != blank -%}
+            <span class="plp-hero__heading-white">{{ section.settings.heading_line1 }}</span>
+          {%- endif -%}
+          {%- if section.settings.heading_line2 != blank -%}
+            <span class="plp-hero__heading-blue">{{ section.settings.heading_line2 }}</span>
+          {%- endif -%}
+        </h1>
+
+        {%- if section.settings.description != blank -%}
+          <p class="plp-hero__desc">{{ section.settings.description }}</p>
+        {%- endif -%}
+
+        <!-- Feature Icons -->
+        {%- if section.blocks.size > 0 -%}
+          <div class="plp-hero__features">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'feature_icon' -%}
+                <div class="plp-hero__feature" {{ block.shopify_attributes }}>
+                  <div class="plp-hero__feature-icon">
+                    {%- if block.settings.icon_image != blank -%}
+                      {{
+                        block.settings.icon_image
+                        | image_url: width: 80
+                        | image_tag: class: 'plp-hero__feature-img', loading: 'lazy'
+                      }}
+                    {%- else -%}
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+                      </svg>
+                    {%- endif -%}
+                  </div>
+                  {%- if block.settings.label != blank -%}
+                    <span class="plp-hero__feature-label">{{ block.settings.label }}</span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.cta_label != blank -%}
+          <a
+            href="{{ section.settings.cta_url | default: collection.url | default: '#' }}"
+            class="plp-hero__cta"
+          >
+            {{ section.settings.cta_label }}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        {%- endif -%}
+      </div>
+
+      <!-- Product Image -->
+      <div class="plp-hero__product-wrap">
+        {%- if section.settings.product_image != blank -%}
+          {{
+            section.settings.product_image
+            | image_url: width: 700
+            | image_tag:
+              class: 'plp-hero__product-img',
+              loading: 'eager',
+              widths: '350,500,700'
+          }}
+        {%- elsif section.settings.featured_product != blank -%}
+          {{
+            section.settings.featured_product.featured_image
+            | image_url: width: 700
+            | image_tag:
+              class: 'plp-hero__product-img',
+              loading: 'eager',
+              alt: section.settings.featured_product.title,
+              widths: '350,500,700'
+          }}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+/* ── Breadcrumb ── */
+.plp-breadcrumb {
+  padding: 14px 0 10px;
+}
+
+.plp-breadcrumb__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.plp-breadcrumb__item {
+  font-size: 13px;
+  color: #555;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.plp-breadcrumb__item--sep {
+  color: #aaa;
+  font-size: 12px;
+}
+
+.plp-breadcrumb__item--current {
+  font-weight: 600;
+  color: #1e3a5f;
+}
+
+.plp-breadcrumb__link {
+  color: #555;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.plp-breadcrumb__link:hover {
+  color: #1e3a5f;
+  text-decoration: underline;
+}
+
+/* ── Hero Banner ── */
+.plp-hero__banner {
+  position: relative;
+  width: 100%;
+  min-height: 420px;
+  overflow: hidden;
+  background: #0b1e35;
+}
+
+.plp-hero__bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.plp-hero__bg-placeholder {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #0b1e35 0%, #1e3a5f 60%, #2a5080 100%);
+}
+
+.plp-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(11,30,53,0.82) 40%, rgba(11,30,53,0.18) 100%);
+  z-index: 1;
+}
+
+.plp-hero__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding-block: 48px;
+  min-height: 420px;
+}
+
+.plp-hero__text {
+  flex: 0 0 55%;
+  max-width: 560px;
+}
+
+.plp-hero__eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  margin: 0 0 12px;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.plp-hero__heading {
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 900;
+  line-height: 1.05;
+  margin: 0 0 16px;
+  font-family: var(--font-primary--family, sans-serif);
+  display: flex;
+  flex-direction: column;
+}
+
+.plp-hero__heading-white {
+  color: #ffffff;
+  display: block;
+}
+
+.plp-hero__heading-blue {
+  color: #4a9eff;
+  display: block;
+}
+
+.plp-hero__desc {
+  font-size: 14px;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.8);
+  margin: 0 0 24px;
+  max-width: 400px;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+/* Feature Icons */
+.plp-hero__features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 28px;
+  margin-bottom: 28px;
+}
+
+.plp-hero__feature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  max-width: 72px;
+}
+
+.plp-hero__feature-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.85);
+  flex-shrink: 0;
+}
+
+.plp-hero__feature-img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.plp-hero__feature-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.3;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+/* CTA Button */
+.plp-hero__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #3b82f6;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 13px 26px;
+  border-radius: 6px;
+  transition: background 0.2s, transform 0.15s;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.plp-hero__cta:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+/* Product Image */
+.plp-hero__product-wrap {
+  flex: 0 0 42%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  max-height: 420px;
+}
+
+.plp-hero__product-img {
+  max-height: 400px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .plp-hero__banner {
+    min-height: unset;
+  }
+
+  .plp-hero__content {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-block: 32px;
+    min-height: unset;
+    gap: 24px;
+  }
+
+  .plp-hero__text {
+    flex: none;
+    max-width: 100%;
+  }
+
+  .plp-hero__heading {
+    font-size: clamp(1.8rem, 7vw, 2.6rem);
+  }
+
+  .plp-hero__product-wrap {
+    flex: none;
+    width: 100%;
+    max-height: 240px;
+    justify-content: center;
+  }
+
+  .plp-hero__product-img {
+    max-height: 220px;
+  }
+
+  .plp-hero__features {
+    gap: 14px 18px;
+  }
+
+  .plp-hero__feature {
+    max-width: 58px;
+  }
+
+  .plp-hero__feature-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .plp-breadcrumb {
+    padding: 10px 0 8px;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection Hero Banner",
+  "tag": "section",
+  "class": "ossian-collection-hero-section",
+  "enabled_on": {
+    "templates": ["collection", "index"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Breadcrumb"
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_parent_label",
+      "label": "Parent label (e.g. Hair Color)",
+      "default": "Hair Color"
+    },
+    {
+      "type": "url",
+      "id": "breadcrumb_parent_url",
+      "label": "Parent URL"
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_current",
+      "label": "Current page label (fallback if no collection)",
+      "default": "Blonder"
+    },
+    {
+      "type": "header",
+      "content": "Banner Content"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "Hair color Collection"
+    },
+    {
+      "type": "text",
+      "id": "heading_line1",
+      "label": "Heading line 1 (white)",
+      "default": "BLONDER"
+    },
+    {
+      "type": "text",
+      "id": "heading_line2",
+      "label": "Heading line 2 (blue)",
+      "default": "COLLECTION"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Professional high lift blonder range powered by Marine Technology for perfect lift with hair protection."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "Shop Collection"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "header",
+      "content": "Product Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product image (right side)"
+    },
+    {
+      "type": "product",
+      "id": "featured_product",
+      "label": "Or pick a product (uses featured image)"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature_icon",
+      "name": "Feature Icon",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Icon image"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "ANTI-YELLOW TECHNOLOGY"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Hero Banner",
+      "settings": {
+        "eyebrow": "Hair color Collection",
+        "heading_line1": "BLONDER",
+        "heading_line2": "COLLECTION",
+        "description": "Professional high lift blonder range powered by Marine Technology for perfect lift with hair protection.",
+        "cta_label": "Shop Collection",
+        "breadcrumb_parent_label": "Hair Color",
+        "breadcrumb_current": "Blonder"
+      },
+      "blocks": [
+        { "type": "feature_icon", "settings": { "label": "ANTI-YELLOW TECHNOLOGY" } },
+        { "type": "feature_icon", "settings": { "label": "FIBER PLEX PROTECTION" } },
+        { "type": "feature_icon", "settings": { "label": "UP TO 9 LEVELS UP" } },
+        { "type": "feature_icon", "settings": { "label": "NON-DAMAGING FORMULA" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

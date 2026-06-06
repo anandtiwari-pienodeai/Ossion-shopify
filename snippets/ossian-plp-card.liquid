@@ -1,0 +1,380 @@
+{%- doc -%}
+  Ossian PLP product card — Figma design.
+  @param {object} product - Shopify product object
+  @param {string} [badge_label] - Optional badge override (default: auto from tags)
+{%- enddoc -%}
+
+{%- liquid
+  assign card_product = product
+  assign variant = card_product.selected_or_first_available_variant
+
+  assign best_seller_badge = false
+  for tag in card_product.tags
+    assign tag_lower = tag | downcase
+    if tag_lower == 'best seller' or tag_lower == 'bestseller' or tag_lower == 'best-seller'
+      assign best_seller_badge = true
+    endif
+  endfor
+
+  assign badge_text = badge_label | default: ''
+  if badge_text == blank and best_seller_badge
+    assign badge_text = 'Best Seller'
+  endif
+
+  assign product_type_label = card_product.type
+  assign rating_meta = card_product.metafields.reviews.rating.value
+  assign rating_count_meta = card_product.metafields.reviews.rating_count.value
+-%}
+
+<div class="ossian-plp-card">
+  <!-- Image Area -->
+  <div class="ossian-plp-card__media">
+    <a href="{{ variant.url | default: card_product.url }}" class="ossian-plp-card__img-link" tabindex="-1" aria-hidden="true">
+      {%- if card_product.featured_image != blank -%}
+        {{
+          card_product.featured_image
+          | image_url: width: 600
+          | image_tag:
+            class: 'ossian-plp-card__img',
+            loading: 'lazy',
+            alt: card_product.title,
+            widths: '300,450,600'
+        }}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'ossian-plp-card__img ossian-plp-card__img--ph' }}
+      {%- endif -%}
+    </a>
+
+    <!-- Badge -->
+    {%- if badge_text != blank -%}
+      <span class="ossian-plp-card__badge">{{ badge_text }}</span>
+    {%- endif -%}
+
+    <!-- Wishlist -->
+    <button
+      class="ossian-plp-card__wishlist"
+      type="button"
+      aria-label="Add {{ card_product.title }} to wishlist"
+      data-product-id="{{ card_product.id }}"
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Info Area -->
+  <div class="ossian-plp-card__body">
+    {%- if product_type_label != blank -%}
+      <span class="ossian-plp-card__type">{{ product_type_label }}</span>
+    {%- endif -%}
+
+    <h3 class="ossian-plp-card__title">
+      <a href="{{ variant.url | default: card_product.url }}" class="ossian-plp-card__title-link">
+        {{ card_product.title }}
+      </a>
+    </h3>
+
+    <!-- Rating -->
+    {%- if rating_meta != blank -%}
+      <div class="ossian-plp-card__rating">
+        <span class="ossian-plp-card__stars" aria-label="{{ rating_meta }} out of 5 stars">
+          {%- assign r_val = rating_meta | times: 1.0 -%}
+          {%- assign r_floor = r_val | floor -%}
+          {%- assign r_half = r_val | minus: r_floor -%}
+          {%- for i in (1..5) -%}
+            {%- if i <= r_floor -%}
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="#f5a623" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            {%- elsif i == r_floor | plus: 1 and r_half >= 0.4 -%}
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <defs><linearGradient id="hg{{ forloop.index }}"><stop offset="50%" stop-color="#f5a623"/><stop offset="50%" stop-color="#ddd"/></linearGradient></defs>
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="url(#hg{{ forloop.index }})"/>
+              </svg>
+            {%- else -%}
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="#ddd" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            {%- endif -%}
+          {%- endfor -%}
+        </span>
+        <span class="ossian-plp-card__rating-val">{{ rating_meta }}</span>
+        {%- if rating_count_meta != blank -%}
+          <span class="ossian-plp-card__rating-count">({{ rating_count_meta }})</span>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <!-- Price -->
+    <div class="ossian-plp-card__price-row">
+      {%- if variant.compare_at_price > variant.price -%}
+        <span class="ossian-plp-card__price ossian-plp-card__price--sale">{{ variant.price | money }}</span>
+        <s class="ossian-plp-card__price ossian-plp-card__price--compare">{{ variant.compare_at_price | money }}</s>
+      {%- else -%}
+        <span class="ossian-plp-card__price">{{ variant.price | money }}</span>
+      {%- endif -%}
+    </div>
+
+    <!-- Add to Cart -->
+    <div class="ossian-plp-card__actions">
+      {%- if card_product.available -%}
+        <form action="{{ routes.cart_add_url }}" method="post" class="ossian-plp-card__atc-form">
+          <input type="hidden" name="id" value="{{ variant.id }}">
+          <input type="hidden" name="quantity" value="1">
+          <button type="submit" class="ossian-plp-card__atc-btn">
+            ADD TO CART
+          </button>
+        </form>
+      {%- else -%}
+        <button type="button" class="ossian-plp-card__atc-btn ossian-plp-card__atc-btn--sold-out" disabled>
+          SOLD OUT
+        </button>
+      {%- endif -%}
+
+      <button
+        class="ossian-plp-card__wishlist-btn"
+        type="button"
+        aria-label="Add {{ card_product.title }} to wishlist"
+        data-product-id="{{ card_product.id }}"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+.ossian-plp-card {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+  height: 100%;
+}
+
+.ossian-plp-card:hover {
+  box-shadow: 0 8px 28px rgba(30,58,95,0.13);
+  transform: translateY(-2px);
+}
+
+/* Media */
+.ossian-plp-card__media {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.ossian-plp-card__img-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ossian-plp-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.ossian-plp-card__img--ph {
+  width: 100%;
+  height: 100%;
+}
+
+.ossian-plp-card:hover .ossian-plp-card__img {
+  transform: scale(1.04);
+}
+
+/* Badge */
+.ossian-plp-card__badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #1e3a5f;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+/* Wishlist icon on image */
+.ossian-plp-card__wishlist {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  transition: color 0.2s, transform 0.15s;
+  padding: 0;
+}
+
+.ossian-plp-card__wishlist:hover {
+  color: #e53935;
+  transform: scale(1.1);
+}
+
+/* Body */
+.ossian-plp-card__body {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.ossian-plp-card__type {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #3b82f6;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.ossian-plp-card__title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #1e3a5f;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.ossian-plp-card__title-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ossian-plp-card__title-link:hover {
+  text-decoration: underline;
+}
+
+/* Rating */
+.ossian-plp-card__rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.ossian-plp-card__stars {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.ossian-plp-card__rating-val {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1e3a5f;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.ossian-plp-card__rating-count {
+  font-size: 11px;
+  color: #888;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+/* Price */
+.ossian-plp-card__price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.ossian-plp-card__price {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e3a5f;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.ossian-plp-card__price--sale {
+  color: #1e3a5f;
+}
+
+.ossian-plp-card__price--compare {
+  font-size: 11px;
+  font-weight: 400;
+  color: #aaa;
+}
+
+/* Actions */
+.ossian-plp-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.ossian-plp-card__atc-form {
+  flex: 1;
+}
+
+.ossian-plp-card__atc-btn {
+  width: 100%;
+  background: #1e3a5f;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: var(--font-body--family, sans-serif);
+  text-align: center;
+}
+
+.ossian-plp-card__atc-btn:hover {
+  background: #2a4f80;
+}
+
+.ossian-plp-card__atc-btn--sold-out {
+  background: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.ossian-plp-card__wishlist-btn {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 6px;
+  border: 1.5px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  transition: color 0.2s, border-color 0.2s;
+  padding: 0;
+}
+
+.ossian-plp-card__wishlist-btn:hover {
+  color: #e53935;
+  border-color: #e53935;
+}
+{% endstylesheet %}
