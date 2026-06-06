@@ -257,35 +257,56 @@
 
 @media (max-width: 768px) {
   .explore-cat {
-    padding: 36px 0 44px;
+    padding: 28px 0 36px;
+  }
+
+  .explore-cat__inner {
+    padding-inline: 0;
   }
 
   .explore-cat__heading {
     font-size: clamp(1.1rem, 5vw, 1.5rem);
-    margin-bottom: 24px;
+    margin-bottom: 20px;
+    padding-inline: 16px;
   }
 
+  /* ── Scrollable carousel ── */
   .explore-cat__grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    padding: 0 10px;
+    display: flex;
+    flex-direction: row;
+    grid-template-columns: unset;
+    gap: 12px;
+    padding: 4px 16px 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
+  .explore-cat__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Each card: fixed width, snaps into place */
   .explore-cat__card {
+    flex: 0 0 72vw;
+    max-width: 280px;
+    scroll-snap-align: start;
     flex-direction: column;
     border-radius: 10px;
   }
 
   .explore-cat__media {
     flex: none;
-    min-height: 130px;
-    aspect-ratio: 4 / 3;
     width: 100%;
+    aspect-ratio: 4 / 3;
+    min-height: unset;
   }
 
   .explore-cat__info {
-    padding: 10px 10px 12px;
-    gap: 3px;
+    padding: 10px 12px 14px;
+    gap: 4px;
   }
 
   .explore-cat__name {
