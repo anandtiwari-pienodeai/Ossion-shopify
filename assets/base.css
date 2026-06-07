@@ -1686,7 +1686,7 @@ zoom-dialog dialog {
 
 /* Product media */
 .product-media {
-  display: flex;
+  /* display: flex; */
   flex: 1;
 }
 
