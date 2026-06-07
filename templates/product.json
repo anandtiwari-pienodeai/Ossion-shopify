@@ -126,12 +126,22 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "text_vendor_tag": {
-              "type": "text",
-              "name": "Brand tag",
+            "ossian_product_type_badge": {
+              "type": "ossian-product-type",
               "settings": {
-                "text": "<p>by {{ closest.product.vendor }}</p>",
-                "width": "fit-content",
+                "padding-block-start": 0,
+                "padding-block-end": 4,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_subtitle": {
+              "type": "text",
+              "name": "Product subtitle",
+              "settings": {
+                "text": "<p>{{ closest.product.metafields.descriptors.subtitle.value }}</p>",
+                "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
                 "type_preset": "paragraph",
@@ -147,6 +157,17 @@
                 "corner_radius": 0,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "ossian_pdp_features_block": {
+              "type": "ossian-pdp-features",
+              "settings": {
+                "features": "Anti-yellow Technology\nFibre Plex Protection\nUp to 9 Levels Lift\nNon-Damaging Formula\nEnriched with Marine actives",
+                "padding-block-start": 4,
+                "padding-block-end": 4,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
               },
@@ -195,7 +216,7 @@
               "settings": {
                 "show_sale_price_first": true,
                 "show_installments": false,
-                "show_tax_info": false,
+                "show_tax_info": true,
                 "type_preset": "h4",
                 "width": "100%",
                 "alignment": "left",
@@ -205,44 +226,6 @@
                 "letter_spacing": "normal",
                 "case": "none",
                 "color": "var(--color-foreground)",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "divider_VJhene": {
-              "type": "_divider",
-              "name": "t:names.divider",
-              "settings": {
-                "thickness": 1,
-                "corner_radius": "square",
-                "width_percent": 100,
-                "padding-block-start": 4,
-                "padding-block-end": 4
-              },
-              "blocks": {}
-            },
-            "text_aEtTtq": {
-              "type": "text",
-              "name": "Product description",
-              "settings": {
-                "text": "{{ closest.product.description }}",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-primary--family)",
-                "font_size": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
@@ -266,7 +249,7 @@
             "buy_buttons_eYQEYi": {
               "type": "buy-buttons",
               "settings": {
-                "stacking": true,
+                "stacking": false,
                 "show_pickup_availability": false,
                 "gift_card_form": true,
                 "padding-block-start": 0,
@@ -301,6 +284,7 @@
             "ossian_pdp_wishlist_mW8kXp": {
               "type": "ossian-pdp-wishlist",
               "settings": {
+                "show_share": false,
                 "show_compare": false,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
@@ -308,28 +292,18 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
-            },
-            "pdp_trust_badges_mN3wQb": {
-              "type": "pdp-trust-badges",
-              "settings": {
-                "badge_1": "Free Shipping",
-                "badge_2": "Authentic",
-                "badge_3": "Easy Returns"
-              },
-              "blocks": {}
             }
           },
           "block_order": [
-            "text_vendor_tag",
+            "ossian_product_type_badge",
             "text_xrnftG",
+            "text_subtitle",
             "review_stars_R9xNsK",
             "price_tVjtKg",
-            "divider_VJhene",
-            "text_aEtTtq",
             "variant_picker_R3rGDr",
+            "ossian_pdp_features_block",
             "buy_buttons_eYQEYi",
-            "ossian_pdp_wishlist_mW8kXp",
-            "pdp_trust_badges_mN3wQb"
+            "ossian_pdp_wishlist_mW8kXp"
           ]
         }
       },

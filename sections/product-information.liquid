@@ -178,29 +178,29 @@
 %}
 
 {% stylesheet %}
-  /* ── Vendor tag pill ─────────────────────────── */
-  .text-block--text_vendor_tag p {
-    display: inline-block;
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: #1e3a5f;
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
-    border-radius: 20px;
-    padding: 4px 14px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin: 0;
+  /* ── Category badge (product type) ──────────── */
+  .product-information .ossian-product-type {
+    margin-bottom: 6px;
   }
 
   /* ── Product title sizing on PDP ─────────────── */
   .product-information .product-details h1 {
-    font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+    font-size: clamp(1.55rem, 3vw, 2.1rem);
     line-height: 1.2;
     font-weight: 800;
     color: #101828;
     margin: 0;
     font-family: var(--font-primary--family, sans-serif);
+  }
+
+  /* ── Product subtitle (metafield) ────────────── */
+  .product-information .text-block--text_subtitle p,
+  .product-information .text-block--text_subtitle {
+    font-size: 0.925rem;
+    color: #4b5563;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.5;
   }
 
   /* ── Rating row ─────────────────────────────── */
@@ -226,7 +226,6 @@
     font-weight: 400;
   }
 
-  /* Savings badge on sale price */
   .product-information .price__badges .price__badge-sale {
     font-size: 12px;
     font-weight: 700;
@@ -236,32 +235,62 @@
     padding: 2px 8px;
   }
 
-  /* ── Description text ────────────────────────── */
-  .product-information .product-details .rte p,
-  .product-information .product-details .rte li {
-    font-size: 0.9375rem;
-    color: #4b5563;
-    line-height: 1.75;
+  /* ── Tax info line ───────────────────────────── */
+  .product-information .price__tax-note,
+  .product-information .price__tax-note * {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 2px;
   }
 
   /* ── Variant picker ─────────────────────────── */
+  .product-information .variant-picker-block .variant-option__heading {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-bottom: 8px;
+  }
+
   .product-information .variant-option--buttons .variant-option__button-label {
     border-radius: 8px;
     font-size: 13px;
     font-weight: 600;
+    padding: 8px 18px;
+    border: 1.5px solid #d1d5db;
+    color: #374151;
+    background: #fff;
+    transition: all 0.15s;
+  }
+
+  .product-information .variant-option--buttons .variant-option__button-label:hover {
+    border-color: #1e3a5f;
+    color: #1e3a5f;
   }
 
   .product-information .variant-option--buttons .variant-option__button-input:checked + .variant-option__button-label {
     background: #1e3a5f;
     border-color: #1e3a5f;
     color: #fff;
+    font-weight: 700;
   }
 
   /* ── Quantity selector ──────────────────────── */
+  .product-information .quantity-selector {
+    border: 1.5px solid #d1d5db;
+    border-radius: 8px;
+  }
+
   .product-information .quantity__input {
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 700;
     color: #1e3a5f;
+  }
+
+  /* Quantity sits above buttons in its own row */
+  .product-information .quantity-selector-wrapper {
+    flex: 0 0 auto;
   }
 
   /* ── Add to cart button ──────────────────────── */
@@ -270,9 +299,9 @@
     border-color: #1e3a5f;
     border-radius: 10px;
     font-weight: 700;
-    letter-spacing: 0.04em;
-    min-height: 54px;
-    font-size: 14px;
+    letter-spacing: 0.05em;
+    min-height: 52px;
+    font-size: 13px;
     text-transform: uppercase;
   }
 
@@ -281,10 +310,42 @@
     border-color: #16304f;
   }
 
-  /* ── Buy now / accelerated checkout ─────────── */
+  /* Add cart icon appearance */
+  .product-information .add-to-cart-icon {
+    margin-right: 6px;
+  }
+
+  /* ── Accelerated checkout (Buy Now) ──────────── */
   .product-information .shopify-payment-button__button {
     border-radius: 10px !important;
-    min-height: 50px !important;
+    min-height: 52px !important;
+    border: 1.5px solid #d1d5db !important;
+  }
+
+  .product-information .shopify-payment-button__button--unbranded {
+    background: #fff !important;
+    color: #1e3a5f !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+  }
+
+  /* ── Wishlist button ─────────────────────────── */
+  .product-information .ossian-pdp-wish-btn {
+    border-radius: 10px;
+    min-height: 52px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border: 1.5px solid #d1d5db;
+    color: #374151;
+  }
+
+  .product-information .ossian-pdp-wish-btn:hover {
+    border-color: #1e3a5f;
+    color: #1e3a5f;
+    background: #f8fafc;
   }
 
   /* ── Divider ────────────────────────────────── */
@@ -292,7 +353,7 @@
     border-color: #e8edf5;
   }
 
-  /* ── Media column image ─────────────────────── */
+  /* ── Media column ────────────────────────────── */
   .product-information .product-information__media {
     position: relative;
   }
@@ -302,7 +363,6 @@
     overflow: hidden;
   }
 
-  /* ── Thumbnail strip ───────────────────────── */
   .product-information .product-media-thumbnail {
     border-radius: 6px;
     overflow: hidden;
@@ -325,12 +385,12 @@
   /* ── Mobile ────────────────────────────────── */
   @media screen and (max-width: 749px) {
     .product-information .product-details h1 {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
     }
 
     .product-information .price__regular .price-item,
     .product-information .price__sale .price-item--sale {
-      font-size: 1.5rem;
+      font-size: 1.45rem;
     }
 
     .ossian-vip { margin-top: 10px; }
