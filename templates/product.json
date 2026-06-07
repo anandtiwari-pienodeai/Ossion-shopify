@@ -1,9 +1,70 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "ossian_pdp_breadcrumb": {
       "type": "ossian-pdp-breadcrumb",
       "settings": {
-        "parent_label": "Hair Care"
+        "parent_label": "Hair Care",
+        "parent_url": "",
+        "collection_url": ""
+      }
+    },
+    "ossian_trust_ticker_c6cjNm": {
+      "type": "ossian-trust-ticker",
+      "blocks": {
+        "badge_z9LYXa": {
+          "type": "badge",
+          "settings": {
+            "icon": "leaf",
+            "title": "Skin Loving Ingredients",
+            "description": "Enriched with natural extracts & nutrients."
+          }
+        },
+        "badge_GMzNML": {
+          "type": "badge",
+          "settings": {
+            "icon": "shield",
+            "title": "Dermatologically Tested",
+            "description": "Safe and gentle for everyday use."
+          }
+        },
+        "badge_qzNxtR": {
+          "type": "badge",
+          "settings": {
+            "icon": "droplet",
+            "title": "Professional Quality",
+            "description": "Salon trusted, expert recommended."
+          }
+        },
+        "badge_dMHwy6": {
+          "type": "badge",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Visible Results",
+            "description": "Healthy, glowing skin you can feel."
+          }
+        }
+      },
+      "block_order": [
+        "badge_z9LYXa",
+        "badge_GMzNML",
+        "badge_qzNxtR",
+        "badge_dMHwy6"
+      ],
+      "name": "Trust Ticker",
+      "settings": {
+        "background_color": "#ffffff",
+        "scroll_speed": 28,
+        "padding_top": 20,
+        "padding_bottom": 20
       }
     },
     "main": {
@@ -22,6 +83,7 @@
             "slideshow_mobile_controls_style": "dots",
             "thumbnail_position": "left",
             "thumbnail_width": 72,
+            "thumbnail_radius": 0,
             "aspect_ratio": "adapt",
             "constrain_to_viewport": true,
             "media_fit": "contain",
@@ -206,6 +268,7 @@
               "settings": {
                 "stacking": true,
                 "show_pickup_availability": false,
+                "gift_card_form": true,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
@@ -224,6 +287,12 @@
                   "settings": {
                     "style_class": "button"
                   },
+                  "blocks": {}
+                },
+                "accelerated-checkout": {
+                  "type": "accelerated-checkout",
+                  "static": true,
+                  "settings": {},
                   "blocks": {}
                 }
               },
@@ -270,6 +339,7 @@
         "equal_columns": true,
         "limit_details_width": false,
         "gap": 48,
+        "enable_sticky_add_to_cart": true,
         "color_scheme": "",
         "padding-block-start": 32,
         "padding-block-end": 48
@@ -373,7 +443,13 @@
     },
     "ossian_marine_banner_pdp": {
       "type": "ossian-marine-banner",
-      "settings": {}
+      "settings": {
+        "powered_by_label": "POWERED BY",
+        "brand_name": "MARINE TECHNOLOGY",
+        "description": "Ocean derived actives work in synergy with advanced science to deliver superior lift, protection and long lasting colour results.",
+        "cta_label": "Explore Our Science",
+        "cta_url": ""
+      }
     },
     "product_recommendations_qggXJq": {
       "type": "product-recommendations",
@@ -531,12 +607,15 @@
     },
     "ossian_explore_category_pdp": {
       "type": "ossian-explore-category",
-      "settings": {}
+      "settings": {
+        "heading": "EXPLORE MORE CATEGORY"
+      }
     }
   },
   "order": [
     "ossian_pdp_breadcrumb",
     "main",
+    "ossian_trust_ticker_c6cjNm",
     "ossian_pdp_tabs",
     "ossian_pdp_benefits",
     "ossian_marine_banner_pdp",

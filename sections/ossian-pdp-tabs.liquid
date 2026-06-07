@@ -1,15 +1,14 @@
 <section class="pdp-tabs" id="pdp-tabs-{{ section.id }}">
   <div class="page-width pdp-tabs__inner">
 
-    <!-- Tab Navigation -->
     <div class="pdp-tabs__nav" role="tablist" aria-label="Product information">
-      {%- assign first_block = true -%}
+      {%- assign first_tab = true -%}
       {%- for block in section.blocks -%}
         {%- if block.type == 'tab' and block.settings.label != blank -%}
           <button
-            class="pdp-tabs__nav-btn{% if first_block %} pdp-tabs__nav-btn--active{% endif %}"
+            class="pdp-tabs__nav-btn{% if first_tab %} pdp-tabs__nav-btn--active{% endif %}"
             role="tab"
-            aria-selected="{% if first_block %}true{% else %}false{% endif %}"
+            aria-selected="{% if first_tab %}true{% else %}false{% endif %}"
             aria-controls="pdp-tab-panel-{{ section.id }}-{{ forloop.index }}"
             id="pdp-tab-{{ section.id }}-{{ forloop.index }}"
             data-tab-index="{{ forloop.index }}"
@@ -17,54 +16,166 @@
           >
             {{ block.settings.label }}
           </button>
-          {%- assign first_block = false -%}
+          {%- assign first_tab = false -%}
         {%- endif -%}
       {%- endfor -%}
     </div>
 
-    <!-- Tab Panels -->
     {%- assign panel_index = 0 -%}
     {%- for block in section.blocks -%}
       {%- if block.type == 'tab' and block.settings.label != blank -%}
         {%- assign panel_index = panel_index | plus: 1 -%}
         <div
-          class="pdp-tabs__panel{% if panel_index == 1 %} pdp-tabs__panel--active{% endif %}"
+          class="pdp-tabs__panel{% if panel_index == 1 %} pdp-tabs__panel--active{% endif %}{% if block.settings.featured_image != blank %} pdp-tabs__panel--split{% endif %}"
           role="tabpanel"
           id="pdp-tab-panel-{{ section.id }}-{{ panel_index }}"
           aria-labelledby="pdp-tab-{{ section.id }}-{{ panel_index }}"
           {% if panel_index != 1 %}hidden{% endif %}
         >
-          {%- if block.settings.use_product_description -%}
-            <div class="pdp-tabs__rte rte">
-              {{ product.description }}
-            </div>
-          {%- elsif block.settings.content != blank -%}
-            <div class="pdp-tabs__rte rte">
-              {{ block.settings.content }}
-            </div>
-          {%- endif -%}
+          <div class="pdp-tabs__panel-text">
+            {%- if block.settings.use_product_description -%}
+              <div class="pdp-tabs__rte rte">{{ product.description }}</div>
+            {%- elsif block.settings.content != blank -%}
+              <div class="pdp-tabs__rte rte">{{ block.settings.content }}</div>
+            {%- endif -%}
+            {%- if block.settings.features_list != blank -%}
+              <ul class="pdp-tabs__features">
+                {%- assign lines = block.settings.features_list | newline_to_br | split: '<br />' -%}
+                {%- for line in lines -%}
+                  {%- assign trimmed = line | strip -%}
+                  {%- if trimmed != blank -%}
+                    <li class="pdp-tabs__feature-item">
+                      <span class="pdp-tabs__feature-check" aria-hidden="true">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      </span>
+                      {{ trimmed }}
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </div>
 
-          {%- if block.settings.features_list != blank -%}
-            <ul class="pdp-tabs__features">
-              {%- assign lines = block.settings.features_list | newline_to_br | split: '<br />' -%}
-              {%- for line in lines -%}
-                {%- assign trimmed = line | strip -%}
-                {%- if trimmed != blank -%}
-                  <li class="pdp-tabs__feature-item">
-                    <span class="pdp-tabs__feature-check" aria-hidden="true">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    </span>
-                    {{ trimmed }}
-                  </li>
+          {%- if block.settings.featured_image != blank -%}
+            {%- assign img_alt = block.settings.image_heading | default: '' -%}
+            <div class="pdp-tabs__panel-image">
+              {{ block.settings.featured_image | image_url: width: 900 | image_tag: class: 'pdp-tabs__panel-img', loading: 'lazy', alt: img_alt }}
+              <div class="pdp-tabs__panel-overlay">
+                {%- if block.settings.image_heading != blank -%}
+                  <p class="pdp-tabs__panel-overlay-heading">{{ block.settings.image_heading }}</p>
                 {%- endif -%}
-              {%- endfor -%}
-            </ul>
+                {%- if block.settings.image_cta_text != blank -%}
+                  <a href="{{ block.settings.image_cta_url | default: '#' }}" class="pdp-tabs__panel-overlay-btn">
+                    {{ block.settings.image_cta_text }}
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
           {%- endif -%}
         </div>
       {%- endif -%}
     {%- endfor -%}
   </div>
 </section>
+
+{%- if section.settings.show_reviews -%}
+  {%- assign p5 = section.settings.five_star_pct | default: 90 -%}
+  {%- assign p4 = section.settings.four_star_pct | default: 5 -%}
+  {%- assign p3 = section.settings.three_star_pct | default: 2 -%}
+  {%- assign p2 = section.settings.two_star_pct | default: 1 -%}
+  {%- assign p1 = section.settings.one_star_pct | default: 2 -%}
+  {%- assign rating_rounded = section.settings.aggregate_rating | default: '4.9' | times: 1 | round -%}
+<section class="pdp-reviews" id="pdp-reviews-{{ section.id }}">
+  <div class="page-width pdp-reviews__inner">
+
+    <div class="pdp-reviews__header">
+      <h2 class="pdp-reviews__title">{{ section.settings.reviews_heading | default: 'Customer Reviews' }}</h2>
+      {%- if section.settings.reviews_link != blank -%}
+        <a href="{{ section.settings.reviews_link }}" class="pdp-reviews__view-all">
+          View all reviews
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="pdp-reviews__summary">
+      <div class="pdp-reviews__agg">
+        <span class="pdp-reviews__agg-num">{{ section.settings.aggregate_rating | default: '4.9' }}</span>
+        <div class="pdp-reviews__agg-stars">
+          {%- for i in (1..5) -%}
+            {%- if i <= rating_rounded -%}
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#f5a623" stroke="#f5a623" stroke-width="0.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            {%- else -%}
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ddd" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        <span class="pdp-reviews__agg-label">Based on {{ section.settings.review_count | default: 240 }} reviews</span>
+      </div>
+
+      <div class="pdp-reviews__breakdown">
+        <div class="pdp-reviews__bar-row">
+          <span class="pdp-reviews__bar-label">5★</span>
+          <div class="pdp-reviews__bar-track"><div class="pdp-reviews__bar-fill" style="width: {{ p5 }}%"></div></div>
+          <span class="pdp-reviews__bar-pct">{{ p5 }}%</span>
+        </div>
+        <div class="pdp-reviews__bar-row">
+          <span class="pdp-reviews__bar-label">4★</span>
+          <div class="pdp-reviews__bar-track"><div class="pdp-reviews__bar-fill" style="width: {{ p4 }}%"></div></div>
+          <span class="pdp-reviews__bar-pct">{{ p4 }}%</span>
+        </div>
+        <div class="pdp-reviews__bar-row">
+          <span class="pdp-reviews__bar-label">3★</span>
+          <div class="pdp-reviews__bar-track"><div class="pdp-reviews__bar-fill" style="width: {{ p3 }}%"></div></div>
+          <span class="pdp-reviews__bar-pct">{{ p3 }}%</span>
+        </div>
+        <div class="pdp-reviews__bar-row">
+          <span class="pdp-reviews__bar-label">2★</span>
+          <div class="pdp-reviews__bar-track"><div class="pdp-reviews__bar-fill" style="width: {{ p2 }}%"></div></div>
+          <span class="pdp-reviews__bar-pct">{{ p2 }}%</span>
+        </div>
+        <div class="pdp-reviews__bar-row">
+          <span class="pdp-reviews__bar-label">1★</span>
+          <div class="pdp-reviews__bar-track"><div class="pdp-reviews__bar-fill" style="width: {{ p1 }}%"></div></div>
+          <span class="pdp-reviews__bar-pct">{{ p1 }}%</span>
+        </div>
+      </div>
+    </div>
+
+    {%- assign review_blocks = section.blocks | where: 'type', 'review' -%}
+    {%- if review_blocks.size > 0 -%}
+      <div class="pdp-reviews__cards">
+        {%- for block in review_blocks -%}
+          <div class="pdp-reviews__card" {{ block.shopify_attributes }}>
+            <div class="pdp-reviews__card-top">
+              <div class="pdp-reviews__card-stars">
+                {%- for i in (1..5) -%}
+                  {%- if i <= block.settings.rating -%}
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="#f5a623" stroke="#f5a623" stroke-width="0.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  {%- else -%}
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ddd" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              {%- if block.settings.reviewer_name != blank -%}
+                <span class="pdp-reviews__card-name">{{ block.settings.reviewer_name }}</span>
+              {%- endif -%}
+            </div>
+            {%- if block.settings.review_title != blank -%}
+              <p class="pdp-reviews__card-title">{{ block.settings.review_title }}</p>
+            {%- endif -%}
+            {%- if block.settings.review_text != blank -%}
+              <p class="pdp-reviews__card-text">{{ block.settings.review_text }}</p>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+{%- endif -%}
 
 <script>
 (function() {
@@ -87,6 +198,8 @@
 </script>
 
 {% stylesheet %}
+
+/* ===== Tab navigation ===== */
 .pdp-tabs {
   background: #fff;
   padding: 0 0 48px;
@@ -97,7 +210,6 @@
   padding-block-start: 0;
 }
 
-/* Tab navigation */
 .pdp-tabs__nav {
   display: flex;
   gap: 0;
@@ -113,22 +225,21 @@
   flex-shrink: 0;
   background: none;
   border: none;
-  border-bottom: 2px solid transparent;
+  border-bottom: 3px solid transparent;
   margin-bottom: -2px;
-  padding: 16px 24px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #666;
+  padding: 18px 28px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #888;
   cursor: pointer;
   transition: color 0.2s, border-color 0.2s;
   font-family: var(--font-body--family, sans-serif);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.06em;
   white-space: nowrap;
+  text-transform: uppercase;
 }
 
-.pdp-tabs__nav-btn:hover {
-  color: #1e3a5f;
-}
+.pdp-tabs__nav-btn:hover { color: #1e3a5f; }
 
 .pdp-tabs__nav-btn--active {
   color: #1e3a5f;
@@ -136,12 +247,87 @@
   font-weight: 700;
 }
 
-/* Tab panel */
+/* ===== Tab panels ===== */
 .pdp-tabs__panel {
-  padding-block-start: 32px;
-  max-width: 800px;
+  padding-block-start: 36px;
 }
 
+.pdp-tabs__panel-text {
+  max-width: 680px;
+}
+
+/* Split layout when featured image is set */
+.pdp-tabs__panel--split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: stretch;
+}
+
+.pdp-tabs__panel--split .pdp-tabs__panel-text {
+  max-width: none;
+}
+
+.pdp-tabs__panel-image {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  min-height: 340px;
+}
+
+.pdp-tabs__panel-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pdp-tabs__panel-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 25, 55, 0.88) 0%, rgba(10, 25, 55, 0.3) 55%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 36px 28px;
+  text-align: center;
+}
+
+.pdp-tabs__panel-overlay-heading {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  margin: 0 0 20px;
+  font-family: var(--font-heading--family, sans-serif);
+}
+
+.pdp-tabs__panel-overlay-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.65);
+  padding: 10px 22px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: background 0.2s, border-color 0.2s;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.pdp-tabs__panel-overlay-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #fff;
+}
+
+/* RTE */
 .pdp-tabs__rte {
   font-size: 15px;
   line-height: 1.75;
@@ -156,16 +342,13 @@
   margin-block-end: 0.5em;
   margin-block-start: 1.25em;
 }
-.pdp-tabs__rte ul, .pdp-tabs__rte ol {
-  padding-inline-start: 20px;
-  margin-block-end: 1em;
-}
+.pdp-tabs__rte ul, .pdp-tabs__rte ol { padding-inline-start: 20px; margin-block-end: 1em; }
 .pdp-tabs__rte li { margin-block-end: 0.4em; }
 
 /* Feature checklist */
 .pdp-tabs__features {
   list-style: none;
-  margin: 0;
+  margin: 16px 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -194,20 +377,234 @@
   justify-content: center;
 }
 
-@media (max-width: 749px) {
-  .pdp-tabs {
-    padding-bottom: 32px;
+/* ===== Reviews section ===== */
+.pdp-reviews {
+  background: #fff;
+  padding: 48px 0 64px;
+  border-top: 1px solid #e8e8e8;
+}
+
+.pdp-reviews__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.pdp-reviews__title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e3a5f;
+  margin: 0;
+  font-family: var(--font-heading--family, sans-serif);
+}
+
+.pdp-reviews__view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #1e3a5f;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s;
+}
+
+.pdp-reviews__view-all:hover { opacity: 0.65; }
+
+/* Summary row */
+.pdp-reviews__summary {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 40px;
+  padding: 32px 36px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid #e2eaf3;
+}
+
+.pdp-reviews__agg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-right: 40px;
+  border-right: 1px solid #dde4ec;
+  margin-right: 40px;
+  min-width: 148px;
+}
+
+.pdp-reviews__agg-num {
+  font-size: 58px;
+  font-weight: 800;
+  color: #1e3a5f;
+  line-height: 1;
+  margin-bottom: 10px;
+  font-family: var(--font-heading--family, sans-serif);
+}
+
+.pdp-reviews__agg-stars {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 8px;
+}
+
+.pdp-reviews__agg-label {
+  font-size: 12px;
+  color: #888;
+  text-align: center;
+}
+
+/* Breakdown bars */
+.pdp-reviews__breakdown {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  max-width: 360px;
+}
+
+.pdp-reviews__bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pdp-reviews__bar-label {
+  font-size: 12px;
+  color: #666;
+  width: 22px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.pdp-reviews__bar-track {
+  flex: 1;
+  height: 7px;
+  background: #e0e8f0;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.pdp-reviews__bar-fill {
+  height: 100%;
+  background: #f5a623;
+  border-radius: 99px;
+}
+
+.pdp-reviews__bar-pct {
+  font-size: 12px;
+  color: #888;
+  width: 30px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* Review cards */
+.pdp-reviews__cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.pdp-reviews__card {
+  background: #fff;
+  border: 1px solid #e2eaf3;
+  border-radius: 8px;
+  padding: 20px 22px;
+}
+
+.pdp-reviews__card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.pdp-reviews__card-stars { display: flex; gap: 2px; }
+
+.pdp-reviews__card-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #888;
+}
+
+.pdp-reviews__card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e3a5f;
+  margin: 0 0 6px;
+}
+
+.pdp-reviews__card-text {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 899px) {
+  .pdp-tabs__panel--split {
+    grid-template-columns: 1fr;
+    gap: 28px;
   }
 
-  .pdp-tabs__nav-btn {
-    padding: 12px 16px;
-    font-size: 13px;
+  .pdp-tabs__panel-image {
+    min-height: 280px;
   }
 
-  .pdp-tabs__panel {
-    padding-block-start: 20px;
+  .pdp-reviews__cards {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
+
+@media (max-width: 749px) {
+  .pdp-tabs { padding-bottom: 32px; }
+
+  .pdp-tabs__nav-btn {
+    padding: 12px 14px;
+    font-size: 11px;
+  }
+
+  .pdp-tabs__panel { padding-block-start: 22px; }
+
+  .pdp-reviews { padding: 36px 0 48px; }
+
+  .pdp-reviews__summary {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 24px;
+  }
+
+  .pdp-reviews__agg {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    border-right: none;
+    border-bottom: 1px solid #dde4ec;
+    padding-right: 0;
+    padding-bottom: 24px;
+    margin-right: 0;
+    margin-bottom: 24px;
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+
+  .pdp-reviews__agg-num {
+    font-size: 42px;
+    margin-bottom: 0;
+  }
+
+  .pdp-reviews__agg-stars { margin-bottom: 0; }
+
+  .pdp-reviews__breakdown { max-width: 100%; }
+
+  .pdp-reviews__cards { grid-template-columns: 1fr; }
+}
+
 {% endstylesheet %}
 
 {% schema %}
@@ -218,7 +615,72 @@
   "enabled_on": {
     "templates": ["product"]
   },
-  "settings": [],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Customer Reviews"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_reviews",
+      "label": "Show reviews section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "reviews_heading",
+      "label": "Reviews heading",
+      "default": "Customer Reviews"
+    },
+    {
+      "type": "url",
+      "id": "reviews_link",
+      "label": "View all reviews URL"
+    },
+    {
+      "type": "text",
+      "id": "aggregate_rating",
+      "label": "Aggregate rating",
+      "default": "4.9",
+      "info": "e.g. 4.9"
+    },
+    {
+      "type": "number",
+      "id": "review_count",
+      "label": "Total review count",
+      "default": 240
+    },
+    {
+      "type": "number",
+      "id": "five_star_pct",
+      "label": "5-star percentage",
+      "default": 90
+    },
+    {
+      "type": "number",
+      "id": "four_star_pct",
+      "label": "4-star percentage",
+      "default": 5
+    },
+    {
+      "type": "number",
+      "id": "three_star_pct",
+      "label": "3-star percentage",
+      "default": 2
+    },
+    {
+      "type": "number",
+      "id": "two_star_pct",
+      "label": "2-star percentage",
+      "default": 1
+    },
+    {
+      "type": "number",
+      "id": "one_star_pct",
+      "label": "1-star percentage",
+      "default": 2
+    }
+  ],
   "blocks": [
     {
       "type": "tab",
@@ -248,6 +710,63 @@
           "id": "features_list",
           "label": "Feature checklist (one per line)",
           "info": "Renders as checkmark bullet list below the content"
+        },
+        {
+          "type": "header",
+          "content": "Featured image (creates split layout)"
+        },
+        {
+          "type": "image_picker",
+          "id": "featured_image",
+          "label": "Featured image"
+        },
+        {
+          "type": "text",
+          "id": "image_heading",
+          "label": "Image heading",
+          "default": "ENRICHED WITH MARINE SCIENCE"
+        },
+        {
+          "type": "text",
+          "id": "image_cta_text",
+          "label": "Button text",
+          "default": "Explore Our Science"
+        },
+        {
+          "type": "url",
+          "id": "image_cta_url",
+          "label": "Button URL"
+        }
+      ]
+    },
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "text",
+          "id": "reviewer_name",
+          "label": "Reviewer name",
+          "default": "Sarah M."
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "review_title",
+          "label": "Review title"
+        },
+        {
+          "type": "textarea",
+          "id": "review_text",
+          "label": "Review text"
         }
       ]
     }
@@ -260,14 +779,16 @@
           "type": "tab",
           "settings": {
             "label": "Description",
-            "use_product_description": true
+            "use_product_description": true,
+            "image_heading": "ENRICHED WITH MARINE SCIENCE",
+            "image_cta_text": "Explore Our Science"
           }
         },
         {
           "type": "tab",
           "settings": {
-            "label": "Key Benefits",
-            "features_list": "Anti-Yellow Technology for bright, clean results\nFiber Plex Protection for stronger hair\nUp to 9 levels of lift in one application\nNon-Damaging Formula with Marine Minerals\nAdvanced Plex & Sea Minerals complex"
+            "label": "Ingredients",
+            "content": "<p>Potassium Persulfate, Ammonium Persulfate, Sodium Persulfate, Kaolin, Sodium Silicate, Polyacrylamide, Silica, Marine Minerals Complex, Hydrolysed Keratin, Panthenol (Vitamin B5), Tocopheryl Acetate (Vitamin E).</p><p><em>Free from PPD, Resorcinol and Ammonia.</em></p>"
           }
         },
         {
@@ -280,8 +801,42 @@
         {
           "type": "tab",
           "settings": {
-            "label": "Ingredients",
-            "content": "<p>Potassium Persulfate, Ammonium Persulfate, Sodium Persulfate, Kaolin, Sodium Silicate, Polyacrylamide, Silica, Marine Minerals Complex, Hydrolysed Keratin, Panthenol (Vitamin B5), Tocopheryl Acetate (Vitamin E).</p><p><em>Free from PPD, Resorcinol and Ammonia.</em></p>"
+            "label": "Marine Technology",
+            "content": "<p>Our exclusive Marine Science complex harnesses the power of deep-sea minerals and marine extracts to protect and strengthen hair during the lightening process. Rich in Sea Minerals, the formula reinforces the hair fibre while delivering brilliant, brass-free results.</p>"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "label": "Before & After",
+            "content": "<p>See the transformation possible with OSSION Bleach Plus — delivering beautiful, bright results while maintaining hair integrity. Achieve up to 9 levels of lift with minimal damage thanks to our advanced Marine Science formula.</p>"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Sarah M.",
+            "rating": 5,
+            "review_title": "Best bleach I've ever used!",
+            "review_text": "Absolutely love this product. Got 8 levels of lift in one session with minimal damage. The marine minerals really do make a difference."
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Jessica K.",
+            "rating": 5,
+            "review_title": "Professional results at home",
+            "review_text": "I was skeptical at first but this bleach is incredible. No brassiness, no breakage. My hair feels so healthy even after lightening."
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Emma T.",
+            "rating": 5,
+            "review_title": "Game changer for blondes",
+            "review_text": "The anti-yellow technology is real. My results were so clean and bright. Will never go back to regular bleach again."
           }
         }
       ]
