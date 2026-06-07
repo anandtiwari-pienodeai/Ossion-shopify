@@ -583,6 +583,40 @@
       white-space: nowrap;
     }
   }
+
+  /* ── PDP: vertical thumbnail strip on the left ── */
+  @media screen and (min-width: 750px) {
+    .template-product slideshow-controls[thumbnails][pagination-position='left'] {
+      width: calc(var(--thumbnail-width, 72px) + 16px);
+      min-width: calc(var(--thumbnail-width, 72px) + 16px);
+    }
+
+    .template-product slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails {
+      flex-direction: column;
+      gap: 8px;
+      padding-inline: 4px;
+    }
+
+    .template-product slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control {
+      width: var(--thumbnail-width, 72px);
+      height: var(--thumbnail-width, 72px);
+      aspect-ratio: 1 / 1;
+      flex-shrink: 0;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .template-product slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .template-product slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control[aria-selected='true'] {
+      outline: 2px solid #1e3a5f;
+      outline-offset: 2px;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}

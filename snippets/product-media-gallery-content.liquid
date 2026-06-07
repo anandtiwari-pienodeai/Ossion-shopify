@@ -444,6 +444,27 @@
       controls: controls
     %}
 
+    {%- if pagination_position == 'left' and sorted_media.size > 4 -%}
+      {%- assign ossian_overflow = sorted_media.size | minus: 4 -%}
+      <style>
+        .template-product slideshow-controls[thumbnails][pagination-position="left"] .slideshow-controls__thumbnails .slideshow-control:nth-child(4)::after {
+          content: '+{{ ossian_overflow }}';
+          position: absolute;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.55);
+          color: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
+          font-weight: 700;
+          letter-spacing: 0.02em;
+          border-radius: inherit;
+          pointer-events: none;
+        }
+      </style>
+    {%- endif -%}
+
     {% if media_presentation == 'grid' %}
       <ul
         class="media-gallery__grid list-unstyled"

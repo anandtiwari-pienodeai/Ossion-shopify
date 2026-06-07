@@ -104,14 +104,14 @@
 
   /* ── Details column ── */
   .product-information__details {
-    flex: 1 1 0;
+   
     min-width: 0;
   }
 
   /* ── Equal columns (50/50) ── */
   .product-information__flex--equal .product-information__media,
   .product-information__flex--equal .product-information__details {
-    flex: 1 1 0;
+    flex: 1 1 ;
   }
 
   /* ── Media on the right: swap visual order ── */
@@ -174,7 +174,7 @@
   @media screen and (min-width: 1200px) {
     .product-information__flex:not(.product-information__flex--equal):not(.product-information__flex--no-media) {
       .product-information__media { flex: 2 1 0; }
-      .product-information__details { flex: 1 1 0; }
+      
     }
   }
 {% endstylesheet %}
