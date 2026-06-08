@@ -190,6 +190,78 @@
         "heading_italic": "Skin Needs"
       }
     },
+    "ossian_salon_choice": {
+      "type": "ossian-salon-choice",
+      "blocks": {
+        "sc_1": {
+          "type": "product_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
+            "product_name": "JAPANESE GLOW FACIAL KIT",
+            "product_descriptor": "Used by 10,000+ customers",
+            "discount_badge": "50% off",
+            "link": ""
+          }
+        },
+        "product_card_PwQnzF": {
+          "type": "product_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
+            "product_name": "JAPANESE GLOW FACIAL KIT",
+            "product_descriptor": "Used by 10,000+ customers",
+            "discount_badge": "50% off",
+            "link": ""
+          }
+        },
+        "sc_2": {
+          "type": "product_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy",
+            "product_name": "ALOEVERA LIPOSOLUBLE WAX",
+            "product_descriptor": "Smooth Waxing. Less Pain",
+            "discount_badge": "50% off",
+            "link": ""
+          }
+        },
+        "sc_3": {
+          "type": "product_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy-1",
+            "product_name": "DE-TAN ILLUMINATE",
+            "product_descriptor": "Tan Removal & Brightening",
+            "discount_badge": "50% off",
+            "link": ""
+          }
+        },
+        "sc_4": {
+          "type": "product_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy",
+            "product_name": "SUPREME STRAIGHT",
+            "product_descriptor": "Hair Straightening System",
+            "discount_badge": "50% off",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "sc_1",
+        "product_card_PwQnzF",
+        "sc_2",
+        "sc_3",
+        "sc_4"
+      ],
+      "name": "Salon Choice",
+      "settings": {
+        "heading": "SALON CHOICE",
+        "subheading": "",
+        "bg_color": "#ffffff",
+        "padding_top": 60,
+        "padding_bottom": 80,
+        "autoplay": false,
+        "autoplay_speed": "4"
+      }
+    },
     "ossian_best_sellers": {
       "type": "ossian-best-sellers",
       "name": "Best Sellers",
@@ -197,6 +269,56 @@
         "heading": "BEST SELLERS",
         "collection": "best-sellers",
         "products_count": 4
+      }
+    },
+    "ossian_trust_ticker": {
+      "type": "ossian-trust-ticker",
+      "blocks": {
+        "badge_leaf": {
+          "type": "badge",
+          "settings": {
+            "icon": "leaf",
+            "title": "Skin Loving Ingredients",
+            "description": "Enriched with natural extracts & nutrients."
+          }
+        },
+        "badge_shield": {
+          "type": "badge",
+          "settings": {
+            "icon": "shield",
+            "title": "Dermatologically Tested",
+            "description": "Safe and gentle for everyday use."
+          }
+        },
+        "badge_droplet": {
+          "type": "badge",
+          "settings": {
+            "icon": "droplet",
+            "title": "Professional Quality",
+            "description": "Salon trusted, expert recommended."
+          }
+        },
+        "badge_sparkle": {
+          "type": "badge",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Visible Results",
+            "description": "Healthy, glowing skin you can feel."
+          }
+        }
+      },
+      "block_order": [
+        "badge_leaf",
+        "badge_shield",
+        "badge_droplet",
+        "badge_sparkle"
+      ],
+      "name": "Trust Ticker",
+      "settings": {
+        "background_color": "#ffffff",
+        "scroll_speed": 28,
+        "padding_top": 20,
+        "padding_bottom": 20
       }
     },
     "ossian_science": {
@@ -287,6 +409,7 @@
         "cat_3",
         "cat_4"
       ],
+      "disabled": true,
       "name": "Shop by Category",
       "settings": {
         "eyebrow": "OSSION SALONE",
@@ -446,120 +569,6 @@
         "instagram_handle": "ossion.care"
       }
     },
-    "ossian_trust_ticker": {
-      "type": "ossian-trust-ticker",
-      "blocks": {
-        "badge_leaf": {
-          "type": "badge",
-          "settings": {
-            "icon": "leaf",
-            "title": "Skin Loving Ingredients",
-            "description": "Enriched with natural extracts & nutrients."
-          }
-        },
-        "badge_shield": {
-          "type": "badge",
-          "settings": {
-            "icon": "shield",
-            "title": "Dermatologically Tested",
-            "description": "Safe and gentle for everyday use."
-          }
-        },
-        "badge_droplet": {
-          "type": "badge",
-          "settings": {
-            "icon": "droplet",
-            "title": "Professional Quality",
-            "description": "Salon trusted, expert recommended."
-          }
-        },
-        "badge_sparkle": {
-          "type": "badge",
-          "settings": {
-            "icon": "sparkle",
-            "title": "Visible Results",
-            "description": "Healthy, glowing skin you can feel."
-          }
-        }
-      },
-      "block_order": [
-        "badge_leaf",
-        "badge_shield",
-        "badge_droplet",
-        "badge_sparkle"
-      ],
-      "name": "Trust Ticker",
-      "settings": {
-        "background_color": "#ffffff",
-        "scroll_speed": 28,
-        "padding_top": 20,
-        "padding_bottom": 20
-      }
-    },
-    "ossian_salon_choice": {
-      "type": "ossian-salon-choice",
-      "blocks": {
-        "sc_1": {
-          "type": "product_card",
-          "settings": {
-            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
-            "product_name": "JAPANESE GLOW FACIAL KIT",
-            "product_descriptor": "Used by 10,000+ customers",
-            "discount_badge": "50% off",
-            "rating": "4.8",
-            "play_icon": true,
-            "link": ""
-          }
-        },
-        "sc_2": {
-          "type": "product_card",
-          "settings": {
-            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy",
-            "product_name": "ALOEVERA LIPOSOLUBLE WAX",
-            "product_descriptor": "Smooth Waxing. Less Pain",
-            "discount_badge": "50% off",
-            "rating": "4.8",
-            "play_icon": true,
-            "link": ""
-          }
-        },
-        "sc_3": {
-          "type": "product_card",
-          "settings": {
-            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy-1",
-            "product_name": "DE-TAN ILLUMINATE",
-            "product_descriptor": "Tan Removal & Brightening",
-            "discount_badge": "50% off",
-            "rating": "4.8",
-            "play_icon": true,
-            "link": ""
-          }
-        },
-        "sc_4": {
-          "type": "product_card",
-          "settings": {
-            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy",
-            "product_name": "SUPREME STRAIGHT",
-            "product_descriptor": "Hair Straightening System",
-            "discount_badge": "50% off",
-            "rating": "4.8",
-            "play_icon": true,
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "sc_1",
-        "sc_2",
-        "sc_3",
-        "sc_4"
-      ],
-      "name": "Salon Choice",
-      "settings": {
-        "heading": "SALON CHOICE",
-        "subheading": ""
-      }
-    },
     "ossian_available_on": {
       "type": "ossian-available-on",
       "blocks": {
@@ -613,12 +622,12 @@
     "ossian_hair_needs",
     "ossian_product_showcase_Qa4xiL",
     "ossian_skin_needs",
+    "ossian_salon_choice",
     "ossian_best_sellers",
+    "ossian_trust_ticker",
     "ossian_science",
     "ossian_shop_by_category",
     "ossian_instagram",
-    "ossian_trust_ticker",
-    "ossian_salon_choice",
     "ossian_available_on"
   ]
 }
