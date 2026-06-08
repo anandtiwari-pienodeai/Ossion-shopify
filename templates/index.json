@@ -53,8 +53,8 @@
           "settings": {
             "product": "",
             "image": "shopify://shop_images/White_Chocolate.png",
-            "custom_name": "Straighten",
-            "descriptor": "SILK-SMOOTH, FRIZZ-FREE FINISH",
+            "custom_name": "⁠Hair Color",
+            "descriptor": "Precise Color, Zero Damage",
             "collection": "hair-color",
             "link": ""
           }
@@ -64,8 +64,8 @@
           "settings": {
             "product": "",
             "image": "shopify://shop_images/Aloe_Vera.png",
-            "custom_name": "Developer",
-            "descriptor": "PRECISION COLOR, ZERO DAMAGE",
+            "custom_name": "Hair Texture",
+            "descriptor": "Silk-Smooth, Frizz-Free Finish",
             "collection": "hair-texture",
             "link": ""
           }
@@ -75,8 +75,8 @@
           "settings": {
             "product": "",
             "image": "shopify://shop_images/Blueberry.png",
-            "custom_name": "Hair Mask",
-            "descriptor": "UP TO 10X REPAIR",
+            "custom_name": "Hair Care",
+            "descriptor": "Silk-Smooth, Frizz-Free Finish",
             "collection": "chromatic-dream-permanent-hair-color",
             "link": ""
           }
@@ -89,7 +89,7 @@
       ],
       "name": "Hair Needs Showcase",
       "settings": {
-        "category_label": "EXPLORE BY CATEGORY",
+        "category_label": "Powered by Marine-ingredients - from the ocean to your routine",
         "heading_prefix": "Only what your",
         "heading_italic": "Hair Needs"
       }
@@ -102,8 +102,8 @@
           "settings": {
             "product": "",
             "image": "shopify://shop_images/Korean_Glow.png",
-            "custom_name": "Straighten",
-            "descriptor": "SILK-SMOOTH, FRIZZ-FREE FINISH",
+            "custom_name": "⁠Facial Treatment",
+            "descriptor": "Korean | Japanese | Hydra | Lumi",
             "collection": "",
             "link": ""
           }
@@ -113,8 +113,8 @@
           "settings": {
             "product": "",
             "image": "shopify://shop_images/Japanese_Glow.png",
-            "custom_name": "Developer",
-            "descriptor": "PRECISION COLOR, ZERO DAMAGE",
+            "custom_name": "Waxing",
+            "descriptor": "Soft Skin, Zero Fuss",
             "collection": "",
             "link": ""
           }
@@ -124,8 +124,8 @@
           "settings": {
             "product": "",
             "image": "shopify://shop_images/Lumi_Glow.png",
-            "custom_name": "Hair Mask",
-            "descriptor": "UP TO 10X REPAIR",
+            "custom_name": "Skin Care",
+            "descriptor": "Soft Skin, Zero Fuss",
             "collection": "",
             "link": ""
           }
@@ -138,7 +138,7 @@
       ],
       "name": "Hair Needs Showcase",
       "settings": {
-        "category_label": "EXPLORE BY CATEGORY",
+        "category_label": "Targeted for all skin types. Clinically developed, ocean-inspired",
         "heading_prefix": "Only what your",
         "heading_italic": "Skin Needs"
       }
@@ -266,9 +266,10 @@
       "type": "ossian-best-sellers",
       "name": "Best Sellers",
       "settings": {
-        "heading": "BEST SELLERS",
+        "heading": "Best Sellers",
         "collection": "best-sellers",
-        "products_count": 4
+        "products_count": 4,
+        "autoplay_speed": 30
       }
     },
     "ossian_trust_ticker": {
@@ -357,8 +358,8 @@
       "name": "Ossion Science",
       "settings": {
         "background_image": "shopify://shop_images/OssionScience.png",
-        "heading": "OSSION SCIENCE",
-        "description": "Lorem ipsum dolor sit amet consectetur. Non metus praesent enim diam fringilis. Sagittis nec convallis virra non risus auctor prom. Quis duam dui curabitur pharetra amet enim.",
+        "heading": "The Ossion Difference",
+        "description": "The Ocean is the earth’s oldest living laboratory - a realm of extraordinary depth, perpetual renewal, and silent precision. For millennia, its tides have refined minerals, concentrated bioactive compounds, and cultivated ingredients of rare potency. <br>\n<br> \nThis is haircare and skincare stripped of excess and elevated in purpose. \nNo embellishment. No compromise.",
         "button_label": "LEARN MORE",
         "button_url": ""
       }

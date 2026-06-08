@@ -1,15 +1,16 @@
 <section class="pshowcase" id="pshowcase-{{ section.id }}">
 
   <div class="pshowcase__header page-width">
-    {%- if section.settings.category_label != blank -%}
-      <p class="pshowcase__eyebrow">{{ section.settings.category_label }}</p>
-    {%- endif -%}
-    <h2 class="pshowcase__heading">
+  <h2 class="pshowcase__heading">
       {{- section.settings.heading_prefix -}}
       {%- if section.settings.heading_italic != blank -%}
         <em>{{- section.settings.heading_italic -}}</em>
       {%- endif -%}
     </h2>
+    {%- if section.settings.category_label != blank -%}
+      <p class="pshowcase__eyebrow">{{ section.settings.category_label }}</p>
+    {%- endif -%}
+    
   </div>
 
   <div class="pshowcase__grid page-width">
@@ -100,6 +101,7 @@
   color: #1e3a5f;
   margin: 0;
   line-height: 1.2;
+  padding:30px;
 }
 
 .pshowcase__heading em {
