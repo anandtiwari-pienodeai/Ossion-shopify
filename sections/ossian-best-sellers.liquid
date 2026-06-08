@@ -12,170 +12,161 @@
   </div>
 
   <div class="obs__carousel-wrap">
-    <div
-      class="obs__track"
-      id="obs-track"
-      style="--obs-duration: {{ section.settings.autoplay_speed }}s"
-    >
+    <div class="obs__carousel" id="obs-carousel">
 
-      {%- comment -%}Cards rendered twice for seamless infinite loop. Second pass is aria-hidden.{%- endcomment -%}
-      {%- for run in (1..2) -%}
-        {%- assign is_clone = false -%}
-        {%- if run == 2 -%}{%- assign is_clone = true -%}{%- endif -%}
+      {%- if has_products -%}
 
-        {%- if has_products -%}
+        {%- for product in col.products limit: section.settings.products_count -%}
 
-          {%- for product in col.products limit: section.settings.products_count -%}
+          {%- assign badge_text = '' -%}
+          {%- for tag in product.tags -%}
+            {%- if badge_text == '' -%}
+              {%- assign tl = tag | downcase -%}
+              {%- if tl == 'best seller' or tl == 'best-seller' -%}
+                {%- assign badge_text = 'BEST SELLER' -%}
+              {%- elsif tl == 'top rated' or tl == 'top-rated' -%}
+                {%- assign badge_text = 'TOP RATED' -%}
+              {%- elsif tl == 'trending' -%}
+                {%- assign badge_text = 'TRENDING' -%}
+              {%- elsif tl == 'new' or tl == 'new arrival' -%}
+                {%- assign badge_text = 'NEW' -%}
+              {%- elsif tl == 'sale' -%}
+                {%- assign badge_text = 'SALE' -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
 
-            {%- assign badge_text = '' -%}
-            {%- for tag in product.tags -%}
-              {%- if badge_text == '' -%}
-                {%- assign tl = tag | downcase -%}
-                {%- if tl == 'best seller' or tl == 'best-seller' -%}
-                  {%- assign badge_text = 'BEST SELLER' -%}
-                {%- elsif tl == 'top rated' or tl == 'top-rated' -%}
-                  {%- assign badge_text = 'TOP RATED' -%}
-                {%- elsif tl == 'trending' -%}
-                  {%- assign badge_text = 'TRENDING' -%}
-                {%- elsif tl == 'new' or tl == 'new arrival' -%}
-                  {%- assign badge_text = 'NEW' -%}
-                {%- elsif tl == 'sale' -%}
-                  {%- assign badge_text = 'SALE' -%}
+          {%- assign badge_tags = 'best seller,best-seller,top rated,top-rated,trending,new,new arrival,sale' | split: ',' -%}
+          {%- assign display_tags = '' -%}
+          {%- assign display_tag_count = 0 -%}
+          {%- for tag in product.tags -%}
+            {%- if display_tag_count < 3 -%}
+              {%- assign tl = tag | downcase -%}
+              {%- unless badge_tags contains tl -%}
+                {%- if display_tags == '' -%}
+                  {%- assign display_tags = tag -%}
+                {%- else -%}
+                  {%- assign display_tags = display_tags | append: '|||' | append: tag -%}
                 {%- endif -%}
-              {%- endif -%}
-            {%- endfor -%}
-
-            {%- assign badge_tags = 'best seller,best-seller,top rated,top-rated,trending,new,new arrival,sale' | split: ',' -%}
-            {%- assign display_tags = '' -%}
-            {%- assign display_tag_count = 0 -%}
-            {%- for tag in product.tags -%}
-              {%- if display_tag_count < 3 -%}
-                {%- assign tl = tag | downcase -%}
-                {%- unless badge_tags contains tl -%}
-                  {%- if display_tags == '' -%}
-                    {%- assign display_tags = tag -%}
-                  {%- else -%}
-                    {%- assign display_tags = display_tags | append: '|||' | append: tag -%}
-                  {%- endif -%}
-                  {%- assign display_tag_count = display_tag_count | plus: 1 -%}
-                {%- endunless -%}
-              {%- endif -%}
-            {%- endfor -%}
-
-            <div class="obs__card{% if is_clone %} obs__card--clone{% endif %}"{% if is_clone %} aria-hidden="true"{% endif %}>
-              <a href="{{ product.url }}" class="obs__card-link"{% if is_clone %} tabindex="-1"{% endif %}>
-
-                <div class="obs__img-wrap">
-                  {%- if badge_text != blank -%}
-                    <span class="obs__badge">{{ badge_text }}</span>
-                  {%- endif -%}
-
-                  {%- if product.featured_image != blank -%}
-                    {{
-                      product.featured_image
-                      | image_url: width: 600
-                      | image_tag:
-                        class: 'obs__img',
-                        alt: product.title,
-                        loading: 'lazy',
-                        widths: '300,450,600'
-                    }}
-                  {%- else -%}
-                    {{ 'product-1' | placeholder_svg_tag: 'obs__img obs__img--placeholder' }}
-                  {%- endif -%}
-                </div>
-
-                <div class="obs__info">
-                  {%- if product.type != blank -%}
-                    <p class="obs__type">{{ product.type | upcase }}</p>
-                  {%- endif -%}
-
-                  <h3 class="obs__name">{{ product.title }}</h3>
-
-                  <div class="obs__rating" aria-label="4.9 stars">
-                    <span class="obs__stars" aria-hidden="true">★★★★★</span>
-                    <span class="obs__rating-val">4.9</span>
-                    <span class="obs__rating-count">(210)</span>
-                  </div>
-
-                  {%- if display_tags != blank -%}
-                    <div class="obs__tags">
-                      {%- assign tag_arr = display_tags | split: '|||' -%}
-                      {%- for tag in tag_arr -%}
-                        <span class="obs__tag">{{ tag }}</span>
-                      {%- endfor -%}
-                    </div>
-                  {%- endif -%}
-
-                  <div class="obs__pricing">
-                    <span class="obs__price">{{ product.price | money }}</span>
-                    {%- if product.compare_at_price > product.price -%}
-                      <s class="obs__compare">{{ product.compare_at_price | money }}</s>
-                      {%- assign pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
-                      <span class="obs__discount">{{ pct }}% off</span>
-                    {%- endif -%}
-                  </div>
-                </div>
-
-              </a>
-
-              <div class="obs__actions">
-                <button
-                  class="obs__atc"
-                  type="button"
-                  data-variant-id="{{ product.variants.first.id }}"
-                  data-product-title="{{ product.title | escape }}"
-                  {% if is_clone %}tabindex="-1" aria-hidden="true"{% endif %}
-                >
-                  ADD TO CART
-                </button>
-                <button
-                  class="obs__wishlist"
-                  aria-label="Add to wishlist"
-                  type="button"
-                  {% if is_clone %}tabindex="-1" aria-hidden="true"{% endif %}
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-
+                {%- assign display_tag_count = display_tag_count | plus: 1 -%}
+              {%- endunless -%}
+            {%- endif -%}
           {%- endfor -%}
 
-        {%- else -%}
+          <div class="obs__card">
+            <a href="{{ product.url }}" class="obs__card-link">
 
-          {%- for i in (1..section.settings.products_count) -%}
-            <div class="obs__card obs__card--placeholder{% if is_clone %} obs__card--clone{% endif %}"{% if is_clone %} aria-hidden="true"{% endif %}>
               <div class="obs__img-wrap">
-                {{ 'product-1' | placeholder_svg_tag: 'obs__img obs__img--placeholder' }}
-              </div>
-              <div class="obs__info">
-                <p class="obs__type">CATEGORY</p>
-                <h3 class="obs__name">Select a collection above</h3>
-                <div class="obs__pricing"><span class="obs__price">₹0.00</span></div>
-              </div>
-              <div class="obs__actions">
-                <button class="obs__atc" disabled type="button"{% if is_clone %} tabindex="-1"{% endif %}>ADD TO CART</button>
-                <button class="obs__wishlist" disabled type="button"{% if is_clone %} tabindex="-1"{% endif %}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                </button>
-              </div>
-            </div>
-          {%- endfor -%}
+                {%- if badge_text != blank -%}
+                  <span class="obs__badge">{{ badge_text }}</span>
+                {%- endif -%}
 
-        {%- endif -%}
-      {%- endfor -%}
+                {%- if product.featured_image != blank -%}
+                  {{
+                    product.featured_image
+                    | image_url: width: 600
+                    | image_tag:
+                      class: 'obs__img',
+                      alt: product.title,
+                      loading: 'lazy',
+                      widths: '300,450,600'
+                  }}
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'obs__img obs__img--placeholder' }}
+                {%- endif -%}
+              </div>
+
+              <div class="obs__info">
+                {%- if product.type != blank -%}
+                  <p class="obs__type">{{ product.type | upcase }}</p>
+                {%- endif -%}
+
+                <h3 class="obs__name">{{ product.title }}</h3>
+
+                <div class="obs__rating" aria-label="4.9 stars">
+                  <span class="obs__stars" aria-hidden="true">★★★★★</span>
+                  <span class="obs__rating-val">4.9</span>
+                  <span class="obs__rating-count">(210)</span>
+                </div>
+
+                {%- if display_tags != blank -%}
+                  <div class="obs__tags">
+                    {%- assign tag_arr = display_tags | split: '|||' -%}
+                    {%- for tag in tag_arr -%}
+                      <span class="obs__tag">{{ tag }}</span>
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+
+                <div class="obs__pricing">
+                  <span class="obs__price">{{ product.price | money }}</span>
+                  {%- if product.compare_at_price > product.price -%}
+                    <s class="obs__compare">{{ product.compare_at_price | money }}</s>
+                    {%- assign pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
+                    <span class="obs__discount">{{ pct }}% off</span>
+                  {%- endif -%}
+                </div>
+              </div>
+
+            </a>
+
+            <div class="obs__actions">
+              <button
+                class="obs__atc"
+                type="button"
+                data-variant-id="{{ product.variants.first.id }}"
+                data-product-title="{{ product.title | escape }}"
+              >
+                ADD TO CART
+              </button>
+              <button class="obs__wishlist" aria-label="Add to wishlist" type="button">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+        {%- endfor -%}
+
+      {%- else -%}
+
+        {%- for i in (1..section.settings.products_count) -%}
+          <div class="obs__card obs__card--placeholder">
+            <div class="obs__img-wrap">
+              {{ 'product-1' | placeholder_svg_tag: 'obs__img obs__img--placeholder' }}
+            </div>
+            <div class="obs__info">
+              <p class="obs__type">CATEGORY</p>
+              <h3 class="obs__name">Select a collection above</h3>
+              <div class="obs__pricing"><span class="obs__price">₹0.00</span></div>
+            </div>
+            <div class="obs__actions">
+              <button class="obs__atc" disabled type="button">ADD TO CART</button>
+              <button class="obs__wishlist" disabled type="button">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </button>
+            </div>
+          </div>
+        {%- endfor -%}
+
+      {%- endif -%}
 
     </div>
+
+    <button class="obs__nav obs__nav--prev" id="obs-prev" aria-label="Previous">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="obs__nav obs__nav--next" id="obs-next" aria-label="Next">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
   </div>
 </section>
 
 <script>
 (function () {
-  /* ATC — only first set of cards (not clones) */
-  document.querySelectorAll('.obs__card:not(.obs__card--clone) .obs__atc[data-variant-id]').forEach(function (btn) {
+  /* ---------- Add to cart ---------- */
+  document.querySelectorAll('.obs__atc[data-variant-id]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var variantId = parseInt(btn.dataset.variantId);
       if (!variantId) return;
@@ -197,31 +188,80 @@
     });
   });
 
-  /* Wishlist toggle — only first set */
-  document.querySelectorAll('.obs__card:not(.obs__card--clone) .obs__wishlist').forEach(function (btn) {
+  /* ---------- Wishlist toggle ---------- */
+  document.querySelectorAll('.obs__wishlist').forEach(function (btn) {
     btn.addEventListener('click', function () {
       btn.classList.toggle('is-wished');
     });
   });
 
-  /* Respect prefers-reduced-motion */
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    var track = document.getElementById('obs-track');
-    if (track) track.style.animationPlayState = 'paused';
+  /* ---------- Nav arrows ---------- */
+  var carousel = document.getElementById('obs-carousel');
+  var prevBtn  = document.getElementById('obs-prev');
+  var nextBtn  = document.getElementById('obs-next');
+  if (!carousel || !prevBtn || !nextBtn) return;
+
+  function getScrollAmount() {
+    var card = carousel.querySelector('.obs__card');
+    if (!card) return 300;
+    var gap = parseInt(getComputedStyle(carousel).gap) || 20;
+    return card.offsetWidth + gap;
   }
+
+  nextBtn.addEventListener('click', function () {
+    carousel.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+  });
+  prevBtn.addEventListener('click', function () {
+    carousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+  });
+
+  function updateArrows() {
+    var atStart = carousel.scrollLeft <= 4;
+    var atEnd   = carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth - 4;
+    prevBtn.style.opacity       = atStart ? '0.35' : '1';
+    prevBtn.style.pointerEvents = atStart ? 'none'  : 'auto';
+    nextBtn.style.opacity       = atEnd   ? '0.35' : '1';
+    nextBtn.style.pointerEvents = atEnd   ? 'none'  : 'auto';
+  }
+
+  carousel.addEventListener('scroll', updateArrows, { passive: true });
+  updateArrows();
+
+  /* ---------- Mouse drag to scroll ---------- */
+  var isDragging = false;
+  var startX, startScroll;
+
+  carousel.addEventListener('mousedown', function (e) {
+    isDragging = true;
+    startX = e.pageX - carousel.offsetLeft;
+    startScroll = carousel.scrollLeft;
+    carousel.style.cursor = 'grabbing';
+    carousel.style.userSelect = 'none';
+  });
+
+  document.addEventListener('mousemove', function (e) {
+    if (!isDragging) return;
+    carousel.scrollLeft = startScroll - (e.pageX - carousel.offsetLeft - startX);
+  });
+
+  document.addEventListener('mouseup', function () {
+    if (!isDragging) return;
+    isDragging = false;
+    carousel.style.cursor = 'grab';
+    carousel.style.userSelect = '';
+  });
 })();
 </script>
 
 {% stylesheet %}
 /* ===================== SECTION ===================== */
 .obs {
-  padding: 40px 20px 10px 20px;
+  padding: 64px 0;
   background: #fff;
-  overflow: hidden;
 }
 
 .obs__header {
-  margin-bottom: 40px;
+  margin-bottom: 36px;
 }
 
 .obs__heading {
@@ -234,50 +274,29 @@
   margin: 0;
 }
 
-/* ===================== MARQUEE WRAP ===================== */
+/* ===================== CAROUSEL ===================== */
 .obs__carousel-wrap {
-  overflow: hidden;
   position: relative;
-  /* Soft fade at both edges */
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    #000 8%,
-    #000 92%,
-    transparent 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    #000 8%,
-    #000 92%,
-    transparent 100%
-  );
+  padding: 0 56px;
 }
 
-/* ===================== SCROLLING TRACK ===================== */
-.obs__track {
+.obs__carousel {
   display: flex;
   gap: 20px;
-  width: max-content;
-  padding: 8px 0 20px;
-  animation: obs-scroll var(--obs-duration, 30s) linear infinite;
-  will-change: transform;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 8px 4px 20px;
+  cursor: grab;
 }
 
-/* Pause on hover so users can interact with cards */
-.obs__carousel-wrap:hover .obs__track {
-  animation-play-state: paused;
-}
-
-@keyframes obs-scroll {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
+.obs__carousel::-webkit-scrollbar { display: none; }
 
 /* ===================== CARD ===================== */
 .obs__card {
-  flex: 0 0 clamp(220px, 20vw, 290px);
+  flex: 0 0 clamp(220px, 22vw, 290px);
+  scroll-snap-align: start;
   display: flex;
   flex-direction: column;
   background: #fff;
@@ -319,10 +338,7 @@
   transition: transform 0.4s ease;
 }
 
-.obs__img--placeholder {
-  width: 100%;
-  height: 100%;
-}
+.obs__img--placeholder { width: 100%; height: 100%; }
 
 .obs__card:hover .obs__img { transform: scale(1.04); }
 
@@ -379,22 +395,9 @@
   margin-bottom: 10px;
 }
 
-.obs__stars {
-  color: #f4a623;
-  font-size: 13px;
-  letter-spacing: 1px;
-}
-
-.obs__rating-val {
-  font-size: 12px;
-  font-weight: 700;
-  color: #222;
-}
-
-.obs__rating-count {
-  font-size: 12px;
-  color: #888;
-}
+.obs__stars { color: #f4a623; font-size: 13px; letter-spacing: 1px; }
+.obs__rating-val { font-size: 12px; font-weight: 700; color: #222; }
+.obs__rating-count { font-size: 12px; color: #888; }
 
 /* ===================== TAGS ===================== */
 .obs__tags {
@@ -426,17 +429,8 @@
   padding-top: 4px;
 }
 
-.obs__price {
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: #111;
-}
-
-.obs__compare {
-  font-size: 0.85rem;
-  color: #aaa;
-  text-decoration: line-through;
-}
+.obs__price { font-size: 1.1rem; font-weight: 800; color: #111; }
+.obs__compare { font-size: 0.85rem; color: #aaa; text-decoration: line-through; }
 
 .obs__discount {
   font-size: 0.78rem;
@@ -497,18 +491,48 @@
 
 .obs__wishlist.is-wished svg { fill: #e74c3c; }
 
+/* ===================== NAV ARROWS ===================== */
+.obs__nav {
+  position: absolute;
+  top: calc(50% - 20px);
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid #ddd;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #333;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+  transition: border-color 0.2s, color 0.2s, box-shadow 0.2s, opacity 0.2s;
+  z-index: 2;
+}
+
+.obs__nav:hover {
+  border-color: #1e3a5f;
+  color: #1e3a5f;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+}
+
+.obs__nav--prev { left: 4px; }
+.obs__nav--next { right: 4px; }
+
 /* ===================== RESPONSIVE ===================== */
 
 @media (max-width: 768px) {
   .obs { padding: 40px 0; }
-  .obs__header { margin-bottom: 28px; }
-  .obs__card { flex: 0 0 clamp(180px, 56vw, 240px); }
-  .obs__track { gap: 14px; }
+  .obs__carousel-wrap { padding: 0 44px; }
+  .obs__card { flex: 0 0 clamp(200px, 46vw, 260px); }
+  .obs__nav { width: 36px; height: 36px; }
 }
 
 @media (max-width: 480px) {
-  .obs__card { flex: 0 0 clamp(160px, 70vw, 210px); }
-  .obs__track { gap: 12px; }
+  .obs__carousel-wrap { padding: 0 10px; }
+  .obs__card { flex: 0 0 76vw; }
+  .obs__nav { display: none; }
 }
 {% endstylesheet %}
 
@@ -537,15 +561,6 @@
       "max": 12,
       "step": 1,
       "default": 6
-    },
-    {
-      "type": "range",
-      "id": "autoplay_speed",
-      "label": "Scroll speed (seconds per full loop)",
-      "min": 10,
-      "max": 60,
-      "step": 5,
-      "default": 30
     }
   ],
   "presets": [
