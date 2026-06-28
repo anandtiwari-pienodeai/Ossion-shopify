@@ -193,6 +193,33 @@
     "ossian_salon_choice": {
       "type": "ossian-salon-choice",
       "blocks": {
+        "feature_pill_YpdVXj": {
+          "type": "feature_pill",
+          "settings": {
+            "icon": "sparkle",
+            "label": "BLONDE LIFT",
+            "subtitle": "Anti-Yellow",
+            "highlighted": false
+          }
+        },
+        "feature_pill_9hW9Ma": {
+          "type": "feature_pill",
+          "settings": {
+            "icon": "sparkle",
+            "label": "BLONDE LIFT",
+            "subtitle": "Anti-Yellow",
+            "highlighted": false
+          }
+        },
+        "feature_pill_b8cGfP": {
+          "type": "feature_pill",
+          "settings": {
+            "icon": "sparkle",
+            "label": "BLONDE LIFT",
+            "subtitle": "Anti-Yellow",
+            "highlighted": false
+          }
+        },
         "feature_pill_KMwVhx": {
           "type": "feature_pill",
           "settings": {
@@ -213,6 +240,9 @@
         }
       },
       "block_order": [
+        "feature_pill_YpdVXj",
+        "feature_pill_9hW9Ma",
+        "feature_pill_b8cGfP",
         "feature_pill_KMwVhx",
         "pill_6"
       ],
