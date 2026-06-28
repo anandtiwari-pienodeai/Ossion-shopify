@@ -1,35 +1,13 @@
 <section class="sc2" id="sc2-{{ section.id }}">
 
   {%- comment -%}── 1. Hero Banner ────────────────────────────────{%- endcomment -%}
-  <div class="sc2__hero" style="background-color: {{ section.settings.hero_bg }};">
-    <div class="sc2__hero-row">
-
-      <div class="sc2__hero-side sc2__hero-side--l">
-        {%- if section.settings.hero_left_img != blank -%}
-          {{ section.settings.hero_left_img | image_url: width: 800
-             | image_tag: class: 'sc2__hero-img', loading: 'lazy', alt: '' }}
-        {%- endif -%}
-      </div>
-
-      <div class="sc2__hero-mid">
-        <div class="sc2__crown-row">
-          <span class="sc2__crown-line"></span>
-          <svg class="sc2__crown-svg" viewBox="0 0 52 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M4 30 L13 8 L23 22 L26 4 L29 22 L39 8 L48 30 Z" fill="#1e3a5f"/>
-            <rect x="4" y="31" width="44" height="4" rx="2" fill="#1e3a5f"/>
-          </svg>
-          <span class="sc2__crown-line"></span>
-        </div>
-      </div>
-
-      <div class="sc2__hero-side sc2__hero-side--r">
-        {%- if section.settings.hero_right_img != blank -%}
-          {{ section.settings.hero_right_img | image_url: width: 800
-             | image_tag: class: 'sc2__hero-img', loading: 'lazy', alt: '' }}
-        {%- endif -%}
-      </div>
-    </div>
-    <div class="sc2__hero-band"></div>
+  <div class="sc2__hero">
+    {%- if section.settings.banner_image != blank -%}
+      {{ section.settings.banner_image | image_url: width: 1800
+         | image_tag: class: 'sc2__banner-img', loading: 'lazy', alt: section.settings.banner_alt | default: '' }}
+    {%- else -%}
+      <div class="sc2__banner-ph"></div>
+    {%- endif -%}
   </div>
 
   {%- comment -%}── 2. Bottom section ─────────────────────────────{%- endcomment -%}
@@ -188,68 +166,23 @@
   overflow: hidden;
 }
 
-/* ── Hero ─────────────────────────────────────────────── */
+/* ── Hero Banner ──────────────────────────────────────── */
 .sc2__hero {
   width: 100%;
-  background: #f3f1ec;
+  line-height: 0;
 }
 
-.sc2__hero-row {
-  display: grid;
-  grid-template-columns: 1fr 180px 1fr;
-  align-items: flex-end;
-  min-height: 300px;
-}
-
-.sc2__hero-side {
-  overflow: hidden;
-  height: 100%;
-  display: flex;
-  align-items: flex-end;
-}
-
-.sc2__hero-side--l { justify-content: flex-start; }
-.sc2__hero-side--r { justify-content: flex-end; }
-
-.sc2__hero-img {
-  max-height: 360px;
+.sc2__banner-img {
   width: 100%;
-  object-fit: contain;
-  object-position: bottom;
-  display: block;
-}
-
-.sc2__hero-mid {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 0;
-  align-self: center;
-}
-
-.sc2__crown-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  width: 100%;
-}
-
-.sc2__crown-line {
-  flex: 1;
-  height: 1.5px;
-  background: #1e3a5f;
-  display: block;
-}
-
-.sc2__crown-svg {
-  width: 38px;
   height: auto;
-  flex-shrink: 0;
+  display: block;
+  object-fit: cover;
 }
 
-.sc2__hero-band {
-  height: 72px;
-  background: #1e3a5f;
+.sc2__banner-ph {
+  width: 100%;
+  height: 340px;
+  background: #e8e4dc;
 }
 
 /* ── Bottom ───────────────────────────────────────────── */
@@ -494,10 +427,6 @@
 
 /* ── Tablet ───────────────────────────────────────────── */
 @media (max-width: 900px) {
-  .sc2__hero-row { grid-template-columns: 1fr 120px 1fr; min-height: 220px; }
-  .sc2__hero-img { max-height: 260px; }
-  .sc2__hero-band { height: 52px; }
-
   .sc2__grid { grid-template-columns: 1fr; }
   .sc2__feat { flex-direction: row; min-height: 260px; }
   .sc2__feat-media { flex: 1; }
@@ -506,12 +435,6 @@
 
 /* ── Mobile ───────────────────────────────────────────── */
 @media (max-width: 580px) {
-  .sc2__hero-row { grid-template-columns: 1fr 80px 1fr; min-height: 160px; }
-  .sc2__hero-img { max-height: 180px; }
-  .sc2__hero-band { height: 40px; }
-  .sc2__hero-mid { padding: 20px 0; }
-  .sc2__crown-svg { width: 26px; }
-
   .sc2__bottom { padding: 24px 14px 40px; }
   .sc2__bac { aspect-ratio: 4 / 3; }
 
@@ -533,20 +456,14 @@
       "content": "Hero Banner"
     },
     {
-      "type": "color",
-      "id": "hero_bg",
-      "label": "Hero background color",
-      "default": "#f3f1ec"
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Banner image"
     },
     {
-      "type": "image_picker",
-      "id": "hero_left_img",
-      "label": "Left product image"
-    },
-    {
-      "type": "image_picker",
-      "id": "hero_right_img",
-      "label": "Right product image"
+      "type": "text",
+      "id": "banner_alt",
+      "label": "Banner image alt text"
     },
     {
       "type": "header",
@@ -629,7 +546,6 @@
     {
       "name": "Salon Choice",
       "settings": {
-        "hero_bg": "#f3f1ec",
         "ba_label": "REAL CLIENT RESULT",
         "feat_headline": "UP TO 9 LEVELS LIFT",
         "feat_bullets": "Anti-yellow molecules to counteract warm & yellow tones\nNon-damaging & dust-free lightening powder\nAdvanced neutralization with fibre plex",
