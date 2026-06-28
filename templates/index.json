@@ -193,76 +193,12 @@
     "ossian_salon_choice": {
       "type": "ossian-salon-choice",
       "blocks": {
-        "icon_1": {
-          "type": "ba_icon",
-          "settings": {
-            "symbol": "↑",
-            "label": "Lift"
-          }
-        },
-        "icon_2": {
-          "type": "ba_icon",
-          "settings": {
-            "symbol": "✦",
-            "label": "Shine"
-          }
-        },
-        "icon_3": {
-          "type": "ba_icon",
-          "settings": {
-            "symbol": "⊕",
-            "label": "Protect"
-          }
-        },
-        "icon_4": {
-          "type": "ba_icon",
-          "settings": {
-            "symbol": "✦",
-            "label": "Nourish"
-          }
-        },
-        "pill_1": {
+        "feature_pill_KMwVhx": {
           "type": "feature_pill",
           "settings": {
             "icon": "sparkle",
             "label": "BLONDE LIFT",
             "subtitle": "Anti-Yellow",
-            "highlighted": true
-          }
-        },
-        "pill_2": {
-          "type": "feature_pill",
-          "settings": {
-            "icon": "waves",
-            "label": "FRIZZ CONTROL",
-            "subtitle": "Smooth & Manageable",
-            "highlighted": false
-          }
-        },
-        "pill_3": {
-          "type": "feature_pill",
-          "settings": {
-            "icon": "person",
-            "label": "GREY COVERAGE",
-            "subtitle": "100% Coverage",
-            "highlighted": false
-          }
-        },
-        "pill_4": {
-          "type": "feature_pill",
-          "settings": {
-            "icon": "drop",
-            "label": "COLOR REVIVAL",
-            "subtitle": "Vibrant & Long-Lasting",
-            "highlighted": false
-          }
-        },
-        "pill_5": {
-          "type": "feature_pill",
-          "settings": {
-            "icon": "shield",
-            "label": "DAMAGE REPAIR",
-            "subtitle": "Stronger Hair",
             "highlighted": false
           }
         },
@@ -277,15 +213,7 @@
         }
       },
       "block_order": [
-        "icon_1",
-        "icon_2",
-        "icon_3",
-        "icon_4",
-        "pill_1",
-        "pill_2",
-        "pill_3",
-        "pill_4",
-        "pill_5",
+        "feature_pill_KMwVhx",
         "pill_6"
       ],
       "name": "Salon Choice",
@@ -618,7 +546,7 @@
           "type": "platform",
           "settings": {
             "platform_name": "Blinkit",
-            "logo": "shopify://shop_images/ossionAvl3.png",
+            "logo": "shopify://shop_images/Sho1.png",
             "url": ""
           }
         },
@@ -626,7 +554,7 @@
           "type": "platform",
           "settings": {
             "platform_name": "Amazon",
-            "logo": "shopify://shop_images/ossionAvl1.png",
+            "logo": "shopify://shop_images/sh4.png",
             "url": ""
           }
         },
@@ -634,7 +562,7 @@
           "type": "platform",
           "settings": {
             "platform_name": "Zepto",
-            "logo": "shopify://shop_images/ossionAvl2.png",
+            "logo": "shopify://shop_images/sh3.png",
             "url": ""
           }
         },
@@ -642,7 +570,7 @@
           "type": "platform",
           "settings": {
             "platform_name": "Swiggy Instamart",
-            "logo": "shopify://shop_images/ossionAvl1.png",
+            "logo": "shopify://shop_images/sh2.png",
             "url": ""
           }
         }
