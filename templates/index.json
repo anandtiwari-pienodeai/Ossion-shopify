@@ -197,7 +197,7 @@
           "type": "ba_icon",
           "settings": {
             "symbol": "↑",
-            "label": "PREMIUM INGREDIENTSScience backed formulas"
+            "label": "Lift"
           }
         },
         "icon_2": {
@@ -220,21 +220,81 @@
             "symbol": "✦",
             "label": "Nourish"
           }
+        },
+        "pill_1": {
+          "type": "feature_pill",
+          "settings": {
+            "icon": "sparkle",
+            "label": "BLONDE LIFT",
+            "subtitle": "Anti-Yellow",
+            "highlighted": true
+          }
+        },
+        "pill_2": {
+          "type": "feature_pill",
+          "settings": {
+            "icon": "waves",
+            "label": "FRIZZ CONTROL",
+            "subtitle": "Smooth & Manageable",
+            "highlighted": false
+          }
+        },
+        "pill_3": {
+          "type": "feature_pill",
+          "settings": {
+            "icon": "person",
+            "label": "GREY COVERAGE",
+            "subtitle": "100% Coverage",
+            "highlighted": false
+          }
+        },
+        "pill_4": {
+          "type": "feature_pill",
+          "settings": {
+            "icon": "drop",
+            "label": "COLOR REVIVAL",
+            "subtitle": "Vibrant & Long-Lasting",
+            "highlighted": false
+          }
+        },
+        "pill_5": {
+          "type": "feature_pill",
+          "settings": {
+            "icon": "shield",
+            "label": "DAMAGE REPAIR",
+            "subtitle": "Stronger Hair",
+            "highlighted": false
+          }
+        },
+        "pill_6": {
+          "type": "feature_pill",
+          "settings": {
+            "icon": "star",
+            "label": "GLOW BOOST",
+            "subtitle": "Radiant & Bright",
+            "highlighted": false
+          }
         }
       },
       "block_order": [
         "icon_1",
         "icon_2",
         "icon_3",
-        "icon_4"
+        "icon_4",
+        "pill_1",
+        "pill_2",
+        "pill_3",
+        "pill_4",
+        "pill_5",
+        "pill_6"
       ],
       "name": "Salon Choice",
       "settings": {
         "banner_image": "shopify://shop_images/WhatsApp_Image_2026-06-29_at_00.30.49.jpg",
         "banner_alt": "",
         "ba_label": "REAL CLIENT RESULT",
-        "before_image": "shopify://shop_images/Ossian5.jpg",
-        "after_image": "shopify://shop_images/Hair_Repair_Spa_Pure_Shea_Butter.png",
+        "before_image": "shopify://shop_images/ChatGPT_Image_Jun_29_2026_12_48_12_AM.png",
+        "after_image": "shopify://shop_images/ChatGPT_Image_Jun_29_2026_12_50_16_AM.png",
         "feat_image": "shopify://shop_images/DEVELOPER_GROUP_SHOT_copy.png",
         "feat_headline": "BLONDER FIBER PLEX BLUE",
         "feat_bullets": "Anti-yellow molecules to counteract warm & yellow tones\nNon-damaging & dust-free lightening powder\nAdvanced neutralization with fibre plex",
