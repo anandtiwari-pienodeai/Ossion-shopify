@@ -1136,7 +1136,7 @@
   }
 
   /* ── DESKTOP: wide pill search bar ── */
-  @media screen and (min-width: 750px) {
+  @media screen and (min-width: 768px) {
     #header-component .search-action {
       min-width: 240px;
       height: 42px;
@@ -1190,9 +1190,9 @@
     }
 
     #header-component .search-action .svg-wrapper svg {
-      width: 18px;
-      height: 18px;
-      color: #9ca3af;
+      width: 20px;
+      height: 20px;
+      color: #1e3a5f;
     }
 
     /* Action buttons — bordered squares */
@@ -1261,11 +1261,21 @@
     #header-component .ossian-wishlist-btn svg {
       width: 20px;
       height: 20px;
+      color: #1e3a5f;
+    }
+
+    /* Catch-all: every action-area SVG in the header → 20px, same navy */
+    #header-component header-actions svg,
+    #header-component .account-button svg,
+    #header-component shopify-account svg {
+      width: 20px;
+      height: 20px;
+      color: #1e3a5f;
     }
   }
 
   /* ── MOBILE: [≡ OSSION ············ Q A Y] ── */
-  @media screen and (max-width: 749px) {
+  @media screen and (max-width: 767px) {
 
     /* ── 1. Kill the navigation-bar row — this is what inflates --header-height to 467px.
               The row renders all nav links as block content; hide it so the JS height
@@ -1278,9 +1288,9 @@
               Do NOT use var(--header-height) — that variable is written by JS
               AFTER measuring the DOM, so it picks up the inflated 467px value. ── */
     #header-component .header__row--top {
-      height: 56px !important;
-      min-height: 56px !important;
-      max-height: 56px !important;
+      height: 50px !important;
+      min-height: 50px !important;
+      max-height: 50px !important;
       overflow: hidden !important;
     }
 
@@ -1339,7 +1349,7 @@
     }
 
     #header-component .header__icon--menu svg,
-    #header-component header-menu svg { width: 22px !important; height: 22px !important; }
+    #header-component header-menu svg { width: 28px !important; height: 28px !important; color: #1e3a5f !important; }
 
     /* ── Logo ── */
     #header-component .header__columns .header-logo {
@@ -1462,6 +1472,113 @@
     #header-component header-actions svg { width: 20px !important; height: 20px !important; }
     #header-component header-actions { padding-right: 4px; }
     #header-component .cart-count-bubble { min-width: 16px; height: 16px; font-size: 10px; }
+  }
+
+  /* ================================================================
+     OSSION DRAWER — mobile visual style (≤767px)
+     ================================================================ */
+  @media screen and (max-width: 767px) {
+
+    /* 1. Warm cream background */
+    .menu-drawer {
+      background-color: #f5f0eb !important;
+    }
+
+    /* 2. Track padding to align with reference */
+    .menu-drawer__menu {
+      padding-inline: 24px !important;
+      margin-block-end: 0 !important;
+    }
+
+    /* 3. Each top-level row: generous height + bottom border */
+    .menu-drawer__menu.has-submenu > .menu-drawer__list-item,
+    .menu-drawer__menu-container {
+      min-height: unset !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.09) !important;
+    }
+
+    /* Remove duplicate divider from --divider modifier */
+    .menu-drawer__menu-container--divider,
+    .menu-drawer__list-item--divider {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.09) !important;
+    }
+
+    /* 4. Main nav items: bold, uppercase, large, full-width */
+    .menu-drawer__menu-item--mainlist {
+      font-size: 1.05rem !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.06em !important;
+      text-transform: uppercase !important;
+      color: #1a1a1a !important;
+      padding-top: 22px !important;
+      padding-bottom: 22px !important;
+      min-height: unset !important;
+      line-height: 1.2 !important;
+      border-bottom: none !important;
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      width: 100% !important;
+    }
+
+    /* 5. Chevron: right-pointing, neutral grey */
+    .menu-drawer__menu-item--mainlist .svg-wrapper.icon-caret--forward {
+      padding: 0 !important;
+      flex-shrink: 0 !important;
+    }
+
+    .menu-drawer__menu-item--mainlist .svg-wrapper.icon-caret--forward svg {
+      width: 14px !important;
+      height: 14px !important;
+      color: #888 !important;
+    }
+
+    /* 6. Divider line before utility section */
+    .menu-drawer__utility-links {
+      border-top: 1px solid rgba(0, 0, 0, 0.12) !important;
+      margin-top: 12px !important;
+      margin-inline-start: 0 !important;
+      padding-inline: 24px !important;
+      padding-top: 8px !important;
+    }
+
+    /* 7. Secondary links: normal weight, mixed case, compact */
+    .menu-drawer__utility-links .menu-drawer__menu-item,
+    .menu-drawer__utility-links a,
+    .menu-drawer__utility-links button {
+      font-size: 0.95rem !important;
+      font-weight: 500 !important;
+      text-transform: none !important;
+      letter-spacing: 0 !important;
+      color: #2a2a2a !important;
+      padding-block: 14px !important;
+      min-height: unset !important;
+    }
+
+    /* 8. Account link: icon + text inline */
+    .menu-drawer__account {
+      font-size: 0.95rem !important;
+      font-weight: 500 !important;
+      color: #2a2a2a !important;
+      height: auto !important;
+      padding-block: 14px !important;
+      gap: 10px !important;
+    }
+
+    .menu-drawer__account svg {
+      width: 20px !important;
+      height: 20px !important;
+      color: #2a2a2a !important;
+    }
+
+    /* 9. Close button: position top-right, subtle */
+    .menu-drawer .menu-drawer__close-button {
+      position: absolute !important;
+      top: 8px !important;
+      right: 8px !important;
+      padding: 12px !important;
+      color: #555 !important;
+    }
   }
 {% endstylesheet %}
 
