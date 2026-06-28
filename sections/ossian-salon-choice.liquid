@@ -68,18 +68,17 @@
 
   {%- comment -%}── 3. Bottom section ─────────────────────────────{%- endcomment -%}
   <div class="sc2__bottom" style="background-color: {{ section.settings.bottom_bg }};">
-    <div class="sc2__grid">
-
-      {%- comment -%}── Before / After card ───────────────────────{%- endcomment -%}
-      <div class="sc2__ba">
-        <div class="sc2__ba-head">
-          <svg class="sc2__ba-crown" viewBox="0 0 40 28" fill="none" aria-hidden="true">
-            <path d="M2 24 L8 6 L18 16 L20 2 L22 16 L32 6 L38 24 Z" fill="#c9953a"/>
-          </svg>
+   <div class="sc2__ba-head">
+  
           <span class="sc2__ba-title">
             {{- section.settings.ba_label | default: 'REAL CLIENT RESULT' -}}
           </span>
         </div>
+    <div class="sc2__grid">
+
+      {%- comment -%}── Before / After card ───────────────────────{%- endcomment -%}
+      <div class="sc2__ba">
+       
 
         <div class="sc2__bac" id="sc2-ba-{{ section.id }}">
           {%- if section.settings.before_image != blank -%}
@@ -332,7 +331,7 @@
 .sc2__grid {
   display: grid;
   grid-template-columns: 1.65fr 1fr;
-  gap: 20px;
+  gap: 10px;
   margin: 0 auto;
 }
 
@@ -369,8 +368,6 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   border-radius: 14px;
-  overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.12);
   background: #0d2340;
   cursor: ew-resize;
   flex: 1;
@@ -498,20 +495,21 @@
 .sc2__feat {
   display: block;
   position: relative;
-  height: 100%;
-  border-radius: 14px;
+
   overflow: hidden;
+
   background: #0d2340;
   text-decoration: none;
+  /* stretch to match BA card height inside the grid row */
+  align-self: stretch;
 }
 
 .sc2__feat-img {
   position: absolute;
   inset: 0;
   width: 100%;
-
-  object-fit: contain;
-  object-position: center;
+  height: 100%;
+  object-position: center top;
   display: block;
   transition: transform 0.4s ease;
 }
