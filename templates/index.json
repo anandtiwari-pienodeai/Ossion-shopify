@@ -295,10 +295,12 @@
         "ba_label": "REAL CLIENT RESULT",
         "before_image": "shopify://shop_images/ChatGPT_Image_Jun_29_2026_12_48_12_AM.png",
         "after_image": "shopify://shop_images/ChatGPT_Image_Jun_29_2026_12_50_16_AM.png",
-        "feat_image": "shopify://shop_images/DEVELOPER_GROUP_SHOT_copy.png",
-        "feat_headline": "BLONDER FIBER PLEX BLUE",
-        "feat_bullets": "Anti-yellow molecules to counteract warm & yellow tones\nNon-damaging & dust-free lightening powder\nAdvanced neutralization with fibre plex",
-        "feat_footer": "MARINE BASED NOURISHING TECHNOLOGY",
+        "feat_product": "",
+        "feat_collection": "",
+        "feat_link": "",
+        "feat_image": "shopify://shop_images/WhatsApp_Image_2026-06-29_at_00.55.40.jpg",
+        "feat_alt": "",
+        "feat_label": "",
         "bottom_bg": "#1e3a5f"
       }
     },

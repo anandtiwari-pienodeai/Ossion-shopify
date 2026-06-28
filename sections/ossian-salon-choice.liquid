@@ -126,37 +126,46 @@
         {%- endif -%}
       </div>
 
-      {%- comment -%}── Product feature card ──────────────────────{%- endcomment -%}
-      <div class="sc2__feat">
-        {%- if section.settings.feat_image != blank -%}
-          <div class="sc2__feat-media">
-            {{ section.settings.feat_image | image_url: width: 700
-               | image_tag: class: 'sc2__feat-img', loading: 'lazy', alt: section.settings.feat_headline | default: '' }}
-          </div>
-        {%- endif -%}
+      {%- comment -%}── Feature card (linked image) ───────────────{%- endcomment -%}
+      {%- liquid
+        assign feat_product    = section.settings.feat_product
+        assign feat_collection = section.settings.feat_collection
+        assign feat_img        = section.settings.feat_image
+        assign feat_alt        = section.settings.feat_alt | default: ''
 
-        {%- if section.settings.feat_headline != blank or section.settings.feat_bullets != blank or section.settings.feat_footer != blank -%}
-          <div class="sc2__feat-body">
-            {%- if section.settings.feat_headline != blank -%}
-              <p class="sc2__feat-hl">{{ section.settings.feat_headline }}</p>
-            {%- endif -%}
-            {%- if section.settings.feat_bullets != blank -%}
-              {%- assign blines = section.settings.feat_bullets | newline_to_br | split: '<br />' -%}
-              <ul class="sc2__feat-ul">
-                {%- for bline in blines -%}
-                  {%- assign bt = bline | strip | strip_html -%}
-                  {%- if bt != blank -%}
-                    <li>{{ bt }}</li>
-                  {%- endif -%}
-                {%- endfor -%}
-              </ul>
-            {%- endif -%}
-            {%- if section.settings.feat_footer != blank -%}
-              <p class="sc2__feat-ft">{{ section.settings.feat_footer }}</p>
-            {%- endif -%}
-          </div>
+        if section.settings.feat_link != blank
+          assign feat_href = section.settings.feat_link
+        elsif feat_product != blank
+          assign feat_href = feat_product.url
+        elsif feat_collection != blank
+          assign feat_href = feat_collection.url
+        else
+          assign feat_href = '#'
+        endif
+
+        if feat_img == blank and feat_product != blank and feat_product.featured_image != blank
+          assign feat_img = feat_product.featured_image
+        elsif feat_img == blank and feat_collection != blank and feat_collection.image != blank
+          assign feat_img = feat_collection.image
+        endif
+
+        if feat_alt == blank and feat_product != blank
+          assign feat_alt = feat_product.title
+        elsif feat_alt == blank and feat_collection != blank
+          assign feat_alt = feat_collection.title
+        endif
+      -%}
+      <a class="sc2__feat" href="{{ feat_href }}">
+        {%- if feat_img != blank -%}
+          {{ feat_img | image_url: width: 700
+             | image_tag: class: 'sc2__feat-img', loading: 'lazy', alt: feat_alt }}
+        {%- else -%}
+          <div class="sc2__feat-ph"></div>
         {%- endif -%}
-      </div>
+        {%- if section.settings.feat_label != blank -%}
+          <span class="sc2__feat-label">{{ section.settings.feat_label }}</span>
+        {%- endif -%}
+      </a>
 
     </div>
   </div>
@@ -485,72 +494,48 @@
   text-align: center;
 }
 
-/* ── Feature card ─────────────────────────────────────── */
+/* ── Feature card (linked image) ──────────────────────── */
 .sc2__feat {
-  display: flex;
-  flex-direction: column;
+  display: block;
+  position: relative;
+  height: 100%;
   border-radius: 14px;
   overflow: hidden;
   border: 2px solid rgba(255, 255, 255, 0.12);
   background: #0d2340;
-}
-
-.sc2__feat-media {
-  flex: 1;
-  overflow: hidden;
-  min-height: 0;
+  text-decoration: none;
 }
 
 .sc2__feat-img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   display: block;
+  transition: transform 0.4s ease;
 }
 
-.sc2__feat-body {
-  padding: 18px 20px 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+.sc2__feat:hover .sc2__feat-img { transform: scale(1.03); }
+
+.sc2__feat-ph {
+  position: absolute;
+  inset: 0;
+  background: #0d2340;
 }
 
-.sc2__feat-hl {
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.09em;
+.sc2__feat-label {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 14px 18px;
+  background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   color: #fff;
   text-transform: uppercase;
-  margin: 0 0 10px;
-}
-
-.sc2__feat-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 10px;
-}
-
-.sc2__feat-ul li {
-  position: relative;
-  padding-left: 14px;
-  font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 1.55;
-}
-
-.sc2__feat-ul li::before {
-  content: '•';
-  position: absolute;
-  left: 0;
-  color: rgba(255, 255, 255, 0.45);
-}
-
-.sc2__feat-ft {
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  color: rgba(255, 255, 255, 0.5);
-  text-transform: uppercase;
-  margin: 0;
+  line-height: 1.3;
 }
 
 /* ── Tablet ───────────────────────────────────────────── */
@@ -615,30 +600,37 @@
     },
     {
       "type": "header",
-      "content": "Product Feature Card"
+      "content": "Feature Card"
+    },
+    {
+      "type": "product",
+      "id": "feat_product",
+      "label": "Link to product"
+    },
+    {
+      "type": "collection",
+      "id": "feat_collection",
+      "label": "Link to collection"
+    },
+    {
+      "type": "url",
+      "id": "feat_link",
+      "label": "Manual link (overrides product / collection)"
     },
     {
       "type": "image_picker",
       "id": "feat_image",
-      "label": "Product image"
+      "label": "Image (overrides product / collection image)"
     },
     {
       "type": "text",
-      "id": "feat_headline",
-      "label": "Headline",
-      "default": "UP TO 9 LEVELS LIFT"
-    },
-    {
-      "type": "textarea",
-      "id": "feat_bullets",
-      "label": "Bullet points (one per line)",
-      "default": "Anti-yellow molecules to counteract warm & yellow tones\nNon-damaging & dust-free lightening powder\nAdvanced neutralization with fibre plex"
+      "id": "feat_alt",
+      "label": "Image alt text"
     },
     {
       "type": "text",
-      "id": "feat_footer",
-      "label": "Footer note",
-      "default": "MARINE BASED NOURISHING TECHNOLOGY"
+      "id": "feat_label",
+      "label": "Overlay label (optional)"
     },
     {
       "type": "header",
@@ -713,9 +705,6 @@
       "name": "Salon Choice",
       "settings": {
         "ba_label": "REAL CLIENT RESULT",
-        "feat_headline": "UP TO 9 LEVELS LIFT",
-        "feat_bullets": "Anti-yellow molecules to counteract warm & yellow tones\nNon-damaging & dust-free lightening powder\nAdvanced neutralization with fibre plex",
-        "feat_footer": "MARINE BASED NOURISHING TECHNOLOGY",
         "bottom_bg": "#1e3a5f"
       },
       "blocks": [
