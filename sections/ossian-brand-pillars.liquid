@@ -1,0 +1,623 @@
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Give+You+Glory&display=swap" rel="stylesheet">
+
+{%- assign pillar_blocks = section.blocks | where: "type", "pillar" -%}
+
+<section class="bpillars" id="bpillars-{{ section.id }}">
+  <div class="bpillars__row">
+
+    <!-- Left: hero image + brand lockup + CTA -->
+    <a href="{{ section.settings.hero_link | default: '#' }}" class="bpillars__hero">
+      {%- if section.settings.hero_image != blank -%}
+        {{ section.settings.hero_image | image_url: width: 1200 | image_tag: class: 'bpillars__hero-img', alt: '', loading: 'lazy', widths: '400,700,1000,1200' }}
+      {%- else -%}
+        <div class="bpillars__hero-ph"></div>
+      {%- endif -%}
+      {%- if section.settings.hero_brand != blank or section.settings.hero_brand_sub != blank -%}
+        <span class="bpillars__hero-brand">
+          {%- if section.settings.hero_brand != blank -%}<span class="bpillars__hero-brand-name">{{ section.settings.hero_brand }}</span>{%- endif -%}
+          {%- if section.settings.hero_brand_sub != blank -%}<span class="bpillars__hero-brand-sub">{{ section.settings.hero_brand_sub }}</span>{%- endif -%}
+        </span>
+      {%- endif -%}
+      {%- if section.settings.hero_tagline_line1 != blank or section.settings.hero_tagline_line2 != blank -%}
+        <span class="bpillars__hero-tagline">
+          {%- if section.settings.hero_tagline_line1 != blank -%}<span>{{ section.settings.hero_tagline_line1 }}</span>{%- endif -%}
+          {%- if section.settings.hero_tagline_line2 != blank -%}<span>{{ section.settings.hero_tagline_line2 }}</span>{%- endif -%}
+        </span>
+      {%- endif -%}
+      {%- if section.settings.hero_cta_label != blank -%}
+        <span class="bpillars__hero-scrim" aria-hidden="true"></span>
+        <span class="bpillars__cta">
+          {{ section.settings.hero_cta_label }}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      {%- endif -%}
+    </a>
+
+    <!-- Right: heading + pillar cards -->
+    <div class="bpillars__right">
+      {%- if section.settings.eyebrow_script != blank or section.settings.heading_white != blank or section.settings.heading_accent != blank -%}
+        <div class="bpillars__heading">
+          {%- if section.settings.eyebrow_script != blank -%}
+            <p class="bpillars__eyebrow">{{ section.settings.eyebrow_script }}</p>
+          {%- endif -%}
+          {%- if section.settings.heading_white != blank or section.settings.heading_accent != blank -%}
+            <p class="bpillars__heading-main">
+              {%- if section.settings.heading_white != blank -%}<span>{{ section.settings.heading_white }}</span>{%- endif -%}
+              {%- if section.settings.heading_accent != blank -%}<span class="bpillars__heading-accent">{{ section.settings.heading_accent }}</span>{%- endif -%}
+            </p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if pillar_blocks.size > 0 -%}
+        <div class="bpillars__cards">
+          {%- for block in pillar_blocks -%}
+            {%- assign opacity = block.settings.overlay_opacity | default: 70 | divided_by: 100.0 -%}
+            <a href="{{ block.settings.button_link | default: '#' }}" class="pillar-card" {{ block.shopify_attributes }}>
+              {%- if block.settings.image != blank -%}
+                {{ block.settings.image | image_url: width: 600 | image_tag: class: 'pillar-card__img', alt: '', loading: 'lazy', widths: '300,450,600' }}
+              {%- else -%}
+                <div class="pillar-card__img pillar-card__img--placeholder"></div>
+              {%- endif -%}
+              <span class="pillar-card__scrim" style="background: linear-gradient(to bottom, rgba(0,14,38,0) 0%, rgba(0,14,38,{{ opacity }}) 40%, rgba(0,14,38,{{ opacity }}) 100%);" aria-hidden="true"></span>
+              <span class="pillar-card__content">
+                {%- if block.settings.heading_line1 != blank or block.settings.heading_line2 != blank -%}
+                  <span class="pillar-card__heading">
+                    {%- if block.settings.heading_line1 != blank -%}<span class="pillar-card__heading-line">{{ block.settings.heading_line1 }}</span>{%- endif -%}
+                    {%- if block.settings.heading_line2 != blank -%}
+                      <span class="pillar-card__heading-line{% if block.settings.accent_line2 %} pillar-card__heading-line--accent{% endif %}">{{ block.settings.heading_line2 }}</span>
+                    {%- endif -%}
+                  </span>
+                {%- endif -%}
+                {%- if block.settings.body_text != blank -%}
+                  <span class="pillar-card__body">{{ block.settings.body_text }}</span>
+                {%- endif -%}
+                {%- if block.settings.button_label != blank -%}
+                  <span class="pillar-card__cta">
+                    {{ block.settings.button_label }}
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </span>
+                {%- endif -%}
+              </span>
+            </a>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+{% stylesheet %}
+
+.bpillars,
+.bpillars * {
+  font-family: 'Jost', sans-serif;
+  box-sizing: border-box;
+}
+
+.bpillars {
+  background: #000e26;
+  overflow: hidden;
+  margin-top: 40px;
+}
+
+.bpillars__row {
+  display: flex;
+  width: 100%;
+  aspect-ratio: 1441 / 858;
+}
+
+/* ── Hero ── */
+.bpillars__hero {
+  position: relative;
+  flex: 0 0 36.85%;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.bpillars__hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.bpillars__hero-ph {
+  position: absolute;
+  inset: 0;
+  background: #0a1830;
+}
+
+.bpillars__hero-scrim {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 22%;
+  background: linear-gradient(to top, rgba(0,14,38,0.75) 0%, rgba(0,14,38,0) 100%);
+}
+
+/* Brand lockup — top-left of hero */
+.bpillars__hero-brand {
+  position: absolute;
+  left: 8.5%;
+  top: 4%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.bpillars__hero-brand-name {
+  font-size: clamp(1.4rem, 3vw, 2.1rem);
+  font-weight: 700;
+  color: #3b82f6;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.bpillars__hero-brand-sub {
+  font-size: clamp(0.7rem, 1vw, 0.9rem);
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.18em;
+  line-height: 1.4;
+}
+
+/* Tagline — centered, upper-middle of hero */
+.bpillars__hero-tagline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 17%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.bpillars__hero-tagline span {
+  font-size: clamp(1.05rem, 1.7vw, 1.5rem);
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+/* ── Right column ── */
+.bpillars__right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+}
+
+.bpillars__heading {
+  flex: 0 0 25%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 48px;
+}
+
+.bpillars__eyebrow {
+  font-family: 'Give You Glory', cursive;
+  font-size: clamp(1.4rem, 2.1vw, 2rem);
+  font-weight: 400;
+  color: #d9a441;
+  margin: 0 0 4px;
+  line-height: 1.2;
+}
+
+.bpillars__heading-main {
+  font-size: clamp(1.6rem, 3.6vw, 3.5rem);
+  font-weight: 700;
+  color: #f1f8fc;
+  margin: 0;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.bpillars__heading-accent {
+  color: #3b82f6;
+}
+
+.bpillars__heading-main span:not(:last-child) {
+  margin-right: 0.3em;
+}
+
+.bpillars__cta {
+  position: absolute;
+  left: 25px;
+  bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px;
+  background: #22345a;
+  border: 2px solid #fff;
+  border-radius: 16px;
+  color: #e5e7eb;
+  font-size: clamp(0.75rem, 0.97vw, 0.875rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.bpillars__cta svg {
+  flex-shrink: 0;
+}
+
+/* ── Cards grid ── */
+.bpillars__cards {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  min-height: 0;
+}
+
+.pillar-card {
+  position: relative;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+  border: 1px solid #182130;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.pillar-card__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.pillar-card__img--placeholder {
+  background: #0a1830;
+}
+
+.pillar-card:hover .pillar-card__img {
+  transform: scale(1.04);
+}
+
+.pillar-card__scrim {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 48%;
+}
+
+.pillar-card__content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 18px 22px;
+  gap: 8px;
+}
+
+/* Heading — exact Figma: 20px Jost Bold, tracking -0.4px */
+.pillar-card__heading {
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(0.95rem, 1.1vw, 1.25rem);
+  font-weight: 700;
+  color: #f1f8fc;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.pillar-card__heading-line--accent {
+  color: #366cd1;
+}
+
+/* Body — exact Figma: 14px Jost Medium, tracking -0.28px */
+.pillar-card__body {
+  font-size: clamp(0.7rem, 0.85vw, 0.875rem);
+  font-weight: 500;
+  color: #f1f8fc;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  opacity: 0.92;
+}
+
+/* CTA — exact Figma: 14px Jost SemiBold, tracking -0.28px */
+.pillar-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 10px 16px;
+  background: #22345a;
+  border: 2px solid #fff;
+  border-radius: 16px;
+  color: #e5e7eb;
+  font-size: clamp(0.7rem, 0.85vw, 0.875rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.pillar-card__cta svg {
+  flex-shrink: 0;
+}
+
+/* ── Tablet ── */
+@media (max-width: 900px) {
+  .bpillars__row {
+    flex-direction: column;
+    aspect-ratio: auto;
+  }
+
+  .bpillars__hero {
+    flex: none;
+    height: 340px;
+  }
+
+  .bpillars__right {
+    height: auto;
+  }
+
+  .bpillars__heading {
+    flex: none;
+    padding: 32px 24px 8px;
+  }
+
+  .bpillars__cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pillar-card {
+    height: auto;
+    aspect-ratio: 228 / 460;
+  }
+}
+
+/* ── Mobile ── */
+@media (max-width: 560px) {
+  .bpillars__hero {
+    height: 300px;
+  }
+
+  .bpillars__hero-brand {
+    left: 6%;
+    top: 6%;
+  }
+
+  .bpillars__hero-tagline {
+    top: 24%;
+  }
+
+  .bpillars__cta {
+    left: 16px;
+    bottom: 16px;
+    padding: 10px 16px;
+  }
+
+  .bpillars__heading {
+    padding: 24px 18px 4px;
+  }
+
+  .bpillars__cards {
+    grid-template-columns: 1fr;
+  }
+
+  .pillar-card {
+    aspect-ratio: 228 / 320;
+  }
+
+  .pillar-card__content {
+    padding: 16px 14px 18px;
+  }
+}
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Brand Pillars",
+  "tag": "section",
+  "class": "ossian-brand-pillars-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "text",
+      "id": "hero_brand",
+      "label": "Hero brand name",
+      "default": "OSSION"
+    },
+    {
+      "type": "text",
+      "id": "hero_brand_sub",
+      "label": "Hero brand subtitle",
+      "default": "PROFESSIONAL"
+    },
+    {
+      "type": "text",
+      "id": "hero_tagline_line1",
+      "label": "Hero tagline line 1",
+      "default": "Salon Science"
+    },
+    {
+      "type": "text",
+      "id": "hero_tagline_line2",
+      "label": "Hero tagline line 2",
+      "default": "At Its Best"
+    },
+    {
+      "type": "text",
+      "id": "hero_cta_label",
+      "label": "Hero button text",
+      "default": "Explore Ossion"
+    },
+    {
+      "type": "url",
+      "id": "hero_link",
+      "label": "Hero button link"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow_script",
+      "label": "Script eyebrow text",
+      "default": "Welcome to our world."
+    },
+    {
+      "type": "text",
+      "id": "heading_white",
+      "label": "Heading (white)",
+      "default": "Real Science."
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "Heading (accent)",
+      "default": "Real Results."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "pillar",
+      "name": "Pillar Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "heading_line1",
+          "label": "Heading line 1",
+          "default": "From the Depths"
+        },
+        {
+          "type": "text",
+          "id": "heading_line2",
+          "label": "Heading line 2",
+          "default": "of Marine Science"
+        },
+        {
+          "type": "checkbox",
+          "id": "accent_line2",
+          "label": "Highlight line 2 in blue",
+          "default": true
+        },
+        {
+          "type": "textarea",
+          "id": "body_text",
+          "label": "Body text",
+          "default": "Advanced formulations inspired by the ocean. Proven by science."
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "Overlay darkness",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "default": 70
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button text",
+          "default": "Our Science"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Pillars",
+      "settings": {
+        "hero_brand": "OSSION",
+        "hero_brand_sub": "PROFESSIONAL",
+        "hero_tagline_line1": "Salon Science",
+        "hero_tagline_line2": "At Its Best",
+        "hero_cta_label": "Explore Ossion",
+        "eyebrow_script": "Welcome to our world.",
+        "heading_white": "Real Science.",
+        "heading_accent": "Real Results."
+      },
+      "blocks": [
+        {
+          "type": "pillar",
+          "settings": {
+            "heading_line1": "From the Depths",
+            "heading_line2": "of Marine Science",
+            "accent_line2": true,
+            "body_text": "Advanced formulations inspired by the ocean. Proven by science.",
+            "overlay_opacity": 80,
+            "button_label": "Our Science"
+          }
+        },
+        {
+          "type": "pillar",
+          "settings": {
+            "heading_line1": "Heads up:",
+            "heading_line2": "Care Beyond the chair",
+            "accent_line2": true,
+            "body_text": "Expert care for every strand. Because your hair deserves more than just a salon visit.",
+            "overlay_opacity": 50,
+            "button_label": "Hair Care"
+          }
+        },
+        {
+          "type": "pillar",
+          "settings": {
+            "heading_line1": "Water Smart.",
+            "heading_line2": "Every Drop Counts.",
+            "accent_line2": true,
+            "body_text": "We use clean, conscious innovation for a better tomorrow.",
+            "overlay_opacity": 70,
+            "button_label": "Our Promise"
+          }
+        },
+        {
+          "type": "pillar",
+          "settings": {
+            "heading_line1": "WE ACT",
+            "heading_line2": "On our purpose always",
+            "accent_line2": false,
+            "body_text": "Better ingredients. Cleaner choices. stronger planet. Stronger you.",
+            "overlay_opacity": 70,
+            "button_label": "Sustainability"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
