@@ -28,7 +28,165 @@
         "padding-block-start": 40,
         "padding-block-end": 80
       }
+    },
+    "about_marine_banner": {
+      "type": "ossian-marine-banner",
+      "settings": {
+        "powered_by_label": "POWERED BY",
+        "brand_name": "MARINE TECHNOLOGY",
+        "description": "Ocean derived actives work in synergy with advanced science to deliver superior lift, protection and long lasting colour results.",
+        "cta_label": "Explore Our Science",
+        "cta_url": "#about_science"
+      }
+    },
+    "about_brand_pillars": {
+      "type": "ossian-brand-pillars",
+      "blocks": {
+        "pillar_1": {
+          "type": "pillar",
+          "settings": {
+            "heading_line1": "From the Depths",
+            "heading_line2": "of Marine Science",
+            "accent_line2": true,
+            "body_text": "Advanced formulations inspired by the ocean. Proven by science.",
+            "overlay_opacity": 80,
+            "button_label": "Our Science"
+          }
+        },
+        "pillar_2": {
+          "type": "pillar",
+          "settings": {
+            "heading_line1": "Heads up:",
+            "heading_line2": "Care Beyond the chair",
+            "accent_line2": true,
+            "body_text": "Expert care for every strand. Because your hair deserves more than just a salon visit.",
+            "overlay_opacity": 50,
+            "button_label": "Hair Care"
+          }
+        },
+        "pillar_3": {
+          "type": "pillar",
+          "settings": {
+            "heading_line1": "Water Smart.",
+            "heading_line2": "Every Drop Counts.",
+            "accent_line2": true,
+            "body_text": "We use clean, conscious innovation for a better tomorrow.",
+            "overlay_opacity": 70,
+            "button_label": "Our Promise"
+          }
+        },
+        "pillar_4": {
+          "type": "pillar",
+          "settings": {
+            "heading_line1": "WE ACT",
+            "heading_line2": "On our purpose always",
+            "accent_line2": false,
+            "body_text": "Better ingredients. Cleaner choices. stronger planet. Stronger you.",
+            "overlay_opacity": 70,
+            "button_label": "Sustainability"
+          }
+        }
+      },
+      "block_order": ["pillar_1", "pillar_2", "pillar_3", "pillar_4"],
+      "settings": {
+        "hero_brand": "OSSION",
+        "hero_brand_sub": "PROFESSIONAL",
+        "hero_tagline_line1": "Salon Science",
+        "hero_tagline_line2": "At Its Best",
+        "hero_cta_label": "Explore Ossion",
+        "eyebrow_script": "Welcome to our world.",
+        "heading_white": "Real Science.",
+        "heading_accent": "Real Results."
+      }
+    },
+    "about_science": {
+      "type": "ossian-science",
+      "blocks": {
+        "badge_1": {
+          "type": "badge",
+          "settings": {
+            "icon_type": "droplet",
+            "label": "DERMAT TESTED",
+            "description": "Gentle on skin, tested for safety and purity."
+          }
+        },
+        "badge_2": {
+          "type": "badge",
+          "settings": {
+            "icon_type": "leaf",
+            "label": "VEGAN FORMULA",
+            "description": "Plant-powered ingredients for a conscious choice."
+          }
+        },
+        "badge_3": {
+          "type": "badge",
+          "settings": {
+            "icon_type": "wave",
+            "label": "MARINE TECHNOLOGY",
+            "description": "Harnessing ocean science for effective solutions."
+          }
+        }
+      },
+      "block_order": ["badge_1", "badge_2", "badge_3"],
+      "settings": {
+        "heading": "OSSION",
+        "heading_accent": "SCIENCE",
+        "description": "The Ocean is the earth's oldest living laboratory - a realm of extraordinary depth, perpetual renewal, and silent precision. For millennia, its tides have refined minerals, concentrated bioactive compounds, and cultivated ingredients of rare potency.\n\nThis is haircare and skincare stripped of excess and elevated in purpose. No embellishment. No compromise.",
+        "quiz_text": "Curious about what your skin or hair needs?",
+        "button_label": "TAKE THE QUIZ",
+        "button_url": ""
+      }
+    },
+    "about_trust_ticker": {
+      "type": "ossian-trust-ticker",
+      "blocks": {
+        "badge_1": {
+          "type": "badge",
+          "settings": {
+            "icon": "leaf",
+            "title": "Skin Loving Ingredients",
+            "description": "Enriched with natural extracts & nutrients."
+          }
+        },
+        "badge_2": {
+          "type": "badge",
+          "settings": {
+            "icon": "shield",
+            "title": "Dermatologically Tested",
+            "description": "Safe and gentle for everyday use."
+          }
+        },
+        "badge_3": {
+          "type": "badge",
+          "settings": {
+            "icon": "droplet",
+            "title": "Professional Quality",
+            "description": "Salon-grade formulas, tested and proven."
+          }
+        },
+        "badge_4": {
+          "type": "badge",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Visible Results",
+            "description": "Healthy, glowing hair and skin you can see."
+          }
+        }
+      },
+      "block_order": ["badge_1", "badge_2", "badge_3", "badge_4"],
+      "settings": {
+        "background_color": "#ffffff",
+        "scroll_speed": 28,
+        "padding_top": 32,
+        "padding_bottom": 32
+      }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main",
+    "about_marine_banner",
+    "about_brand_pillars",
+    "about_science",
+    "about_trust_ticker"
+  ]
 }
