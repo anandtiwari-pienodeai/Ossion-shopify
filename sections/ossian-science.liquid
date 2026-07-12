@@ -9,8 +9,14 @@
   "
 >
   <div class="ossian-science__card page-width">
-    {%- if section.settings.heading != blank -%}
-      <h2 class="ossian-science__heading">{{ section.settings.heading }}</h2>
+    {%- if section.settings.heading != blank or section.settings.heading_accent != blank -%}
+      <h2 class="ossian-science__heading">
+        {%- if section.settings.heading != blank -%}<span>{{ section.settings.heading }}</span>{%- endif -%}
+        {%- if section.settings.heading_accent != blank -%}<span class="ossian-science__heading-accent">{{ section.settings.heading_accent }}</span>{%- endif -%}
+      </h2>
+      <svg class="ossian-science__squiggle" width="70" height="14" viewBox="0 0 70 14" fill="none" aria-hidden="true">
+        <path d="M2 7c4-8 10-8 14 0s10 8 14 0 10-8 14 0 10 8 14 0 8-6 10-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
     {%- endif -%}
     {%- if section.settings.description != blank -%}
       <p class="ossian-science__description">{{ section.settings.description }}</p>
@@ -24,38 +30,59 @@
               {%- if block.settings.icon != blank -%}
                 {{
                   block.settings.icon
-                  | image_url: width: 80
+                  | image_url: width: 100
                   | image_tag:
                     class: 'ossian-science__badge-img',
                     loading: 'lazy'
                 }}
               {%- else -%}
-                <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-                  <circle cx="18" cy="18" r="17" stroke="currentColor" stroke-width="1.5"/>
-                  {%- case block.settings.icon_type -%}
-                    {%- when 'leaf' -%}
-                      <path d="M18 26c-4-4-8-8-4-12s12 0 8 8c-1 2-4 4-4 4z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                    {%- when 'droplet' -%}
-                      <path d="M18 10l6 9a6 6 0 01-12 0l6-9z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                    {%- else -%}
-                      <path d="M14 18l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                  {%- endcase -%}
-                </svg>
+                {%- case block.settings.icon_type -%}
+                  {%- when 'leaf' -%}
+                    <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+                      <path d="M21 34C13 30 9 22 12 13c9-1 17 3 19 11 2 8-3 13-10 10z" fill="#3fa74a"/>
+                      <path d="M21 34V16" stroke="#2c7a37" stroke-width="1.6" stroke-linecap="round"/>
+                    </svg>
+                  {%- when 'wave' -%}
+                    <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+                      <path d="M21 6c5 5 9 10 6 17-2 5-8 6-11 2-2-3-1-6 1-7 3-1 5 1 4 4" stroke="#1e8a9e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#bfe6ec"/>
+                      <path d="M8 30c3-2 6-2 9 0s6 2 9 0 6-2 8 0" stroke="#1e8a9e" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                  {%- else -%}
+                    <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+                      <path d="M21 6c5 7 10 13 10 18a10 10 0 01-20 0c0-5 5-11 10-18z" fill="#2f6fed"/>
+                      <path d="M9 32c3-2 6-2 9 0s6 2 9 0" stroke="#1e8a9e" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                {%- endcase -%}
               {%- endif -%}
             </div>
             {%- if block.settings.label != blank -%}
               <span class="ossian-science__badge-label">{{ block.settings.label }}</span>
+            {%- endif -%}
+            {%- if block.settings.description != blank -%}
+              <p class="ossian-science__badge-desc">{{ block.settings.description }}</p>
             {%- endif -%}
           </div>
         {%- endfor -%}
       </div>
     {%- endif -%}
 
-    {%- if section.settings.button_label != blank -%}
-      <a href="{{ section.settings.button_url | default: '#' }}" class="ossian-science__cta">
-        {{ section.settings.button_label }}
-        <svg width="20" height="12" viewBox="0 0 20 12" fill="none"><path d="M0 6h18M13 1l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
+    {%- if section.settings.quiz_text != blank or section.settings.button_label != blank -%}
+      <div class="ossian-science__quiz">
+        <div class="ossian-science__quiz-info">
+          <span class="ossian-science__quiz-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6a1 1 0 0 1 1 1v1H8V4a1 1 0 0 1 1-1Z"/><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9.5 12a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.4v.3"/><circle cx="12" cy="18.5" r=".6" fill="white" stroke="none"/></svg>
+          </span>
+          {%- if section.settings.quiz_text != blank -%}
+            <p class="ossian-science__quiz-text">{{ section.settings.quiz_text }}</p>
+          {%- endif -%}
+        </div>
+        {%- if section.settings.button_label != blank -%}
+          <a href="{{ section.settings.button_url | default: '#' }}" class="ossian-science__cta">
+            {{ section.settings.button_label }}
+            <svg width="20" height="12" viewBox="0 0 20 12" fill="none"><path d="M0 6h18M13 1l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        {%- endif -%}
+      </div>
     {%- endif -%}
   </div>
 </div>
@@ -81,39 +108,51 @@
 .ossian-science__card {
   position: relative;
   z-index: 1;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 16px;
-  padding: 56px 64px;
+  background-color: #eef4fb;
+  background-image: url('https://cdn.shopify.com/s/files/1/1021/3716/8155/files/ChatGPT_Image_Jul_12_2026_03_38_49_PM.png?v=1783850951');
+  background-size: cover;
+  background-position: center;
+  border-radius: 28px;
+  padding: 56px 64px 40px;
   text-align: center;
-  max-width: 920px;
+  max-width: 1080px;
   margin: 0 auto;
-  backdrop-filter: blur(8px);
+  box-shadow: 0 30px 70px rgba(6, 20, 45, 0.35);
 }
 
 .ossian-science__heading {
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
-  font-weight: 900;
-  letter-spacing: 0.12em;
+  font-size: clamp(1.8rem, 3.4vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: 0.01em;
   text-transform: uppercase;
-  color: #ffffff;
-  margin: 0 0 20px;
+  color: #1e3a5f;
+  margin: 0;
+}
+
+.ossian-science__heading-accent {
+  color: #1a63c9;
+  margin-left: 0.3em;
+}
+
+.ossian-science__squiggle {
+  display: block;
+  color: #2f6fed;
+  margin: 4px auto 20px;
 }
 
 .ossian-science__description {
-  font-size: 0.95rem;
-  line-height: 1.7;
-  color: rgba(255, 255, 255, 0.8);
+  font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+  line-height: 1.6;
+  color: #33507a;
   margin: 0 auto 40px;
-  max-width: 680px;
+  max-width: 700px;
 }
 
 .ossian-science__badges {
   display: flex;
   justify-content: center;
-  gap: 48px;
-  margin-bottom: 40px;
-  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-bottom: 36px;
 }
 
 .ossian-science__badge {
@@ -121,59 +160,132 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  flex: 1;
+  max-width: 260px;
+  padding: 0 28px;
+  border-right: 1px solid rgba(30, 58, 95, 0.15);
+}
+
+.ossian-science__badge:last-child {
+  border-right: none;
 }
 
 .ossian-science__badge-icon {
-  width: 70px;
-  height: 70px;
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  width: 84px;
+  height: 84px;
   border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(30, 58, 95, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.9);
 }
 
 .ossian-science__badge-img {
-  width: 36px;
-  height: 36px;
+  width: 46px;
+  height: 46px;
   object-fit: contain;
-  filter: brightness(0) invert(1);
 }
 
 .ossian-science__badge-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.8);
+  color: #1e3a5f;
   text-align: center;
+}
+
+.ossian-science__badge-desc {
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: #5b7091;
+  text-align: center;
+  margin: 0;
+}
+
+.ossian-science__quiz {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(30, 58, 95, 0.1);
+  border-radius: 20px;
+  padding: 14px 14px 14px 20px;
+  text-align: left;
+}
+
+.ossian-science__quiz-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.ossian-science__quiz-icon {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a63c9, #123a70);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ossian-science__quiz-text {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #1e3a5f;
+  margin: 0;
 }
 
 .ossian-science__cta {
   display: inline-flex;
   align-items: center;
+  flex-shrink: 0;
   gap: 12px;
   color: #ffffff;
+  background: #1e3a5f;
   font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
-  border: 1.5px solid rgba(255,255,255,0.6);
-  padding: 14px 32px;
-  border-radius: 6px;
-  transition: background 0.2s, border-color 0.2s;
+  padding: 16px 28px;
+  border-radius: 12px;
+  transition: background 0.2s;
 }
 
 .ossian-science__cta:hover {
-  background: rgba(255,255,255,0.12);
-  border-color: #fff;
+  background: #16304f;
 }
 
 @media (max-width: 768px) {
   .ossian-science__card { padding: 40px 24px; }
-  .ossian-science__badges { gap: 28px; }
+
+  .ossian-science__badges {
+    flex-wrap: wrap;
+    row-gap: 28px;
+  }
+
+  .ossian-science__badge {
+    flex: 0 0 50%;
+    max-width: none;
+    border-right: none;
+    padding: 0 12px;
+  }
+
+  .ossian-science__quiz {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .ossian-science__quiz-info { flex-direction: column; text-align: center; }
+  .ossian-science__cta { justify-content: center; }
 }
 {% endstylesheet %}
 
@@ -192,7 +304,13 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "OSSION SCIENCE"
+      "default": "OSSION"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "Heading accent word",
+      "default": "SCIENCE"
     },
     {
       "type": "textarea",
@@ -201,15 +319,25 @@
       "default": "Lorem ipsum dolor sit amet consectetur. Non metus praesent enim diam fringilis. Sagittis nec convallis virra non risus auctor prom. Quis duam dui curabitur pharetra amet enim."
     },
     {
+      "type": "header",
+      "content": "Quiz bar"
+    },
+    {
+      "type": "text",
+      "id": "quiz_text",
+      "label": "Quiz prompt text",
+      "default": "Curious about what your skin or hair needs?"
+    },
+    {
       "type": "text",
       "id": "button_label",
-      "label": "Button label",
-      "default": "LEARN MORE"
+      "label": "Quiz button label",
+      "default": "TAKE THE QUIZ"
     },
     {
       "type": "url",
       "id": "button_url",
-      "label": "Button URL"
+      "label": "Quiz button URL"
     }
   ],
   "blocks": [
@@ -227,17 +355,23 @@
           "id": "icon_type",
           "label": "Fallback icon",
           "options": [
-            { "value": "check", "label": "Check" },
+            { "value": "droplet", "label": "Droplet" },
             { "value": "leaf", "label": "Leaf" },
-            { "value": "droplet", "label": "Droplet" }
+            { "value": "wave", "label": "Wave / Marine" }
           ],
-          "default": "check"
+          "default": "droplet"
         },
         {
           "type": "text",
           "id": "label",
           "label": "Label",
           "default": "DERMAT TESTED"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Gentle on skin, tested for safety and purity."
         }
       ]
     }
@@ -246,13 +380,15 @@
     {
       "name": "Ossion Science",
       "settings": {
-        "heading": "OSSION SCIENCE",
-        "button_label": "LEARN MORE"
+        "heading": "OSSION",
+        "heading_accent": "SCIENCE",
+        "quiz_text": "Curious about what your skin or hair needs?",
+        "button_label": "TAKE THE QUIZ"
       },
       "blocks": [
-        { "type": "badge", "settings": { "label": "DERMAT TESTED", "icon_type": "check" } },
-        { "type": "badge", "settings": { "label": "VEGAN FORMULA", "icon_type": "leaf" } },
-        { "type": "badge", "settings": { "label": "MARINE TECHNOLOGY", "icon_type": "droplet" } }
+        { "type": "badge", "settings": { "label": "DERMAT TESTED", "icon_type": "droplet", "description": "Gentle on skin, tested for safety and purity." } },
+        { "type": "badge", "settings": { "label": "VEGAN FORMULA", "icon_type": "leaf", "description": "Plant-powered ingredients for a conscious choice." } },
+        { "type": "badge", "settings": { "label": "MARINE TECHNOLOGY", "icon_type": "wave", "description": "Harnessing ocean science for effective solutions." } }
       ]
     }
   ]

@@ -60,7 +60,7 @@
 /* ── Section ── */
 .ossian-available {
   background: #fff;
-  padding: 52px 0 56px;
+  padding: 52px 0 20px;
   overflow: hidden;
 }
 
@@ -118,15 +118,13 @@
 .ossian-available__logo {
   flex-shrink: 0;
   width: clamp(100px, 9vw, 140px);
-  height: clamp(100px, 9vw, 140px);
+  height: clamp(100px, 2vw, 140px);
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 20px;
   overflow: hidden;
   text-decoration: none;
-  background: #fff;
-  box-shadow: 0 2px 10px rgba(30,58,95,0.08);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -173,7 +171,7 @@
 
 /* ── Large desktop (≥1400px) ── */
 @media (min-width: 1400px) {
-  .ossian-available { padding: 60px 0 64px; }
+  .ossian-available { padding: 60px 0 20px; }
   .ossian-available__inner { gap: 28px; padding-right: 28px; }
 }
 

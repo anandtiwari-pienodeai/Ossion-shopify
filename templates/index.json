@@ -524,8 +524,9 @@
           "type": "badge",
           "settings": {
             "icon": "shopify://shop_images/OssionSc1.png",
-            "icon_type": "check",
-            "label": "DERMAT TESTED"
+            "icon_type": "droplet",
+            "label": "DERMAT TESTED",
+            "description": "Gentle on skin, tested for safety and purity."
           }
         },
         "badge_2": {
@@ -533,15 +534,17 @@
           "settings": {
             "icon": "shopify://shop_images/OssionSc2.png",
             "icon_type": "leaf",
-            "label": "VEGAN FORMULA"
+            "label": "VEGAN FORMULA",
+            "description": "Plant-powered ingredients for a conscious choice."
           }
         },
         "badge_3": {
           "type": "badge",
           "settings": {
             "icon": "shopify://shop_images/OssionSc3.png",
-            "icon_type": "droplet",
-            "label": "MARINE TECHNOLOGY"
+            "icon_type": "wave",
+            "label": "MARINE TECHNOLOGY",
+            "description": "Harnessing ocean science for effective solutions."
           }
         }
       },
@@ -554,8 +557,10 @@
       "settings": {
         "background_image": "shopify://shop_images/OssionScience.png",
         "heading": "The Ossion Difference",
+        "heading_accent": "",
         "description": "The Ocean is the earth’s oldest living laboratory - a realm of extraordinary depth, perpetual renewal, and silent precision. For millennia, its tides have refined minerals, concentrated bioactive compounds, and cultivated ingredients of rare potency. <br>\n<br> \nThis is haircare and skincare stripped of excess and elevated in purpose. \nNo embellishment. No compromise.",
-        "button_label": "LEARN MORE",
+        "quiz_text": "Curious about what your skin or hair needs?",
+        "button_label": "TAKE THE QUIZ",
         "button_url": ""
       }
     },
