@@ -414,11 +414,26 @@
   }
 
   .bpillars__cards {
-    grid-template-columns: 1fr;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 18px;
+    -webkit-overflow-scrolling: touch;
+    gap: 12px;
+    padding: 4px 18px;
+    scrollbar-width: none;
+  }
+
+  .bpillars__cards::-webkit-scrollbar {
+    display: none;
   }
 
   .pillar-card {
+    flex: 0 0 auto;
+    width: 78vw;
+    max-width: 300px;
     aspect-ratio: 228 / 320;
+    scroll-snap-align: start;
   }
 
   .pillar-card__content {
