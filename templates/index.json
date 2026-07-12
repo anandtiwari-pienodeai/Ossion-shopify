@@ -219,6 +219,104 @@
         "trust_label_3": "Safe & Effective"
       }
     },
+    "ossian_product_showcase_LAeCxW": {
+      "type": "ossian-product-showcase",
+      "blocks": {
+        "product_card_gfxYkB": {
+          "type": "product_card",
+          "settings": {
+            "product": "",
+            "image": "shopify://shop_images/C12.png",
+            "custom_name": "STRAIGHTEN",
+            "descriptor": "Silk-smooth, frizz free finish",
+            "badge_label": "BEST SELLER",
+            "step_label": "STEP 1",
+            "collection": "",
+            "link": ""
+          }
+        },
+        "product_card_FPVM3F": {
+          "type": "product_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy-1",
+            "image": "shopify://shop_images/DEVELOPER_GROUP_SHOT_copy.png",
+            "custom_name": "Developer",
+            "descriptor": "Precision color, zero damage",
+            "badge_label": "NEW LAUNCH",
+            "step_label": "STEP 2",
+            "collection": "",
+            "link": ""
+          }
+        },
+        "product_card_ipzPTP": {
+          "type": "product_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy",
+            "custom_name": "Hair Mask",
+            "descriptor": "Up to 10X repair",
+            "badge_label": "DEEP REPAIR",
+            "step_label": "STEP 3",
+            "collection": "",
+            "link": ""
+          }
+        },
+        "feature_item_kwJfjc": {
+          "type": "feature_item",
+          "settings": {
+            "icon": "beaker",
+            "title": "For All Hair Types",
+            "subtitle": "Suitable for every hair type"
+          }
+        },
+        "feature_item_YcBKk3": {
+          "type": "feature_item",
+          "settings": {
+            "icon": "triangle",
+            "title": "Keratin Complex",
+            "subtitle": "Strengthens from within"
+          }
+        },
+        "feature_item_EJfLHi": {
+          "type": "feature_item",
+          "settings": {
+            "icon": "drop",
+            "title": "Long Lasting results",
+            "subtitle": "Salon results that last"
+          }
+        },
+        "feature_item_xXh3VN": {
+          "type": "feature_item",
+          "settings": {
+            "icon": "person",
+            "title": "Trusted by professionals",
+            "subtitle": "Used in salons worldwide"
+          }
+        }
+      },
+      "block_order": [
+        "product_card_gfxYkB",
+        "product_card_FPVM3F",
+        "product_card_ipzPTP",
+        "feature_item_kwJfjc",
+        "feature_item_YcBKk3",
+        "feature_item_EJfLHi",
+        "feature_item_xXh3VN"
+      ],
+      "name": "Professional Hair Solutions",
+      "settings": {
+        "category_label": "Hair Care",
+        "heading": "Professional Hair Solutions",
+        "body_text": "Advanced formulas for stronger, smoother & healthier hair.",
+        "cta_text": "Explore Collection",
+        "cta_link": "",
+        "trust_icon_1": "flask",
+        "trust_label_1": "Salon Quality",
+        "trust_icon_2": "drop",
+        "trust_label_2": "Advanced Technology",
+        "trust_icon_3": "shield",
+        "trust_label_3": "Safe & Effective"
+      }
+    },
     "ossian_skin_needs": {
       "type": "ossian-product-showcase",
       "blocks": {
@@ -338,7 +436,7 @@
       ],
       "name": "Salon Choice",
       "settings": {
-        "banner_image": "shopify://shop_images/WhatsApp_Image_2026-06-29_at_00.30.49.jpg",
+        "banner_image": "shopify://shop_images/WhatsApp_Image_2026-07-12_at_11.52.14.jpg",
         "banner_alt": "",
         "ba_label": "REAL CLIENT RESULT",
         "before_image": "shopify://shop_images/ChatGPT_Image_Jun_29_2026_01_26_46_AM.png",
@@ -711,6 +809,7 @@
     "ossian_hero_slider",
     "ossian_brand_pillars",
     "ossian_hair_solutions",
+    "ossian_product_showcase_LAeCxW",
     "ossian_skin_needs",
     "ossian_salon_choice",
     "ossian_best_sellers",
