@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -8,9 +17,23 @@
           "settings": {
             "text": "<h1>{{ closest.page.title }}</h1>",
             "width": "100%",
+            "max_width": "normal",
             "alignment": "center",
             "type_preset": "h2",
-            "font": "var(--font-primary--family)"
+            "font": "var(--font-primary--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
           },
           "blocks": {}
         },
@@ -20,13 +43,89 @@
           "blocks": {}
         }
       },
-      "block_order": ["heading", "page-content"],
+      "block_order": [
+        "heading",
+        "page-content"
+      ],
       "settings": {
         "content_direction": "column",
         "gap": 32,
         "color_scheme": "",
         "padding-block-start": 40,
         "padding-block-end": 80
+      }
+    },
+    "about_heritage": {
+      "type": "ossian-heritage",
+      "settings": {
+        "eyebrow": "OUR HERITAGE",
+        "heading": "Year by year, forever passionate",
+        "body_text": "<p>For over a decade, Ossion Professional has pushed the boundaries of hair science - refining formulas, perfecting technique, and partnering with salons who share our obsession with results.</p>",
+        "image": "shopify://shop_images/ChatGPT_Image_Jun_29_2026_01_26_46_AM.png",
+        "image_position": "right",
+        "cta_label": "Discover our story",
+        "cta_url": "",
+        "pdf_label": "Download our brand book",
+        "pdf_url": "",
+        "background_color": "#ffffff"
+      }
+    },
+    "about_sustainability": {
+      "type": "ossian-sustainability",
+      "blocks": {
+        "commit_1": {
+          "type": "commitment",
+          "settings": {
+            "icon": "water",
+            "label": "Water use",
+            "description": "Formulated to minimise water use across our supply chain."
+          }
+        },
+        "commit_2": {
+          "type": "commitment",
+          "settings": {
+            "icon": "recycle",
+            "label": "Packaging",
+            "description": "Moving toward recyclable and refillable packaging."
+          }
+        },
+        "commit_3": {
+          "type": "commitment",
+          "settings": {
+            "icon": "energy",
+            "label": "Energy circularity",
+            "description": "Manufacturing powered by renewable energy sources."
+          }
+        }
+      },
+      "block_order": [
+        "commit_1",
+        "commit_2",
+        "commit_3"
+      ],
+      "settings": {
+        "eyebrow": "SUSTAINABILITY",
+        "heading": "Committed to sustainability",
+        "body_text": "<p>We're reducing our footprint at every stage - from formulation to packaging - so professional results never come at the planet's expense.</p>",
+        "image": "shopify://shop_images/ChatGPT_Image_Jun_29_2026_12_48_12_AM.png",
+        "image_position": "right",
+        "cta_label": "Learn more",
+        "cta_url": "",
+        "background_color": "#f7f9fc"
+      }
+    },
+    "about_community": {
+      "type": "ossian-promo-spotlight",
+      "settings": {
+        "eyebrow": "COMMUNITY",
+        "heading": "Supporting hair professionals since day one",
+        "body_text": "<p>From training programs to wellbeing initiatives, we're invested in the people behind the chair - not just the products they use.</p>",
+        "image": "shopify://shop_images/OSSION_PROFESSIONAL.png",
+        "image_position": "right",
+        "cta_label": "Learn more",
+        "cta_url": "",
+        "theme": "dark",
+        "background_color": "#ffffff"
       }
     },
     "about_marine_banner": {
@@ -39,102 +138,49 @@
         "cta_url": "#about_science"
       }
     },
-    "about_brand_pillars": {
-      "type": "ossian-brand-pillars",
+    "about_innovation": {
+      "type": "ossian-innovation-grid",
       "blocks": {
-        "pillar_1": {
-          "type": "pillar",
+        "innovation_1": {
+          "type": "innovation",
           "settings": {
-            "heading_line1": "From the Depths",
-            "heading_line2": "of Marine Science",
-            "accent_line2": true,
-            "body_text": "Advanced formulations inspired by the ocean. Proven by science.",
-            "overlay_opacity": 80,
-            "button_label": "Our Science"
+            "image": "shopify://shop_images/Korean_Glow.png",
+            "heading": "Molecular Repair",
+            "description": "A state-of-the-art formula that repairs visible damage in a single use, protected by advanced bonding technology.",
+            "link_label": "Discover more",
+            "link_url": ""
           }
         },
-        "pillar_2": {
-          "type": "pillar",
+        "innovation_2": {
+          "type": "innovation",
           "settings": {
-            "heading_line1": "Heads up:",
-            "heading_line2": "Care Beyond the chair",
-            "accent_line2": true,
-            "body_text": "Expert care for every strand. Because your hair deserves more than just a salon visit.",
-            "overlay_opacity": 50,
-            "button_label": "Hair Care"
+            "image": "shopify://shop_images/image_208.png",
+            "heading": "Marine Technology",
+            "description": "Ocean-derived actives that work in synergy with advanced science for superior lift and long-lasting colour.",
+            "link_label": "Discover more",
+            "link_url": ""
           }
         },
-        "pillar_3": {
-          "type": "pillar",
+        "innovation_3": {
+          "type": "innovation",
           "settings": {
-            "heading_line1": "Water Smart.",
-            "heading_line2": "Every Drop Counts.",
-            "accent_line2": true,
-            "body_text": "We use clean, conscious innovation for a better tomorrow.",
-            "overlay_opacity": 70,
-            "button_label": "Our Promise"
-          }
-        },
-        "pillar_4": {
-          "type": "pillar",
-          "settings": {
-            "heading_line1": "WE ACT",
-            "heading_line2": "On our purpose always",
-            "accent_line2": false,
-            "body_text": "Better ingredients. Cleaner choices. stronger planet. Stronger you.",
-            "overlay_opacity": 70,
-            "button_label": "Sustainability"
+            "image": "shopify://shop_images/Korean_Glow.png",
+            "heading": "Water Saver",
+            "description": "A unique fragmentation technology that saves up to 69% water at the backbar without compromising results.",
+            "link_label": "Discover more",
+            "link_url": ""
           }
         }
       },
-      "block_order": ["pillar_1", "pillar_2", "pillar_3", "pillar_4"],
+      "block_order": [
+        "innovation_1",
+        "innovation_2",
+        "innovation_3"
+      ],
       "settings": {
-        "hero_brand": "OSSION",
-        "hero_brand_sub": "PROFESSIONAL",
-        "hero_tagline_line1": "Salon Science",
-        "hero_tagline_line2": "At Its Best",
-        "hero_cta_label": "Explore Ossion",
-        "eyebrow_script": "Welcome to our world.",
-        "heading_white": "Real Science.",
-        "heading_accent": "Real Results."
-      }
-    },
-    "about_science": {
-      "type": "ossian-science",
-      "blocks": {
-        "badge_1": {
-          "type": "badge",
-          "settings": {
-            "icon_type": "droplet",
-            "label": "DERMAT TESTED",
-            "description": "Gentle on skin, tested for safety and purity."
-          }
-        },
-        "badge_2": {
-          "type": "badge",
-          "settings": {
-            "icon_type": "leaf",
-            "label": "VEGAN FORMULA",
-            "description": "Plant-powered ingredients for a conscious choice."
-          }
-        },
-        "badge_3": {
-          "type": "badge",
-          "settings": {
-            "icon_type": "wave",
-            "label": "MARINE TECHNOLOGY",
-            "description": "Harnessing ocean science for effective solutions."
-          }
-        }
-      },
-      "block_order": ["badge_1", "badge_2", "badge_3"],
-      "settings": {
-        "heading": "OSSION",
-        "heading_accent": "SCIENCE",
-        "description": "The Ocean is the earth's oldest living laboratory - a realm of extraordinary depth, perpetual renewal, and silent precision. For millennia, its tides have refined minerals, concentrated bioactive compounds, and cultivated ingredients of rare potency.\n\nThis is haircare and skincare stripped of excess and elevated in purpose. No embellishment. No compromise.",
-        "quiz_text": "Curious about what your skin or hair needs?",
-        "button_label": "TAKE THE QUIZ",
-        "button_url": ""
+        "eyebrow": "INNOVATION",
+        "heading": "Technology behind the results",
+        "subheading": "Every formula is backed by science built to perform in the real world."
       }
     },
     "about_trust_ticker": {
@@ -173,7 +219,12 @@
           }
         }
       },
-      "block_order": ["badge_1", "badge_2", "badge_3", "badge_4"],
+      "block_order": [
+        "badge_1",
+        "badge_2",
+        "badge_3",
+        "badge_4"
+      ],
       "settings": {
         "background_color": "#ffffff",
         "scroll_speed": 28,
@@ -184,9 +235,11 @@
   },
   "order": [
     "main",
+    "about_heritage",
+    "about_sustainability",
+    "about_community",
     "about_marine_banner",
-    "about_brand_pillars",
-    "about_science",
+    "about_innovation",
     "about_trust_ticker"
   ]
 }
