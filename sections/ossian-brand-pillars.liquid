@@ -51,7 +51,8 @@
       {%- endif -%}
 
       {%- if pillar_blocks.size > 0 -%}
-        <div class="bpillars__cards">
+        <div class="bpillars__cards-wrap">
+        <div class="bpillars__cards" id="bpillars-carousel-{{ section.id }}">
           {%- for block in pillar_blocks -%}
             {%- assign opacity = block.settings.overlay_opacity | default: 70 | divided_by: 100.0 -%}
             <a href="{{ block.settings.button_link | default: '#' }}" class="pillar-card" {{ block.shopify_attributes }}>
@@ -83,11 +84,53 @@
             </a>
           {%- endfor -%}
         </div>
+
+        <button class="bpillars__nav bpillars__nav--prev" id="bpillars-prev-{{ section.id }}" aria-label="Previous">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="bpillars__nav bpillars__nav--next" id="bpillars-next-{{ section.id }}" aria-label="Next">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        </div>
       {%- endif -%}
     </div>
 
   </div>
 </section>
+
+<script>
+(function () {
+  var carousel = document.getElementById('bpillars-carousel-{{ section.id }}');
+  var prevBtn  = document.getElementById('bpillars-prev-{{ section.id }}');
+  var nextBtn  = document.getElementById('bpillars-next-{{ section.id }}');
+  if (!carousel || !prevBtn || !nextBtn) return;
+
+  function getScrollAmount() {
+    var card = carousel.querySelector('.pillar-card');
+    if (!card) return 300;
+    return card.offsetWidth;
+  }
+
+  nextBtn.addEventListener('click', function () {
+    carousel.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+  });
+  prevBtn.addEventListener('click', function () {
+    carousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+  });
+
+  function updateArrows() {
+    var atStart = carousel.scrollLeft <= 4;
+    var atEnd   = carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth - 4;
+    prevBtn.style.opacity       = atStart ? '0.35' : '1';
+    prevBtn.style.pointerEvents = atStart ? 'none'  : 'auto';
+    nextBtn.style.opacity       = atEnd   ? '0.35' : '1';
+    nextBtn.style.pointerEvents = atEnd   ? 'none'  : 'auto';
+  }
+
+  carousel.addEventListener('scroll', updateArrows, { passive: true });
+  updateArrows();
+})();
+</script>
 
 {% stylesheet %}
 
@@ -255,22 +298,69 @@
   flex-shrink: 0;
 }
 
-/* ── Cards grid ── */
-.bpillars__cards {
+/* ── Cards row — horizontally scrollable, 3-up in view ── */
+.bpillars__cards-wrap {
+  position: relative;
   flex: 1;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
   min-height: 0;
+}
+
+.bpillars__cards {
+  height: 100%;
+  display: flex;
+  min-height: 0;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.bpillars__cards::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Nav arrows ── */
+.bpillars__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  background: rgba(0, 14, 38, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s, opacity 0.2s;
+  z-index: 2;
+}
+
+.bpillars__nav:hover {
+  border-color: #fff;
+  background: #22345a;
+}
+
+.bpillars__nav--prev {
+  left: 12px;
+}
+
+.bpillars__nav--next {
+  right: 12px;
 }
 
 .pillar-card {
   position: relative;
+  flex: 0 0 33.3333%;
   height: 100%;
   display: block;
   overflow: hidden;
   border: 1px solid #182130;
   border-radius: 4px;
   text-decoration: none;
+  scroll-snap-align: start;
 }
 
 .pillar-card__img {
@@ -379,10 +469,18 @@
   }
 
   .bpillars__cards {
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
+    overflow-x: visible;
+    scroll-snap-type: none;
+  }
+
+  .bpillars__nav {
+    display: none;
   }
 
   .pillar-card {
+    flex: initial;
     height: auto;
     aspect-ratio: 228 / 460;
   }
