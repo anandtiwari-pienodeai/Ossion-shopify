@@ -49,10 +49,10 @@
       ],
       "settings": {
         "content_direction": "column",
-        "gap": 32,
+        "gap": 0,
         "color_scheme": "",
         "padding-block-start": 40,
-        "padding-block-end": 80
+        "padding-block-end": 24
       }
     },
     "about_heritage": {
@@ -128,16 +128,6 @@
         "background_color": "#ffffff"
       }
     },
-    "about_marine_banner": {
-      "type": "ossian-marine-banner",
-      "settings": {
-        "powered_by_label": "POWERED BY",
-        "brand_name": "MARINE TECHNOLOGY",
-        "description": "Ocean derived actives work in synergy with advanced science to deliver superior lift, protection and long lasting colour results.",
-        "cta_label": "Explore Our Science",
-        "cta_url": "#about_science"
-      }
-    },
     "about_innovation": {
       "type": "ossian-innovation-grid",
       "blocks": {
@@ -181,6 +171,16 @@
         "eyebrow": "INNOVATION",
         "heading": "Technology behind the results",
         "subheading": "Every formula is backed by science built to perform in the real world."
+      }
+    },
+    "about_marine_banner": {
+      "type": "ossian-marine-banner",
+      "settings": {
+        "powered_by_label": "POWERED BY",
+        "brand_name": "MARINE TECHNOLOGY",
+        "description": "Ocean derived actives work in synergy with advanced science to deliver superior lift, protection and long lasting colour results.",
+        "cta_label": "Explore Our Science",
+        "cta_url": "#about_science"
       }
     },
     "about_trust_ticker": {
@@ -238,8 +238,8 @@
     "about_heritage",
     "about_sustainability",
     "about_community",
-    "about_marine_banner",
     "about_innovation",
+    "about_marine_banner",
     "about_trust_ticker"
   ]
 }

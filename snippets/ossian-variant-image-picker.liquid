@@ -1,0 +1,180 @@
+{%- doc -%}
+  Renders a custom square color-swatch picker with "Col no: XX" captions,
+  matching the Ossion PDP reference design. It visually replaces the native
+  Horizon "Color" variant fieldset (hidden, not removed) and forwards clicks
+  to its radio inputs, so price / add-to-cart / stock all stay in sync with
+  the native <variant-picker> component.
+
+  Renders nothing if the product has no "Color" (or "Colour") option.
+
+  @param {object} product - The current product object.
+
+  @example
+  {% render 'ossian-variant-image-picker', product: product %}
+{%- enddoc -%}
+
+{%- liquid
+  assign color_option = nil
+  for option in product.options_with_values
+    if option.name == 'Color' or option.name == 'Colour'
+      assign color_option = option
+    endif
+  endfor
+-%}
+
+{%- if color_option and color_option.values.size > 1 -%}
+  <div class="ossian-color-picker" data-option-name="{{ color_option.name | escape }}">
+    <p class="ossian-color-picker__label">
+      {{ color_option.name }}
+      <span class="ossian-color-picker__selected">{{ color_option.position }} {{ color_option.selected_value }}</span>
+    </p>
+    <div class="ossian-color-picker__row">
+      {%- for value in color_option.values -%}
+        {%- liquid
+          assign col_index = forloop.index
+          if col_index < 10
+            assign col_label = '0' | append: col_index
+          else
+            assign col_label = col_index
+          endif
+        -%}
+        <button
+          type="button"
+          class="ossian-color-picker__item{% if value.selected %} is-selected{% endif %}"
+          data-color-value="{{ value | escape }}"
+          aria-label="{{ value.name | escape }}"
+          {% unless value.available %}data-unavailable="true" disabled{% endunless %}
+        >
+          <span
+            class="ossian-color-picker__swatch"
+            style="background: {% if value.swatch.color %}{{ value.swatch.color }}{% else %}#e5e9f0{% endif %};"
+          >
+            {%- if value.swatch.image -%}
+              {{
+                value.swatch.image
+                | image_url: width: 88
+                | image_tag: loading: 'lazy', sizes: '44px', class: 'ossian-color-picker__swatch-img'
+              }}
+            {%- endif -%}
+          </span>
+          <span class="ossian-color-picker__caption">Col no: {{ col_label }}</span>
+        </button>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var picker = document.currentScript.previousElementSibling;
+      if (!picker || !picker.classList.contains('ossian-color-picker')) return;
+      var optionName = picker.dataset.optionName;
+
+      function findNativeRadio(value) {
+        return document.querySelector(
+          'variant-picker input[type="radio"][name^="' + CSS.escape(optionName) + '-"][value="' + CSS.escape(value) + '"]'
+        );
+      }
+
+      // Hide the native fieldset for this option — our swatches replace it visually.
+      var anyRadio = document.querySelector(
+        'variant-picker input[type="radio"][name^="' + CSS.escape(optionName) + '-"]'
+      );
+      if (anyRadio) {
+        var fieldset = anyRadio.closest('fieldset');
+        if (fieldset) fieldset.style.display = 'none';
+      }
+
+      picker.querySelectorAll('.ossian-color-picker__item').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          if (btn.disabled) return;
+          var radio = findNativeRadio(btn.dataset.colorValue);
+          if (!radio) return;
+          radio.checked = true;
+          radio.dispatchEvent(new Event('change', { bubbles: true }));
+
+          picker.querySelectorAll('.ossian-color-picker__item').forEach(function (b) {
+            b.classList.toggle('is-selected', b === btn);
+          });
+          var label = picker.querySelector('.ossian-color-picker__selected');
+          if (label) label.textContent = ' ' + btn.dataset.colorValue;
+        });
+      });
+    })();
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .ossian-color-picker {
+    margin-top: 20px;
+    font-family: 'Jost', sans-serif;
+  }
+
+  .ossian-color-picker__label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e3a5f;
+    margin: 0 0 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .ossian-color-picker__selected {
+    font-weight: 500;
+    text-transform: none;
+    color: #5b7091;
+    margin-left: 6px;
+  }
+
+  .ossian-color-picker__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .ossian-color-picker__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .ossian-color-picker__swatch {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    display: block;
+    border: 2px solid transparent;
+    outline: 1px solid rgba(30, 58, 95, 0.12);
+    outline-offset: 2px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .ossian-color-picker__item.is-selected .ossian-color-picker__swatch {
+    border-color: #1e3a5f;
+    transform: scale(1.05);
+  }
+
+  .ossian-color-picker__item[data-unavailable='true'] {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .ossian-color-picker__swatch-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ossian-color-picker__caption {
+    font-size: 0.7rem;
+    color: #8892a3;
+    font-weight: 500;
+  }
+{% endstylesheet %}
