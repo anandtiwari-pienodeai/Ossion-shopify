@@ -760,7 +760,8 @@
       ],
       "name": "Ossion Reels",
       "settings": {
-        "heading": "OSSION gram",
+        "heading": "OSSION",
+        "heading_accent": "gram",
         "subheading": "Real people. Real results. Real stories",
         "instagram_handle": "ossion.care"
       }

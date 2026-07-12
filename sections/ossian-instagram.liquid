@@ -1,7 +1,7 @@
 <div class="ossian-reels">
   <div class="ossian-reels__header page-width">
     <div class="ossian-reels__title-group">
-      <h2 class="ossian-reels__heading">{{ section.settings.heading }}</h2>
+      <h2 class="ossian-reels__heading">{{ section.settings.heading }}&nbsp;{%- if section.settings.heading_accent != blank %}<span class="ossian-reels__heading-accent">{{ section.settings.heading_accent }}</span>{% endif -%}</h2>
       {%- if section.settings.subheading != blank -%}
         <p class="ossian-reels__sub">{{ section.settings.subheading }}</p>
       {%- endif -%}
@@ -25,7 +25,7 @@
         {%- for block in section.blocks -%}
           {%- assign idx = forloop.index0 -%}
           <div
-            class="ossian-reels__card{% if forloop.index == 3 %} ossian-reels__card--active{% endif %}"
+            class="ossian-reels__card{% if forloop.index == 3 %} ossian-reels__card--active{% elsif forloop.index == 2 or forloop.index == 4 %} ossian-reels__card--near{% endif %}"
             data-reel-index="{{ idx }}"
             {{ block.shopify_attributes }}
           >
@@ -56,47 +56,36 @@
               <div class="ossian-reels__play-btn">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
               </div>
-              {%- if block.settings.reel_label != blank -%}
-                <div class="ossian-reels__card-label">{{ block.settings.reel_label }}</div>
+
+              {%- if block.settings.product != blank or block.settings.custom_price != blank -%}
+                <span class="ossian-reels__tag-badge" aria-label="Product tagged" title="Product tagged">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                </span>
               {%- endif -%}
-            </div>
-            <div class="ossian-reels__card-footer">
+
               {%- if block.settings.product != blank -%}
                 {%- assign reel_product = block.settings.product -%}
-                <div class="ossian-reels__product-row">
-                  {%- if reel_product.featured_image != blank -%}
-                    <img
-                      src="{{ reel_product.featured_image | image_url: width: 60 }}"
-                      alt="{{ reel_product.title }}"
-                      class="ossian-reels__product-thumb"
-                      loading="lazy"
-                    >
-                  {%- else -%}
-                    <div class="ossian-reels__product-thumb-placeholder"></div>
-                  {%- endif -%}
+                <div class="ossian-reels__card-footer">
+                  <p class="ossian-reels__product-name">{{ reel_product.title }}</p>
                   <div class="ossian-reels__price-wrap">
+                    <span class="ossian-reels__price-current">{{ reel_product.price | money_without_trailing_zeros }}</span>
                     {%- if reel_product.compare_at_price > reel_product.price -%}
                       <span class="ossian-reels__price-original">{{ reel_product.compare_at_price | money_without_trailing_zeros }}</span>
                       {%- assign discount = reel_product.compare_at_price | minus: reel_product.price | times: 100 | divided_by: reel_product.compare_at_price -%}
                       <span class="ossian-reels__price-discount">{{ discount }}%</span>
-                    {%- else -%}
-                      <span class="ossian-reels__price-original">{{ reel_product.price | money_without_trailing_zeros }}</span>
                     {%- endif -%}
                   </div>
                 </div>
               {%- elsif block.settings.custom_price != blank -%}
-                <div class="ossian-reels__product-row">
-                  {%- if block.settings.product_image != blank -%}
-                    {{
-                      block.settings.product_image
-                      | image_url: width: 60
-                      | image_tag: class: 'ossian-reels__product-thumb', loading: 'lazy'
-                    }}
-                  {%- else -%}
-                    <div class="ossian-reels__product-thumb-placeholder"></div>
+                <div class="ossian-reels__card-footer">
+                  {%- if block.settings.reel_label != blank -%}
+                    <p class="ossian-reels__product-name">{{ block.settings.reel_label }}</p>
                   {%- endif -%}
                   <div class="ossian-reels__price-wrap">
-                    <span class="ossian-reels__price-original">{{ block.settings.custom_price }}</span>
+                    <span class="ossian-reels__price-current">{{ block.settings.custom_price }}</span>
+                    {%- if block.settings.custom_compare_price != blank -%}
+                      <span class="ossian-reels__price-original">{{ block.settings.custom_compare_price }}</span>
+                    {%- endif -%}
                     {%- if block.settings.discount_label != blank -%}
                       <span class="ossian-reels__price-discount">{{ block.settings.discount_label }}</span>
                     {%- endif -%}
@@ -174,23 +163,24 @@
 {% stylesheet %}
 /* ===================== REELS SECTION ===================== */
 .ossian-reels {
-  padding: 60px 0 0;
-  background: #fff;
+  padding: 60px 0 24px;
+  background: #eaf3fb url('https://cdn.shopify.com/s/files/1/1021/3716/8155/files/image_191.png?v=1783841201') center top / cover no-repeat;
 }
 
 .ossian-reels__header {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  text-align: center;
-  gap: 16px;
+ justify-content: center;
+  text-align: left;
+  gap: 24px;
   margin-bottom: 36px;
 }
 
 .ossian-reels__title-group {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 6px;
 }
 
@@ -199,13 +189,17 @@
   font-weight: 900;
   color: #1e3a5f;
   margin: 0;
-  font-style: italic;
+  font-style: normal;
   letter-spacing: -0.01em;
+}
+
+.ossian-reels__heading-accent {
+  color: #2563eb;
 }
 
 .ossian-reels__sub {
   font-size: 0.9rem;
-  color: #666;
+  color: #444;
   margin: 0;
 }
 
@@ -213,19 +207,20 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #1e3a5f;
+  color: #2563eb;
   font-size: 13px;
   font-weight: 600;
   text-decoration: none;
-  border: 1.5px solid #1e3a5f;
+  border: 1.5px solid #2563eb;
+  background: rgba(255, 255, 255, 0.65);
   padding: 10px 20px;
-  border-radius: 6px;
+  border-radius: 8px;
   white-space: nowrap;
   transition: background 0.2s, color 0.2s;
 }
 
 .ossian-reels__follow:hover {
-  background: #1e3a5f;
+  background: #2563eb;
   color: #fff;
 }
 
@@ -241,7 +236,7 @@
 
 .ossian-reels__track {
   display: flex;
-  gap: 16px;
+  gap: 20px;
   align-items: flex-end;
   width: max-content;
   margin: 0 auto;
@@ -249,34 +244,34 @@
 
 .ossian-reels__card {
   flex-shrink: 0;
-  width: 190px;
+  /* sized so ~5 cards fill the visible row (track-wrap has 40px side
+     padding, gap is 20px: (100vw - 80px padding - 80px gaps) / 5 */
+  width: clamp(220px, calc((100vw - 160px) / 5), 340px);
   border-radius: 20px;
   overflow: hidden;
   background: #000;
   cursor: pointer;
-  /* inactive: scaled down, faded, slightly blurred */
-  transform: scale(0.82);
-  opacity: 0.45;
-  filter: brightness(0.7);
+  transform-origin: bottom center;
+  /* far tier: shortest, sits at the bottom of the row */
+  transform: scale(0.72);
   transition: transform 0.4s cubic-bezier(.4,0,.2,1),
-              opacity 0.4s ease,
-              filter 0.4s ease,
               box-shadow 0.4s ease;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.ossian-reels__card--near {
+  transform: scale(0.87);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
 }
 
 .ossian-reels__card--active {
   transform: scale(1);
-  opacity: 1;
-  filter: brightness(1);
   box-shadow: 0 16px 48px rgba(0,0,0,0.38);
   z-index: 2;
 }
 
 .ossian-reels__card:hover:not(.ossian-reels__card--active) {
-  opacity: 0.75;
-  filter: brightness(0.88);
-  transform: scale(0.88);
+  transform: scale(0.92);
 }
 
 .ossian-reels__card-media {
@@ -343,44 +338,47 @@
   height: 44px;
 }
 
-.ossian-reels__card-label {
+/* Shopping tag badge — shown on any reel with a product linked */
+.ossian-reels__tag-badge {
   position: absolute;
-  bottom: 12px;
-  left: 12px;
-  right: 12px;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
   color: #fff;
-  font-size: 11px;
-  font-weight: 600;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.7);
-  line-height: 1.3;
-}
-
-.ossian-reels__card-footer {
-  background: #111;
-  padding: 10px 12px 14px;
-}
-
-.ossian-reels__product-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  pointer-events: none;
 }
 
-.ossian-reels__product-thumb {
-  width: 44px;
-  height: 44px;
-  object-fit: contain;
-  border-radius: 8px;
-  background: #222;
-  flex-shrink: 0;
+/* Product / price bar — flush strip at the bottom edge of the card */
+.ossian-reels__card-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  background: rgba(223, 228, 237, 0.92);
+  padding: 10px 12px 12px;
 }
 
-.ossian-reels__product-thumb-placeholder {
-  width: 44px;
-  height: 44px;
-  border-radius: 8px;
-  background: #333;
-  flex-shrink: 0;
+.ossian-reels__product-name {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #1e3a5f;
+  margin: 0 0 4px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .ossian-reels__price-wrap {
@@ -390,16 +388,22 @@
   flex-wrap: wrap;
 }
 
-.ossian-reels__price-original {
-  color: #aaa;
+.ossian-reels__price-current {
+  color: #1a1a2e;
   font-size: 13px;
+  font-weight: 800;
+}
+
+.ossian-reels__price-original {
+  color: #8892a3;
+  font-size: 12px;
   font-weight: 500;
   text-decoration: line-through;
 }
 
 .ossian-reels__price-discount {
-  color: #4caf50;
-  font-size: 16px;
+  color: #2e9e4a;
+  font-size: 12px;
   font-weight: 800;
 }
 
@@ -948,15 +952,7 @@
 
 /* ── Large desktop (≥1400px) ── */
 @media (min-width: 1400px) {
-  .ossian-reels__card { width: 230px; }
-  .ossian-reels__track-wrap { padding: 24px 80px 48px; }
   .ossian-reels__heading { font-size: 3.5rem; }
-}
-
-/* ── Standard desktop (1024px–1399px) ── */
-@media (min-width: 1024px) and (max-width: 1399px) {
-  .ossian-reels__card { width: 200px; }
-  .ossian-reels__track-wrap { padding: 20px 60px 40px; }
 }
 
 /* ── Small desktop / large tablet (769px–1023px) ── */
@@ -964,7 +960,7 @@
   .ossian-reels { padding: 40px 0 0; }
   .ossian-reels__heading { font-size: clamp(1.8rem, 4vw, 2.6rem); }
   .ossian-reels__track-wrap { padding: 16px 32px 36px; }
-  .ossian-reels__card { width: 170px; }
+  .ossian-reels__card { width: clamp(150px, calc((100vw - 104px) / 3), 220px); }
 
   /* Popup: stacked column */
   .reel-popup__dialog {
@@ -989,6 +985,9 @@
   .ossian-reels { padding: 24px 0 0; }
 
   .ossian-reels__header {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
     gap: 10px;
     margin-bottom: 18px;
     padding: 0 16px;
@@ -1006,21 +1005,19 @@
   .ossian-reels__track-wrap { padding: 10px 0 24px; }
   .ossian-reels__track { gap: 8px; }
 
-  /* Active card = centered hero; inactive = scaled down + faded */
+  /* Active card = centered hero; near/far = progressively smaller */
   .ossian-reels__card {
     width: 52vw;
     min-width: 150px;
     max-width: 200px;
     border-radius: 16px;
-    transform: scale(0.82);
-    opacity: 0.45;
-    filter: brightness(0.7);
+    transform: scale(0.78);
   }
+
+  .ossian-reels__card--near { transform: scale(0.9); }
 
   .ossian-reels__card--active {
     transform: scale(1);
-    opacity: 1;
-    filter: brightness(1);
   }
 
   /* Always show play overlay on the active card */
@@ -1028,14 +1025,11 @@
   .ossian-reels__play-btn svg { width: 30px; height: 30px; }
 
   /* Card footer */
-  .ossian-reels__card-footer { padding: 8px 10px 12px; }
-
-  .ossian-reels__product-thumb,
-  .ossian-reels__product-thumb-placeholder { width: 34px; height: 34px; border-radius: 6px; }
-
-  .ossian-reels__price-original { font-size: 11px; }
-  .ossian-reels__price-discount { font-size: 13px; }
-  .ossian-reels__product-row { gap: 6px; }
+  .ossian-reels__card-footer { padding: 8px 10px 10px; }
+  .ossian-reels__product-name { font-size: 10px; }
+  .ossian-reels__price-current { font-size: 11.5px; }
+  .ossian-reels__price-original { font-size: 10.5px; }
+  .ossian-reels__price-discount { font-size: 10.5px; }
 
   /* ─────────────────────────────────────────────────
      MOBILE POPUP — Full-screen TikTok / Reels style
@@ -1228,7 +1222,7 @@
       productUrl: {%- if block.settings.product != blank -%}{{ block.settings.product.url | json }}{%- else -%}{{ block.settings.product_url | default: '' | json }}{%- endif -%},
       productImage: {%- if block.settings.product != blank and block.settings.product.featured_image != blank -%}{{ block.settings.product.featured_image | image_url: width: 300 | json }}{%- elsif block.settings.product_image != blank -%}{{ block.settings.product_image | image_url: width: 300 | json }}{%- else -%}null{%- endif -%},
       price: {%- if block.settings.product != blank -%}{{ block.settings.product.price | money }}{%- else -%}{{ block.settings.custom_price | default: '' | json }}{%- endif -%},
-      comparePrice: {%- if block.settings.product != blank and block.settings.product.compare_at_price > block.settings.product.price -%}{{ block.settings.product.compare_at_price | money }}{%- else -%}null{%- endif -%},
+      comparePrice: {%- if block.settings.product != blank and block.settings.product.compare_at_price > block.settings.product.price -%}{{ block.settings.product.compare_at_price | money }}{%- elsif block.settings.product == blank and block.settings.custom_compare_price != blank -%}{{ block.settings.custom_compare_price | json }}{%- else -%}null{%- endif -%},
       discountLabel: {%- if block.settings.product != blank and block.settings.product.compare_at_price > block.settings.product.price -%}{{ block.settings.product.compare_at_price | minus: block.settings.product.price | times: 100 | divided_by: block.settings.product.compare_at_price }}% off{%- elsif block.settings.discount_label != blank -%}{{ block.settings.discount_label | json }}{%- else -%}null{%- endif -%},
       rating: {{ block.settings.rating | default: '0' }},
       reviewCount: {{ block.settings.review_count | default: '0' }},
@@ -1493,6 +1487,7 @@
       cards.forEach(function(c, i) {
         const isActive = i === index;
         c.classList.toggle('ossian-reels__card--active', isActive);
+        c.classList.toggle('ossian-reels__card--near', !isActive && Math.abs(i - index) === 1);
 
         const vid = c.querySelector('.ossian-reels__card-video');
         if (!vid) return;
@@ -1634,7 +1629,13 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "OSSION gram"
+      "default": "OSSION"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "Heading accent word",
+      "default": "gram"
     },
     {
       "type": "text",
@@ -1701,6 +1702,11 @@
         },
         {
           "type": "text",
+          "id": "custom_compare_price",
+          "label": "Custom compare-at price (optional, shown struck through)"
+        },
+        {
+          "type": "text",
           "id": "discount_label",
           "label": "Discount label (e.g. 50%)"
         },
@@ -1758,7 +1764,8 @@
     {
       "name": "Ossion Reels",
       "settings": {
-        "heading": "OSSION gram",
+        "heading": "OSSION",
+        "heading_accent": "gram",
         "subheading": "Real people. Real results. Real stories",
         "instagram_handle": "ossion.care"
       },
