@@ -7,51 +7,61 @@
 
   <div class="ossian-available__track-outer">
     <div class="ossian-available__track">
-      <!-- Set 1 -->
-      <div class="ossian-available__inner">
-        {%- for block in section.blocks -%}
-          <a
-            href="{{ block.settings.url | default: '#' }}"
-            class="ossian-available__logo"
-            target="_blank"
-            rel="noopener"
-            aria-label="{{ block.settings.platform_name }}"
-            {{ block.shopify_attributes }}
-          >
-            {%- if block.settings.logo != blank -%}
-              {{
-                block.settings.logo
-                | image_url: width: 240
-                | image_tag:
-                  class: 'ossian-available__logo-img',
-                  alt: block.settings.platform_name,
-                  loading: 'lazy'
-              }}
-            {%- else -%}
-              <span class="ossian-available__logo-text">{{ block.settings.platform_name }}</span>
-            {%- endif -%}
-          </a>
-        {%- endfor -%}
-      </div>
-      <!-- Set 2 (duplicate for seamless loop) -->
-      <div class="ossian-available__inner" aria-hidden="true">
-        {%- for block in section.blocks -%}
-          <div class="ossian-available__logo">
-            {%- if block.settings.logo != blank -%}
-              {{
-                block.settings.logo
-                | image_url: width: 240
-                | image_tag:
-                  class: 'ossian-available__logo-img',
-                  alt: block.settings.platform_name,
-                  loading: 'lazy'
-              }}
-            {%- else -%}
-              <span class="ossian-available__logo-text">{{ block.settings.platform_name }}</span>
-            {%- endif -%}
+      {%- comment -%}
+        Repeat the logo set enough times that the track is always wider
+        than any viewport — otherwise the -50% loop shows a visible gap
+        of blank space once the (short) content runs out mid-scroll.
+        Only the first set is real/accessible; the rest are aria-hidden
+        duplicates purely for the marquee illusion.
+      {%- endcomment -%}
+      {%- for i in (1..10) -%}
+        {%- if i == 1 -%}
+          <div class="ossian-available__inner">
+            {%- for block in section.blocks -%}
+              <a
+                href="{{ block.settings.url | default: '#' }}"
+                class="ossian-available__logo"
+                target="_blank"
+                rel="noopener"
+                aria-label="{{ block.settings.platform_name }}"
+                {{ block.shopify_attributes }}
+              >
+                {%- if block.settings.logo != blank -%}
+                  {{
+                    block.settings.logo
+                    | image_url: width: 240
+                    | image_tag:
+                      class: 'ossian-available__logo-img',
+                      alt: block.settings.platform_name,
+                      loading: 'lazy'
+                  }}
+                {%- else -%}
+                  <span class="ossian-available__logo-text">{{ block.settings.platform_name }}</span>
+                {%- endif -%}
+              </a>
+            {%- endfor -%}
           </div>
-        {%- endfor -%}
-      </div>
+        {%- else -%}
+          <div class="ossian-available__inner" aria-hidden="true">
+            {%- for block in section.blocks -%}
+              <div class="ossian-available__logo">
+                {%- if block.settings.logo != blank -%}
+                  {{
+                    block.settings.logo
+                    | image_url: width: 240
+                    | image_tag:
+                      class: 'ossian-available__logo-img',
+                      alt: block.settings.platform_name,
+                      loading: 'lazy'
+                  }}
+                {%- else -%}
+                  <span class="ossian-available__logo-text">{{ block.settings.platform_name }}</span>
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
     </div>
   </div>
 </div>
@@ -96,11 +106,12 @@
   );
 }
 
-/* ── Marquee track: two identical sets side by side ── */
+/* ── Marquee track: 10 identical sets in a row (keeps the track wider
+   than any viewport so the loop never runs out of content) ── */
 .ossian-available__track {
   display: flex;
   width: max-content;
-  animation: ossian-available-scroll 22s linear infinite;
+  animation: ossian-available-scroll 110s linear infinite;
 }
 
 .ossian-available__track:hover {
@@ -204,7 +215,7 @@
   .ossian-available__inner { gap: 12px; padding-right: 12px; }
 
   /* Slower on mobile (fewer logos visible) */
-  .ossian-available__track { animation-duration: 16s; }
+  .ossian-available__track { animation-duration: 80s; }
 
   /* Narrower fade zone on small screens */
   .ossian-available__track-outer {
