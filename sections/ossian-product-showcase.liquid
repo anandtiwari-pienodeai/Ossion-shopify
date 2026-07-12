@@ -187,6 +187,9 @@
   overflow: hidden;
   background: #e8eef5;
   padding: 0 0 0;
+  display: flex;
+  flex-direction: column;
+  height: min(850px, 90vh);
 }
 
 /* ── Background Image ── */
@@ -210,10 +213,13 @@
   z-index: 1;
   display: grid;
   grid-template-columns: 1fr 1.5fr 1.45fr;
+  grid-template-rows: minmax(0, 1fr);
   gap: 20px;
   align-items: stretch;
   padding-top: 16px;
   padding-bottom: 20px;
+  flex: 1;
+  min-height: 0;
 }
 
 /* ── Left Panel ── */
@@ -221,6 +227,8 @@
   display: flex;
   flex-direction: column;
   padding: 72px 16px 28px 0;
+  min-height: 0;
+  overflow: hidden;
 }
 
 /* Eyebrow — exact Figma: 32px Jost Medium, #005cc8, tracking -0.64px, NOT italic */
@@ -327,6 +335,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 12px 28px rgba(34, 52, 90, 0.12);
 }
 
 .pshowcase__stack {
@@ -367,18 +376,11 @@
 }
 
 .pshowcase__img-wrap {
-  height: 100%;
   overflow: hidden;
   background: #eaecef;
+  height: 100%;
 }
 
-.pshowcase__card--featured .pshowcase__img-wrap {
-  min-height: 440px;
-}
-
-.pshowcase__card--secondary .pshowcase__img-wrap {
-  min-height: 170px;
-}
 
 .pshowcase__img {
   width: 100%;
@@ -473,13 +475,16 @@
 .pshowcase__features {
   position: relative;
   z-index: 1;
-  background: #fff;
-  border-top: 1px solid rgba(34, 52, 90, 0.08);
+  flex-shrink: 0;
+  padding: 0 0 20px;
 }
 
 .pshowcase__features-inner {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(34, 52, 90, 0.1);
 }
 
 .pshowcase__feature {
@@ -525,16 +530,26 @@
 
 /* ── Tablet (900px) ── */
 @media (max-width: 900px) {
+  .pshowcase {
+    height: auto;
+    overflow: visible;
+  }
+
   .pshowcase__main {
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: none;
     gap: 14px;
     padding-top: 40px;
     padding-bottom: 16px;
+    flex: none;
+    min-height: 0;
   }
 
   .pshowcase__left {
     grid-column: 1 / -1;
     padding: 0 0 16px;
+    min-height: 0;
+    overflow: visible;
   }
 
   .pshowcase__trust {
@@ -545,10 +560,6 @@
 
   .pshowcase__trust-item {
     flex: 0 0 auto;
-  }
-
-  .pshowcase__card--featured .pshowcase__img-wrap {
-    min-height: 320px;
   }
 
   .pshowcase__features-inner {
@@ -598,14 +609,6 @@
 
   .pshowcase__card--secondary {
     flex: 1;
-  }
-
-  .pshowcase__card--featured .pshowcase__img-wrap {
-    min-height: 300px;
-  }
-
-  .pshowcase__card--secondary .pshowcase__img-wrap {
-    min-height: 130px;
   }
 
   .pshowcase__card-footer {

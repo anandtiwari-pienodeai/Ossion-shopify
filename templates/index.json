@@ -127,7 +127,8 @@
         "card_straighten": {
           "type": "product_card",
           "settings": {
-            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy",
+            "product": "",
+            "image": "shopify://shop_images/C12.png",
             "custom_name": "STRAIGHTEN",
             "descriptor": "Silk-smooth, frizz free finish",
             "badge_label": "BEST SELLER",
