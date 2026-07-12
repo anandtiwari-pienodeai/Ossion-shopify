@@ -17,9 +17,23 @@
           "settings": {
             "text": "<h1>{{ closest.page.title }}</h1>",
             "width": "100%",
+            "max_width": "normal",
             "alignment": "center",
             "type_preset": "h2",
-            "font": "var(--font-primary--family)"
+            "font": "var(--font-primary--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
           },
           "blocks": {}
         },
@@ -29,15 +43,203 @@
           "blocks": {}
         }
       },
-      "block_order": ["heading", "page-content"],
+      "block_order": [
+        "heading",
+        "page-content"
+      ],
       "settings": {
         "content_direction": "column",
-        "gap": 32,
+        "gap": 0,
         "color_scheme": "",
         "padding-block-start": 40,
-        "padding-block-end": 80
+        "padding-block-end": 24
+      }
+    },
+    "about_heritage": {
+      "type": "ossian-heritage",
+      "settings": {
+        "eyebrow": "OUR HERITAGE",
+        "heading": "Year by year, forever passionate",
+        "body_text": "<p>For over a decade, Ossion Professional has pushed the boundaries of hair science - refining formulas, perfecting technique, and partnering with salons who share our obsession with results.</p>",
+        "image": "shopify://shop_images/ChatGPT_Image_Jun_29_2026_01_26_46_AM.png",
+        "image_position": "right",
+        "cta_label": "Discover our story",
+        "cta_url": "",
+        "pdf_label": "Download our brand book",
+        "pdf_url": "",
+        "background_color": "#ffffff"
+      }
+    },
+    "about_sustainability": {
+      "type": "ossian-sustainability",
+      "blocks": {
+        "commit_1": {
+          "type": "commitment",
+          "settings": {
+            "icon": "water",
+            "label": "Water use",
+            "description": "Formulated to minimise water use across our supply chain."
+          }
+        },
+        "commit_2": {
+          "type": "commitment",
+          "settings": {
+            "icon": "recycle",
+            "label": "Packaging",
+            "description": "Moving toward recyclable and refillable packaging."
+          }
+        },
+        "commit_3": {
+          "type": "commitment",
+          "settings": {
+            "icon": "energy",
+            "label": "Energy circularity",
+            "description": "Manufacturing powered by renewable energy sources."
+          }
+        }
+      },
+      "block_order": [
+        "commit_1",
+        "commit_2",
+        "commit_3"
+      ],
+      "settings": {
+        "eyebrow": "SUSTAINABILITY",
+        "heading": "Committed to sustainability",
+        "body_text": "<p>We're reducing our footprint at every stage - from formulation to packaging - so professional results never come at the planet's expense.</p>",
+        "image": "shopify://shop_images/ChatGPT_Image_Jun_29_2026_12_48_12_AM.png",
+        "image_position": "right",
+        "cta_label": "Learn more",
+        "cta_url": "",
+        "background_color": "#f7f9fc"
+      }
+    },
+    "about_community": {
+      "type": "ossian-promo-spotlight",
+      "settings": {
+        "eyebrow": "COMMUNITY",
+        "heading": "Supporting hair professionals since day one",
+        "body_text": "<p>From training programs to wellbeing initiatives, we're invested in the people behind the chair - not just the products they use.</p>",
+        "image": "shopify://shop_images/OSSION_PROFESSIONAL.png",
+        "image_position": "right",
+        "cta_label": "Learn more",
+        "cta_url": "",
+        "theme": "dark",
+        "background_color": "#ffffff"
+      }
+    },
+    "about_innovation": {
+      "type": "ossian-innovation-grid",
+      "blocks": {
+        "innovation_1": {
+          "type": "innovation",
+          "settings": {
+            "image": "shopify://shop_images/Korean_Glow.png",
+            "heading": "Molecular Repair",
+            "description": "A state-of-the-art formula that repairs visible damage in a single use, protected by advanced bonding technology.",
+            "link_label": "Discover more",
+            "link_url": ""
+          }
+        },
+        "innovation_2": {
+          "type": "innovation",
+          "settings": {
+            "image": "shopify://shop_images/image_208.png",
+            "heading": "Marine Technology",
+            "description": "Ocean-derived actives that work in synergy with advanced science for superior lift and long-lasting colour.",
+            "link_label": "Discover more",
+            "link_url": ""
+          }
+        },
+        "innovation_3": {
+          "type": "innovation",
+          "settings": {
+            "image": "shopify://shop_images/Korean_Glow.png",
+            "heading": "Water Saver",
+            "description": "A unique fragmentation technology that saves up to 69% water at the backbar without compromising results.",
+            "link_label": "Discover more",
+            "link_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "innovation_1",
+        "innovation_2",
+        "innovation_3"
+      ],
+      "settings": {
+        "eyebrow": "INNOVATION",
+        "heading": "Technology behind the results",
+        "subheading": "Every formula is backed by science built to perform in the real world."
+      }
+    },
+    "about_marine_banner": {
+      "type": "ossian-marine-banner",
+      "settings": {
+        "powered_by_label": "POWERED BY",
+        "brand_name": "MARINE TECHNOLOGY",
+        "description": "Ocean derived actives work in synergy with advanced science to deliver superior lift, protection and long lasting colour results.",
+        "cta_label": "Explore Our Science",
+        "cta_url": "#about_science"
+      }
+    },
+    "about_trust_ticker": {
+      "type": "ossian-trust-ticker",
+      "blocks": {
+        "badge_1": {
+          "type": "badge",
+          "settings": {
+            "icon": "leaf",
+            "title": "Skin Loving Ingredients",
+            "description": "Enriched with natural extracts & nutrients."
+          }
+        },
+        "badge_2": {
+          "type": "badge",
+          "settings": {
+            "icon": "shield",
+            "title": "Dermatologically Tested",
+            "description": "Safe and gentle for everyday use."
+          }
+        },
+        "badge_3": {
+          "type": "badge",
+          "settings": {
+            "icon": "droplet",
+            "title": "Professional Quality",
+            "description": "Salon-grade formulas, tested and proven."
+          }
+        },
+        "badge_4": {
+          "type": "badge",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Visible Results",
+            "description": "Healthy, glowing hair and skin you can see."
+          }
+        }
+      },
+      "block_order": [
+        "badge_1",
+        "badge_2",
+        "badge_3",
+        "badge_4"
+      ],
+      "settings": {
+        "background_color": "#ffffff",
+        "scroll_speed": 28,
+        "padding_top": 32,
+        "padding_bottom": 32
       }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main",
+    "about_heritage",
+    "about_sustainability",
+    "about_community",
+    "about_innovation",
+    "about_marine_banner",
+    "about_trust_ticker"
+  ]
 }

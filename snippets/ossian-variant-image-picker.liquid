@@ -1,312 +1,180 @@
-{% stylesheet %}
-  .ossian-vip {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 4px 0 2px;
-  }
+{%- doc -%}
+  Renders a custom square color-swatch picker with "Col no: XX" captions,
+  matching the Ossion PDP reference design. It visually replaces the native
+  Horizon "Color" variant fieldset (hidden, not removed) and forwards clicks
+  to its radio inputs, so price / add-to-cart / stock all stay in sync with
+  the native <variant-picker> component.
 
-  .ossian-vip__label-row {
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-  }
+  Renders nothing if the product has no "Color" (or "Colour") option.
 
-  .ossian-vip__label {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: #374151;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
+  @param {object} product - The current product object.
 
-  .ossian-vip__selected-name {
-    font-size: 0.8125rem;
-    font-weight: 400;
-    color: #6b7280;
-  }
+  @example
+  {% render 'ossian-variant-image-picker', product: product %}
+{%- enddoc -%}
 
-  .ossian-vip__scroll {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: #d1d5db transparent;
-    padding-bottom: 6px;
-  }
+{%- liquid
+  assign color_option = nil
+  for option in product.options_with_values
+    if option.name == 'Color' or option.name == 'Colour'
+      assign color_option = option
+    endif
+  endfor
+-%}
 
-  .ossian-vip__scroll::-webkit-scrollbar {
-    height: 3px;
-  }
-
-  .ossian-vip__scroll::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .ossian-vip__scroll::-webkit-scrollbar-thumb {
-    background: #d1d5db;
-    border-radius: 99px;
-  }
-
-  .ossian-vip__swatch {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    flex-shrink: 0;
-    scroll-snap-align: start;
-    cursor: pointer;
-    background: none;
-    border: none;
-    padding: 0;
-    outline: none;
-  }
-
-  .ossian-vip__swatch-img-wrap {
-    position: relative;
-    width: 64px;
-    height: 64px;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 2.5px solid transparent;
-    background: #f3f4f6;
-    transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s;
-  }
-
-  .ossian-vip__swatch:hover .ossian-vip__swatch-img-wrap {
-    border-color: #1e3a5f;
-    transform: translateY(-2px);
-  }
-
-  .ossian-vip__swatch:focus-visible .ossian-vip__swatch-img-wrap {
-    box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.3);
-  }
-
-  .ossian-vip__swatch--active .ossian-vip__swatch-img-wrap {
-    border-color: #1e3a5f;
-    box-shadow: 0 0 0 2px rgba(30, 58, 95, 0.18);
-  }
-
-  .ossian-vip__swatch-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.25s;
-  }
-
-  .ossian-vip__swatch:hover .ossian-vip__swatch-img {
-    transform: scale(1.07);
-  }
-
-  .ossian-vip__swatch-name {
-    font-size: 0.6875rem;
-    font-weight: 500;
-    color: #6b7280;
-    max-width: 64px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: center;
-    line-height: 1.2;
-    transition: color 0.15s;
-  }
-
-  .ossian-vip__swatch--active .ossian-vip__swatch-name {
-    color: #1e3a5f;
-    font-weight: 600;
-  }
-
-  .ossian-vip__swatch-placeholder {
-    display: block;
-    width: 100%;
-    height: 100%;
-    background: #e5e7eb;
-  }
-
-  /* Sold-out diagonal cross */
-  .ossian-vip__x {
-    position: absolute;
-    inset: 0;
-    background: rgba(255, 255, 255, 0.52);
-    pointer-events: none;
-  }
-
-  .ossian-vip__x::before,
-  .ossian-vip__x::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 10%;
-    width: 80%;
-    height: 1.5px;
-    background: rgba(0, 0, 0, 0.4);
-  }
-
-  .ossian-vip__x::before { transform: translateY(-50%) rotate(45deg); }
-  .ossian-vip__x::after  { transform: translateY(-50%) rotate(-45deg); }
-{% endstylesheet %}
-
-{%- unless product.has_only_default_variant -%}
-  {%- assign selected_variant = product.selected_or_first_available_variant -%}
-
-  {%- comment -%} Determine the option name to label the swatch strip (first option with images) {%- endcomment -%}
-  {%- assign swatch_option_name = product.options.first -%}
-
-  <div class="ossian-vip" data-product-id="{{ product.id }}">
-
-    <script type="application/json" class="ossian-vip__data">
-      {
-        "variants": [
-          {%- for variant in product.variants -%}
-            {
-              "id": {{ variant.id }},
-              "title": {{ variant.title | json }},
-              "options": {{ variant.options | json }},
-              "available": {{ variant.available }}
-            }{%- unless forloop.last -%},{%- endunless -%}
-          {%- endfor -%}
-        ]
-      }
-    </script>
-
-    <div class="ossian-vip__label-row">
-      <span class="ossian-vip__label">{{ swatch_option_name }}</span>
-      <span class="ossian-vip__selected-name" data-vip-selected-name>{{ selected_variant.options.first }}</span>
-    </div>
-
-    <div class="ossian-vip__scroll">
-      {%- for variant in product.variants -%}
-        {%- assign vi = variant.featured_image | default: product.featured_image -%}
-
+{%- if color_option and color_option.values.size > 1 -%}
+  <div class="ossian-color-picker" data-option-name="{{ color_option.name | escape }}">
+    <p class="ossian-color-picker__label">
+      {{ color_option.name }}
+      <span class="ossian-color-picker__selected">{{ color_option.position }} {{ color_option.selected_value }}</span>
+    </p>
+    <div class="ossian-color-picker__row">
+      {%- for value in color_option.values -%}
+        {%- liquid
+          assign col_index = forloop.index
+          if col_index < 10
+            assign col_label = '0' | append: col_index
+          else
+            assign col_label = col_index
+          endif
+        -%}
         <button
           type="button"
-          class="ossian-vip__swatch{% if variant.id == selected_variant.id %} ossian-vip__swatch--active{% endif %}"
-          data-variant-id="{{ variant.id }}"
-          data-variant-name="{{ variant.options.first | escape }}"
-          aria-label="{{ variant.title | escape }}"
+          class="ossian-color-picker__item{% if value.selected %} is-selected{% endif %}"
+          data-color-value="{{ value | escape }}"
+          aria-label="{{ value.name | escape }}"
+          {% unless value.available %}data-unavailable="true" disabled{% endunless %}
         >
-          <div class="ossian-vip__swatch-img-wrap">
-            {%- if vi != blank -%}
+          <span
+            class="ossian-color-picker__swatch"
+            style="background: {% if value.swatch.color %}{{ value.swatch.color }}{% else %}#e5e9f0{% endif %};"
+          >
+            {%- if value.swatch.image -%}
               {{
-                vi
-                | image_url: width: 160
-                | image_tag:
-                  loading: 'lazy',
-                  class: 'ossian-vip__swatch-img',
-                  alt: variant.title
+                value.swatch.image
+                | image_url: width: 88
+                | image_tag: loading: 'lazy', sizes: '44px', class: 'ossian-color-picker__swatch-img'
               }}
-            {%- else -%}
-              <span class="ossian-vip__swatch-placeholder"></span>
             {%- endif -%}
-            {%- unless variant.available -%}
-              <span class="ossian-vip__x" aria-hidden="true"></span>
-            {%- endunless -%}
-          </div>
-          <span class="ossian-vip__swatch-name">{{ variant.options.first }}</span>
+          </span>
+          <span class="ossian-color-picker__caption">Col no: {{ col_label }}</span>
         </button>
       {%- endfor -%}
     </div>
   </div>
 
   <script>
-  (function () {
-    function initVIP(el) {
-      var dataEl = el.querySelector('.ossian-vip__data');
-      if (!dataEl) return;
+    (function () {
+      var picker = document.currentScript.previousElementSibling;
+      if (!picker || !picker.classList.contains('ossian-color-picker')) return;
+      var optionName = picker.dataset.optionName;
 
-      var data;
-      try { data = JSON.parse(dataEl.textContent); } catch (e) { return; }
-
-      var variants    = data.variants;
-      var swatches    = Array.from(el.querySelectorAll('.ossian-vip__swatch'));
-      var selectedEl  = el.querySelector('[data-vip-selected-name]');
-
-      /* ── Reposition: insert just before variant-picker in the right column ── */
-      function reposition() {
-        var picker = document.querySelector('variant-picker');
-        if (picker && !picker.previousElementSibling?.classList.contains('ossian-vip')) {
-          picker.parentNode.insertBefore(el, picker);
-        }
+      function findNativeRadio(value) {
+        return document.querySelector(
+          'variant-picker input[type="radio"][name^="' + CSS.escape(optionName) + '-"][value="' + CSS.escape(value) + '"]'
+        );
       }
 
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', reposition);
-      } else {
-        reposition();
+      // Hide the native fieldset for this option — our swatches replace it visually.
+      var anyRadio = document.querySelector(
+        'variant-picker input[type="radio"][name^="' + CSS.escape(optionName) + '-"]'
+      );
+      if (anyRadio) {
+        var fieldset = anyRadio.closest('fieldset');
+        if (fieldset) fieldset.style.display = 'none';
       }
 
-      /* ── Active state ── */
-      function setActive(variantId) {
-        var id = String(variantId);
-        swatches.forEach(function (s) {
-          var isActive = s.dataset.variantId === id;
-          s.classList.toggle('ossian-vip__swatch--active', isActive);
-          if (isActive && selectedEl) selectedEl.textContent = s.dataset.variantName || '';
-        });
-      }
+      picker.querySelectorAll('.ossian-color-picker__item').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          if (btn.disabled) return;
+          var radio = findNativeRadio(btn.dataset.colorValue);
+          if (!radio) return;
+          radio.checked = true;
+          radio.dispatchEvent(new Event('change', { bubbles: true }));
 
-      /* ── Trigger variant change via picker radio buttons ── */
-      function triggerVariant(variantId) {
-        var variant = variants.find(function (v) { return String(v.id) === String(variantId); });
-        if (!variant) return;
-
-        var picker = document.querySelector('variant-picker');
-        if (picker) {
-          var fieldsets = Array.from(picker.querySelectorAll('fieldset[data-fieldset-index]'));
-          var synced = true;
-
-          fieldsets.forEach(function (fs) {
-            var idx      = parseInt(fs.getAttribute('data-fieldset-index'), 10);
-            var optValue = variant.options[idx];
-            if (optValue == null) { synced = false; return; }
-
-            var escaped = optValue.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-            var radio   = fs.querySelector('input[value="' + escaped + '"]');
-            if (radio) {
-              if (!radio.checked) radio.click();
-            } else {
-              synced = false;
-            }
+          picker.querySelectorAll('.ossian-color-picker__item').forEach(function (b) {
+            b.classList.toggle('is-selected', b === btn);
           });
-
-          if (synced) {
-            setActive(variantId);
-            var url = new URL(window.location.href);
-            url.searchParams.set('variant', variantId);
-            window.history.replaceState({}, '', url.toString());
-            return;
-          }
-        }
-
-        window.location.href = '?variant=' + variantId;
-      }
-
-      swatches.forEach(function (swatch) {
-        swatch.addEventListener('click', function () {
-          triggerVariant(swatch.dataset.variantId);
+          var label = picker.querySelector('.ossian-color-picker__selected');
+          if (label) label.textContent = ' ' + btn.dataset.colorValue;
         });
       });
-
-      /* ── Sync when the existing picker changes ── */
-      document.addEventListener('variant:change', function (e) {
-        if (e.detail && e.detail.variant) setActive(e.detail.variant.id);
-      });
-
-      window.addEventListener('popstate', function () {
-        var vid = new URLSearchParams(window.location.search).get('variant');
-        if (vid) setActive(vid);
-      });
-    }
-
-    document.querySelectorAll('.ossian-vip').forEach(initVIP);
-
-    document.addEventListener('shopify:section:load', function () {
-      document.querySelectorAll('.ossian-vip').forEach(initVIP);
-    });
-  })();
+    })();
   </script>
-{%- endunless -%}
+{%- endif -%}
+
+{% stylesheet %}
+  .ossian-color-picker {
+    margin-top: 20px;
+    font-family: 'Jost', sans-serif;
+  }
+
+  .ossian-color-picker__label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e3a5f;
+    margin: 0 0 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .ossian-color-picker__selected {
+    font-weight: 500;
+    text-transform: none;
+    color: #5b7091;
+    margin-left: 6px;
+  }
+
+  .ossian-color-picker__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .ossian-color-picker__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .ossian-color-picker__swatch {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    display: block;
+    border: 2px solid transparent;
+    outline: 1px solid rgba(30, 58, 95, 0.12);
+    outline-offset: 2px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .ossian-color-picker__item.is-selected .ossian-color-picker__swatch {
+    border-color: #1e3a5f;
+    transform: scale(1.05);
+  }
+
+  .ossian-color-picker__item[data-unavailable='true'] {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .ossian-color-picker__swatch-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ossian-color-picker__caption {
+    font-size: 0.7rem;
+    color: #8892a3;
+    font-weight: 500;
+  }
+{% endstylesheet %}

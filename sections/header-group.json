@@ -17,25 +17,25 @@
         "announcement_XcYpTG": {
           "type": "announcement",
           "settings": {
-            "text": "Get 1 + 1 on products above ₹1,000"
+            "text": "Free delivery above Rs. 999"
           }
         },
         "announcement_G3wpa8": {
           "type": "announcement",
           "settings": {
-            "text": "Get 1 + 1 on products above ₹1,000"
+            "text": "Trusted by Salon Professionals"
           }
         },
         "announcement_qLULQL": {
           "type": "announcement",
           "settings": {
-            "text": "Get 1 + 1 on products above ₹1,000"
+            "text": "Free delivery above Rs. 999"
           }
         },
         "announcement_b3Y3by": {
           "type": "announcement",
           "settings": {
-            "text": "Get 1 + 1 on products above ₹1,000"
+            "text": "Trusted by Salon Professionals"
           }
         }
       },
@@ -70,8 +70,8 @@
           "settings": {
             "menu": "main-menu",
             "color_scheme": "",
-            "type_font_primary_size": "1rem",
-            "menu_font_style": "inverse_large",
+            "type_font_primary_size": "0.875rem",
+            "menu_font_style": "inverse",
             "type_font_primary_link": "body",
             "type_case_primary_link": "none",
             "menu_style": "featured_products",

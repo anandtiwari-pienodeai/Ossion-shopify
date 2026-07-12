@@ -154,6 +154,24 @@
           ref="facetsForm"
         >
           {% if should_show_pane %}
+            {% if block_settings.filter_style == 'vertical' and block_settings.enable_filtering %}
+              <div class="ossian-filter-header">
+                <span class="ossian-filter-header__title">Filters</span>
+                <facet-remove-component
+                  class="ossian-filter-clear-wrap{% if total_active_values > 0 %} ossian-filter-clear-wrap--active{% endif %}"
+                  active-class="ossian-filter-clear-wrap--active"
+                  data-url="{{ results_url }}"
+                >
+                  <button
+                    type="button"
+                    class="ossian-filter-header__clear"
+                    ref="clearButton"
+                    on:click="/removeFilter?form="
+                    on:keydown="/removeFilter?form="
+                  >Clear All</button>
+                </facet-remove-component>
+              </div>
+            {% endif %}
             {% render 'filter-remove-buttons',
               filters: filters,
               results_url: results_url,
@@ -527,7 +545,7 @@
     justify-content: space-between;
     align-items: center;
     height: var(--minimum-touch-target);
-    margin: var(--facets-margin);
+    
     padding-block: var(--facets-inner-padding-block);
     padding-inline: var(--facets-inner-padding-inline);
 
@@ -1309,58 +1327,75 @@
     position: absolute;
   }
 
-  /* ── Ossian PLP vertical filter sidebar ── */
+  /* ── OSSIAN vertical filter sidebar ── */
+
+  /* Outer container */
+  .facets-block-wrapper--vertical {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    font-family: var(--font-body--family, sans-serif);
+  }
+
   .facets--vertical {
     padding-block-start: 0 !important;
   }
 
-  /* Filters header row (title + Clear All) */
-  .facets--vertical .facets--filters-title {
-    display: flex !important;
+  /* ── "Filters" header + Clear All ── */
+  .ossian-filter-header {
+    display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 15px;
-    font-weight: 700;
+    padding: 16px 18px 14px;
+    border-bottom: 1.5px solid #e2e8f0;
+  }
+
+  .ossian-filter-header__title {
+    font-size: 18px;
+    font-weight: 800;
     color: #1e3a5f;
-    padding: 14px 16px 12px;
-    border-bottom: 1.5px solid #eee;
-    margin: 0;
+    letter-spacing: -0.01em;
     font-family: var(--font-body--family, sans-serif);
   }
 
-  /* "Filters" label inside the vertical pane */
-  .facets-block-wrapper--vertical .facets--filters-title {
-    display: flex !important;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 15px;
+  .ossian-filter-header__clear {
+    font-size: 14px;
     font-weight: 700;
-    color: #1e3a5f;
-    padding: 14px 16px 12px;
-    border-bottom: 1.5px solid #eee;
-    margin: 0;
-  }
-
-  /* Clear All link inside vertical sidebar */
-  .facets--vertical .facets__clear-all-link,
-  .facets-block-wrapper--vertical .facets__clear-all-link {
-    font-size: 12px;
-    font-weight: 600;
-    color: #3b82f6 !important;
-    text-decoration: none;
+    color: #3b82f6;
+    background: none;
+    border: none;
+    cursor: pointer;
     padding: 0;
-    display: inline !important;
+    font-family: var(--font-body--family, sans-serif);
+    transition: color 0.2s;
+    display: none;
   }
 
-  .facets--vertical .facets__clear-all-link:hover,
-  .facets-block-wrapper--vertical .facets__clear-all-link:hover {
+  .ossian-filter-header__clear:hover {
+    color: #2563eb;
     text-decoration: underline;
   }
 
-  /* Filter group accordion item */
+  .ossian-filter-clear-wrap--active .ossian-filter-header__clear {
+    display: block;
+  }
+
+  /* Hide the default "Filters" title since we have ossian-filter-header */
+  .facets-block-wrapper--vertical .facets--filters-title,
+  .facets--vertical .facets--filters-title {
+    display: none !important;
+  }
+
+  /* ── Group item dividers ── */
   .facets--vertical .facets__item,
   .facets-block-wrapper--vertical .facets__item {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1.5px solid #e2e8f0;
+  }
+
+  .facets--vertical .facets__item:last-child,
+  .facets-block-wrapper--vertical .facets__item:last-child {
+    border-bottom: none;
   }
 
   .facets--vertical .facets__item::before,
@@ -1368,67 +1403,158 @@
     display: none !important;
   }
 
-  /* Summary / accordion heading */
+  /* ── Group heading (summary) ── */
   .facets--vertical .facets__summary,
   .facets-block-wrapper--vertical .facets__summary {
-    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 15px;
     font-weight: 700;
     color: #1e3a5f;
-    padding: 12px 16px;
+    padding: 14px 18px;
     cursor: pointer;
     user-select: none;
     list-style: none;
     font-family: var(--font-body--family, sans-serif);
+    letter-spacing: -0.01em;
   }
 
-  /* Accordion body */
+  .facets--vertical .facets__summary::-webkit-details-marker,
+  .facets-block-wrapper--vertical .facets__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* Chevron icon on summary */
+  .facets--vertical .facets__summary .icon-caret,
+  .facets-block-wrapper--vertical .facets__summary .icon-caret {
+    width: 18px;
+    height: 18px;
+    color: #1e3a5f;
+    opacity: 1;
+    flex-shrink: 0;
+  }
+
+  /* ── Accordion panel ── */
   .facets--vertical .facets__panel,
   .facets-block-wrapper--vertical .facets__panel {
-    padding: 0 16px 14px;
+    padding: 2px 18px 16px;
   }
 
-  /* Checkboxes */
+  /* ── Checkboxes ── */
   .facets--vertical .facets__inputs-wrapper label,
   .facets-block-wrapper--vertical .facets__inputs-wrapper label {
-    font-size: 13px;
-    color: #333;
+    font-size: 14px;
+    color: #2d3748;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     cursor: pointer;
     font-family: var(--font-body--family, sans-serif);
-    padding-block: 3px;
+    padding-block: 5px;
+    line-height: 1.4;
   }
 
+  /* Custom checkbox */
   .facets--vertical input[type="checkbox"],
   .facets-block-wrapper--vertical input[type="checkbox"] {
-    width: 15px;
-    height: 15px;
-    border-radius: 3px;
-    border: 1.5px solid #bbb;
-    accent-color: #1e3a5f;
-    flex-shrink: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    border-radius: 5px;
+    border: 1.5px solid #c8d3e0;
+    background: #fff;
     cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    transition: background 0.15s, border-color 0.15s;
   }
 
-  /* Price range slider */
+  .facets--vertical input[type="checkbox"]:checked,
+  .facets-block-wrapper--vertical input[type="checkbox"]:checked {
+    background: #1e3a5f;
+    border-color: #1e3a5f;
+  }
+
+  /* White checkmark via pseudo-element */
+  .facets--vertical input[type="checkbox"]:checked::after,
+  .facets-block-wrapper--vertical input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 3px;
+    width: 6px;
+    height: 11px;
+    border: 2.5px solid #fff;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg);
+  }
+
+  .facets--vertical input[type="checkbox"]:hover:not(:checked),
+  .facets-block-wrapper--vertical input[type="checkbox"]:hover:not(:checked) {
+    border-color: #1e3a5f;
+  }
+
+  /* ── Price range section ── */
   .facets--vertical .price-filter,
   .facets-block-wrapper--vertical .price-filter {
-    padding: 8px 0 4px;
+    padding: 6px 0 8px;
   }
 
   .facets--vertical input[type="range"],
   .facets-block-wrapper--vertical input[type="range"] {
-    accent-color: #1e3a5f;
+    -webkit-appearance: none;
+    appearance: none;
     width: 100%;
+    height: 4px;
+    border-radius: 4px;
+    background: #3b82f6;
+    outline: none;
+    cursor: pointer;
   }
 
-  /* Sidebar wrapper border */
-  .facets-block-wrapper--vertical {
-    border: 1.5px solid #e8e8e8;
-    border-radius: 10px;
-    overflow: hidden;
-    background: #fff;
+  .facets--vertical input[type="range"]::-webkit-slider-thumb,
+  .facets-block-wrapper--vertical input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #1e3a5f;
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1.5px #1e3a5f;
+  }
+
+  .facets--vertical input[type="range"]::-moz-range-thumb,
+  .facets-block-wrapper--vertical input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #1e3a5f;
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1.5px #1e3a5f;
+  }
+
+  /* Price labels below slider */
+  .facets--vertical .price-filter__range-wrapper,
+  .facets-block-wrapper--vertical .price-filter__range-wrapper {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1e3a5f;
+    font-family: var(--font-body--family, sans-serif);
+  }
+
+  /* Hide built-in clear all link (replaced by ossian-filter-header) */
+  .facets-block-wrapper--vertical .facets__clear-all-link {
+    display: none !important;
   }
 {% endstylesheet %}
 

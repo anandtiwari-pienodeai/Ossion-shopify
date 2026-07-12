@@ -1,0 +1,127 @@
+{%- if block.settings.features != blank -%}
+  <div
+    class="ossian-pdp-features spacing-style"
+    style="{% render 'spacing-style', settings: block.settings %}"
+    {{ block.shopify_attributes }}
+  >
+    {%- assign lines = block.settings.features | newline_to_br | split: '<br />' -%}
+    {%- for line in lines -%}
+      {%- assign trimmed = line | strip -%}
+      {%- if trimmed != blank -%}
+        <div class="ossian-pdp-feature-item">
+          <span class="ossian-pdp-feature-check" aria-hidden="true">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          <span class="ossian-pdp-feature-text">{{ trimmed }}</span>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+.ossian-pdp-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 20px;
+}
+
+.ossian-pdp-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
+  color: #222;
+  line-height: 1.4;
+  font-family: var(--font-body--family, sans-serif);
+  font-weight: 500;
+}
+
+.ossian-pdp-feature-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #1e3a5f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ossian-pdp-feature-text {
+  font-size: 13px;
+  color: #333;
+}
+
+@media (max-width: 480px) {
+  .ossian-pdp-features {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Feature Badges",
+  "tag": null,
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "features",
+      "label": "Features (one per line)",
+      "default": "Anti-yellow Technology\nFibre Plex Protection\nUp to 9 Levels Lift\nNon-Damaging Formula\nEnriched with Marine actives"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP Feature Badges",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

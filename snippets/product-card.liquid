@@ -125,85 +125,211 @@
     }
   }
 
-  /* Ossian PLP product card */
+  /* ── Card shell ── */
   .product-card__content {
-    border-radius: 8px;
+    border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    box-shadow: 0 2px 10px rgba(30, 58, 95, 0.08);
+    background: #ffffff;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+    width: 100%;
+    min-width: 0;
   }
 
-  .ossian-product-desc {
-    margin: 0;
-    font-size: 0.75rem;
-    color: #888;
-    padding: 2px 12px 0;
-    line-height: 1.4;
-    font-family: var(--font-body--family);
+  .product-card:hover .product-card__content {
+    box-shadow: 0 8px 28px rgba(30, 58, 95, 0.14);
+    transform: translateY(-2px);
   }
 
-  .ossian-price-row {
+  /* ── Card shell: width follows grid, height auto ── */
+  @media screen and (min-width: 750px) {
+    .product-card__content {
+      width: 300px;
+      max-width: 100%;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  /* ── Image area ── */
+  .product-card .card-gallery {
+    background: #f7f7f7;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .product-card .card-gallery .product-media-container {
+    width: 100%;
+  }
+
+  /* ── product-media: exactly 300 × 400 ── */
+  @media screen and (min-width: 750px) {
+    .product-card .card-gallery,
+    .product-card .card-gallery .product-media-container,
+    .product-card .card-gallery .product-media {
+      width: 300px;
+      height: 400px;
+      aspect-ratio: auto;
+      overflow: hidden;
+    }
+
+    .product-card .card-gallery .product-media__image,
+    .product-card .card-gallery img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  .product-card .card-gallery img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .product-card:hover .card-gallery img {
+    transform: scale(1.04);
+  }
+
+  /* ── Product type label ── */
+  .product-card .ossian-product-type {
+    font-size: clamp(8px, 1.5vw, 9px);
+  }
+
+  /* ── Product title ── */
+  .product-card .product-title {
+    font-size: clamp(11px, 1.8vw, 13px) !important;
+    font-weight: 700 !important;
+    color: #1e3a5f !important;
+    line-height: 1.35 !important;
+    font-family: var(--font-body--family, sans-serif) !important;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  /* ── Price ── */
+  .product-card .price {
+    font-size: clamp(12px, 2vw, 14px) !important;
+    font-weight: 700 !important;
+    color: #1e3a5f !important;
+    font-family: var(--font-body--family, sans-serif) !important;
+  }
+
+  .product-card .price__compare {
+    font-size: clamp(10px, 1.5vw, 11px) !important;
+    color: #aaa !important;
+    font-weight: 400 !important;
+  }
+
+  /* ── Rating ── */
+  .product-card .rating-wrapper {
+    padding-inline: 12px;
+  }
+
+  .product-card .rating svg {
+    width: clamp(10px, 1.8vw, 13px);
+    height: clamp(10px, 1.8vw, 13px);
+  }
+
+  /* ── ATC row (ossian-plp-actions) ── */
+  .ossian-card-actions__row {
+    display: flex;
+    gap: 6px;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .ossian-card-atc-btn {
+    flex: 1;
+    min-width: 0;
+    font-size: clamp(9px, 1.5vw, 11px);
+    padding-block: clamp(8px, 1.5vw, 10px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ossian-card-wish-btn {
+    flex-shrink: 0;
+    width: clamp(32px, 5vw, 38px);
+    height: clamp(32px, 5vw, 38px);
+    padding: 0;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 6px 12px 2px;
-    gap: 8px;
+    justify-content: center;
   }
 
-  .ossian-price-wrapper {
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-    flex-wrap: wrap;
+  .ossian-card-wish-btn svg {
+    width: clamp(13px, 2vw, 16px);
+    height: clamp(13px, 2vw, 16px);
   }
 
-  .ossian-price,
-  .ossian-price--sale {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: #1e3a5f;
-    font-family: var(--font-body--family);
-  }
-
-  .ossian-price--compare {
-    font-size: 0.78rem;
-    color: #aaa;
-    font-weight: 400;
-  }
-
-  .ossian-stock {
-    font-size: 0.68rem;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 20px;
-    white-space: nowrap;
-    font-family: var(--font-body--family);
-    flex-shrink: 0;
-  }
-
-  .ossian-stock--in {
-    background: #e6f4ea;
-    color: #2d7a37;
-  }
-
-  .ossian-stock--out {
-    background: #fce4ec;
-    color: #b71c1c;
-  }
-
-  /* Add to Cart button — navy blue, full width */
-  .product-grid__item .product-form-buttons .add-to-cart-button {
+  /* ── Legacy ATC fallback ── */
+  .product-grid__item .product-form-buttons .add-to-cart-button,
+  .product-grid__item .buy-buttons-block .button {
     width: 100%;
     background-color: #1e3a5f;
     color: #ffffff;
     border-color: #1e3a5f;
     border-radius: 6px;
-    font-size: 0.85rem;
+    font-size: clamp(9px, 1.5vw, 11px);
+    font-weight: 700;
+    letter-spacing: 0.06em;
     padding-block: 10px;
   }
 
-  .product-grid__item .product-form-buttons .add-to-cart-button:hover {
+  .product-grid__item .product-form-buttons .add-to-cart-button:hover,
+  .product-grid__item .buy-buttons-block .button:hover {
     background-color: #2a4f80;
     border-color: #2a4f80;
-    color: #ffffff;
+  }
+
+  /* ── Filter sidebar + grid layout ── */
+  .collection-wrapper {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  @media screen and (max-width: 749px) {
+    .collection-wrapper {
+      grid-template-columns: 1fr;
+    }
+
+    /* Tighter card padding on small screens */
+    .product-card__content {
+      border-radius: 8px;
+      height: auto;
+      width: 100%;
+    }
+
+    .product-card .rating-wrapper {
+      padding-inline: 8px;
+    }
+
+    /* ATC row on mobile */
+    .ossian-card-atc-btn {
+      font-size: 9px;
+      padding-block: 8px;
+      letter-spacing: 0.04em;
+    }
+
+    .ossian-card-wish-btn {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  /* Toolbar row spans full width */
+  .facets--horizontal.facets-controls-wrapper {
+    grid-column: 1 / -1;
   }
 {% endstylesheet %}

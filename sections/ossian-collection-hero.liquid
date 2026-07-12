@@ -1,47 +1,49 @@
 <section class="collection-hero" id="collection-hero-{{ section.id }}">
-  {%- if section.settings.banner_image != blank -%}
-    {{
-      section.settings.banner_image
-      | image_url: width: 2000
-      | image_tag:
-        class: 'collection-hero__img',
-        loading: 'eager',
-        fetchpriority: 'high',
-        widths: '750,1100,1600,2000',
-        alt: section.settings.banner_image.alt | default: collection.title
-    }}
-  {%- else -%}
-    <div class="collection-hero__placeholder"></div>
-  {%- endif -%}
+  <div class="collection-hero__banner">
+    {%- if section.settings.banner_image != blank -%}
+      {{
+        section.settings.banner_image
+        | image_url: width: 2000
+        | image_tag:
+          class: 'collection-hero__img',
+          loading: 'eager',
+          fetchpriority: 'high',
+          widths: '750,1100,1600,2000',
+          alt: section.settings.banner_image.alt | default: collection.title
+      }}
+    {%- else -%}
+      <div class="collection-hero__placeholder"></div>
+    {%- endif -%}
+  </div>
 </section>
 
 {% stylesheet %}
 .collection-hero {
   width: 100%;
-  overflow: hidden;
+  display: block;
+}
+
+.collection-hero__banner {
+  width: 100%;
+  height: 400px;
   display: block;
   line-height: 0;
+  padding:0px 10px
 }
 
 .collection-hero__img {
   width: 100%;
-  height: var(--collection-hero-height, 480px);
+  height: 100%;
   object-fit: cover;
   object-position: center;
   display: block;
+  border-radius:20px
 }
 
 .collection-hero__placeholder {
   width: 100%;
   height: var(--collection-hero-height, 480px);
   background: linear-gradient(135deg, #0b1e35 0%, #1e3a5f 100%);
-}
-
-@media (max-width: 768px) {
-  .collection-hero__img,
-  .collection-hero__placeholder {
-    height: var(--collection-hero-height-mobile, 220px);
-  }
 }
 {% endstylesheet %}
 

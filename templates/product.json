@@ -12,7 +12,59 @@
     "ossian_pdp_breadcrumb": {
       "type": "ossian-pdp-breadcrumb",
       "settings": {
-        "parent_label": "Hair Care"
+        "parent_label": "Hair Care",
+        "parent_url": "",
+        "collection_url": ""
+      }
+    },
+    "ossian_trust_ticker_c6cjNm": {
+      "type": "ossian-trust-ticker",
+      "blocks": {
+        "badge_z9LYXa": {
+          "type": "badge",
+          "settings": {
+            "icon": "leaf",
+            "title": "Skin Loving Ingredients",
+            "description": "Enriched with natural extracts & nutrients."
+          }
+        },
+        "badge_GMzNML": {
+          "type": "badge",
+          "settings": {
+            "icon": "shield",
+            "title": "Dermatologically Tested",
+            "description": "Safe and gentle for everyday use."
+          }
+        },
+        "badge_qzNxtR": {
+          "type": "badge",
+          "settings": {
+            "icon": "droplet",
+            "title": "Professional Quality",
+            "description": "Salon trusted, expert recommended."
+          }
+        },
+        "badge_dMHwy6": {
+          "type": "badge",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Visible Results",
+            "description": "Healthy, glowing skin you can feel."
+          }
+        }
+      },
+      "block_order": [
+        "badge_z9LYXa",
+        "badge_GMzNML",
+        "badge_qzNxtR",
+        "badge_dMHwy6"
+      ],
+      "name": "Trust Ticker",
+      "settings": {
+        "background_color": "#ffffff",
+        "scroll_speed": 28,
+        "padding_top": 20,
+        "padding_bottom": 20
       }
     },
     "main": {
@@ -22,17 +74,18 @@
           "type": "_product-media-gallery",
           "static": true,
           "settings": {
-            "media_presentation": "slideshow",
-            "media_columns": "two",
+            "media_presentation": "carousel",
+            "media_columns": "one",
             "image_gap": 4,
             "large_first_image": false,
-            "icons_style": "none",
-            "slideshow_controls_style": "dots",
+            "icons_style": "chevron",
+            "slideshow_controls_style": "thumbnails",
             "slideshow_mobile_controls_style": "dots",
             "thumbnail_position": "left",
             "thumbnail_width": 72,
+            "thumbnail_radius": 4,
             "aspect_ratio": "adapt",
-            "constrain_to_viewport": true,
+            "constrain_to_viewport": false,
             "media_fit": "contain",
             "media_radius": 8,
             "extend_media": false,
@@ -73,12 +126,22 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "text_vendor_tag": {
-              "type": "text",
-              "name": "Brand tag",
+            "ossian_product_type_badge": {
+              "type": "ossian-product-type",
               "settings": {
-                "text": "<p>by {{ closest.product.vendor }}</p>",
-                "width": "fit-content",
+                "padding-block-start": 0,
+                "padding-block-end": 4,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_subtitle": {
+              "type": "text",
+              "name": "Product subtitle",
+              "settings": {
+                "text": "<p>{{ closest.product.metafields.descriptors.subtitle.value }}</p>",
+                "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
                 "type_preset": "paragraph",
@@ -94,6 +157,17 @@
                 "corner_radius": 0,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "ossian_pdp_features_block": {
+              "type": "ossian-pdp-features",
+              "settings": {
+                "features": "Anti-yellow Technology\nFibre Plex Protection\nUp to 9 Levels Lift\nNon-Damaging Formula\nEnriched with Marine actives",
+                "padding-block-start": 4,
+                "padding-block-end": 4,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
               },
@@ -142,7 +216,7 @@
               "settings": {
                 "show_sale_price_first": true,
                 "show_installments": false,
-                "show_tax_info": false,
+                "show_tax_info": true,
                 "type_preset": "h4",
                 "width": "100%",
                 "alignment": "left",
@@ -152,44 +226,6 @@
                 "letter_spacing": "normal",
                 "case": "none",
                 "color": "var(--color-foreground)",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "divider_VJhene": {
-              "type": "_divider",
-              "name": "t:names.divider",
-              "settings": {
-                "thickness": 1,
-                "corner_radius": "square",
-                "width_percent": 100,
-                "padding-block-start": 4,
-                "padding-block-end": 4
-              },
-              "blocks": {}
-            },
-            "text_aEtTtq": {
-              "type": "text",
-              "name": "Product description",
-              "settings": {
-                "text": "{{ closest.product.description }}",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-primary--family)",
-                "font_size": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
@@ -213,8 +249,9 @@
             "buy_buttons_eYQEYi": {
               "type": "buy-buttons",
               "settings": {
-                "stacking": true,
+                "stacking": false,
                 "show_pickup_availability": false,
+                "gift_card_form": true,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
@@ -234,6 +271,12 @@
                     "style_class": "button"
                   },
                   "blocks": {}
+                },
+                "accelerated-checkout": {
+                  "type": "accelerated-checkout",
+                  "static": true,
+                  "settings": {},
+                  "blocks": {}
                 }
               },
               "block_order": []
@@ -241,6 +284,7 @@
             "ossian_pdp_wishlist_mW8kXp": {
               "type": "ossian-pdp-wishlist",
               "settings": {
+                "show_share": false,
                 "show_compare": false,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
@@ -248,28 +292,18 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
-            },
-            "pdp_trust_badges_mN3wQb": {
-              "type": "pdp-trust-badges",
-              "settings": {
-                "badge_1": "Free Shipping",
-                "badge_2": "Authentic",
-                "badge_3": "Easy Returns"
-              },
-              "blocks": {}
             }
           },
           "block_order": [
-            "text_vendor_tag",
+            "ossian_product_type_badge",
             "text_xrnftG",
+            "text_subtitle",
             "review_stars_R9xNsK",
             "price_tVjtKg",
-            "divider_VJhene",
-            "text_aEtTtq",
             "variant_picker_R3rGDr",
+            "ossian_pdp_features_block",
             "buy_buttons_eYQEYi",
-            "ossian_pdp_wishlist_mW8kXp",
-            "pdp_trust_badges_mN3wQb"
+            "ossian_pdp_wishlist_mW8kXp"
           ]
         }
       },
@@ -279,6 +313,7 @@
         "equal_columns": true,
         "limit_details_width": false,
         "gap": 48,
+        "enable_sticky_add_to_cart": true,
         "color_scheme": "",
         "padding-block-start": 32,
         "padding-block-end": 48
@@ -382,7 +417,13 @@
     },
     "ossian_marine_banner_pdp": {
       "type": "ossian-marine-banner",
-      "settings": {}
+      "settings": {
+        "powered_by_label": "POWERED BY",
+        "brand_name": "MARINE TECHNOLOGY",
+        "description": "Ocean derived actives work in synergy with advanced science to deliver superior lift, protection and long lasting colour results.",
+        "cta_label": "Explore Our Science",
+        "cta_url": ""
+      }
     },
     "product_recommendations_qggXJq": {
       "type": "product-recommendations",
@@ -540,12 +581,15 @@
     },
     "ossian_explore_category_pdp": {
       "type": "ossian-explore-category",
-      "settings": {}
+      "settings": {
+        "heading": "EXPLORE MORE CATEGORY"
+      }
     }
   },
   "order": [
     "ossian_pdp_breadcrumb",
     "main",
+    "ossian_trust_ticker_c6cjNm",
     "ossian_pdp_tabs",
     "ossian_pdp_benefits",
     "ossian_marine_banner_pdp",

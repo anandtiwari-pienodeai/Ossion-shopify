@@ -13,7 +13,7 @@
       "type": "ossian-collection-hero",
       "settings": {
         "banner_image": "shopify://shop_images/OssionBannertwo.png",
-        "banner_height": 300,
+        "banner_height": 400,
         "banner_height_mobile": 220
       }
     },

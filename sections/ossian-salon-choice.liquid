@@ -1,243 +1,720 @@
-<section class="salon-choice">
-  <div class="page-width">
-    {%- if section.settings.heading != blank -%}
-      <div class="salon-choice__header">
-        <h2 class="salon-choice__heading">{{ section.settings.heading }}</h2>
-        {%- if section.settings.subheading != blank -%}
-          <p class="salon-choice__sub">{{ section.settings.subheading }}</p>
-        {%- endif -%}
-      </div>
-    {%- endif -%}
+<section class="sc2" id="sc2-{{ section.id }}">
 
-    {%- if section.blocks.size > 0 -%}
-      <div class="salon-choice__grid">
-        {%- for block in section.blocks -%}
-          {%- assign sc_product = block.settings.product -%}
-          <a
-            class="salon-choice__card"
-            href="{{ block.settings.link | default: sc_product.url | default: '#' }}"
-            {{ block.shopify_attributes }}
-          >
-            <!-- Thumbnail -->
-            <div class="salon-choice__media">
-              {%- if block.settings.image != blank -%}
-                {{
-                  block.settings.image
-                  | image_url: width: 500
-                  | image_tag: class: 'salon-choice__img', loading: 'lazy'
-                }}
-              {%- elsif sc_product != blank and sc_product.featured_image != blank -%}
-                {{
-                  sc_product.featured_image
-                  | image_url: width: 500
-                  | image_tag: class: 'salon-choice__img', loading: 'lazy', alt: sc_product.title
-                }}
-              {%- else -%}
-                <div class="salon-choice__img-placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
-              {%- endif -%}
-
-              {%- if block.settings.discount_badge != blank -%}
-                <span class="salon-choice__badge">{{ block.settings.discount_badge }}</span>
-              {%- endif -%}
-
-              {%- if block.settings.play_icon -%}
-                <div class="salon-choice__play">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-                </div>
-              {%- endif -%}
-            </div>
-
-            <!-- Info -->
-            <div class="salon-choice__info">
-              <p class="salon-choice__name">
-                {%- if block.settings.product_name != blank -%}
-                  {{ block.settings.product_name }}
-                {%- elsif sc_product != blank -%}
-                  {{ sc_product.title }}
-                {%- endif -%}
-              </p>
-              {%- assign descriptor = block.settings.product_descriptor -%}
-              {%- if descriptor != blank -%}
-                <p class="salon-choice__descriptor">{{ descriptor }}</p>
-              {%- endif -%}
-              {%- assign rating_val = block.settings.rating -%}
-              {%- if rating_val != blank and rating_val != '0' -%}
-                <div class="salon-choice__rating">
-                  <span class="salon-choice__stars">
-                    {%- assign r = rating_val | times: 1.0 | round -%}
-                    {%- for i in (1..5) -%}
-                      {%- if i <= r -%}★{%- else -%}☆{%- endif -%}
-                    {%- endfor -%}
-                  </span>
-                  <span class="salon-choice__rating-val">{{ rating_val }}</span>
-                </div>
-              {%- endif -%}
-            </div>
-          </a>
-        {%- endfor -%}
-      </div>
+  {%- comment -%}── 1. Hero Banner ────────────────────────────────{%- endcomment -%}
+  <div class="sc2__hero">
+    {%- if section.settings.banner_image != blank -%}
+      {{ section.settings.banner_image | image_url: width: 1800
+         | image_tag: class: 'sc2__banner-img', loading: 'lazy', alt: section.settings.banner_alt | default: '' }}
+    {%- else -%}
+      <div class="sc2__banner-ph"></div>
     {%- endif -%}
   </div>
+
+  {%- comment -%}── 2. Feature Strip ──────────────────────────────{%- endcomment -%}
+  {%- assign pill_blocks = section.blocks | where: 'type', 'feature_pill' -%}
+  {%- if pill_blocks.size > 0 -%}
+    <div class="sc2__strip" style="background-color: {{ section.settings.strip_bg }};">
+      {%- if section.settings.concern_heading != blank -%}
+        <h2 class="sc2__strip-heading">{{ section.settings.concern_heading }}</h2>
+      {%- endif -%}
+      <div class="sc2__strip-inner">
+        {%- for block in pill_blocks -%}
+          <div class="sc2__pill{% if block.settings.highlighted %} sc2__pill--gold{% endif %}" {{ block.shopify_attributes }}>
+            <div class="sc2__pill-icon" aria-hidden="true">
+              {%- case block.settings.icon -%}
+                {%- when 'sparkle' -%}
+                  <svg viewBox="0 0 26 26" fill="none">
+                    <path d="M10 5 L11.2 9.5 L15.5 10.5 L11.2 11.5 L10 16 L8.8 11.5 L4.5 10.5 L8.8 9.5 Z" fill="currentColor"/>
+                    <path d="M19 2 L19.8 4.7 L22.5 5.5 L19.8 6.3 L19 9 L18.2 6.3 L15.5 5.5 L18.2 4.7 Z" fill="currentColor"/>
+                  </svg>
+                {%- when 'waves' -%}
+                  <svg viewBox="0 0 26 26" fill="none">
+                    <path d="M2 7 Q5.5 4 9 7 Q12.5 10 16 7 Q19.5 4 23 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M2 13 Q5.5 10 9 13 Q12.5 16 16 13 Q19.5 10 23 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M2 19 Q5.5 16 9 19 Q12.5 22 16 19 Q19.5 16 23 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                {%- when 'person' -%}
+                  <svg viewBox="0 0 26 26" fill="none">
+                    <circle cx="13" cy="9" r="5" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M4 23 C4 17.5 22 17.5 22 23" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                {%- when 'drop' -%}
+                  <svg viewBox="0 0 26 26" fill="none">
+                    <path d="M13 3 C13 3 5.5 12.5 5.5 16.5 A7.5 7.5 0 0 0 20.5 16.5 C20.5 12.5 13 3 13 3 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                  </svg>
+                {%- when 'shield' -%}
+                  <svg viewBox="0 0 26 26" fill="none">
+                    <path d="M13 2.5 L4 7 L4 13.5 C4 18.5 8 21.5 13 23.5 C18 21.5 22 18.5 22 13.5 L22 7 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M9.5 13 L11.5 15.5 L16.5 10.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                {%- when 'star' -%}
+                  <svg viewBox="0 0 26 26" fill="none">
+                    <path d="M13 3 L14.5 9.5 L21 11 L14.5 12.5 L13 19 L11.5 12.5 L5 11 L11.5 9.5 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                  </svg>
+                {%- else -%}
+                  <svg viewBox="0 0 26 26" fill="none">
+                    <path d="M13 3 L14.5 9.5 L21 11 L14.5 12.5 L13 19 L11.5 12.5 L5 11 L11.5 9.5 Z" fill="currentColor"/>
+                  </svg>
+              {%- endcase -%}
+            </div>
+            <div class="sc2__pill-text">
+              <span class="sc2__pill-label">{{ block.settings.label }}</span>
+              {%- if block.settings.subtitle != blank -%}
+                <span class="sc2__pill-sub">{{ block.settings.subtitle }}</span>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%}── 3. Bottom section ─────────────────────────────{%- endcomment -%}
+  <div class="sc2__bottom" style="background-color: {{ section.settings.bottom_bg }};">
+    <div class="sc2__grid">
+
+      {%- comment -%}── Before / After card ───────────────────────{%- endcomment -%}
+      <div class="sc2__ba">
+       
+
+        <div class="sc2__bac" id="sc2-ba-{{ section.id }}">
+          {%- if section.settings.before_image != blank -%}
+            {{ section.settings.before_image | image_url: width: 1000
+               | image_tag: class: 'sc2__bac-before', loading: 'lazy', draggable: 'false', alt: 'Before' }}
+          {%- else -%}
+            <div class="sc2__bac-before sc2__bac-ph">Before</div>
+          {%- endif -%}
+
+          {%- if section.settings.after_image != blank -%}
+            {{ section.settings.after_image | image_url: width: 1000
+               | image_tag: class: 'sc2__bac-after', loading: 'lazy', draggable: 'false', alt: 'After' }}
+          {%- else -%}
+            <div class="sc2__bac-after sc2__bac-ph">After</div>
+          {%- endif -%}
+
+          <div class="sc2__bac-sep"></div>
+          <div class="sc2__bac-handle" aria-hidden="true">
+            <svg viewBox="0 0 44 44" fill="none">
+              <circle cx="22" cy="22" r="21" fill="rgba(0,0,0,0.52)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+              <path d="M16 22 L10 22 M28 22 L34 22 M16 22 L19 19 M16 22 L19 25 M28 22 L25 19 M28 22 L25 25"
+                    stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <input class="sc2__bac-range" type="range" min="0" max="100" value="50"
+                 aria-label="Slide to compare before and after">
+
+          <span class="sc2__bac-tag sc2__bac-tag--b">BEFORE</span>
+          <span class="sc2__bac-tag sc2__bac-tag--a">AFTER</span>
+        </div>
+
+        {%- assign icon_blocks = section.blocks | where: 'type', 'ba_icon' -%}
+        {%- if icon_blocks.size > 0 -%}
+          <div class="sc2__icons">
+            {%- for block in icon_blocks -%}
+              <div class="sc2__icon" {{ block.shopify_attributes }}>
+                <span class="sc2__icon-badge" aria-hidden="true">
+                  {%- case block.settings.icon -%}
+                    {%- when 'flask' -%}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M9 3v7L4 19a1 1 0 00.93 1.37h14.14A1 1 0 0020 19l-5-9V3"/><line x1="6.3" y1="16" x2="17.7" y2="16"/></svg>
+                    {%- when 'shield' -%}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 L4 6.5 L4 12.5 C4 17.5 7.5 20.5 12 22 C16.5 20.5 20 17.5 20 12.5 L20 6.5 Z"/></svg>
+                    {%- when 'check' -%}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5 L10.5 15 L16 9"/></svg>
+                    {%- when 'medal' -%}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="5.5"/><path d="M9 13 L7 21 L12 18.5 L17 21 L15 13"/></svg>
+                    {%- else -%}
+                      <span class="sc2__icon-sym">{{ block.settings.symbol | default: '✦' }}</span>
+                  {%- endcase -%}
+                </span>
+                <span class="sc2__icon-text">
+                  {%- if block.settings.label != blank -%}
+                    <span class="sc2__icon-lbl">{{ block.settings.label }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.subtitle != blank -%}
+                    <span class="sc2__icon-sub">{{ block.settings.subtitle }}</span>
+                  {%- endif -%}
+                </span>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%}── Feature card (recommended product) ────────{%- endcomment -%}
+      {%- liquid
+        assign feat_product    = section.settings.feat_product
+        assign feat_collection = section.settings.feat_collection
+        assign feat_img        = section.settings.feat_image
+        assign feat_alt        = section.settings.feat_alt | default: ''
+
+        if section.settings.feat_link != blank
+          assign feat_href = section.settings.feat_link
+        elsif feat_product != blank
+          assign feat_href = feat_product.url
+        elsif feat_collection != blank
+          assign feat_href = feat_collection.url
+        else
+          assign feat_href = '#'
+        endif
+
+        if feat_img == blank and feat_product != blank and feat_product.featured_image != blank
+          assign feat_img = feat_product.featured_image
+        elsif feat_img == blank and feat_collection != blank and feat_collection.image != blank
+          assign feat_img = feat_collection.image
+        endif
+
+        if feat_alt == blank and feat_product != blank
+          assign feat_alt = feat_product.title
+        elsif feat_alt == blank and feat_collection != blank
+          assign feat_alt = feat_collection.title
+        endif
+      -%}
+      <div class="sc2__feat">
+        <div class="sc2__feat-body">
+          {%- if section.settings.feat_eyebrow != blank -%}
+            <p class="sc2__feat-eyebrow">{{ section.settings.feat_eyebrow }}</p>
+          {%- endif -%}
+          {%- if section.settings.feat_heading_white != blank or section.settings.feat_heading_accent != blank -%}
+            <h3 class="sc2__feat-heading">
+              {%- if section.settings.feat_heading_white != blank -%}<span>{{ section.settings.feat_heading_white }}</span>{%- endif -%}
+              {%- if section.settings.feat_heading_accent != blank -%}<span class="sc2__feat-heading-accent">{{ section.settings.feat_heading_accent }}</span>{%- endif -%}
+            </h3>
+          {%- endif -%}
+          {%- if section.settings.feat_subheading != blank -%}
+            <p class="sc2__feat-subheading">{{ section.settings.feat_subheading }}</p>
+          {%- endif -%}
+          {%- if section.settings.feat_body != blank -%}
+            <p class="sc2__feat-desc">{{ section.settings.feat_body }}</p>
+          {%- endif -%}
+          {%- if section.settings.feat_cta_label != blank -%}
+            <a href="{{ feat_href }}" class="sc2__feat-cta">{{ section.settings.feat_cta_label }}</a>
+          {%- endif -%}
+        </div>
+        <a href="{{ feat_href }}" class="sc2__feat-media" aria-label="{{ feat_alt }}">
+          {%- if feat_img != blank -%}
+            {{ feat_img | image_url: width: 700
+               | image_tag: class: 'sc2__feat-img', loading: 'lazy', alt: feat_alt }}
+          {%- else -%}
+            <div class="sc2__feat-ph"></div>
+          {%- endif -%}
+        </a>
+      </div>
+
+    </div>
+  </div>
+
 </section>
 
+<script>
+(function () {
+  var wrap = document.getElementById('sc2-ba-{{ section.id }}');
+  if (!wrap) return;
+
+  var after  = wrap.querySelector('.sc2__bac-after');
+  var sep    = wrap.querySelector('.sc2__bac-sep');
+  var handle = wrap.querySelector('.sc2__bac-handle');
+  var range  = wrap.querySelector('.sc2__bac-range');
+  var cur    = 50;
+
+  function setPos(pct) {
+    cur = Math.max(0, Math.min(100, pct));
+    if (after)  after.style.clipPath = 'inset(0 ' + (100 - cur) + '% 0 0)';
+    if (sep)    sep.style.left       = cur + '%';
+    if (handle) handle.style.left    = cur + '%';
+    if (range)  range.value          = cur;
+  }
+
+  if (range) range.addEventListener('input', function () { setPos(+this.value); });
+
+  /* drag the handle directly */
+  var dragging = false;
+
+  function pctFromEvent(clientX) {
+    var rect = wrap.getBoundingClientRect();
+    return ((clientX - rect.left) / rect.width) * 100;
+  }
+
+  handle.addEventListener('mousedown', function (e) { dragging = true; e.preventDefault(); });
+  document.addEventListener('mouseup',  function ()  { dragging = false; });
+  document.addEventListener('mousemove', function (e) {
+    if (dragging) setPos(pctFromEvent(e.clientX));
+  });
+
+  handle.addEventListener('touchstart', function (e) {
+    dragging = true; e.preventDefault();
+  }, { passive: false });
+  document.addEventListener('touchend', function () { dragging = false; });
+  document.addEventListener('touchmove', function (e) {
+    if (dragging) setPos(pctFromEvent(e.touches[0].clientX));
+  }, { passive: true });
+
+  /* Shopify theme editor reload */
+  document.addEventListener('shopify:section:load', function (e) {
+    if (e.detail && e.detail.sectionId === {{ section.id | json }}) setPos(50);
+  });
+
+  requestAnimationFrame(function () { setPos(50); });
+}());
+</script>
+
 {% stylesheet %}
-.salon-choice {
-  padding: 60px 0;
-  background: #fff;
+/* ── Shared ───────────────────────────────────────────── */
+.sc2 {
+  font-family: 'Jost', sans-serif;
+  overflow: hidden;
 }
 
-.salon-choice__header {
+/* ── Hero Banner ──────────────────────────────────────── */
+.sc2__hero {
+  width: 100%;
+  line-height: 0;
+  margin-top:60px
+}
+
+.sc2__banner-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.sc2__banner-ph {
+  width: 100%;
+  height: 340px;
+  background: #e8e4dc;
+}
+
+/* ── Feature Strip ────────────────────────────────────── */
+.sc2__strip {
+  padding: 32px 24px 28px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.sc2__strip::-webkit-scrollbar { display: none; }
+
+.sc2__strip-heading {
   text-align: center;
-  margin-bottom: 36px;
-}
-
-.salon-choice__heading {
-  font-size: clamp(1.8rem, 3.5vw, 3rem);
-  font-weight: 900;
+  font-size: clamp(1.3rem, 2.4vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
   color: #1e3a5f;
-  margin: 0 0 8px;
-  font-style: italic;
-  letter-spacing: -0.01em;
+  margin: 0 0 22px;
 }
 
-.salon-choice__sub {
-  font-size: 0.9rem;
-  color: #666;
-  margin: 0;
+.sc2__strip-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-width: max-content;
+  margin: 0 auto;
+  max-width: 1380px;
 }
 
-.salon-choice__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  padding:0px 40px
+.sc2__pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 50px;
+  border: none;
+  background: #14284a;
+  box-shadow: 0 3px 10px rgba(20, 40, 74, 0.18);
+  flex-shrink: 0;
+  cursor: default;
 }
 
-.salon-choice__card {
+.sc2__pill--gold {
+  background: linear-gradient(135deg, #b8832a 0%, #dba84a 50%, #c9953a 100%);
+  box-shadow: 0 3px 10px rgba(184, 131, 42, 0.35);
+}
+
+.sc2__pill-icon {
+  width: 26px;
+  height: 26px;
+  color: #fff;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sc2__pill-icon svg { width: 100%; height: 100%; }
+
+.sc2__pill-text {
   display: flex;
   flex-direction: column;
-  text-decoration: none;
-  border-radius: 14px;
-  overflow: hidden;
-  background: #f8f8f8;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  gap: 1px;
 }
 
-.salon-choice__card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+.sc2__pill-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #fff;
+  text-transform: uppercase;
+  line-height: 1.25;
+  white-space: nowrap;
 }
 
-.salon-choice__media {
+.sc2__pill-sub {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 400;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+/* ── Bottom ───────────────────────────────────────────── */
+.sc2__bottom {
+  background: #1e3a5f;
+  padding: 0;
+}
+
+.sc2__grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 0;
+  margin: 0 auto;
+  align-items: stretch;
+}
+
+/* ── Before / After ───────────────────────────────────── */
+.sc2__ba {
+  display: flex;
+  flex-direction: column;
+}
+
+.sc2__ba-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 0 24px;
+}
+
+.sc2__ba-crown {
+  width: 26px;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.sc2__ba-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+/* slider container */
+.sc2__bac {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
-  background: #ececec;
+  aspect-ratio: 16 / 9;
+  border-radius: 0;
+  background: #0d2340;
+  cursor: ew-resize;
+  flex: 1;
 }
 
-.salon-choice__img {
+.sc2__bac-before,
+.sc2__bac-after {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.4s ease;
+  user-select: none;
+  pointer-events: none;
 }
 
-.salon-choice__card:hover .salon-choice__img { transform: scale(1.05); }
+.sc2__bac-before { z-index: 1; }
+.sc2__bac-after  { z-index: 2; clip-path: inset(0 50% 0 0); }
 
-.salon-choice__img-placeholder {
+.sc2__bac-ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2a4a6f;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.sc2__bac-sep {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.65);
+  z-index: 3;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.sc2__bac-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  width: 50px;
+  height: 50px;
+  cursor: ew-resize;
+  pointer-events: auto;
+}
+
+.sc2__bac-handle svg {
+  width: 50px;
+  height: 50px;
+}
+
+/* invisible range that captures input across full area */
+.sc2__bac-range {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #e0ddd8;
+  opacity: 0;
+  z-index: 5;
+  cursor: ew-resize;
+  margin: 0;
+  padding: 0;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
-.salon-choice__badge {
+.sc2__bac-range::-webkit-slider-thumb { -webkit-appearance: none; width: 2px; height: 100%; }
+.sc2__bac-range::-moz-range-thumb     { width: 2px; height: 100%; border: none; background: transparent; }
+
+.sc2__bac-tag {
   position: absolute;
-  top: 12px;
-  left: 12px;
-  background: #1e3a5f;
+  top: 14px;
+  z-index: 6;
+  background: rgba(10, 20, 35, 0.82);
   color: #fff;
-  font-size: 11px;
+  font-size: 0.78rem;
   font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 20px;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.07em;
+  padding: 5px 14px;
+  border-radius: 4px;
+  pointer-events: none;
 }
 
-.salon-choice__play {
-  position: absolute;
-  bottom: 12px;
-  right: 12px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.45);
+.sc2__bac-tag--b { left: 14px; }
+.sc2__bac-tag--a { right: 14px; }
+
+/* ── Icon row ─────────────────────────────────────────── */
+.sc2__icons {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  background: #05070d;
+}
+
+.sc2__icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.sc2__icon-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
 }
 
-.salon-choice__card:hover .salon-choice__play { background: rgba(0,0,0,0.7); }
+.sc2__icon-badge svg {
+  width: 18px;
+  height: 18px;
+}
 
-.salon-choice__info {
-  padding: 14px 16px 18px;
+.sc2__icon-sym {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.sc2__icon-text {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
+  min-width: 0;
 }
 
-.salon-choice__name {
-  font-size: 13px;
+.sc2__icon-lbl {
+  font-size: 0.68rem;
   font-weight: 700;
-  color: #1e3a5f;
-  margin: 0;
-  line-height: 1.3;
+  color: #fff;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  line-height: 1.3;
+  white-space: nowrap;
 }
 
-.salon-choice__descriptor {
-  font-size: 12px;
-  color: #777;
-  margin: 0;
-  line-height: 1.4;
+.sc2__icon-sub {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.3;
+  white-space: nowrap;
 }
 
-.salon-choice__rating {
+/* ── Feature card (recommended product) ───────────────── */
+.sc2__feat {
   display: flex;
   align-items: center;
-  gap: 5px;
-  margin-top: 4px;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+  background: #05070d;
+  /* stretch to match BA card height inside the grid row */
+  align-self: stretch;
 }
 
-.salon-choice__stars {
-  color: #f5a623;
-  font-size: 12px;
-  letter-spacing: 1px;
+.sc2__feat-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  padding: 40px 16px 40px 44px;
 }
 
-.salon-choice__rating-val {
-  font-size: 12px;
+.sc2__feat-eyebrow {
+  font-size: clamp(0.9rem, 1.1vw, 1.05rem);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 14px;
+}
+
+.sc2__feat-heading {
+  font-size: clamp(1.6rem, 2.6vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 1.15;
+  margin: 0 0 14px;
+}
+
+.sc2__feat-heading-accent {
+  color: #3b82f6;
+}
+
+.sc2__feat-heading span:not(:last-child) {
+  margin-right: 0.28em;
+}
+
+.sc2__feat-subheading {
+  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
   font-weight: 600;
-  color: #444;
+  color: #d9a441;
+  margin: 0 0 14px;
 }
 
+.sc2__feat-desc {
+  font-size: clamp(0.85rem, 1vw, 1rem);
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.6;
+  max-width: 34ch;
+  margin: 0 0 26px;
+}
+
+.sc2__feat-cta {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  background: linear-gradient(135deg, #b8832a 0%, #dba84a 50%, #c9953a 100%);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 14px 30px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: filter 0.2s;
+}
+
+.sc2__feat-cta:hover {
+  filter: brightness(1.08);
+}
+
+.sc2__feat-media {
+  flex: 0 0 46%;
+  align-self: stretch;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 24px 20px 0 0;
+  min-width: 0;
+}
+
+.sc2__feat-img {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  display: block;
+}
+
+.sc2__feat-ph {
+  width: 100%;
+  height: 100%;
+  min-height: 160px;
+  background: #0d2340;
+}
+
+/* ── Tablet ───────────────────────────────────────────── */
 @media (max-width: 900px) {
-  .salon-choice__grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .sc2__grid { grid-template-columns: 1fr; }
+  .sc2__feat { flex-direction: row; min-height: 260px; }
+  .sc2__feat-media { flex: 1; padding: 16px; }
+  .sc2__feat-body { flex: 1; padding: 28px 16px 28px 28px; }
 }
 
-@media (max-width: 480px) {
-  .salon-choice { padding: 40px 0; }
-  .salon-choice__grid { grid-template-columns: repeat(2, 1fr); gap: 12px;
-  padding: 0px 10px; }
-  .salon-choice__info { padding: 10px 12px 14px; }
-  .salon-choice__name { font-size: 12px; }
+/* ── Mobile ───────────────────────────────────────────── */
+@media (max-width: 580px) {
+  .sc2__bac { aspect-ratio: 4 / 3; }
 
+  .sc2__icons {
+    flex-wrap: wrap;
+    gap: 14px 10px;
+    padding: 16px;
+  }
+
+  .sc2__icon { flex: 0 0 47%; }
+
+  .sc2__icon-lbl,
+  .sc2__icon-sub {
+    white-space: normal;
+  }
+
+  .sc2__feat { flex-direction: column; }
+  .sc2__feat-media { height: 200px; flex: none; padding: 16px; }
+  .sc2__feat-body { padding: 28px 20px; }
+  .sc2__feat-desc { max-width: none; }
+
+  .sc2__ba-title { font-size: 0.85rem; }
+
+  .sc2__strip { padding: 24px 16px 20px; }
+  .sc2__strip-heading { margin: 0 0 16px; }
 }
 {% endstylesheet %}
 
@@ -248,63 +725,209 @@
   "class": "salon-choice-section",
   "settings": [
     {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "SALON CHOICE"
+      "type": "header",
+      "content": "Hero Banner"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Banner image"
     },
     {
       "type": "text",
-      "id": "subheading",
-      "label": "Subheading"
+      "id": "banner_alt",
+      "label": "Banner image alt text"
+    },
+    {
+      "type": "header",
+      "content": "Feature Strip"
+    },
+    {
+      "type": "text",
+      "id": "concern_heading",
+      "label": "Heading",
+      "default": "Choose Your Concern"
+    },
+    {
+      "type": "color",
+      "id": "strip_bg",
+      "label": "Strip background",
+      "default": "#eef1f8"
+    },
+    {
+      "type": "header",
+      "content": "Before / After Slider"
+    },
+    {
+      "type": "text",
+      "id": "ba_label",
+      "label": "Card label",
+      "default": "REAL CLIENT RESULT"
+    },
+    {
+      "type": "image_picker",
+      "id": "before_image",
+      "label": "Before image"
+    },
+    {
+      "type": "image_picker",
+      "id": "after_image",
+      "label": "After image"
+    },
+    {
+      "type": "header",
+      "content": "Feature Card"
+    },
+    {
+      "type": "product",
+      "id": "feat_product",
+      "label": "Link to product"
+    },
+    {
+      "type": "collection",
+      "id": "feat_collection",
+      "label": "Link to collection"
+    },
+    {
+      "type": "url",
+      "id": "feat_link",
+      "label": "Manual link (overrides product / collection)"
+    },
+    {
+      "type": "image_picker",
+      "id": "feat_image",
+      "label": "Image (overrides product / collection image)"
+    },
+    {
+      "type": "text",
+      "id": "feat_alt",
+      "label": "Image alt text"
+    },
+    {
+      "type": "text",
+      "id": "feat_eyebrow",
+      "label": "Eyebrow text",
+      "default": "Recommended for this result"
+    },
+    {
+      "type": "text",
+      "id": "feat_heading_white",
+      "label": "Heading (white)",
+      "default": "Blonder Fiber Plex"
+    },
+    {
+      "type": "text",
+      "id": "feat_heading_accent",
+      "label": "Heading (accent)",
+      "default": "Blue"
+    },
+    {
+      "type": "text",
+      "id": "feat_subheading",
+      "label": "Subheading",
+      "default": "Up to 9 levels up"
+    },
+    {
+      "type": "textarea",
+      "id": "feat_body",
+      "label": "Body text",
+      "default": "Advanced lightening with anti-yellow molecules for bright, cool blonde results."
+    },
+    {
+      "type": "text",
+      "id": "feat_cta_label",
+      "label": "Button text",
+      "default": "Learn more"
+    },
+    {
+      "type": "text",
+      "id": "feat_label",
+      "label": "Overlay label (legacy, unused)"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bottom_bg",
+      "label": "Bottom section background",
+      "default": "#1e3a5f"
     }
   ],
   "blocks": [
     {
-      "type": "product_card",
-      "name": "Product Card",
+      "type": "ba_icon",
+      "name": "Feature Icon",
       "settings": [
         {
-          "type": "product",
-          "id": "product",
-          "label": "Product (auto-fills image, title, URL)"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Override image"
-        },
-        {
-          "type": "text",
-          "id": "product_name",
-          "label": "Product name (overrides product title)"
-        },
-        {
-          "type": "text",
-          "id": "product_descriptor",
-          "label": "Short descriptor"
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "flask",
+          "options": [
+            { "value": "flask",  "label": "Flask / Ingredients" },
+            { "value": "shield", "label": "Shield / Trusted" },
+            { "value": "check",  "label": "Check / Safe" },
+            { "value": "medal",  "label": "Medal / Quality" },
+            { "value": "custom", "label": "Custom symbol (below)" }
+          ]
         },
         {
           "type": "text",
-          "id": "discount_badge",
-          "label": "Discount badge (e.g. 50% off)"
+          "id": "symbol",
+          "label": "Custom symbol (used when Icon = Custom)",
+          "default": "✦"
         },
         {
           "type": "text",
-          "id": "rating",
-          "label": "Rating (e.g. 4.8)",
-          "default": "4.8"
+          "id": "label",
+          "label": "Icon label",
+          "default": "PREMIUM INGREDIENTS"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Icon subtitle",
+          "default": "Science backed formulas"
+        }
+      ]
+    },
+    {
+      "type": "feature_pill",
+      "name": "Feature Pill",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "sparkle",
+          "options": [
+            { "value": "sparkle", "label": "Sparkle / Stars" },
+            { "value": "waves",   "label": "Waves / Frizz" },
+            { "value": "person",  "label": "Person / Coverage" },
+            { "value": "drop",    "label": "Drop / Color" },
+            { "value": "shield",  "label": "Shield / Repair" },
+            { "value": "star",    "label": "Star / Boost" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "BLONDE LIFT"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "Anti-Yellow"
         },
         {
           "type": "checkbox",
-          "id": "play_icon",
-          "label": "Show play icon",
-          "default": true
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Link (overrides product URL)"
+          "id": "highlighted",
+          "label": "Gold highlight (active state)",
+          "default": false
         }
       ]
     }
@@ -313,13 +936,14 @@
     {
       "name": "Salon Choice",
       "settings": {
-        "heading": "SALON CHOICE"
+        "ba_label": "REAL CLIENT RESULT",
+        "bottom_bg": "#1e3a5f"
       },
       "blocks": [
-        { "type": "product_card", "settings": { "product_name": "JAPANESE GLOW FACIAL KIT", "product_descriptor": "Used by 10,000+ customers", "discount_badge": "50% off", "rating": "4.8", "play_icon": true } },
-        { "type": "product_card", "settings": { "product_name": "ALOEVERA LIPOSOLUBLE WAX", "product_descriptor": "Smooth Waxing. Less Pain", "discount_badge": "50% off", "rating": "4.8", "play_icon": true } },
-        { "type": "product_card", "settings": { "product_name": "DE-TAN ILLUMINATE", "product_descriptor": "Tan Removal & Brightening", "discount_badge": "50% off", "rating": "4.8", "play_icon": true } },
-        { "type": "product_card", "settings": { "product_name": "SUPREME STRAIGHT", "product_descriptor": "Hair Straightening System", "discount_badge": "50% off", "rating": "4.8", "play_icon": true } }
+        { "type": "ba_icon", "settings": { "icon": "flask",  "label": "Premium Ingredients", "subtitle": "Science backed formulas" } },
+        { "type": "ba_icon", "settings": { "icon": "shield", "label": "Salon Trusted",        "subtitle": "Used by professionals" } },
+        { "type": "ba_icon", "settings": { "icon": "check",  "label": "Safe & Effective",     "subtitle": "Dermatologically tested" } },
+        { "type": "ba_icon", "settings": { "icon": "medal",  "label": "Quality Assured",      "subtitle": "Every product, every time" } }
       ]
     }
   ]
