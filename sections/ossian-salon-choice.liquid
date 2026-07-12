@@ -112,17 +112,35 @@
           <div class="sc2__icons">
             {%- for block in icon_blocks -%}
               <div class="sc2__icon" {{ block.shopify_attributes }}>
-                <span class="sc2__icon-sym">{{ block.settings.symbol | default: '✦' }}</span>
-                {%- if block.settings.label != blank -%}
-                  <span class="sc2__icon-lbl">{{ block.settings.label }}</span>
-                {%- endif -%}
+                <span class="sc2__icon-badge" aria-hidden="true">
+                  {%- case block.settings.icon -%}
+                    {%- when 'flask' -%}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M9 3v7L4 19a1 1 0 00.93 1.37h14.14A1 1 0 0020 19l-5-9V3"/><line x1="6.3" y1="16" x2="17.7" y2="16"/></svg>
+                    {%- when 'shield' -%}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 L4 6.5 L4 12.5 C4 17.5 7.5 20.5 12 22 C16.5 20.5 20 17.5 20 12.5 L20 6.5 Z"/></svg>
+                    {%- when 'check' -%}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5 L10.5 15 L16 9"/></svg>
+                    {%- when 'medal' -%}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="5.5"/><path d="M9 13 L7 21 L12 18.5 L17 21 L15 13"/></svg>
+                    {%- else -%}
+                      <span class="sc2__icon-sym">{{ block.settings.symbol | default: '✦' }}</span>
+                  {%- endcase -%}
+                </span>
+                <span class="sc2__icon-text">
+                  {%- if block.settings.label != blank -%}
+                    <span class="sc2__icon-lbl">{{ block.settings.label }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.subtitle != blank -%}
+                    <span class="sc2__icon-sub">{{ block.settings.subtitle }}</span>
+                  {%- endif -%}
+                </span>
               </div>
             {%- endfor -%}
           </div>
         {%- endif -%}
       </div>
 
-      {%- comment -%}── Feature card (linked image) ───────────────{%- endcomment -%}
+      {%- comment -%}── Feature card (recommended product) ────────{%- endcomment -%}
       {%- liquid
         assign feat_product    = section.settings.feat_product
         assign feat_collection = section.settings.feat_collection
@@ -151,17 +169,36 @@
           assign feat_alt = feat_collection.title
         endif
       -%}
-      <a class="sc2__feat" href="{{ feat_href }}">
-        {%- if feat_img != blank -%}
-          {{ feat_img | image_url: width: 700
-             | image_tag: class: 'sc2__feat-img', loading: 'lazy', alt: feat_alt }}
-        {%- else -%}
-          <div class="sc2__feat-ph"></div>
-        {%- endif -%}
-        {%- if section.settings.feat_label != blank -%}
-          <span class="sc2__feat-label">{{ section.settings.feat_label }}</span>
-        {%- endif -%}
-      </a>
+      <div class="sc2__feat">
+        <div class="sc2__feat-body">
+          {%- if section.settings.feat_eyebrow != blank -%}
+            <p class="sc2__feat-eyebrow">{{ section.settings.feat_eyebrow }}</p>
+          {%- endif -%}
+          {%- if section.settings.feat_heading_white != blank or section.settings.feat_heading_accent != blank -%}
+            <h3 class="sc2__feat-heading">
+              {%- if section.settings.feat_heading_white != blank -%}<span>{{ section.settings.feat_heading_white }}</span>{%- endif -%}
+              {%- if section.settings.feat_heading_accent != blank -%}<span class="sc2__feat-heading-accent">{{ section.settings.feat_heading_accent }}</span>{%- endif -%}
+            </h3>
+          {%- endif -%}
+          {%- if section.settings.feat_subheading != blank -%}
+            <p class="sc2__feat-subheading">{{ section.settings.feat_subheading }}</p>
+          {%- endif -%}
+          {%- if section.settings.feat_body != blank -%}
+            <p class="sc2__feat-desc">{{ section.settings.feat_body }}</p>
+          {%- endif -%}
+          {%- if section.settings.feat_cta_label != blank -%}
+            <a href="{{ feat_href }}" class="sc2__feat-cta">{{ section.settings.feat_cta_label }}</a>
+          {%- endif -%}
+        </div>
+        <a href="{{ feat_href }}" class="sc2__feat-media" aria-label="{{ feat_alt }}">
+          {%- if feat_img != blank -%}
+            {{ feat_img | image_url: width: 700
+               | image_tag: class: 'sc2__feat-img', loading: 'lazy', alt: feat_alt }}
+          {%- else -%}
+            <div class="sc2__feat-ph"></div>
+          {%- endif -%}
+        </a>
+      </div>
 
     </div>
   </div>
@@ -334,14 +371,15 @@
 /* ── Bottom ───────────────────────────────────────────── */
 .sc2__bottom {
   background: #1e3a5f;
-  padding: 36px 24px 52px;
+  padding: 0;
 }
 
 .sc2__grid {
   display: grid;
-  grid-template-columns: 1.65fr 1fr;
-  gap: 10px;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 0;
   margin: 0 auto;
+  align-items: stretch;
 }
 
 /* ── Before / After ───────────────────────────────────── */
@@ -380,7 +418,7 @@
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: 14px;
+  border-radius: 0;
   background: #0d2340;
   cursor: ew-resize;
   flex: 1;
@@ -478,91 +516,200 @@
 /* ── Icon row ─────────────────────────────────────────── */
 .sc2__icons {
   display: flex;
-  justify-content: space-around;
-  margin-top: 22px;
-  padding: 0 12px;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  background: #05070d;
 }
 
 .sc2__icon {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
+  min-width: 0;
+}
+
+.sc2__icon-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sc2__icon-badge svg {
+  width: 18px;
+  height: 18px;
 }
 
 .sc2__icon-sym {
-  font-size: 1.3rem;
-  color: rgba(255, 255, 255, 0.65);
+  font-size: 1rem;
   line-height: 1;
 }
 
-.sc2__icon-lbl {
-  font-size: 0.6rem;
-  color: rgba(255, 255, 255, 0.45);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  text-align: center;
+.sc2__icon-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
 }
 
-/* ── Feature card (linked image) ──────────────────────── */
+.sc2__icon-lbl {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.sc2__icon-sub {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+/* ── Feature card (recommended product) ───────────────── */
 .sc2__feat {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 20px;
   position: relative;
-
   overflow: hidden;
-
-  background: #0d2340;
-  text-decoration: none;
+  background: #05070d;
   /* stretch to match BA card height inside the grid row */
   align-self: stretch;
 }
 
+.sc2__feat-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  padding: 40px 16px 40px 44px;
+}
+
+.sc2__feat-eyebrow {
+  font-size: clamp(0.9rem, 1.1vw, 1.05rem);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 14px;
+}
+
+.sc2__feat-heading {
+  font-size: clamp(1.6rem, 2.6vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 1.15;
+  margin: 0 0 14px;
+}
+
+.sc2__feat-heading-accent {
+  color: #3b82f6;
+}
+
+.sc2__feat-heading span:not(:last-child) {
+  margin-right: 0.28em;
+}
+
+.sc2__feat-subheading {
+  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+  font-weight: 600;
+  color: #d9a441;
+  margin: 0 0 14px;
+}
+
+.sc2__feat-desc {
+  font-size: clamp(0.85rem, 1vw, 1rem);
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.6;
+  max-width: 34ch;
+  margin: 0 0 26px;
+}
+
+.sc2__feat-cta {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  background: linear-gradient(135deg, #b8832a 0%, #dba84a 50%, #c9953a 100%);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 14px 30px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: filter 0.2s;
+}
+
+.sc2__feat-cta:hover {
+  filter: brightness(1.08);
+}
+
+.sc2__feat-media {
+  flex: 0 0 42%;
+  align-self: stretch;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 16px 24px 0 0;
+  min-width: 0;
+}
+
 .sc2__feat-img {
-  position: absolute;
-  inset: 0;
   width: 100%;
   height: 100%;
-  object-position: center top;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: bottom right;
   display: block;
-  transition: transform 0.4s ease;
 }
-
-.sc2__feat:hover .sc2__feat-img { transform: scale(1.03); }
 
 .sc2__feat-ph {
-  position: absolute;
-  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 160px;
   background: #0d2340;
-}
-
-.sc2__feat-label {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  padding: 14px 18px;
-  background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #fff;
-  text-transform: uppercase;
-  line-height: 1.3;
 }
 
 /* ── Tablet ───────────────────────────────────────────── */
 @media (max-width: 900px) {
   .sc2__grid { grid-template-columns: 1fr; }
   .sc2__feat { flex-direction: row; min-height: 260px; }
-  .sc2__feat-media { flex: 1; }
-  .sc2__feat-body { flex: 1; }
+  .sc2__feat-media { flex: 1; padding: 16px; }
+  .sc2__feat-body { flex: 1; padding: 28px 16px 28px 28px; }
 }
 
 /* ── Mobile ───────────────────────────────────────────── */
 @media (max-width: 580px) {
-  .sc2__bottom { padding: 24px 14px 40px; }
   .sc2__bac { aspect-ratio: 4 / 3; }
 
+  .sc2__icons {
+    flex-wrap: wrap;
+    gap: 14px 10px;
+    padding: 16px;
+  }
+
+  .sc2__icon { flex: 0 0 47%; }
+
+  .sc2__icon-lbl,
+  .sc2__icon-sub {
+    white-space: normal;
+  }
+
   .sc2__feat { flex-direction: column; }
-  .sc2__feat-media { height: 200px; flex: none; }
+  .sc2__feat-media { height: 200px; flex: none; padding: 16px; }
+  .sc2__feat-body { padding: 28px 20px; }
+  .sc2__feat-desc { max-width: none; }
 
   .sc2__ba-title { font-size: 0.85rem; }
 
@@ -658,8 +805,44 @@
     },
     {
       "type": "text",
+      "id": "feat_eyebrow",
+      "label": "Eyebrow text",
+      "default": "Recommended for this result"
+    },
+    {
+      "type": "text",
+      "id": "feat_heading_white",
+      "label": "Heading (white)",
+      "default": "Blonder Fiber Plex"
+    },
+    {
+      "type": "text",
+      "id": "feat_heading_accent",
+      "label": "Heading (accent)",
+      "default": "Blue"
+    },
+    {
+      "type": "text",
+      "id": "feat_subheading",
+      "label": "Subheading",
+      "default": "Up to 9 levels up"
+    },
+    {
+      "type": "textarea",
+      "id": "feat_body",
+      "label": "Body text",
+      "default": "Advanced lightening with anti-yellow molecules for bright, cool blonde results."
+    },
+    {
+      "type": "text",
+      "id": "feat_cta_label",
+      "label": "Button text",
+      "default": "Learn more"
+    },
+    {
+      "type": "text",
       "id": "feat_label",
-      "label": "Overlay label (optional)"
+      "label": "Overlay label (legacy, unused)"
     },
     {
       "type": "header",
@@ -678,15 +861,35 @@
       "name": "Feature Icon",
       "settings": [
         {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "flask",
+          "options": [
+            { "value": "flask",  "label": "Flask / Ingredients" },
+            { "value": "shield", "label": "Shield / Trusted" },
+            { "value": "check",  "label": "Check / Safe" },
+            { "value": "medal",  "label": "Medal / Quality" },
+            { "value": "custom", "label": "Custom symbol (below)" }
+          ]
+        },
+        {
           "type": "text",
           "id": "symbol",
-          "label": "Icon symbol (emoji or unicode)",
+          "label": "Custom symbol (used when Icon = Custom)",
           "default": "✦"
         },
         {
           "type": "text",
           "id": "label",
-          "label": "Icon label"
+          "label": "Icon label",
+          "default": "PREMIUM INGREDIENTS"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Icon subtitle",
+          "default": "Science backed formulas"
         }
       ]
     },
@@ -737,10 +940,10 @@
         "bottom_bg": "#1e3a5f"
       },
       "blocks": [
-        { "type": "ba_icon", "settings": { "symbol": "↑", "label": "Lift" } },
-        { "type": "ba_icon", "settings": { "symbol": "✦", "label": "Shine" } },
-        { "type": "ba_icon", "settings": { "symbol": "⊕", "label": "Protect" } },
-        { "type": "ba_icon", "settings": { "symbol": "✦", "label": "Nourish" } }
+        { "type": "ba_icon", "settings": { "icon": "flask",  "label": "Premium Ingredients", "subtitle": "Science backed formulas" } },
+        { "type": "ba_icon", "settings": { "icon": "shield", "label": "Salon Trusted",        "subtitle": "Used by professionals" } },
+        { "type": "ba_icon", "settings": { "icon": "check",  "label": "Safe & Effective",     "subtitle": "Dermatologically tested" } },
+        { "type": "ba_icon", "settings": { "icon": "medal",  "label": "Quality Assured",      "subtitle": "Every product, every time" } }
       ]
     }
   ]

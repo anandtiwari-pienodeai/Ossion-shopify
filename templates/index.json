@@ -438,14 +438,22 @@
       "settings": {
         "banner_image": "shopify://shop_images/WhatsApp_Image_2026-07-12_at_11.52.14.jpg",
         "banner_alt": "",
+        "concern_heading": "Choose Your Concern",
+        "strip_bg": "#eef1f8",
         "ba_label": "REAL CLIENT RESULT",
         "before_image": "shopify://shop_images/ChatGPT_Image_Jun_29_2026_01_26_46_AM.png",
         "after_image": "shopify://shop_images/ChatGPT_Image_Jun_29_2026_01_28_10_AM.png",
         "feat_product": "",
         "feat_collection": "",
         "feat_link": "",
-        "feat_image": "shopify://shop_images/WhatsApp_Image_2026-06-29_at_00.55.40.jpg",
+        "feat_image": "shopify://shop_images/image_169.png",
         "feat_alt": "",
+        "feat_eyebrow": "Recommended for this result",
+        "feat_heading_white": "Blonder Fiber Plex",
+        "feat_heading_accent": "Blue",
+        "feat_subheading": "Up to 9 levels up",
+        "feat_body": "Advanced lightening with anti-yellow molecules for bright, cool blonde results.",
+        "feat_cta_label": "Learn more",
         "feat_label": "",
         "bottom_bg": "#1e3a5f"
       }
