@@ -13,7 +13,10 @@
   {%- comment -%}── 2. Feature Strip ──────────────────────────────{%- endcomment -%}
   {%- assign pill_blocks = section.blocks | where: 'type', 'feature_pill' -%}
   {%- if pill_blocks.size > 0 -%}
-    <div class="sc2__strip" style="background-color: {{ section.settings.bottom_bg }};">
+    <div class="sc2__strip" style="background-color: {{ section.settings.strip_bg }};">
+      {%- if section.settings.concern_heading != blank -%}
+        <h2 class="sc2__strip-heading">{{ section.settings.concern_heading }}</h2>
+      {%- endif -%}
       <div class="sc2__strip-inner">
         {%- for block in pill_blocks -%}
           <div class="sc2__pill{% if block.settings.highlighted %} sc2__pill--gold{% endif %}" {{ block.shopify_attributes }}>
@@ -68,12 +71,6 @@
 
   {%- comment -%}── 3. Bottom section ─────────────────────────────{%- endcomment -%}
   <div class="sc2__bottom" style="background-color: {{ section.settings.bottom_bg }};">
-   <div class="sc2__ba-head">
-  
-          <span class="sc2__ba-title">
-            {{- section.settings.ba_label | default: 'REAL CLIENT RESULT' -}}
-          </span>
-        </div>
     <div class="sc2__grid">
 
       {%- comment -%}── Before / After card ───────────────────────{%- endcomment -%}
@@ -252,7 +249,7 @@
 
 /* ── Feature Strip ────────────────────────────────────── */
 .sc2__strip {
-  padding: 14px 24px;
+  padding: 32px 24px 28px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
@@ -260,11 +257,21 @@
 
 .sc2__strip::-webkit-scrollbar { display: none; }
 
+.sc2__strip-heading {
+  text-align: center;
+  font-size: clamp(1.3rem, 2.4vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #1e3a5f;
+  margin: 0 0 22px;
+}
+
 .sc2__strip-inner {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 14px;
   min-width: max-content;
   margin: 0 auto;
   max-width: 1380px;
@@ -274,17 +281,18 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 18px;
+  padding: 12px 20px;
   border-radius: 50px;
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  background: #14284a;
+  box-shadow: 0 3px 10px rgba(20, 40, 74, 0.18);
   flex-shrink: 0;
   cursor: default;
 }
 
 .sc2__pill--gold {
   background: linear-gradient(135deg, #b8832a 0%, #dba84a 50%, #c9953a 100%);
-  border-color: transparent;
+  box-shadow: 0 3px 10px rgba(184, 131, 42, 0.35);
 }
 
 .sc2__pill-icon {
@@ -306,9 +314,9 @@
 }
 
 .sc2__pill-label {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.06em;
   color: #fff;
   text-transform: uppercase;
   line-height: 1.25;
@@ -316,7 +324,7 @@
 }
 
 .sc2__pill-sub {
-  font-size: 0.67rem;
+  font-size: 0.72rem;
   color: rgba(255, 255, 255, 0.7);
   font-weight: 400;
   line-height: 1.25;
@@ -557,6 +565,9 @@
   .sc2__feat-media { height: 200px; flex: none; }
 
   .sc2__ba-title { font-size: 0.85rem; }
+
+  .sc2__strip { padding: 24px 16px 20px; }
+  .sc2__strip-heading { margin: 0 0 16px; }
 }
 {% endstylesheet %}
 
@@ -579,6 +590,22 @@
       "type": "text",
       "id": "banner_alt",
       "label": "Banner image alt text"
+    },
+    {
+      "type": "header",
+      "content": "Feature Strip"
+    },
+    {
+      "type": "text",
+      "id": "concern_heading",
+      "label": "Heading",
+      "default": "Choose Your Concern"
+    },
+    {
+      "type": "color",
+      "id": "strip_bg",
+      "label": "Strip background",
+      "default": "#eef1f8"
     },
     {
       "type": "header",

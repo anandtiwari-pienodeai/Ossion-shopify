@@ -6,17 +6,16 @@
 
 <section class="pshowcase" id="pshowcase-{{ section.id }}">
 
-  <!-- Section background image -->
-  {%- if section.settings.bg_image != blank -%}
-    <div class="pshowcase__bg" aria-hidden="true">
-      {{ section.settings.bg_image | image_url: width: 1920 | image_tag: class: 'pshowcase__bg-img', alt: '', loading: 'lazy', widths: '800,1200,1600,1920' }}
-    </div>
-  {%- endif -%}
-
   <div class="pshowcase__main page-width">
 
     <!-- Left Panel -->
     <div class="pshowcase__left">
+      <!-- Left panel background image -->
+      {%- if section.settings.bg_image != blank -%}
+        <div class="pshowcase__bg" aria-hidden="true">
+          {{ section.settings.bg_image | image_url: width: 1200 | image_tag: class: 'pshowcase__bg-img', alt: '', loading: 'lazy', widths: '400,700,1000,1200' }}
+        </div>
+      {%- endif -%}
       {%- if section.settings.category_label != blank -%}
         <p class="pshowcase__eyebrow">{{ section.settings.category_label }}</p>
       {%- endif -%}
@@ -192,11 +191,11 @@
   height: min(850px, 90vh);
 }
 
-/* ── Background Image ── */
+/* ── Background Image — confined to the left text panel ── */
 .pshowcase__bg {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: -1;
 }
 
 .pshowcase__bg-img {
@@ -224,6 +223,7 @@
 
 /* ── Left Panel ── */
 .pshowcase__left {
+  position: relative;
   display: flex;
   flex-direction: column;
   padding: 72px 16px 28px 0;
@@ -585,16 +585,45 @@
   }
 
   .pshowcase__left {
-    padding: 0 0 4px;
+    padding: 20px 20px 24px;
+  }
+
+  .pshowcase__eyebrow {
+    font-size: 1.75rem;
+    margin: 0 0 8px;
+  }
+
+  .pshowcase__heading {
+    font-size: 2.5rem;
+    line-height: 1.15;
+    margin: 0 0 16px;
+  }
+
+  .pshowcase__body {
+    font-size: 1.125rem;
+    line-height: 1.4;
+    margin: 0 0 24px;
+  }
+
+  .pshowcase__cta {
+    border-radius: 100px;
   }
 
   .pshowcase__trust {
-    gap: 8px;
-    padding-top: 20px;
+    gap: 0;
+    padding: 20px 0 0;
+    margin: 20px -20px 0;
+    border-top: 1px solid rgba(34, 52, 90, 0.1);
   }
 
   .pshowcase__trust-item {
     flex: 1;
+    padding: 0 8px;
+    border-right: 1px solid rgba(34, 52, 90, 0.15);
+  }
+
+  .pshowcase__trust-item:last-child {
+    border-right: none;
   }
 
   .pshowcase__stack {
