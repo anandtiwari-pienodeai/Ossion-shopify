@@ -292,23 +292,6 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
-            },
-            "ossian_pdp_offers_block": {
-              "type": "ossian-pdp-offers",
-              "settings": {
-                "heading": "Active Offers",
-                "offer_1_icon": "truck",
-                "offer_1_title": "Free Delivery",
-                "offer_1_description": "On orders above ₹399",
-                "offer_2_icon": "gift",
-                "offer_2_title": "BOGO Payday Sale",
-                "offer_2_description": "Add 2 items to cart, 1 item will be free",
-                "padding-block-start": 20,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
             }
           },
           "block_order": [
@@ -320,8 +303,7 @@
             "variant_picker_R3rGDr",
             "ossian_pdp_features_block",
             "buy_buttons_eYQEYi",
-            "ossian_pdp_wishlist_mW8kXp",
-            "ossian_pdp_offers_block"
+            "ossian_pdp_wishlist_mW8kXp"
           ]
         }
       },
