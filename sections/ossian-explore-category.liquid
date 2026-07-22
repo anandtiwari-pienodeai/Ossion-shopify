@@ -37,28 +37,33 @@
 
             <!-- Info -->
             <div class="explore-cat__info">
-              {%- assign cat_label = block.settings.category_label -%}
+              {%- liquid
+                assign cat_label = ec_product.type | default: block.settings.category_label
+
+                assign card_title = block.settings.name
+                if ec_product != blank
+                  assign card_title = ec_product.title
+                endif
+
+                assign rating_val = block.settings.rating
+                assign review_count_val = block.settings.review_count
+                if ec_product.metafields.reviews.rating.value.rating != blank
+                  assign rating_val = ec_product.metafields.reviews.rating.value.rating
+                endif
+                if ec_product.metafields.reviews.rating_count != blank
+                  assign review_count_val = ec_product.metafields.reviews.rating_count
+                endif
+              -%}
+
               {%- if cat_label != blank -%}
                 <span class="explore-cat__cat-label">{{ cat_label }}</span>
-              {%- elsif ec_product.type != blank -%}
-                <span class="explore-cat__cat-label">{{ ec_product.type }}</span>
               {%- endif -%}
 
               <h3 class="explore-cat__name">
-                {%- if block.settings.name != blank -%}
-                  {{ block.settings.name }}
-                {%- elsif ec_product != blank -%}
-                  {{ ec_product.title }}
-                {%- else -%}
-                  Product Name
-                {%- endif -%}
+                {{ card_title | default: 'Product Name' }}
               </h3>
 
               <!-- Rating -->
-              {%- assign rating_val = block.settings.rating -%}
-              {%- if ec_product.metafields.reviews.rating.value != blank -%}
-                {%- assign rating_val = ec_product.metafields.reviews.rating.value -%}
-              {%- endif -%}
               {%- if rating_val != blank -%}
                 <div class="explore-cat__rating">
                   <span class="explore-cat__stars" aria-hidden="true">
@@ -72,8 +77,8 @@
                     {%- endfor -%}
                   </span>
                   <span class="explore-cat__rating-val">{{ rating_val }}</span>
-                  {%- if block.settings.review_count != blank -%}
-                    <span class="explore-cat__review-count">({{ block.settings.review_count }})</span>
+                  {%- if review_count_val != blank -%}
+                    <span class="explore-cat__review-count">({{ review_count_val }})</span>
                   {%- endif -%}
                 </div>
               {%- endif -%}
