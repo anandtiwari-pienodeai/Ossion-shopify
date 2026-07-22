@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "collection_hero": {
@@ -290,7 +299,7 @@
         "cat_1": {
           "type": "category_card",
           "settings": {
-            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy",
+            "product": "amber-glow-permanent-hair-color-creme-100ml",
             "category_label": "HAIR CARE",
             "name": "Caviar Mask",
             "price": "₹1,999",
@@ -303,7 +312,7 @@
         "cat_2": {
           "type": "category_card",
           "settings": {
-            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy-1",
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
             "category_label": "HAIR CARE",
             "name": "Caviar Mask",
             "price": "₹1,999",
@@ -316,7 +325,7 @@
         "cat_3": {
           "type": "category_card",
           "settings": {
-            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
+            "product": "crimson-veil-permanent-hair-color-creme-100ml",
             "category_label": "HAIR CARE",
             "name": "Caviar Mask",
             "price": "₹1,999",
@@ -329,7 +338,7 @@
         "cat_4": {
           "type": "category_card",
           "settings": {
-            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy",
+            "product": "velvet-noir-permanent-hair-color-creme-100ml",
             "category_label": "HAIR CARE",
             "name": "Caviar Mask",
             "price": "₹1,999",
