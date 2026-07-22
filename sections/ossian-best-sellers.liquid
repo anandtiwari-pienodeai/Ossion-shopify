@@ -119,11 +119,6 @@
               >
                 ADD TO CART
               </button>
-              <button class="obs__wishlist" aria-label="Add to wishlist" type="button">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                </svg>
-              </button>
             </div>
           </div>
 
@@ -143,9 +138,6 @@
             </div>
             <div class="obs__actions">
               <button class="obs__atc" disabled type="button">ADD TO CART</button>
-              <button class="obs__wishlist" disabled type="button">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-              </button>
             </div>
           </div>
         {%- endfor -%}
@@ -185,13 +177,6 @@
           setTimeout(function () { btn.textContent = original; btn.disabled = false; }, 2000);
         })
         .catch(function () { btn.textContent = original; btn.disabled = false; });
-    });
-  });
-
-  /* ---------- Wishlist toggle ---------- */
-  document.querySelectorAll('.obs__wishlist').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      btn.classList.toggle('is-wished');
     });
   });
 

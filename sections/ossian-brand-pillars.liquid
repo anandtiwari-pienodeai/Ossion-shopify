@@ -152,6 +152,14 @@
   aspect-ratio: 1441 / 858;
 }
 
+/* ── Desktop — keep the whole section within one viewport ── */
+@media (min-width: 901px) {
+  .bpillars__row {
+    height: 85vh;
+    max-height: 85vh;
+  }
+}
+
 /* ── Hero ── */
 .bpillars__hero {
   position: relative;
@@ -247,6 +255,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  text-align: center;
   padding: 0 48px;
 }
 
