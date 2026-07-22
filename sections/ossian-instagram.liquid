@@ -30,27 +30,21 @@
             {{ block.shopify_attributes }}
           >
             <div class="ossian-reels__card-media" data-open-reel="{{ idx }}">
-              {%- if block.settings.thumbnail != blank -%}
-                {{
-                  block.settings.thumbnail
-                  | image_url: width: 400
-                  | image_tag:
-                    class: 'ossian-reels__thumb',
-                    loading: 'lazy'
-                }}
-              {%- else -%}
-                <div class="ossian-reels__thumb-placeholder">{{ 'image' | placeholder_svg_tag }}</div>
-              {%- endif -%}
-
               {%- if block.settings.video_url != blank -%}
                 <video
-                  class="ossian-reels__card-video"
+                  class="ossian-reels__card-video is-playing"
                   src="{{ block.settings.video_url }}"
+                  {%- if block.settings.thumbnail != blank -%}
+                  poster="{{ block.settings.thumbnail | image_url: width: 400 }}"
+                  {%- endif -%}
                   muted
                   loop
+                  autoplay
                   playsinline
-                  preload="none"
+                  preload="auto"
                 ></video>
+              {%- else -%}
+                <div class="ossian-reels__thumb-placeholder">{{ 'image' | placeholder_svg_tag }}</div>
               {%- endif -%}
 
               <div class="ossian-reels__play-btn">
@@ -66,29 +60,56 @@
               {%- if block.settings.product != blank -%}
                 {%- assign reel_product = block.settings.product -%}
                 <div class="ossian-reels__card-footer">
-                  <p class="ossian-reels__product-name">{{ reel_product.title }}</p>
-                  <div class="ossian-reels__price-wrap">
-                    <span class="ossian-reels__price-current">{{ reel_product.price | money_without_trailing_zeros }}</span>
-                    {%- if reel_product.compare_at_price > reel_product.price -%}
-                      <span class="ossian-reels__price-original">{{ reel_product.compare_at_price | money_without_trailing_zeros }}</span>
-                      {%- assign discount = reel_product.compare_at_price | minus: reel_product.price | times: 100 | divided_by: reel_product.compare_at_price -%}
-                      <span class="ossian-reels__price-discount">{{ discount }}%</span>
-                    {%- endif -%}
+                  {%- if reel_product.featured_image != blank -%}
+                    <div class="ossian-reels__product-image-wrap">
+                      {{
+                        reel_product.featured_image
+                        | image_url: width: 120
+                        | image_tag:
+                          class: 'ossian-reels__product-image',
+                          loading: 'lazy',
+                          alt: reel_product.title
+                      }}
+                    </div>
+                  {%- endif -%}
+                  <div class="ossian-reels__product-info">
+                    <p class="ossian-reels__product-name">{{ reel_product.title }}</p>
+                    <div class="ossian-reels__price-wrap">
+                      <span class="ossian-reels__price-current">{{ reel_product.price | money_without_trailing_zeros }}</span>
+                      {%- if reel_product.compare_at_price > reel_product.price -%}
+                        <span class="ossian-reels__price-original">{{ reel_product.compare_at_price | money_without_trailing_zeros }}</span>
+                        {%- assign discount = reel_product.compare_at_price | minus: reel_product.price | times: 100 | divided_by: reel_product.compare_at_price -%}
+                        <span class="ossian-reels__price-discount">{{ discount }}%</span>
+                      {%- endif -%}
+                    </div>
                   </div>
                 </div>
               {%- elsif block.settings.custom_price != blank -%}
                 <div class="ossian-reels__card-footer">
-                  {%- if block.settings.reel_label != blank -%}
-                    <p class="ossian-reels__product-name">{{ block.settings.reel_label }}</p>
+                  {%- if block.settings.product_image != blank -%}
+                    <div class="ossian-reels__product-image-wrap">
+                      {{
+                        block.settings.product_image
+                        | image_url: width: 120
+                        | image_tag:
+                          class: 'ossian-reels__product-image',
+                          loading: 'lazy'
+                      }}
+                    </div>
                   {%- endif -%}
-                  <div class="ossian-reels__price-wrap">
-                    <span class="ossian-reels__price-current">{{ block.settings.custom_price }}</span>
-                    {%- if block.settings.custom_compare_price != blank -%}
-                      <span class="ossian-reels__price-original">{{ block.settings.custom_compare_price }}</span>
+                  <div class="ossian-reels__product-info">
+                    {%- if block.settings.reel_label != blank -%}
+                      <p class="ossian-reels__product-name">{{ block.settings.reel_label }}</p>
                     {%- endif -%}
-                    {%- if block.settings.discount_label != blank -%}
-                      <span class="ossian-reels__price-discount">{{ block.settings.discount_label }}</span>
-                    {%- endif -%}
+                    <div class="ossian-reels__price-wrap">
+                      <span class="ossian-reels__price-current">{{ block.settings.custom_price }}</span>
+                      {%- if block.settings.custom_compare_price != blank -%}
+                        <span class="ossian-reels__price-original">{{ block.settings.custom_compare_price }}</span>
+                      {%- endif -%}
+                      {%- if block.settings.discount_label != blank -%}
+                        <span class="ossian-reels__price-discount">{{ block.settings.discount_label }}</span>
+                      {%- endif -%}
+                    </div>
                   </div>
                 </div>
               {%- endif -%}
@@ -244,9 +265,9 @@
 
 .ossian-reels__card {
   flex-shrink: 0;
-  /* sized so ~5 cards fill the visible row (track-wrap has 40px side
-     padding, gap is 20px: (100vw - 80px padding - 80px gaps) / 5 */
-  width: clamp(220px, calc((100vw - 160px) / 5), 340px);
+  /* sized so ~4 cards fill the visible row (track-wrap has 40px side
+     padding, gap is 20px: (100vw - 80px padding - 60px gaps) / 4 */
+  width: clamp(260px, calc((100vw - 140px) / 4), 420px);
   border-radius: 20px;
   overflow: hidden;
   background: #000;
@@ -282,32 +303,20 @@
   cursor: pointer;
 }
 
-.ossian-reels__thumb {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.4s ease;
-}
-
-.ossian-reels__card:hover .ossian-reels__thumb { transform: scale(1.05); }
-
-/* Card inline video — sits over thumbnail, hidden until active */
+/* Card inline video — always visible and playing */
 .ossian-reels__card-video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  opacity: 1;
+  transition: transform 0.4s ease;
   pointer-events: none;
   z-index: 1;
 }
 
-.ossian-reels__card--active .ossian-reels__card-video.is-playing {
-  opacity: 1;
-}
+.ossian-reels__card:hover .ossian-reels__card-video { transform: scale(1.05); }
 
 .ossian-reels__thumb-placeholder {
   width: 100%;
@@ -363,8 +372,36 @@
   right: 0;
   bottom: 0;
   z-index: 3;
-  background: rgba(223, 228, 237, 0.92);
-  padding: 10px 12px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #eaf2fb 0%, #cfe0f5 100%);
+  padding: 10px 12px;
+}
+
+.ossian-reels__product-image-wrap {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.ossian-reels__product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.ossian-reels__product-info {
+  flex: 1;
+  min-width: 0;
 }
 
 .ossian-reels__product-name {
@@ -1025,7 +1062,8 @@
   .ossian-reels__play-btn svg { width: 30px; height: 30px; }
 
   /* Card footer */
-  .ossian-reels__card-footer { padding: 8px 10px 10px; }
+  .ossian-reels__card-footer { padding: 8px 10px; gap: 8px; }
+  .ossian-reels__product-image-wrap { width: 34px; height: 34px; border-radius: 8px; }
   .ossian-reels__product-name { font-size: 10px; }
   .ossian-reels__price-current { font-size: 11.5px; }
   .ossian-reels__price-original { font-size: 10.5px; }
@@ -1488,19 +1526,15 @@
         const isActive = i === index;
         c.classList.toggle('ossian-reels__card--active', isActive);
         c.classList.toggle('ossian-reels__card--near', !isActive && Math.abs(i - index) === 1);
+      });
+    }
 
+    /* All reel videos autoplay and keep playing regardless of which card is active */
+    function playAllVideos() {
+      cards.forEach(function(c) {
         const vid = c.querySelector('.ossian-reels__card-video');
         if (!vid) return;
-
-        if (isActive) {
-          vid.play().then(function() {
-            vid.classList.add('is-playing');
-          }).catch(function() { /* autoplay blocked — thumbnail stays */ });
-        } else {
-          vid.pause();
-          vid.currentTime = 0;
-          vid.classList.remove('is-playing');
-        }
+        vid.play().catch(function() { /* autoplay blocked until user interacts with the page */ });
       });
     }
 
@@ -1540,6 +1574,7 @@
       }, 30);
     }
     setTimeout(initActive, 80);
+    playAllVideos();
   })();
 
   // Open reel on card click
