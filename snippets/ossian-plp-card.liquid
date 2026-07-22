@@ -1,6 +1,7 @@
 {%- doc -%}
   Ossian PLP product card — Figma design.
   @param {object} product - Shopify product object
+  @param {string} section_id - The id of the section rendering this card (needed for the add-to-cart form)
   @param {string} [badge_label] - Optional badge override (default: auto from tags)
 {%- enddoc -%}
 
@@ -82,10 +83,11 @@
           {%- assign r_val = rating_meta | times: 1.0 -%}
           {%- assign r_floor = r_val | floor -%}
           {%- assign r_half = r_val | minus: r_floor -%}
+          {%- assign r_floor_plus_1 = r_floor | plus: 1 -%}
           {%- for i in (1..5) -%}
             {%- if i <= r_floor -%}
               <svg width="13" height="13" viewBox="0 0 24 24" fill="#f5a623" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            {%- elsif i == r_floor | plus: 1 and r_half >= 0.4 -%}
+            {%- elsif i == r_floor_plus_1 and r_half >= 0.4 -%}
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <defs><linearGradient id="hg{{ forloop.index }}"><stop offset="50%" stop-color="#f5a623"/><stop offset="50%" stop-color="#ddd"/></linearGradient></defs>
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="url(#hg{{ forloop.index }})"/>
@@ -114,14 +116,35 @@
 
     <!-- Add to Cart -->
     <div class="ossian-plp-card__actions">
-      {%- if card_product.available -%}
-        <form action="{{ routes.cart_add_url }}" method="post" class="ossian-plp-card__atc-form">
-          <input type="hidden" name="id" value="{{ variant.id }}">
-          <input type="hidden" name="quantity" value="1">
-          <button type="submit" class="ossian-plp-card__atc-btn">
-            ADD TO CART
-          </button>
-        </form>
+      {%- if variant.available -%}
+        {%- assign form_id = 'OssianPlpAtc-' | append: section_id | append: '-' | append: card_product.id -%}
+        <product-form-component
+          class="ossian-plp-card__atc-form"
+          data-section-id="{{ section_id }}"
+          data-product-id="{{ card_product.id }}"
+          data-product-url="{{ card_product.url }}"
+          on:submit="/handleSubmit"
+          data-quantity-default="1"
+          data-quantity-error-max="{{ 'products.product.quantity_error_max' | t }}"
+        >
+          <div class="visually-hidden" aria-live="assertive" role="status" aria-atomic="true" ref="liveRegion"></div>
+          {%- form 'product', card_product, id: form_id, data-type: 'add-to-cart-form' -%}
+            <input type="hidden" name="id" value="{{ variant.id }}" ref="variantId">
+            <input type="hidden" name="quantity" value="1">
+            <add-to-cart-component ref="addToCartButtonContainer">
+              <button
+                type="submit"
+                name="add"
+                ref="addToCartButton"
+                on:click="/handleClick"
+                class="ossian-plp-card__atc-btn"
+                aria-label="Add {{ card_product.title | escape }} to cart"
+              >
+                ADD TO CART
+              </button>
+            </add-to-cart-component>
+          {%- endform -%}
+        </product-form-component>
       {%- else -%}
         <button type="button" class="ossian-plp-card__atc-btn ossian-plp-card__atc-btn--sold-out" disabled>
           SOLD OUT
@@ -328,7 +351,15 @@
 }
 
 .ossian-plp-card__atc-form {
+  display: block;
   flex: 1;
+  min-width: 0;
+}
+
+.ossian-plp-card__atc-form form,
+.ossian-plp-card__atc-form add-to-cart-component {
+  display: block;
+  width: 100%;
 }
 
 .ossian-plp-card__atc-btn {
