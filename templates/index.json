@@ -624,8 +624,7 @@
         "reel_1": {
           "type": "reel",
           "settings": {
-            "thumbnail": "shopify://shop_images/DEVELOPER_GROUP_SHOT_copy.png",
-            "video_url": "",
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/dfc06861678847a8b50cde8d042e294e.mp4",
             "reel_label": "",
             "product": "amber-glow-permanent-hair-color-creme-100ml",
             "product_subtitle": "",
@@ -648,7 +647,7 @@
         "reel_2": {
           "type": "reel",
           "settings": {
-            "video_url": "",
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/dfc06861678847a8b50cde8d042e294e.mp4",
             "reel_label": "",
             "product": "chromatic-dream-permanent-hair-color-creme-100ml",
             "product_subtitle": "",
@@ -671,7 +670,7 @@
         "reel_3": {
           "type": "reel",
           "settings": {
-            "video_url": "https://cdn.shopify.com/videos/c/o/v/fb8cef1258d54a89a2c7854ccb5bb2f1.mp4",
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/dfc06861678847a8b50cde8d042e294e.mp4",
             "reel_label": "",
             "product": "crimson-veil-permanent-hair-color-creme-100ml",
             "product_subtitle": "",
@@ -694,7 +693,7 @@
         "reel_4": {
           "type": "reel",
           "settings": {
-            "video_url": "",
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/dfc06861678847a8b50cde8d042e294e.mp4",
             "reel_label": "",
             "product": "golden-luster-permanent-hair-color-creme-100ml",
             "product_subtitle": "",
@@ -717,7 +716,7 @@
         "reel_5": {
           "type": "reel",
           "settings": {
-            "video_url": "",
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/dfc06861678847a8b50cde8d042e294e.mp4",
             "reel_label": "",
             "product": "silver-mist-permanent-hair-color-creme-100ml",
             "product_subtitle": "",
@@ -771,6 +770,7 @@
       ],
       "name": "Ossion Reels",
       "settings": {
+        "background_image": "shopify://shop_images/Ossiongmbg.png",
         "heading": "OSSION",
         "heading_accent": "gram",
         "subheading": "Real people. Real results. Real stories",

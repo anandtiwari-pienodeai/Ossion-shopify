@@ -114,7 +114,7 @@
       "settings": {
         "products_per_page": 24,
         "desktop_columns": 3,
-        "mobile_columns": 2,
+        "mobile_columns": "2",
         "product_grid_width": "full-width",
         "full_width_on_mobile": true,
         "columns_gap_horizontal": 16,
