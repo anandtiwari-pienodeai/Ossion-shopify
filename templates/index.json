@@ -133,7 +133,7 @@
             "descriptor": "Silk-smooth, frizz free finish",
             "badge_label": "BEST SELLER",
             "step_label": "STEP 1",
-            "collection": "",
+            "collection": "collectionone",
             "link": ""
           }
         },
@@ -146,7 +146,7 @@
             "descriptor": "Precision color, zero damage",
             "badge_label": "NEW LAUNCH",
             "step_label": "STEP 2",
-            "collection": "",
+            "collection": "collectiontwo",
             "link": ""
           }
         },
@@ -158,7 +158,7 @@
             "descriptor": "Up to 10X repair",
             "badge_label": "DEEP REPAIR",
             "step_label": "STEP 3",
-            "collection": "",
+            "collection": "shopall",
             "link": ""
           }
         },
@@ -463,7 +463,7 @@
       "name": "Best Sellers",
       "settings": {
         "heading": "Best Sellers",
-        "collection": "best-sellers",
+        "collection": "shopall",
         "products_count": 4
       }
     },
@@ -627,11 +627,12 @@
             "thumbnail": "shopify://shop_images/DEVELOPER_GROUP_SHOT_copy.png",
             "video_url": "",
             "reel_label": "",
-            "product": "",
+            "product": "amber-glow-permanent-hair-color-creme-100ml",
             "product_subtitle": "",
             "product_category": "",
             "product_url": "",
             "custom_price": "",
+            "custom_compare_price": "",
             "discount_label": "",
             "rating": 0,
             "review_count": 0,
@@ -649,11 +650,12 @@
           "settings": {
             "video_url": "",
             "reel_label": "",
-            "product": "",
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
             "product_subtitle": "",
             "product_category": "",
             "product_url": "",
             "custom_price": "",
+            "custom_compare_price": "",
             "discount_label": "",
             "rating": 0,
             "review_count": 0,
@@ -671,11 +673,12 @@
           "settings": {
             "video_url": "https://cdn.shopify.com/videos/c/o/v/fb8cef1258d54a89a2c7854ccb5bb2f1.mp4",
             "reel_label": "",
-            "product": "",
+            "product": "crimson-veil-permanent-hair-color-creme-100ml",
             "product_subtitle": "",
             "product_category": "",
             "product_url": "",
             "custom_price": "",
+            "custom_compare_price": "",
             "discount_label": "",
             "rating": 0,
             "review_count": 0,
@@ -693,11 +696,12 @@
           "settings": {
             "video_url": "",
             "reel_label": "",
-            "product": "",
+            "product": "golden-luster-permanent-hair-color-creme-100ml",
             "product_subtitle": "",
             "product_category": "",
             "product_url": "",
             "custom_price": "",
+            "custom_compare_price": "",
             "discount_label": "",
             "rating": 0,
             "review_count": 0,
@@ -715,11 +719,12 @@
           "settings": {
             "video_url": "",
             "reel_label": "",
-            "product": "",
+            "product": "silver-mist-permanent-hair-color-creme-100ml",
             "product_subtitle": "",
             "product_category": "",
             "product_url": "",
             "custom_price": "",
+            "custom_compare_price": "",
             "discount_label": "",
             "rating": 0,
             "review_count": 0,
@@ -742,6 +747,7 @@
             "product_category": "",
             "product_url": "",
             "custom_price": "",
+            "custom_compare_price": "",
             "discount_label": "",
             "rating": 0,
             "review_count": 0,
