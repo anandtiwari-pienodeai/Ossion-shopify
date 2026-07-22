@@ -36,12 +36,12 @@
     width: 100%;
   }
 
-  /* ── Desktop: sidebar + grid ── */
+  /* ── Desktop: sidebar + content, built with flexbox (no CSS grid) ── */
   .collection-wrapper {
-    display: grid;
-    grid-template-columns: 220px 1fr;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
     gap: 24px;
-    align-items: start;
     padding-inline: 16px;
   }
 
@@ -49,18 +49,36 @@
     padding-inline: 0;
   }
 
-  /* Toolbar spans full width above both columns */
-  .facets--horizontal.facets-controls-wrapper {
-    grid-column: 1 / -1;
+  /* Toolbar forces a line break so it spans full width above the columns below it */
+  .collection-wrapper > .facets--horizontal.facets-controls-wrapper {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  /* Sidebar column: fixed width, doesn't grow or shrink */
+  .collection-wrapper > .facets-block-wrapper--vertical {
+    flex: 0 0 220px;
+    width: 220px;
+  }
+
+  /* Product results column: fills the remaining space */
+  .collection-wrapper > #ResultsList {
+    flex: 1 1 0%;
+    min-width: 0;
   }
 
   /* ── Mobile ── */
   @media screen and (max-width: 749px) {
-    /* Collapse sidebar column — filter opens as drawer on mobile */
+    /* Collapse to a single stacked column — filter opens as drawer on mobile */
     .collection-wrapper {
-      grid-template-columns: 1fr;
+      display: block;
       gap: 0;
       padding-inline: 0;
+    }
+
+    .collection-wrapper > .facets-block-wrapper--vertical,
+    .collection-wrapper > #ResultsList {
+      width: auto;
     }
 
     /* Hide the vertical sidebar panel on mobile (drawer handles it) */
@@ -77,8 +95,8 @@
       border-bottom: 1px solid #e8edf5;
       background: #fff;
       position: sticky;
-      top: 0;
-      z-index: 10;
+      top: var(--header-height, 50px);
+      z-index: 7;
     }
 
     .facets-toggle__button {
@@ -133,7 +151,7 @@
   {% render 'skip-to-content-link', href: '#ResultsList', text: 'accessibility.skip_to_results_list' %}
 
   <div
-    class="collection-wrapper grid gap-style{% if section.settings.product_grid_width == 'full-width' %} collection-wrapper--grid-full-width{% endif %}"
+    class="collection-wrapper{% if section.settings.product_grid_width == 'full-width' %} collection-wrapper--grid-full-width{% endif %}"
   >
     {% content_for 'block',
       type: 'filters',
