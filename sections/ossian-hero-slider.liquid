@@ -11,21 +11,48 @@
             playsinline
             preload="metadata"
           >
+            {%- if block.settings.video_mobile != blank -%}
+              {%- for source in block.settings.video_mobile.sources -%}
+                <source src="{{ source.url }}" type="{{ source.mime_type }}" media="(max-width: 768px)">
+              {%- endfor -%}
+            {%- endif -%}
             {%- for source in block.settings.video.sources -%}
               <source src="{{ source.url }}" type="{{ source.mime_type }}">
             {%- endfor -%}
           </video>
         {%- elsif block.settings.image != blank -%}
-          {{
-            block.settings.image
-            | image_url: width: 1920
-            | image_tag:
-              class: 'hero-carousel__media',
-              loading: forloop.first | ternary: 'eager', 'lazy',
-              fetchpriority: forloop.first | ternary: 'high', 'low',
-              widths: '750,1100,1500,1920',
-              sizes: '100vw'
-          }}
+          {%- liquid
+            if forloop.first
+              assign img_loading = 'eager'
+              assign img_fetchpriority = 'high'
+            else
+              assign img_loading = 'lazy'
+              assign img_fetchpriority = 'low'
+            endif
+          -%}
+          <picture>
+            {%- if block.settings.image_mobile != blank -%}
+              <source
+                media="(max-width: 768px)"
+                srcset="
+                  {{- block.settings.image_mobile | image_url: width: 400 }} 400w,
+                  {{ block.settings.image_mobile | image_url: width: 700 }} 700w,
+                  {{ block.settings.image_mobile | image_url: width: 900 }} 900w
+                "
+                sizes="100vw"
+              >
+            {%- endif -%}
+            {{
+              block.settings.image
+              | image_url: width: 1920
+              | image_tag:
+                class: 'hero-carousel__media',
+                loading: img_loading,
+                fetchpriority: img_fetchpriority,
+                widths: '750,1100,1500,1920',
+                sizes: '100vw'
+            }}
+          </picture>
         {%- else -%}
           <div class="hero-carousel__placeholder">{{ 'lifestyle-1' | placeholder_svg_tag: 'hero-carousel__media hero-carousel__placeholder-svg' }}</div>
         {%- endif -%}
@@ -279,12 +306,24 @@
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Image"
+          "label": "Desktop image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Mobile image (optional)",
+          "info": "Shown below 768px width. If left blank, the desktop image is used on mobile too."
         },
         {
           "type": "video",
           "id": "video",
-          "label": "Video"
+          "label": "Desktop video"
+        },
+        {
+          "type": "video",
+          "id": "video_mobile",
+          "label": "Mobile video (optional)",
+          "info": "Shown below 768px width. If left blank, the desktop video is used on mobile too."
         }
       ]
     }
