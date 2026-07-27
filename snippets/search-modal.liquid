@@ -127,7 +127,11 @@
               class="button predictive-search__search-button"
               ref="viewAllButton"
             >
-              {{ 'content.search_results_view_all' | t }}
+              <span class="predictive-search__search-button-label">
+                {{ 'content.search_results_view_all' | t }}
+                <span data-query-display></span>
+              </span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
           </div>
         </div>
@@ -136,24 +140,149 @@
   </dialog>
 </dialog-component>
 
+<script>
+(function () {
+  var STORAGE_KEY = 'ossian:recentSearches';
+  var MAX_ITEMS = 5;
+  var searchUrl = {{ routes.search_url | json }};
+
+  function getRecentSearches() {
+    try {
+      var list = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      return Array.isArray(list) ? list : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveRecentSearches(list) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    } catch (e) {
+      /* localStorage unavailable (private browsing, quota exceeded, etc.) */
+    }
+  }
+
+  function addRecentSearch(term) {
+    term = (term || '').trim();
+    if (!term) return;
+    var list = getRecentSearches().filter(function (existing) {
+      return existing.toLowerCase() !== term.toLowerCase();
+    });
+    list.unshift(term);
+    if (list.length > MAX_ITEMS) list = list.slice(0, MAX_ITEMS);
+    saveRecentSearches(list);
+    renderAllRecentSearchLists();
+  }
+
+  function removeRecentSearch(term) {
+    saveRecentSearches(getRecentSearches().filter(function (existing) {
+      return existing !== term;
+    }));
+    renderAllRecentSearchLists();
+  }
+
+  function buildListItem(term) {
+    var li = document.createElement('li');
+
+    var link = document.createElement('a');
+    link.className = 'predictive-search-discovery__recent-term';
+    link.href = searchUrl + '?q=' + encodeURIComponent(term);
+    link.textContent = term;
+    li.appendChild(link);
+
+    var removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'predictive-search-discovery__remove';
+    removeBtn.setAttribute('aria-label', 'Remove "' + term + '" from recent searches');
+    removeBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+    removeBtn.addEventListener('click', function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      removeRecentSearch(term);
+    });
+    li.appendChild(removeBtn);
+
+    return li;
+  }
+
+  function renderRecentSearchList(container) {
+    var wrapper = container.closest('[data-recent-searches]');
+    var list = getRecentSearches();
+
+    container.innerHTML = '';
+    if (list.length === 0) {
+      if (wrapper) wrapper.hidden = true;
+      return;
+    }
+    if (wrapper) wrapper.hidden = false;
+    list.forEach(function (term) {
+      container.appendChild(buildListItem(term));
+    });
+  }
+
+  function renderAllRecentSearchLists() {
+    document.querySelectorAll('[data-recent-searches-list]').forEach(renderRecentSearchList);
+  }
+
+  renderAllRecentSearchLists();
+
+  /* The empty-state markup (including [data-recent-searches-list]) gets replaced via
+     AJAX section rendering when a search is reset, and scripts inside AJAX-inserted
+     HTML don't auto-execute — so watch for it being re-inserted instead. */
+  new MutationObserver(function (mutations) {
+    var shouldRender = mutations.some(function (mutation) {
+      return Array.prototype.some.call(mutation.addedNodes, function (node) {
+        if (node.nodeType !== 1) return false;
+        return (node.matches && node.matches('[data-recent-searches-list]'))
+          || (node.querySelector && node.querySelector('[data-recent-searches-list]'));
+      });
+    });
+    if (shouldRender) renderAllRecentSearchLists();
+  }).observe(document.body, { childList: true, subtree: true });
+
+  /* Record a search whenever a predictive search form is actually submitted
+     (Enter key, or the "View all results" button). */
+  document.addEventListener('submit', function (event) {
+    var form = event.target;
+    if (!form.classList || !form.classList.contains('predictive-search-form')) return;
+    var input = form.querySelector('input[name="q"]');
+    if (input) addRecentSearch(input.value);
+  });
+
+  /* Keep the "View all results for '…'" footer text in sync with what's typed. */
+  document.addEventListener('input', function (event) {
+    var input = event.target;
+    if (!input.matches || !input.matches('.predictive-search-form input[name="q"]')) return;
+    var form = input.closest('.predictive-search-form');
+    var display = form && form.querySelector('[data-query-display]');
+    if (!display) return;
+    var term = input.value.trim();
+    display.textContent = term ? ' for “' + term + '”' : '';
+  });
+})();
+</script>
+
 {% stylesheet %}
   /* Search modal style */
   .search-modal {
     --search-border-radius: var(--style-border-radius-popover);
     --search-border-width: var(--style-border-width);
+    /* Scoped override: the shared --modal-max-height default (65dvh, from theme-styles-variables.liquid)
+       is used by other dialogs (e.g. popup-link) too, so we redefine it here rather than change it globally. */
+    --modal-max-height: 80dvh;
   }
 
   .search-modal__content {
-    /* Approx set the top so when the content is at max height, the modal is centered */
-    --modal-top-margin: calc(50dvh - var(--modal-max-height) / 2 - 2rem);
-    --modal-width: 66dvw;
+    --modal-width: 100dvw;
 
     padding: 0;
     border: var(--style-border-popover);
 
     @media screen and (min-width: 750px) {
       width: var(--modal-width);
-      margin-block-start: var(--modal-top-margin);
+      max-width: var(--modal-width);
+      margin-block-start: 0;
       overflow: hidden;
     }
   }
@@ -483,6 +612,30 @@
       transition: transform 100ms var(--animation-timing-active);
       box-shadow: none;
     }
+  }
+
+  .predictive-search-form__footer .predictive-search__search-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    background: rgb(var(--color-foreground-rgb) / var(--opacity-5, 0.05));
+    color: var(--color-foreground);
+    border: none;
+    border-radius: 999px;
+    padding: 14px 20px;
+    font-weight: 600;
+  }
+
+  .predictive-search__search-button-label {
+    display: inline-flex;
+    align-items: baseline;
+  }
+
+  .predictive-search__search-button [data-query-display] {
+    color: var(--color-primary, #6d5bd0);
+    font-weight: 700;
   }
 
   .predictive-search__close-modal-button {

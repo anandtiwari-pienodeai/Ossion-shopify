@@ -1,0 +1,222 @@
+{%- comment -%}
+  A single, fixed-layout navbar used at every viewport width — logo, nav menu,
+  search bar, and wishlist/account/cart icons all in one row always. No mobile
+  drawer/hamburger variant; elements shrink to fit narrow screens instead of
+  being hidden or collapsed into a menu.
+{%- endcomment -%}
+
+<header-component
+  id="header-component"
+  class="header ossian-navbar"
+  data-skip-node-update
+>
+  <div class="ossian-navbar__inner page-width">
+    <a href="{{ routes.root_url }}" class="ossian-navbar__logo">
+      {%- if settings.logo != blank -%}
+        {{ settings.logo | image_url: width: 300 | image_tag: alt: shop.name, loading: 'eager', fetchpriority: 'high' }}
+      {%- else -%}
+        <span class="ossian-navbar__logo-text">{{ shop.name | default: 'OSSION' }}</span>
+        <span class="ossian-navbar__logo-sub">PROFESSIONAL</span>
+      {%- endif -%}
+    </a>
+
+    {%- if section.settings.menu != blank -%}
+      <nav class="ossian-navbar__menu" aria-label="{{ 'accessibility.header_navigation_label' | t }}">
+        <ul class="ossian-navbar__menu-list">
+          {%- for link in section.settings.menu.links -%}
+            <li>
+              <a
+                href="{{ link.url }}"
+                class="ossian-navbar__menu-link"
+                {% if link.current %}aria-current="page"{% endif %}
+              >
+                {{ link.title }}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    <div class="ossian-navbar__actions">
+      <button
+        type="button"
+        class="ossian-navbar__search"
+        on:click="#search-modal/showDialog"
+        aria-label="{{ 'content.search_input_label' | t }}"
+        aria-haspopup="dialog"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <span>{{ 'content.search_input_placeholder' | t }}</span>
+      </button>
+
+      {% render 'header-actions', section: section %}
+    </div>
+  </div>
+</header-component>
+
+{% stylesheet %}
+  .ossian-navbar {
+    background: var(--color-background, #fff);
+    border-bottom: 1px solid rgb(var(--color-foreground-rgb, 20 24 32) / 0.08);
+    position: relative;
+  }
+
+  .ossian-navbar__inner {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: clamp(6px, 2vw, 32px);
+    padding-block: clamp(8px, 1.6vh, 16px);
+  }
+
+  .ossian-navbar__logo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.15;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .ossian-navbar__logo img {
+    display: block;
+    height: clamp(26px, 5vw, 40px);
+    width: auto;
+  }
+
+  .ossian-navbar__logo-text {
+    font-size: clamp(0.85rem, 3vw, 1.5rem);
+    font-weight: 800;
+    color: #1e3a5f;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .ossian-navbar__logo-sub {
+    font-size: clamp(0.45rem, 1.1vw, 0.65rem);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: #1e3a5f;
+    opacity: 0.75;
+    white-space: nowrap;
+  }
+
+  .ossian-navbar__menu {
+    min-width: 0;
+    flex-shrink: 1;
+  }
+
+  .ossian-navbar__menu-list {
+    display: flex;
+    align-items: center;
+    gap: clamp(6px, 1.8vw, 28px);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ossian-navbar__menu-list li {
+    min-width: 0;
+  }
+
+  .ossian-navbar__menu-link {
+    display: block;
+    font-size: clamp(0.62rem, 1.5vw, 0.9rem);
+    font-weight: 600;
+    color: #1e3a5f;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: opacity 0.2s;
+  }
+
+  .ossian-navbar__menu-link:hover {
+    opacity: 0.65;
+  }
+
+  .ossian-navbar__actions {
+    display: flex;
+    align-items: center;
+    gap: clamp(4px, 1.2vw, 14px);
+    margin-inline-start: auto;
+    flex-shrink: 0;
+  }
+
+  .ossian-navbar__search {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    width: clamp(56px, 16vw, 240px);
+    border: 1px solid rgb(var(--color-foreground-rgb, 20 24 32) / 0.16);
+    border-radius: 999px;
+    padding: clamp(5px, 0.9vw, 9px) clamp(8px, 1.3vw, 16px);
+    background: var(--color-background, #fff);
+    color: rgb(var(--color-foreground-rgb, 20 24 32) / 0.55);
+    cursor: pointer;
+    font-size: clamp(0.62rem, 1.3vw, 0.85rem);
+    font-family: inherit;
+  }
+
+  .ossian-navbar__search svg {
+    flex-shrink: 0;
+  }
+
+  .ossian-navbar__search span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ossian-navbar__actions header-actions {
+    display: flex;
+    align-items: center;
+    gap: clamp(2px, 0.8vw, 8px);
+  }
+
+  .ossian-navbar__actions .ossian-wishlist-btn,
+  .ossian-navbar__actions .header-actions__action,
+  .ossian-navbar__actions shopify-account {
+    width: clamp(28px, 5vw, 40px);
+    height: clamp(28px, 5vw, 40px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(var(--color-foreground-rgb, 20 24 32) / 0.16);
+    border-radius: 50%;
+    color: #1e3a5f;
+    flex-shrink: 0;
+  }
+
+  .ossian-navbar__actions .ossian-wishlist-btn svg,
+  .ossian-navbar__actions .header-actions__cart-icon svg {
+    width: clamp(14px, 2.6vw, 20px);
+    height: clamp(14px, 2.6vw, 20px);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ossion Navbar",
+  "tag": "section",
+  "class": "ossian-header-section",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ossion Navbar"
+    }
+  ]
+}
+{% endschema %}

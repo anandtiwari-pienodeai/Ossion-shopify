@@ -18,6 +18,90 @@
 >
   {% if load_empty_state %}
     <div class="predictive-search-results__inner">
+      {%- liquid
+        assign show_recent = settings.predictive_search_show_recent
+
+        assign show_trending = false
+        if settings.predictive_search_show_trending and settings.predictive_search_trending_terms != blank
+          assign show_trending = true
+        endif
+
+        assign any_category_configured = false
+        if settings.predictive_search_category_1 != blank or settings.predictive_search_category_2 != blank or settings.predictive_search_category_3 != blank or settings.predictive_search_category_4 != blank or settings.predictive_search_category_5 != blank
+          assign any_category_configured = true
+        endif
+        assign show_categories = false
+        if settings.predictive_search_show_categories and any_category_configured
+          assign show_categories = true
+        endif
+      -%}
+      {%- if show_recent or show_trending or show_categories -%}
+        <div class="predictive-search-discovery">
+          {%- if show_recent -%}
+            <div class="predictive-search-discovery__col" data-recent-searches hidden>
+              <h3 class="predictive-search-discovery__heading">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6d5bd0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                Recent Searches
+              </h3>
+              <ul class="predictive-search-discovery__list" data-recent-searches-list></ul>
+            </div>
+          {%- endif -%}
+
+          {%- if show_trending -%}
+            <div class="predictive-search-discovery__col">
+              <h3 class="predictive-search-discovery__heading">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e0526b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c2 3-1 4-1 7a3 3 0 0 0 6 0c1.5 2 2 4 2 6a7 7 0 0 1-14 0c0-3 1.5-5 3-7 1-1.3 1.5-3 1.5-6z"/></svg>
+                Trending Searches
+              </h3>
+              <ul class="predictive-search-discovery__list">
+                {%- assign trending_terms = settings.predictive_search_trending_terms | newline_to_br | split: '<br />' -%}
+                {%- for term in trending_terms -%}
+                  {%- assign clean_term = term | strip -%}
+                  {%- if clean_term != blank -%}
+                    <li>
+                      <a href="{{ routes.search_url }}?q={{ clean_term | url_encode }}" class="predictive-search-discovery__term">
+                        {{ clean_term }}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+
+          {%- if show_categories -%}
+            <div class="predictive-search-discovery__col">
+              <h3 class="predictive-search-discovery__heading">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6d5bd0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+                Top Categories
+              </h3>
+              <ul class="predictive-search-discovery__categories">
+                {%- for i in (1..5) -%}
+                  {%- assign cat_key = 'predictive_search_category_' | append: i -%}
+                  {%- assign cat_icon_key = cat_key | append: '_icon' -%}
+                  {%- assign cat_collection = settings[cat_key] -%}
+                  {%- assign cat_icon = settings[cat_icon_key] -%}
+                  {%- if cat_collection != blank -%}
+                    <li>
+                      <a href="{{ cat_collection.url }}" class="predictive-search-discovery__category">
+                        <span class="predictive-search-discovery__category-icon">
+                          {%- if cat_icon != blank -%}
+                            {{ cat_icon | image_url: width: 80 | image_tag: loading: 'lazy', alt: '' }}
+                          {%- else -%}
+                            {{ 'product-1' | placeholder_svg_tag }}
+                          {%- endif -%}
+                        </span>
+                        <span class="predictive-search-discovery__category-name">{{ cat_collection.title }}</span>
+                        <span class="predictive-search-discovery__category-count">{{ cat_collection.products_count }} Products</span>
+                      </a>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
       {% liquid
         assign collection = settings.empty_state_collection | default: collections.all
         assign default_title = 'content.search_results_resource_products' | t

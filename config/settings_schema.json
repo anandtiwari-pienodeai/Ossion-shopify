@@ -2154,6 +2154,106 @@
           }
         ],
         "default": "default"
+      },
+      {
+        "type": "header",
+        "content": "Search discovery"
+      },
+      {
+        "type": "checkbox",
+        "id": "predictive_search_show_recent",
+        "label": "Show recent searches",
+        "info": "Remembers each visitor's own past searches on this device (stored in their browser, not shared across customers).",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "predictive_search_show_trending",
+        "label": "Show trending searches",
+        "default": true
+      },
+      {
+        "type": "textarea",
+        "id": "predictive_search_trending_terms",
+        "label": "Trending search terms",
+        "info": "One search term per line.",
+        "default": "Sunscreen SPF 50\nNiacinamide Serum\nLip Balm\nHyaluronic Acid Serum\nAloe Vera Gel"
+      },
+      {
+        "type": "checkbox",
+        "id": "predictive_search_show_categories",
+        "label": "Show top categories",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Top category 1"
+      },
+      {
+        "type": "collection",
+        "id": "predictive_search_category_1",
+        "label": "Collection"
+      },
+      {
+        "type": "image_picker",
+        "id": "predictive_search_category_1_icon",
+        "label": "Icon"
+      },
+      {
+        "type": "header",
+        "content": "Top category 2"
+      },
+      {
+        "type": "collection",
+        "id": "predictive_search_category_2",
+        "label": "Collection"
+      },
+      {
+        "type": "image_picker",
+        "id": "predictive_search_category_2_icon",
+        "label": "Icon"
+      },
+      {
+        "type": "header",
+        "content": "Top category 3"
+      },
+      {
+        "type": "collection",
+        "id": "predictive_search_category_3",
+        "label": "Collection"
+      },
+      {
+        "type": "image_picker",
+        "id": "predictive_search_category_3_icon",
+        "label": "Icon"
+      },
+      {
+        "type": "header",
+        "content": "Top category 4"
+      },
+      {
+        "type": "collection",
+        "id": "predictive_search_category_4",
+        "label": "Collection"
+      },
+      {
+        "type": "image_picker",
+        "id": "predictive_search_category_4_icon",
+        "label": "Icon"
+      },
+      {
+        "type": "header",
+        "content": "Top category 5"
+      },
+      {
+        "type": "collection",
+        "id": "predictive_search_category_5",
+        "label": "Collection"
+      },
+      {
+        "type": "image_picker",
+        "id": "predictive_search_category_5_icon",
+        "label": "Icon"
       }
     ]
   },
