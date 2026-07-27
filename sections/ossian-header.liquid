@@ -53,7 +53,7 @@
         <span>{{ 'content.search_input_placeholder' | t }}</span>
       </button>
 
-      {% render 'header-actions', section: section %}
+      {% render 'header-actions', section: section, display_style: 'icon', show_wishlist: false %}
     </div>
   </div>
 </header-component>
@@ -70,7 +70,7 @@
     align-items: center;
     flex-wrap: nowrap;
     gap: clamp(6px, 2vw, 32px);
-    padding-block: clamp(8px, 1.6vh, 16px);
+    padding: 10px 20px;
   }
 
   .ossian-navbar__logo {
@@ -179,9 +179,7 @@
     gap: clamp(2px, 0.8vw, 8px);
   }
 
-  .ossian-navbar__actions .ossian-wishlist-btn,
-  .ossian-navbar__actions .header-actions__action,
-  .ossian-navbar__actions shopify-account {
+  .ossian-navbar__actions .header-actions__action {
     width: clamp(28px, 5vw, 40px);
     height: clamp(28px, 5vw, 40px);
     display: flex;
@@ -191,10 +189,21 @@
     border-radius: 50%;
     color: #1e3a5f;
     flex-shrink: 0;
+    padding: 0;
   }
 
-  .ossian-navbar__actions .ossian-wishlist-btn svg,
-  .ossian-navbar__actions .header-actions__cart-icon svg {
+  /* Fill the circular button above rather than drawing its own border/size,
+     so account and cart icons don't end up with a circle nested inside a circle. */
+  .ossian-navbar__actions shopify-account {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ossian-navbar__actions .header-actions__cart-icon svg,
+  .ossian-navbar__actions .account-button__icon {
     width: clamp(14px, 2.6vw, 20px);
     height: clamp(14px, 2.6vw, 20px);
   }
