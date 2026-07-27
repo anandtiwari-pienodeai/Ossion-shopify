@@ -1,180 +1,634 @@
+{%- liquid
+  assign products_per_page = section.settings.products_per_page
+  assign desktop_columns = section.settings.desktop_columns
+  assign mobile_columns = section.settings.mobile_columns
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
 
+  assign active_filter_count = 0
+  for filter in collection.filters
+    case filter.type
+      when 'price_range'
+        if filter.min_value.value != null or filter.max_value.value != null
+          assign active_filter_count = active_filter_count | plus: 1
+        endif
+      when 'boolean'
+        if filter.active_values.size > 0
+          assign active_filter_count = active_filter_count | plus: 1
+        endif
+      else
+        assign active_filter_count = active_filter_count | plus: filter.active_values.size
+    endcase
+  endfor
+-%}
 
 <script
-  src="{{ 'results-list.js' | asset_url }}"
+  src="{{ 'ossian-plp.js' | asset_url }}"
   type="module"
   fetchpriority="low"
 ></script>
 
-{% javascript %}
-  const url = new URL(window.location.href);
-  if (url.hash) {
-    document.addEventListener(
-      'DOMContentLoaded',
-      () => {
-        const card = document.getElementById(url.hash.slice(1));
-        if (card) {
-          card.scrollIntoView({ behavior: 'instant' });
-        }
-      },
-      { once: true }
-    );
-  }
-{% endjavascript %}
+<div
+  class="ossian-plp color-{{ section.settings.color_scheme }}{% if section.settings.product_grid_width == 'full-width' %} ossian-plp--full-width{% endif %}{% if section.settings.full_width_on_mobile %} ossian-plp--full-width-mobile{% endif %}"
+  id="OssianPlp-{{ section.id }}"
+  data-ossian-plp
+  style="
+    --ossian-plp-padding-block-start: {{ section.settings.padding-block-start }}px;
+    --ossian-plp-padding-block-end: {{ section.settings.padding-block-end }}px;
+    --ossian-plp-gap-h: {{ section.settings.columns_gap_horizontal }}px;
+    --ossian-plp-gap-v: {{ section.settings.columns_gap_vertical }}px;
+    --ossian-plp-columns-desktop: {{ desktop_columns }};
+    --ossian-plp-columns-mobile: {{ mobile_columns }};
+  "
+>
+  {% render 'skip-to-content-link', href: '#OssianPlpGrid-' | append: section.id, text: 'accessibility.skip_to_results_list' %}
 
-{% style %}
-  @media screen and (min-width: 750px) {
-    .product-grid--{{ section.id }} {
-      --product-grid-columns-desktop: repeat(auto-fill, minmax(300px, 1fr));
-    }
-  }
-{% endstyle %}
+  <div class="ossian-plp__toolbar">
+    <button type="button" class="ossian-plp__filter-toggle" data-ossian-plp-drawer-open aria-haspopup="dialog">
+      {{ 'icon-filter.svg' | inline_asset_content }}
+      Filters
+      {%- if active_filter_count > 0 -%}
+        <span class="ossian-plp__filter-count">{{ active_filter_count }}</span>
+      {%- endif -%}
+    </button>
+
+    <p class="ossian-plp__count" role="status">
+      {{ 'content.item_count' | t: count: collection.products_count }}
+    </p>
+
+    <div class="ossian-plp__sort">
+      <label for="OssianPlpSort-{{ section.id }}" class="visually-hidden">{{ 'actions.sort' | t }}</label>
+      <select
+        id="OssianPlpSort-{{ section.id }}"
+        name="sort_by"
+        form="OssianPlpFilterForm-{{ section.id }}"
+        data-ossian-plp-sort
+        class="ossian-plp__sort-select"
+      >
+        {%- for option in collection.sort_options -%}
+          <option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>
+            {{ option.name }}
+          </option>
+        {%- endfor -%}
+      </select>
+    </div>
+  </div>
+
+  <div class="ossian-plp__body">
+    <div class="ossian-plp__backdrop" data-ossian-plp-backdrop data-ossian-plp-drawer-close></div>
+
+    <aside class="ossian-plp__filters" data-ossian-plp-drawer aria-label="{{ 'accessibility.filters' | t }}">
+      <div class="ossian-plp__filters-head">
+        <span class="ossian-plp__filters-title">{{ 'content.filters' | t }}</span>
+        <button type="button" class="ossian-plp__filters-close" data-ossian-plp-drawer-close aria-label="{{ 'actions.close' | t }}">
+          {{ 'icon-close.svg' | inline_asset_content }}
+        </button>
+      </div>
+
+      <form
+        id="OssianPlpFilterForm-{{ section.id }}"
+        action="{{ collection.url }}"
+        method="get"
+        class="ossian-plp__filters-form"
+        data-ossian-plp-form
+      >
+        {%- if collection.filters.size == 0 -%}
+          <p class="ossian-plp__filters-empty">No filters available.</p>
+        {%- endif -%}
+
+        {%- for filter in collection.filters -%}
+          <div class="ossian-plp__filter-group">
+            <h3 class="ossian-plp__filter-title">{{ filter.label }}</h3>
+
+            {%- case filter.type -%}
+              {%- when 'list' -%}
+                <div class="ossian-plp__filter-options">
+                  {%- for value in filter.values -%}
+                    {%- assign is_soldout = false -%}
+                    {%- if value.count == 0 and value.active == false -%}
+                      {%- assign is_soldout = true -%}
+                    {%- endif -%}
+                    <label class="ossian-plp__filter-option{% if is_soldout %} is-disabled{% endif %}">
+                      <input
+                        type="checkbox"
+                        name="{{ value.param_name }}"
+                        value="{{ value.value }}"
+                        {% if value.active %}checked{% endif %}
+                        {% if is_soldout %}disabled{% endif %}
+                      >
+                      <span class="ossian-plp__filter-option-label">{{ value.label }}</span>
+                      <span class="ossian-plp__filter-option-count">({{ value.count }})</span>
+                    </label>
+                  {%- endfor -%}
+                </div>
+
+              {%- when 'boolean' -%}
+                {%- assign bool_value = filter.values.first -%}
+                <div class="ossian-plp__filter-options">
+                  <label class="ossian-plp__filter-option">
+                    <input
+                      type="checkbox"
+                      name="{{ bool_value.param_name }}"
+                      value="{{ bool_value.value }}"
+                      {% if bool_value.active %}checked{% endif %}
+                    >
+                    <span class="ossian-plp__filter-option-label">{{ bool_value.label | default: filter.label }}</span>
+                  </label>
+                </div>
+
+              {%- when 'price_range' -%}
+                <div class="ossian-plp__price-inputs">
+                  <label class="ossian-plp__price-field">
+                    <span class="ossian-plp__price-currency">{{ cart.currency.symbol }}</span>
+                    <input
+                      type="number"
+                      inputmode="decimal"
+                      min="0"
+                      step="0.01"
+                      name="{{ filter.min_value.param_name }}"
+                      value="{{ filter.min_value.value | money_without_currency }}"
+                      placeholder="0"
+                      aria-label="{{ 'accessibility.price_filter_low' | t }}"
+                    >
+                  </label>
+                  <span class="ossian-plp__price-sep">{{ 'fields.separator' | t }}</span>
+                  <label class="ossian-plp__price-field">
+                    <span class="ossian-plp__price-currency">{{ cart.currency.symbol }}</span>
+                    <input
+                      type="number"
+                      inputmode="decimal"
+                      min="0"
+                      step="0.01"
+                      name="{{ filter.max_value.param_name }}"
+                      value="{{ filter.max_value.value | money_without_currency }}"
+                      placeholder="{{ filter.range_max | money_without_currency }}"
+                      aria-label="{{ 'accessibility.price_filter_high' | t }}"
+                    >
+                  </label>
+                </div>
+                {%- assign formatted_range_max = filter.range_max | money -%}
+                <p class="ossian-plp__price-hint">
+                  {{ 'content.price_filter_html' | t: price: formatted_range_max }}
+                </p>
+            {%- endcase -%}
+          </div>
+        {%- endfor -%}
+
+        <div class="ossian-plp__filters-actions">
+          <a href="{{ collection.url }}{% if sort_by %}?sort_by={{ sort_by }}{% endif %}" class="ossian-plp__clear-all">
+            {{ 'actions.clear_all' | t }}
+          </a>
+          <button type="submit" class="ossian-plp__apply">
+            {{ 'actions.see_items' | t: count: collection.products_count }}
+          </button>
+        </div>
+      </form>
+    </aside>
+
+    <div class="ossian-plp__grid-wrap">
+      {%- paginate collection.products by products_per_page -%}
+        {%- if collection.products.size == 0 -%}
+          <div class="ossian-plp__empty">
+            <h2 class="ossian-plp__empty-title">{{ 'content.no_products_found' | t }}</h2>
+            <p>{{ 'content.use_fewer_filters_html' | t: link: collection.url }}</p>
+          </div>
+        {%- else -%}
+          <ul class="ossian-plp__grid" id="OssianPlpGrid-{{ section.id }}" role="list">
+            {%- for product in collection.products -%}
+              <li class="ossian-plp__grid-item">
+                {%- render 'ossian-plp-card', product: product, section_id: section.id -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+
+          {%- render 'pagination-controls', paginate: paginate -%}
+        {%- endif -%}
+      {%- endpaginate -%}
+    </div>
+  </div>
+</div>
 
 {% stylesheet %}
-  /* ── Section wrapper ── */
-  .product-grid-container {
+  .ossian-plp {
     width: 100%;
+    position: relative;
+    padding-block: var(--ossian-plp-padding-block-start) var(--ossian-plp-padding-block-end);
   }
 
-  /* ── Desktop: sidebar + grid ── */
-  .collection-wrapper {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 24px;
-    align-items: start;
+  /* ── Toolbar ── */
+  .ossian-plp__toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-inline: var(--page-margin, 16px);
+    padding-block-end: 16px;
+  }
+
+  .ossian-plp--full-width .ossian-plp__toolbar {
     padding-inline: 16px;
   }
 
-  .collection-wrapper--grid-full-width {
-    padding-inline: 0;
+  .ossian-plp__filter-toggle {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    border: 1.5px solid #d0d0d0;
+    border-radius: 8px;
+    padding: 9px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1e3a5f;
+    cursor: pointer;
+    font-family: var(--font-body--family, sans-serif);
   }
 
-  /* Toolbar spans full width above both columns */
-  .facets--horizontal.facets-controls-wrapper {
-    grid-column: 1 / -1;
+  .ossian-plp__filter-toggle svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .ossian-plp__filter-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding-inline: 4px;
+    border-radius: 999px;
+    background: #1e3a5f;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .ossian-plp__count {
+    margin: 0;
+    font-size: 14px;
+    color: #444;
+    font-family: var(--font-body--family, sans-serif);
+  }
+
+  .ossian-plp__sort-select {
+    font-size: 13px;
+    font-family: var(--font-body--family, sans-serif);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1.5px solid #d0d0d0;
+    background: #fff;
+    color: #1e3a5f;
+    cursor: pointer;
+  }
+
+  /* ── Body: filters + grid, flexbox (no CSS grid) ── */
+  .ossian-plp__body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 24px;
+    padding-inline: var(--page-margin, 16px);
+  }
+
+  .ossian-plp--full-width .ossian-plp__body {
+    padding-inline: 16px;
+  }
+
+  .ossian-plp__backdrop {
+    display: none;
+  }
+
+  /* ── Filter sidebar ── */
+  .ossian-plp__filters {
+    flex: 0 0 220px;
+    width: 220px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    font-family: var(--font-body--family, sans-serif);
+  }
+
+  .ossian-plp__filters-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px 14px;
+    border-bottom: 1.5px solid #e2e8f0;
+  }
+
+  .ossian-plp__filters-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #1e3a5f;
+    letter-spacing: -0.01em;
+  }
+
+  .ossian-plp__filters-close {
+    display: none;
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #1e3a5f;
+  }
+
+  .ossian-plp__filters-close svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .ossian-plp__filters-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ossian-plp__filter-group {
+    padding: 14px 18px 16px;
+    border-bottom: 1.5px solid #e2e8f0;
+  }
+
+  .ossian-plp__filter-group:last-of-type {
+    border-bottom: none;
+  }
+
+  .ossian-plp__filter-title {
+    margin: 0 0 10px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e3a5f;
+    letter-spacing: -0.01em;
+  }
+
+  .ossian-plp__filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .ossian-plp__filter-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #2d3748;
+    cursor: pointer;
+    padding-block: 5px;
+    line-height: 1.4;
+  }
+
+  .ossian-plp__filter-option.is-disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .ossian-plp__filter-option input[type='checkbox'] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    border-radius: 5px;
+    border: 1.5px solid #c8d3e0;
+    background: #fff;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .ossian-plp__filter-option input[type='checkbox']:checked {
+    background: #1e3a5f;
+    border-color: #1e3a5f;
+  }
+
+  .ossian-plp__filter-option input[type='checkbox']:checked::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 2px;
+    width: 6px;
+    height: 10px;
+    border: 2px solid #fff;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg);
+  }
+
+  .ossian-plp__filter-option-count {
+    color: #888;
+    font-size: 12px;
+  }
+
+  .ossian-plp__price-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ossian-plp__price-field {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border: 1.5px solid #c8d3e0;
+    border-radius: 6px;
+    padding: 6px 8px;
+    min-width: 0;
+  }
+
+  .ossian-plp__price-currency {
+    font-size: 12px;
+    color: #888;
+    flex-shrink: 0;
+  }
+
+  .ossian-plp__price-field input {
+    width: 100%;
+    min-width: 0;
+    border: none;
+    outline: none;
+    font-size: 13px;
+    color: #1e3a5f;
+    -moz-appearance: textfield;
+  }
+
+  .ossian-plp__price-field input::-webkit-outer-spin-button,
+  .ossian-plp__price-field input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .ossian-plp__price-sep {
+    color: #888;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  .ossian-plp__price-hint {
+    margin: 10px 0 0;
+    font-size: 12px;
+    color: #888;
+  }
+
+  .ossian-plp__filters-empty {
+    padding: 16px 18px;
+    font-size: 13px;
+    color: #888;
+    margin: 0;
+  }
+
+  .ossian-plp__filters-actions {
+    display: none;
+  }
+
+  /* ── Product grid, flexbox (no CSS grid) ── */
+  .ossian-plp__grid-wrap {
+    flex: 1 1 0%;
+    min-width: 0;
+  }
+
+  .ossian-plp__grid {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: var(--ossian-plp-gap-v) var(--ossian-plp-gap-h);
+  }
+
+  .ossian-plp__grid-item {
+    flex: 0 0 calc((100% - (var(--ossian-plp-columns-desktop) - 1) * var(--ossian-plp-gap-h)) / var(--ossian-plp-columns-desktop));
+    max-width: calc((100% - (var(--ossian-plp-columns-desktop) - 1) * var(--ossian-plp-gap-h)) / var(--ossian-plp-columns-desktop));
+  }
+
+  .ossian-plp__empty {
+    padding-block: 60px;
+    text-align: center;
+    color: #666;
+  }
+
+  .ossian-plp__empty-title {
+    margin: 0 0 8px;
+    color: #1e3a5f;
   }
 
   /* ── Mobile ── */
   @media screen and (max-width: 749px) {
-    /* Collapse sidebar column — filter opens as drawer on mobile */
-    .collection-wrapper {
-      grid-template-columns: 1fr;
-      gap: 0;
+    .ossian-plp__toolbar {
+      padding-inline: 16px;
+    }
+
+    .ossian-plp__filter-toggle {
+      display: flex;
+    }
+
+    .ossian-plp__count {
+      order: 1;
+      flex-basis: 100%;
+      font-size: 12px;
+    }
+
+    .ossian-plp__body {
       padding-inline: 0;
     }
 
-    /* Hide the vertical sidebar panel on mobile (drawer handles it) */
-    .facets-block-wrapper--vertical {
-      display: none;
-    }
-
-    /* Filter/sort toggle bar — full width, horizontal layout */
-    .facets-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 16px;
-      border-bottom: 1px solid #e8edf5;
-      background: #fff;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    .facets-toggle__button {
-      display: flex !important;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #1e3a5f;
-    }
-
-    /* Product grid: 2 columns, tight gap */
-    .product-grid {
-      grid-template-columns: repeat(2, 1fr) !important;
-      gap: 10px !important;
-    }
-
-    /* Grid wrapper padding */
-    #ResultsList {
+    .ossian-plp--full-width-mobile .ossian-plp__grid-wrap {
       padding-inline: 10px;
     }
 
-    /* Section top/bottom spacing */
-    .product-grid-container {
-      --padding-block-start: 0px !important;
-      --padding-block-end: 24px !important;
+    /* Filters become an off-canvas drawer */
+    .ossian-plp__filters {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: var(--layer-modal, 100);
+      width: min(85vw, 340px);
+      height: 100dvh;
+      border-radius: 0;
+      border: none;
+      transform: translateX(100%);
+      transition: transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
     }
 
-    /* Sort select full width on mobile */
-    .sorting-filter-component select,
-    .facets-mobile-wrapper select {
-      width: 100%;
+    .ossian-plp__filters[data-ossian-plp-drawer].is-open {
+      transform: translateX(0);
+    }
+
+    .ossian-plp__filters-close {
+      display: block;
+    }
+
+    .ossian-plp__filters-form {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .ossian-plp__filters-actions {
+      display: flex;
+      gap: 10px;
+      padding: 14px 18px;
+      border-top: 1.5px solid #e2e8f0;
+      background: #fff;
+      position: sticky;
+      bottom: 0;
+      margin-top: auto;
+    }
+
+    .ossian-plp__clear-all {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 13px;
+      font-weight: 700;
+      color: #1e3a5f;
+      text-decoration: none;
+      border: 1.5px solid #1e3a5f;
+      border-radius: 6px;
     }
 
-    /* Products count text */
-    .products-count-wrapper {
-      font-size: 12px;
-      color: #666;
+    .ossian-plp__apply {
+      flex: 2;
+      background: #1e3a5f;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 12px;
+      cursor: pointer;
+    }
+
+    .ossian-plp__backdrop {
+      display: block;
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 20, 40, 0.5);
+      z-index: calc(var(--layer-modal, 100) - 1);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .ossian-plp__backdrop.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .ossian-plp__grid-item {
+      flex-basis: calc((100% - (var(--ossian-plp-columns-mobile) - 1) * var(--ossian-plp-gap-h)) / var(--ossian-plp-columns-mobile));
+      max-width: calc((100% - (var(--ossian-plp-columns-mobile) - 1) * var(--ossian-plp-gap-h)) / var(--ossian-plp-columns-mobile));
     }
   }
+
+  html.ossian-plp-scroll-lock {
+    overflow: hidden;
+  }
 {% endstylesheet %}
-
-{% comment %} We always render this full-width, as the child blocks have width: page/full settings {% endcomment %}
-<div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<results-list
-  class="section product-grid-container color-{{ section.settings.color_scheme }}"
-  style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
-  section-id="{{ section.id }}"
-  infinite-scroll="{{ section.settings.enable_infinite_scroll }}"
->
-  {% render 'skip-to-content-link', href: '#ResultsList', text: 'accessibility.skip_to_results_list' %}
-
-  <div
-    class="collection-wrapper grid gap-style{% if section.settings.product_grid_width == 'full-width' %} collection-wrapper--grid-full-width{% endif %}"
-  >
-    {% content_for 'block',
-      type: 'filters',
-      id: 'filters',
-      results: collection,
-      results_size: collection.products_count
-    %}
-
-    {% assign products_per_page = 24 %}
-
-    {% if section.settings.enable_infinite_scroll == false %}
-      {% assign products_per_page = section.settings.products_per_page %}
-    {% endif %}
-
-    {% paginate collection.products by products_per_page %}
-      {% capture children %}
-        {% for product in collection.products %}
-          <li
-            id="{{ section.id }}-{{ product.id }}"
-            class="product-grid__item product-grid__item--{{ forloop.index0 }}"
-            data-page="{{ paginate.current_page }}"
-            data-product-id="{{ product.id }}"
-            ref="cards[]"
-          >
-            {% # theme-check-disable %}
-            {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
-            {% # theme-check-enable %}
-          </li>
-        {% endfor %}
-      {% endcapture %}
-
-      {% render 'product-grid',
-        section: section,
-        children: children,
-        products: collection.products,
-        paginate: paginate,
-        enable_infinite_scroll: section.settings.enable_infinite_scroll
-      %}
-    {% endpaginate %}
-  </div>
-</results-list>
 
 {% schema %}
 {
@@ -184,81 +638,42 @@
   },
   "settings": [
     {
-      "type": "select",
-      "id": "layout_type",
-      "label": "t:settings.type",
-      "options": [
-        {
-          "value": "grid",
-          "label": "t:options.grid"
-        },
-        {
-          "value": "organic",
-          "label": "t:options.editorial"
-        }
-      ],
-      "default": "grid"
-    },
-    {
-      "type": "select",
-      "id": "product_card_size",
-      "label": "t:settings.card_size",
-      "options": [
-        {
-          "value": "small",
-          "label": "t:options.small"
-        },
-        {
-          "value": "medium",
-          "label": "t:options.medium"
-        },
-        {
-          "value": "large",
-          "label": "t:options.large"
-        },
-        {
-          "value": "extra-large",
-          "label": "t:options.extra_large"
-        }
-      ],
-      "default": "medium",
-      "visible_if": "{{ section.settings.layout_type == 'grid' }}"
-    },
-    {
-      "type": "select",
-      "id": "mobile_product_card_size",
-      "label": "t:settings.mobile_card_size",
-      "options": [
-        {
-          "value": "small",
-          "label": "t:options.small"
-        },
-        {
-          "value": "large",
-          "label": "t:options.large"
-        }
-      ],
-      "default": "small"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_infinite_scroll",
-      "label": "t:settings.auto_load_products",
-      "default": true
-    },
-    {
       "type": "range",
       "id": "products_per_page",
       "label": "t:settings.products_per_page",
       "min": 8,
       "max": 36,
       "step": 4,
-      "default": 24,
-      "visible_if": "{{ section.settings.enable_infinite_scroll == false }}"
+      "default": 24
     },
     {
       "type": "header",
       "content": "t:content.layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_columns",
+      "label": "Columns (desktop)",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Columns (mobile)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2"
     },
     {
       "type": "select",
@@ -274,7 +689,7 @@
           "label": "t:options.full"
         }
       ],
-      "default": "centered"
+      "default": "full-width"
     },
     {
       "type": "checkbox",
@@ -301,27 +716,7 @@
       "max": 50,
       "step": 1,
       "unit": "px",
-      "default": 16
-    },
-    {
-      "type": "range",
-      "id": "padding-inline-start",
-      "label": "t:settings.left_padding",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "padding-inline-end",
-      "label": "t:settings.right_padding",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "default": 0
+      "default": 20
     },
     {
       "type": "header",
@@ -341,7 +736,7 @@
       "max": 100,
       "step": 1,
       "unit": "px",
-      "default": 8
+      "default": 24
     },
     {
       "type": "range",
@@ -351,7 +746,7 @@
       "max": 100,
       "step": 1,
       "unit": "px",
-      "default": 8
+      "default": 40
     }
   ],
   "presets": []

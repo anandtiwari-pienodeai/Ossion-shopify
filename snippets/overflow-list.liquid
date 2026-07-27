@@ -7,6 +7,7 @@
   @param {string} [data-testid] - The data-testid attribute that is set on the overflow-list element.
   @param {string} [more-attributes] - The attributes that are applied on the more button slot.
   @param {string} [more-button-attributes] - The attributes that are applied directly on the more button element.
+  @param {string} [list-attributes] - The attributes that are applied on the internal <ul part="list">. Pass role="presentation" when every slotted <li> child also uses role="presentation", so the list container's implicit list semantics stay consistent with its children.
 {%- enddoc -%}
 
 <overflow-list
@@ -29,7 +30,12 @@
   <template shadowrootmode="open">
     {{ 'overflow-list.css' | asset_url | stylesheet_tag }}
 
-    <ul part="list">
+    <ul
+      part="list"
+      {% if list-attributes %}
+        {{ list-attributes }}
+      {% endif %}
+    >
       <slot></slot>
       <slot
         name="more"
@@ -41,6 +47,9 @@
       >
         <li
           part="more"
+          {% if list-attributes %}
+            {{ list-attributes }}
+          {% endif %}
         >
           <button
             class="button"
@@ -57,11 +66,19 @@
       <li
         part="placeholder"
         hidden
+        {% if list-attributes %}
+          {{ list-attributes }}
+        {% endif %}
       ></li>
     </ul>
 
     <div part="overflow">
-      <ul part="overflow-list">
+      <ul
+        part="overflow-list"
+        {% if list-attributes %}
+          {{ list-attributes }}
+        {% endif %}
+      >
         <slot name="overflow"></slot>
       </ul>
     </div>

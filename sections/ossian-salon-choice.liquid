@@ -4,7 +4,7 @@
   <div class="sc2__hero">
     {%- if section.settings.banner_image != blank -%}
       {{ section.settings.banner_image | image_url: width: 1800
-         | image_tag: class: 'sc2__banner-img', loading: 'lazy', alt: section.settings.banner_alt | default: '' }}
+         | image_tag: class: 'sc2__banner-img', loading: 'lazy', widths: '750,1100,1500,1800', sizes: '100vw', alt: section.settings.banner_alt | default: '' }}
     {%- else -%}
       <div class="sc2__banner-ph"></div>
     {%- endif -%}
@@ -80,14 +80,14 @@
         <div class="sc2__bac" id="sc2-ba-{{ section.id }}">
           {%- if section.settings.before_image != blank -%}
             {{ section.settings.before_image | image_url: width: 1000
-               | image_tag: class: 'sc2__bac-before', loading: 'lazy', draggable: 'false', alt: 'Before' }}
+               | image_tag: class: 'sc2__bac-before', loading: 'lazy', widths: '400,700,1000', draggable: 'false', alt: 'Before' }}
           {%- else -%}
             <div class="sc2__bac-before sc2__bac-ph">Before</div>
           {%- endif -%}
 
           {%- if section.settings.after_image != blank -%}
             {{ section.settings.after_image | image_url: width: 1000
-               | image_tag: class: 'sc2__bac-after', loading: 'lazy', draggable: 'false', alt: 'After' }}
+               | image_tag: class: 'sc2__bac-after', loading: 'lazy', widths: '400,700,1000', draggable: 'false', alt: 'After' }}
           {%- else -%}
             <div class="sc2__bac-after sc2__bac-ph">After</div>
           {%- endif -%}
@@ -168,6 +168,8 @@
         elsif feat_alt == blank and feat_collection != blank
           assign feat_alt = feat_collection.title
         endif
+
+        assign feat_alt = feat_alt | default: section.settings.feat_heading_white | default: section.settings.feat_heading_accent | default: 'Shop now'
       -%}
       <div class="sc2__feat">
         <div class="sc2__feat-body">
@@ -193,7 +195,7 @@
         <a href="{{ feat_href }}" class="sc2__feat-media" aria-label="{{ feat_alt }}">
           {%- if feat_img != blank -%}
             {{ feat_img | image_url: width: 700
-               | image_tag: class: 'sc2__feat-img', loading: 'lazy', alt: feat_alt }}
+               | image_tag: class: 'sc2__feat-img', loading: 'lazy', widths: '400,700', alt: feat_alt }}
           {%- else -%}
             <div class="sc2__feat-ph"></div>
           {%- endif -%}

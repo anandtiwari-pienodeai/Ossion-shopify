@@ -37,7 +37,7 @@
     >
       <div class="visually-hidden" aria-live="assertive" role="status" aria-atomic="true" ref="liveRegion"></div>
       {%- form 'product', product, id: form_id, data-type: 'add-to-cart-form' -%}
-        <input type="hidden" name="id" value="{{ variant.id }}">
+        <input type="hidden" name="id" value="{{ variant.id }}" ref="variantId">
         <input type="hidden" name="quantity" value="1">
         <div class="ossian-card-actions__row">
           <add-to-cart-component ref="addToCartButtonContainer">

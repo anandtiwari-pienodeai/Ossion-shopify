@@ -1,4 +1,14 @@
-<div class="ossian-reels">
+<div class="ossian-reels" style="--ossian-reels-bg-image: image-set(
+  {%- if section.settings.background_image != blank -%}
+    url('{{ section.settings.background_image | image_url: width: 750 }}') 1x,
+    url('{{ section.settings.background_image | image_url: width: 1500 }}') 2x,
+    url('{{ section.settings.background_image | image_url: width: 1920 }}') 3x
+  {%- else -%}
+    url('https://cdn.shopify.com/s/files/1/1021/3716/8155/files/image_191.png?v=1783841201&width=750') 1x,
+    url('https://cdn.shopify.com/s/files/1/1021/3716/8155/files/image_191.png?v=1783841201&width=1500') 2x,
+    url('https://cdn.shopify.com/s/files/1/1021/3716/8155/files/image_191.png?v=1783841201&width=1920') 3x
+  {%- endif -%}
+);">
   <div class="ossian-reels__header page-width">
     <div class="ossian-reels__title-group">
       <h2 class="ossian-reels__heading">{{ section.settings.heading }}&nbsp;{%- if section.settings.heading_accent != blank %}<span class="ossian-reels__heading-accent">{{ section.settings.heading_accent }}</span>{% endif -%}</h2>
@@ -30,27 +40,20 @@
             {{ block.shopify_attributes }}
           >
             <div class="ossian-reels__card-media" data-open-reel="{{ idx }}">
-              {%- if block.settings.thumbnail != blank -%}
-                {{
-                  block.settings.thumbnail
-                  | image_url: width: 400
-                  | image_tag:
-                    class: 'ossian-reels__thumb',
-                    loading: 'lazy'
-                }}
-              {%- else -%}
-                <div class="ossian-reels__thumb-placeholder">{{ 'image' | placeholder_svg_tag }}</div>
-              {%- endif -%}
-
               {%- if block.settings.video_url != blank -%}
                 <video
-                  class="ossian-reels__card-video"
-                  src="{{ block.settings.video_url }}"
+                  class="ossian-reels__card-video is-playing"
+                  data-src="{{ block.settings.video_url }}"
+                  {%- if block.settings.thumbnail != blank -%}
+                  poster="{{ block.settings.thumbnail | image_url: width: 400 }}"
+                  {%- endif -%}
                   muted
                   loop
                   playsinline
                   preload="none"
                 ></video>
+              {%- else -%}
+                <div class="ossian-reels__thumb-placeholder">{{ 'image' | placeholder_svg_tag }}</div>
               {%- endif -%}
 
               <div class="ossian-reels__play-btn">
@@ -58,37 +61,64 @@
               </div>
 
               {%- if block.settings.product != blank or block.settings.custom_price != blank -%}
-                <span class="ossian-reels__tag-badge" aria-label="Product tagged" title="Product tagged">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                <span class="ossian-reels__tag-badge" role="img" aria-label="Product tagged" title="Product tagged">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                 </span>
               {%- endif -%}
 
               {%- if block.settings.product != blank -%}
                 {%- assign reel_product = block.settings.product -%}
                 <div class="ossian-reels__card-footer">
-                  <p class="ossian-reels__product-name">{{ reel_product.title }}</p>
-                  <div class="ossian-reels__price-wrap">
-                    <span class="ossian-reels__price-current">{{ reel_product.price | money_without_trailing_zeros }}</span>
-                    {%- if reel_product.compare_at_price > reel_product.price -%}
-                      <span class="ossian-reels__price-original">{{ reel_product.compare_at_price | money_without_trailing_zeros }}</span>
-                      {%- assign discount = reel_product.compare_at_price | minus: reel_product.price | times: 100 | divided_by: reel_product.compare_at_price -%}
-                      <span class="ossian-reels__price-discount">{{ discount }}%</span>
-                    {%- endif -%}
+                  {%- if reel_product.featured_image != blank -%}
+                    <div class="ossian-reels__product-image-wrap">
+                      {{
+                        reel_product.featured_image
+                        | image_url: width: 120
+                        | image_tag:
+                          class: 'ossian-reels__product-image',
+                          loading: 'lazy',
+                          alt: reel_product.title
+                      }}
+                    </div>
+                  {%- endif -%}
+                  <div class="ossian-reels__product-info">
+                    <p class="ossian-reels__product-name">{{ reel_product.title }}</p>
+                    <div class="ossian-reels__price-wrap">
+                      <span class="ossian-reels__price-current">{{ reel_product.price | money_without_trailing_zeros }}</span>
+                      {%- if reel_product.compare_at_price > reel_product.price -%}
+                        <span class="ossian-reels__price-original">{{ reel_product.compare_at_price | money_without_trailing_zeros }}</span>
+                        {%- assign discount = reel_product.compare_at_price | minus: reel_product.price | times: 100 | divided_by: reel_product.compare_at_price -%}
+                        <span class="ossian-reels__price-discount">{{ discount }}%</span>
+                      {%- endif -%}
+                    </div>
                   </div>
                 </div>
               {%- elsif block.settings.custom_price != blank -%}
                 <div class="ossian-reels__card-footer">
-                  {%- if block.settings.reel_label != blank -%}
-                    <p class="ossian-reels__product-name">{{ block.settings.reel_label }}</p>
+                  {%- if block.settings.product_image != blank -%}
+                    <div class="ossian-reels__product-image-wrap">
+                      {{
+                        block.settings.product_image
+                        | image_url: width: 120
+                        | image_tag:
+                          class: 'ossian-reels__product-image',
+                          loading: 'lazy'
+                      }}
+                    </div>
                   {%- endif -%}
-                  <div class="ossian-reels__price-wrap">
-                    <span class="ossian-reels__price-current">{{ block.settings.custom_price }}</span>
-                    {%- if block.settings.custom_compare_price != blank -%}
-                      <span class="ossian-reels__price-original">{{ block.settings.custom_compare_price }}</span>
+                  <div class="ossian-reels__product-info">
+                    {%- if block.settings.reel_label != blank -%}
+                      <p class="ossian-reels__product-name">{{ block.settings.reel_label }}</p>
                     {%- endif -%}
-                    {%- if block.settings.discount_label != blank -%}
-                      <span class="ossian-reels__price-discount">{{ block.settings.discount_label }}</span>
-                    {%- endif -%}
+                    <div class="ossian-reels__price-wrap">
+                      <span class="ossian-reels__price-current">{{ block.settings.custom_price }}</span>
+                      {%- if block.settings.custom_compare_price != blank -%}
+                        <span class="ossian-reels__price-original">{{ block.settings.custom_compare_price }}</span>
+                      {%- endif -%}
+                      {%- if block.settings.discount_label != blank -%}
+                        <span class="ossian-reels__price-discount">{{ block.settings.discount_label }}</span>
+                      {%- endif -%}
+                    </div>
                   </div>
                 </div>
               {%- endif -%}
@@ -101,7 +131,7 @@
 </div>
 
 <!-- Reel Popup Overlay -->
-<div class="reel-popup" id="reel-popup" aria-hidden="true">
+<div class="reel-popup" id="reel-popup" aria-hidden="true" inert>
   <div class="reel-popup__backdrop" id="reel-popup-backdrop"></div>
   <div class="reel-popup__dialog" role="dialog" aria-modal="true">
     <!-- Left: Video Player -->
@@ -164,7 +194,7 @@
 /* ===================== REELS SECTION ===================== */
 .ossian-reels {
   padding: 60px 0 24px;
-  background: #eaf3fb url('https://cdn.shopify.com/s/files/1/1021/3716/8155/files/image_191.png?v=1783841201') center top / cover no-repeat;
+  background: #eaf3fb var(--ossian-reels-bg-image) center top / cover no-repeat;
 }
 
 .ossian-reels__header {
@@ -244,9 +274,9 @@
 
 .ossian-reels__card {
   flex-shrink: 0;
-  /* sized so ~5 cards fill the visible row (track-wrap has 40px side
-     padding, gap is 20px: (100vw - 80px padding - 80px gaps) / 5 */
-  width: clamp(220px, calc((100vw - 160px) / 5), 340px);
+  /* sized so ~4 cards fill the visible row (track-wrap has 40px side
+     padding, gap is 20px: (100vw - 80px padding - 60px gaps) / 4 */
+  width: clamp(260px, calc((100vw - 140px) / 4), 420px);
   border-radius: 20px;
   overflow: hidden;
   background: #000;
@@ -282,32 +312,20 @@
   cursor: pointer;
 }
 
-.ossian-reels__thumb {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.4s ease;
-}
-
-.ossian-reels__card:hover .ossian-reels__thumb { transform: scale(1.05); }
-
-/* Card inline video — sits over thumbnail, hidden until active */
+/* Card inline video — always visible and playing */
 .ossian-reels__card-video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  opacity: 1;
+  transition: transform 0.4s ease;
   pointer-events: none;
   z-index: 1;
 }
 
-.ossian-reels__card--active .ossian-reels__card-video.is-playing {
-  opacity: 1;
-}
+.ossian-reels__card:hover .ossian-reels__card-video { transform: scale(1.05); }
 
 .ossian-reels__thumb-placeholder {
   width: 100%;
@@ -363,8 +381,36 @@
   right: 0;
   bottom: 0;
   z-index: 3;
-  background: rgba(223, 228, 237, 0.92);
-  padding: 10px 12px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #eaf2fb 0%, #cfe0f5 100%);
+  padding: 10px 12px;
+}
+
+.ossian-reels__product-image-wrap {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.ossian-reels__product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.ossian-reels__product-info {
+  flex: 1;
+  min-width: 0;
 }
 
 .ossian-reels__product-name {
@@ -1025,7 +1071,8 @@
   .ossian-reels__play-btn svg { width: 30px; height: 30px; }
 
   /* Card footer */
-  .ossian-reels__card-footer { padding: 8px 10px 10px; }
+  .ossian-reels__card-footer { padding: 8px 10px; gap: 8px; }
+  .ossian-reels__product-image-wrap { width: 34px; height: 34px; border-radius: 8px; }
   .ossian-reels__product-name { font-size: 10px; }
   .ossian-reels__price-current { font-size: 11.5px; }
   .ossian-reels__price-original { font-size: 10.5px; }
@@ -1221,9 +1268,9 @@
       productCategory: {{ block.settings.product_category | default: '' | json }},
       productUrl: {%- if block.settings.product != blank -%}{{ block.settings.product.url | json }}{%- else -%}{{ block.settings.product_url | default: '' | json }}{%- endif -%},
       productImage: {%- if block.settings.product != blank and block.settings.product.featured_image != blank -%}{{ block.settings.product.featured_image | image_url: width: 300 | json }}{%- elsif block.settings.product_image != blank -%}{{ block.settings.product_image | image_url: width: 300 | json }}{%- else -%}null{%- endif -%},
-      price: {%- if block.settings.product != blank -%}{{ block.settings.product.price | money }}{%- else -%}{{ block.settings.custom_price | default: '' | json }}{%- endif -%},
-      comparePrice: {%- if block.settings.product != blank and block.settings.product.compare_at_price > block.settings.product.price -%}{{ block.settings.product.compare_at_price | money }}{%- elsif block.settings.product == blank and block.settings.custom_compare_price != blank -%}{{ block.settings.custom_compare_price | json }}{%- else -%}null{%- endif -%},
-      discountLabel: {%- if block.settings.product != blank and block.settings.product.compare_at_price > block.settings.product.price -%}{{ block.settings.product.compare_at_price | minus: block.settings.product.price | times: 100 | divided_by: block.settings.product.compare_at_price }}% off{%- elsif block.settings.discount_label != blank -%}{{ block.settings.discount_label | json }}{%- else -%}null{%- endif -%},
+      price: {%- if block.settings.product != blank -%}{{ block.settings.product.price | money | json }}{%- else -%}{{ block.settings.custom_price | default: '' | json }}{%- endif -%},
+      comparePrice: {%- if block.settings.product != blank and block.settings.product.compare_at_price > block.settings.product.price -%}{{ block.settings.product.compare_at_price | money | json }}{%- elsif block.settings.product == blank and block.settings.custom_compare_price != blank -%}{{ block.settings.custom_compare_price | json }}{%- else -%}null{%- endif -%},
+      discountLabel: {%- if block.settings.product != blank and block.settings.product.compare_at_price > block.settings.product.price -%}{%- assign discount_pct = block.settings.product.compare_at_price | minus: block.settings.product.price | times: 100 | divided_by: block.settings.product.compare_at_price -%}{{ discount_pct | append: '% off' | json }}{%- elsif block.settings.discount_label != blank -%}{{ block.settings.discount_label | json }}{%- else -%}null{%- endif -%},
       rating: {{ block.settings.rating | default: '0' }},
       reviewCount: {{ block.settings.review_count | default: '0' }},
       description: {{ block.settings.product_description | default: '' | json }},
@@ -1320,6 +1367,7 @@
     buildProductPanel(data);
 
     popup.setAttribute('aria-hidden', 'false');
+    popup.removeAttribute('inert');
     popup.classList.add('is-open');
     document.body.style.overflow = 'hidden';
   }
@@ -1450,6 +1498,7 @@
   function closePopup() {
     popup.classList.remove('is-open');
     popup.setAttribute('aria-hidden', 'true');
+    popup.setAttribute('inert', '');
     document.body.style.overflow = '';
     video.pause();
     video.src = '';
@@ -1488,20 +1537,34 @@
         const isActive = i === index;
         c.classList.toggle('ossian-reels__card--active', isActive);
         c.classList.toggle('ossian-reels__card--near', !isActive && Math.abs(i - index) === 1);
-
-        const vid = c.querySelector('.ossian-reels__card-video');
-        if (!vid) return;
-
-        if (isActive) {
-          vid.play().then(function() {
-            vid.classList.add('is-playing');
-          }).catch(function() { /* autoplay blocked — thumbnail stays */ });
-        } else {
-          vid.pause();
-          vid.currentTime = 0;
-          vid.classList.remove('is-playing');
-        }
       });
+    }
+
+    /* All reel videos autoplay and keep playing regardless of which card is active,
+       but only once the section is actually scrolled near the viewport — loading
+       every card's video eagerly on page load was costing ~27MB on every pageview. */
+    function playAllVideos() {
+      cards.forEach(function(c) {
+        const vid = c.querySelector('.ossian-reels__card-video');
+        if (!vid || vid.src) return;
+        vid.src = vid.dataset.src;
+        vid.load();
+        vid.play().catch(function() { /* autoplay blocked until user interacts with the page */ });
+      });
+    }
+
+    if ('IntersectionObserver' in window) {
+      const lazyObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            playAllVideos();
+            lazyObserver.disconnect();
+          }
+        });
+      }, { rootMargin: '300px 0px' });
+      lazyObserver.observe(track);
+    } else {
+      playAllVideos();
     }
 
     function findCenterCard() {
@@ -1625,6 +1688,11 @@
   "tag": "section",
   "class": "ossian-reels-section",
   "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
     {
       "type": "text",
       "id": "heading",
