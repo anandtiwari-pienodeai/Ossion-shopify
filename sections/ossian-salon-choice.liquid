@@ -2,12 +2,14 @@
 
   {%- comment -%}── 1. Hero Banner ────────────────────────────────{%- endcomment -%}
   <div class="sc2__hero">
+    {%- if section.settings.banner_link != blank -%}<a href="{{ section.settings.banner_link }}" class="sc2__banner-link">{%- endif -%}
     {%- if section.settings.banner_image != blank -%}
       {{ section.settings.banner_image | image_url: width: 1800
          | image_tag: class: 'sc2__banner-img', loading: 'lazy', widths: '750,1100,1500,1800', sizes: '100vw', alt: section.settings.banner_alt | default: '' }}
     {%- else -%}
       <div class="sc2__banner-ph"></div>
     {%- endif -%}
+    {%- if section.settings.banner_link != blank -%}</a>{%- endif -%}
   </div>
 
   {%- comment -%}── 2. Feature Strip ──────────────────────────────{%- endcomment -%}
@@ -278,6 +280,10 @@
   height: auto;
   display: block;
   object-fit: cover;
+}
+
+.sc2__banner-link {
+  display: block;
 }
 
 .sc2__banner-ph {

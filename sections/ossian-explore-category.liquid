@@ -8,9 +8,11 @@
       {%- for block in section.blocks -%}
         {%- if block.type == 'category_card' -%}
           {%- assign ec_product = block.settings.product -%}
+          {%- assign card_link = block.settings.link | default: ec_product.url | default: '#' -%}
           <div class="explore-cat__card" {{ block.shopify_attributes }}>
             <!-- Image -->
             <div class="explore-cat__media">
+              <a href="{{ card_link }}" class="explore-cat__media-link" aria-hidden="true" tabindex="-1">
               {%- if block.settings.image != blank -%}
                 {{
                   block.settings.image
@@ -33,6 +35,7 @@
               {%- else -%}
                 {{ 'product-1' | placeholder_svg_tag: 'explore-cat__img explore-cat__img--placeholder' }}
               {%- endif -%}
+              </a>
             </div>
 
             <!-- Info -->
@@ -92,7 +95,7 @@
 
               <!-- View All -->
               <a
-                href="{{ block.settings.link | default: ec_product.url | default: '#' }}"
+                href="{{ card_link }}"
                 class="explore-cat__viewall"
               >
                 {{ block.settings.cta_label | default: 'View all' }}
@@ -154,6 +157,12 @@
   overflow: hidden;
   position: relative;
   background: #ececec;
+}
+
+.explore-cat__media-link {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .explore-cat__img {

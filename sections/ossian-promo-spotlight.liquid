@@ -20,11 +20,19 @@
     </div>
 
     <div class="ospot__media">
+      {%- if section.settings.cta_url != blank -%}
+        <a
+          href="{{ section.settings.cta_url }}"
+          class="ospot__media-link"
+          {% if section.settings.cta_label != blank %}aria-hidden="true" tabindex="-1"{% endif %}
+        >
+      {%- endif -%}
       {%- if section.settings.image != blank -%}
         {{ section.settings.image | image_url: width: 900 | image_tag: class: 'ospot__img', loading: 'lazy', widths: '400,600,800,900' }}
       {%- else -%}
         <div class="ospot__img-ph"></div>
       {%- endif -%}
+      {%- if section.settings.cta_url != blank -%}</a>{%- endif -%}
     </div>
 
   </div>
@@ -105,6 +113,8 @@
 .ospot__cta:hover { background: #16304f; }
 
 .ospot__media { position: relative; }
+
+.ospot__media-link { display: block; }
 
 .ospot__img {
   width: 100%;
