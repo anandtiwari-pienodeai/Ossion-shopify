@@ -1,6 +1,3 @@
-<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Give+You+Glory&display=swap" rel="stylesheet">
-
 {%- assign pillar_blocks = section.blocks | where: "type", "pillar" -%}
 
 <section class="bpillars" id="bpillars-{{ section.id }}">
@@ -9,7 +6,7 @@
     <!-- Left: hero image + brand lockup + CTA -->
     <a href="{{ section.settings.hero_link | default: '#' }}" class="bpillars__hero">
       {%- if section.settings.hero_image != blank -%}
-        {{ section.settings.hero_image | image_url: width: 1200 | image_tag: class: 'bpillars__hero-img', alt: '', loading: 'lazy', widths: '400,700,1000,1200' }}
+        {{ section.settings.hero_image | image_url: width: 1200 | image_tag: class: 'bpillars__hero-img', alt: '', loading: 'eager', fetchpriority: 'high', widths: '400,700,1000,1200' }}
       {%- else -%}
         <div class="bpillars__hero-ph"></div>
       {%- endif -%}

@@ -2,7 +2,11 @@
   class="ossian-science"
   style="
     {%- if section.settings.background_image != blank -%}
-      --science-bg: url('{{ section.settings.background_image | image_url: width: 1920 }}');
+      --science-bg: image-set(
+        url('{{ section.settings.background_image | image_url: width: 750 }}') 1x,
+        url('{{ section.settings.background_image | image_url: width: 1500 }}') 2x,
+        url('{{ section.settings.background_image | image_url: width: 1920 }}') 3x
+      );
     {%- else -%}
       --science-bg: none;
     {%- endif -%}
@@ -114,7 +118,11 @@
   position: relative;
   z-index: 1;
   background-color: #eef4fb;
-  background-image: url('https://cdn.shopify.com/s/files/1/1021/3716/8155/files/ChatGPT_Image_Jul_12_2026_03_38_49_PM.png?v=1783850951');
+  background-image: image-set(
+    url('https://cdn.shopify.com/s/files/1/1021/3716/8155/files/ChatGPT_Image_Jul_12_2026_03_38_49_PM.png?v=1783850951&width=750') 1x,
+    url('https://cdn.shopify.com/s/files/1/1021/3716/8155/files/ChatGPT_Image_Jul_12_2026_03_38_49_PM.png?v=1783850951&width=1500') 2x,
+    url('https://cdn.shopify.com/s/files/1/1021/3716/8155/files/ChatGPT_Image_Jul_12_2026_03_38_49_PM.png?v=1783850951&width=2200') 3x
+  );
   background-size: cover;
   background-position: center;
   border-radius: 28px;

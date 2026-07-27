@@ -1,4 +1,14 @@
-<div class="ossian-reels" style="--ossian-reels-bg-image: url('{%- if section.settings.background_image != blank -%}{{ section.settings.background_image | image_url: width: 1920 }}{%- else -%}https://cdn.shopify.com/s/files/1/1021/3716/8155/files/image_191.png?v=1783841201{%- endif -%}');">
+<div class="ossian-reels" style="--ossian-reels-bg-image: image-set(
+  {%- if section.settings.background_image != blank -%}
+    url('{{ section.settings.background_image | image_url: width: 750 }}') 1x,
+    url('{{ section.settings.background_image | image_url: width: 1500 }}') 2x,
+    url('{{ section.settings.background_image | image_url: width: 1920 }}') 3x
+  {%- else -%}
+    url('https://cdn.shopify.com/s/files/1/1021/3716/8155/files/image_191.png?v=1783841201&width=750') 1x,
+    url('https://cdn.shopify.com/s/files/1/1021/3716/8155/files/image_191.png?v=1783841201&width=1500') 2x,
+    url('https://cdn.shopify.com/s/files/1/1021/3716/8155/files/image_191.png?v=1783841201&width=1920') 3x
+  {%- endif -%}
+);">
   <div class="ossian-reels__header page-width">
     <div class="ossian-reels__title-group">
       <h2 class="ossian-reels__heading">{{ section.settings.heading }}&nbsp;{%- if section.settings.heading_accent != blank %}<span class="ossian-reels__heading-accent">{{ section.settings.heading_accent }}</span>{% endif -%}</h2>

@@ -1,0 +1,24 @@
+{%- doc -%}
+  Loads the "Jost" and "Give You Glory" Google Fonts used by the custom ossian-* sections.
+
+  Previously each section (ossian-brand-pillars, ossian-heritage, ossian-innovation-grid,
+  ossian-product-showcase, ossian-promo-spotlight, ossian-sustainability) imported these
+  fonts independently via a render-blocking <link rel="stylesheet">, causing duplicate
+  requests and blocking first paint. This snippet consolidates that into a single
+  non-render-blocking load.
+{%- enddoc -%}
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  rel="preload"
+  as="style"
+  href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Give+You+Glory&display=swap"
+  onload="this.onload=null;this.rel='stylesheet'"
+>
+<noscript>
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Give+You+Glory&display=swap"
+  >
+</noscript>
