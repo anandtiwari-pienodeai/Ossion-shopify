@@ -1,7 +1,20 @@
 <div class="hero-carousel" id="hero-carousel-{{ section.id }}" data-autoplay="{{ section.settings.autoplay }}" data-speed="{{ section.settings.autoplay_speed }}">
   <div class="hero-carousel__track">
     {%- for block in section.blocks -%}
+      {%- liquid
+        assign slide_link_label = block.settings.link_label
+        unless slide_link_label != blank
+          assign slide_link_label = 'Slide ' | append: forloop.index
+        endunless
+      -%}
       <div class="hero-carousel__slide{% if forloop.first %} is-active{% endif %}" {{ block.shopify_attributes }}>
+        {%- if block.settings.link != blank -%}
+          <a
+            href="{{ block.settings.link }}"
+            class="hero-carousel__link"
+            aria-label="{{ slide_link_label }}"
+          >
+        {%- endif -%}
         {%- if block.settings.media_type == 'video' and block.settings.video != blank -%}
           <video
             class="hero-carousel__media"
@@ -56,6 +69,7 @@
         {%- else -%}
           <div class="hero-carousel__placeholder">{{ 'lifestyle-1' | placeholder_svg_tag: 'hero-carousel__media hero-carousel__placeholder-svg' }}</div>
         {%- endif -%}
+        {%- if block.settings.link != blank -%}</a>{%- endif -%}
       </div>
     {%- endfor -%}
   </div>
@@ -150,6 +164,10 @@
   height: auto;
   max-height: 90vh;
   object-fit: cover;
+  display: block;
+}
+
+.hero-carousel__link {
   display: block;
 }
 
@@ -324,6 +342,18 @@
           "id": "video_mobile",
           "label": "Mobile video (optional)",
           "info": "Shown below 768px width. If left blank, the desktop video is used on mobile too."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional. Makes this slide clickable — link to any page, collection, or product."
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link accessibility label",
+          "info": "Optional. Describes the link for screen reader users, e.g. \"Shop the new collection\". Defaults to \"Slide 1\", \"Slide 2\", etc. if left blank."
         }
       ]
     }
