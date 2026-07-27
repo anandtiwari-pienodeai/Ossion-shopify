@@ -58,11 +58,12 @@
     <!-- Center: Featured Card -->
     {%- for block in product_blocks limit: 1 -%}
       {%- assign card_url = block.settings.collection.url | default: block.settings.link | default: '#' -%}
+      {%- assign card_name = block.settings.product.title | default: block.settings.custom_name | default: 'View product' -%}
       <div class="pshowcase__card pshowcase__card--featured" {{ block.shopify_attributes }}>
         {%- if block.settings.badge_label != blank -%}
           <span class="pshowcase__badge">{{ block.settings.badge_label }}</span>
         {%- endif -%}
-        <a href="{{ card_url }}" class="pshowcase__img-link">
+        <a href="{{ card_url }}" class="pshowcase__img-link" aria-label="{{ card_name }}">
           <div class="pshowcase__img-wrap">
             {%- if block.settings.product != blank -%}
               {{ block.settings.product.featured_image | image_url: width: 800 | image_tag: class: 'pshowcase__img', alt: block.settings.product.title, loading: 'lazy', widths: '400,600,800' }}
@@ -97,11 +98,12 @@
       <div class="pshowcase__stack">
         {%- for block in product_blocks limit: 2 offset: 1 -%}
           {%- assign card_url = block.settings.collection.url | default: block.settings.link | default: '#' -%}
+          {%- assign card_name = block.settings.product.title | default: block.settings.custom_name | default: 'View product' -%}
           <div class="pshowcase__card pshowcase__card--secondary" {{ block.shopify_attributes }}>
             {%- if block.settings.badge_label != blank -%}
               <span class="pshowcase__badge">{{ block.settings.badge_label }}</span>
             {%- endif -%}
-            <a href="{{ card_url }}" class="pshowcase__img-link">
+            <a href="{{ card_url }}" class="pshowcase__img-link" aria-label="{{ card_name }}">
               <div class="pshowcase__img-wrap">
                 {%- if block.settings.product != blank -%}
                   {{ block.settings.product.featured_image | image_url: width: 600 | image_tag: class: 'pshowcase__img', alt: block.settings.product.title, loading: 'lazy', widths: '300,500,600' }}
@@ -518,8 +520,7 @@
 .pshowcase__feature-text p {
   font-size: 1rem;
   font-weight: 400;
-  color: #22345a;
-  opacity: 0.6;
+  color: #4a5876;
   margin: 0;
   line-height: 1.25;
 }

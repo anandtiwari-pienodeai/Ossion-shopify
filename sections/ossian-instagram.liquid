@@ -33,15 +33,14 @@
               {%- if block.settings.video_url != blank -%}
                 <video
                   class="ossian-reels__card-video is-playing"
-                  src="{{ block.settings.video_url }}"
+                  data-src="{{ block.settings.video_url }}"
                   {%- if block.settings.thumbnail != blank -%}
                   poster="{{ block.settings.thumbnail | image_url: width: 400 }}"
                   {%- endif -%}
                   muted
                   loop
-                  autoplay
                   playsinline
-                  preload="auto"
+                  preload="none"
                 ></video>
               {%- else -%}
                 <div class="ossian-reels__thumb-placeholder">{{ 'image' | placeholder_svg_tag }}</div>
@@ -52,8 +51,8 @@
               </div>
 
               {%- if block.settings.product != blank or block.settings.custom_price != blank -%}
-                <span class="ossian-reels__tag-badge" aria-label="Product tagged" title="Product tagged">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                <span class="ossian-reels__tag-badge" role="img" aria-label="Product tagged" title="Product tagged">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                 </span>
               {%- endif -%}
 
@@ -122,7 +121,7 @@
 </div>
 
 <!-- Reel Popup Overlay -->
-<div class="reel-popup" id="reel-popup" aria-hidden="true">
+<div class="reel-popup" id="reel-popup" aria-hidden="true" inert>
   <div class="reel-popup__backdrop" id="reel-popup-backdrop"></div>
   <div class="reel-popup__dialog" role="dialog" aria-modal="true">
     <!-- Left: Video Player -->
@@ -1358,6 +1357,7 @@
     buildProductPanel(data);
 
     popup.setAttribute('aria-hidden', 'false');
+    popup.removeAttribute('inert');
     popup.classList.add('is-open');
     document.body.style.overflow = 'hidden';
   }
@@ -1488,6 +1488,7 @@
   function closePopup() {
     popup.classList.remove('is-open');
     popup.setAttribute('aria-hidden', 'true');
+    popup.setAttribute('inert', '');
     document.body.style.overflow = '';
     video.pause();
     video.src = '';
@@ -1529,13 +1530,31 @@
       });
     }
 
-    /* All reel videos autoplay and keep playing regardless of which card is active */
+    /* All reel videos autoplay and keep playing regardless of which card is active,
+       but only once the section is actually scrolled near the viewport — loading
+       every card's video eagerly on page load was costing ~27MB on every pageview. */
     function playAllVideos() {
       cards.forEach(function(c) {
         const vid = c.querySelector('.ossian-reels__card-video');
-        if (!vid) return;
+        if (!vid || vid.src) return;
+        vid.src = vid.dataset.src;
+        vid.load();
         vid.play().catch(function() { /* autoplay blocked until user interacts with the page */ });
       });
+    }
+
+    if ('IntersectionObserver' in window) {
+      const lazyObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            playAllVideos();
+            lazyObserver.disconnect();
+          }
+        });
+      }, { rootMargin: '300px 0px' });
+      lazyObserver.observe(track);
+    } else {
+      playAllVideos();
     }
 
     function findCenterCard() {
@@ -1574,7 +1593,6 @@
       }, 30);
     }
     setTimeout(initActive, 80);
-    playAllVideos();
   })();
 
   // Open reel on card click

@@ -22,6 +22,7 @@
             | image_tag:
               class: 'hero-carousel__media',
               loading: forloop.first | ternary: 'eager', 'lazy',
+              fetchpriority: forloop.first | ternary: 'high', 'low',
               widths: '750,1100,1500,1920',
               sizes: '100vw'
           }}
@@ -185,18 +186,29 @@
 }
 
 .hero-carousel__dot {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.hero-carousel__dot::after {
+  content: '';
   width: 8px;
   height: 8px;
   border-radius: 50%;
   border: 1.5px solid rgba(255,255,255,0.9);
   background: transparent;
-  cursor: pointer;
-  padding: 0;
-  flex-shrink: 0;
   transition: background 0.2s, border-color 0.2s;
 }
 
-.hero-carousel__dot.is-active {
+.hero-carousel__dot.is-active::after {
   background: rgba(255,255,255,0.9);
   border-color: rgba(255,255,255,0.9);
 }
@@ -217,7 +229,7 @@
     height: 24px;
   }
 
-  .hero-carousel__dot {
+  .hero-carousel__dot::after {
     width: 7px;
     height: 7px;
   }

@@ -141,7 +141,11 @@
       {%- form 'customer' -%}
         <input type="hidden" name="contact[tags]" value="newsletter">
         <div class="ossian-footer__form">
+          <label for="ossian-footer-newsletter-email" class="visually-hidden">
+            {{ section.settings.email_placeholder | default: 'Enter Your Email' }}
+          </label>
           <input
+            id="ossian-footer-newsletter-email"
             type="email"
             name="contact[email]"
             class="ossian-footer__email-input"
@@ -346,16 +350,25 @@
   padding: 11px 14px;
   border: 1.5px solid #1e8a9e;
   border-radius: 6px;
-  background: transparent;
+  background-color: #0f2044;
   color: #fff;
   font-size: 13px;
   outline: none;
   transition: border-color 0.2s;
   box-sizing: border-box;
+
+  &:autofill {
+    background-color: #0f2044;
+    color: #fff;
+  }
 }
 
 .ossian-footer__email-input::placeholder { color:#ffffff}
-.ossian-footer__email-input:focus { border-color:#fff }
+.ossian-footer__email-input:focus-visible {
+  border-color: #fff;
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
 
 .ossian-footer__subscribe-btn {
   padding: 12px 20px;

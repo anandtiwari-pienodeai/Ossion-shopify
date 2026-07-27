@@ -30,6 +30,45 @@
   </div>
 </nav>
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": {{ request.origin | append: routes.root_url | json }}
+    },
+    {%- if product.type != blank -%}
+      {%- assign type_url = product.type | handle | prepend: '/collections/' -%}
+      {%- assign crumb_url = section.settings.collection_url | default: type_url -%}
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": {{ product.type | json }},
+        "item": {{ request.origin | append: crumb_url | json }}
+      },
+    {%- elsif section.settings.parent_label != blank -%}
+      {%- assign crumb_url = section.settings.parent_url | default: '#' -%}
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": {{ section.settings.parent_label | json }},
+        "item": {{ request.origin | append: crumb_url | json }}
+      },
+    {%- endif -%}
+    {
+      "@type": "ListItem",
+      "position": {% if product.type != blank or section.settings.parent_label != blank %}3{% else %}2{% endif %},
+      "name": {{ product.title | json }},
+      "item": {{ request.origin | append: product.url | json }}
+    }
+  ]
+}
+</script>
+
 {% stylesheet %}
 .pdp-breadcrumb {
   background: #fff;

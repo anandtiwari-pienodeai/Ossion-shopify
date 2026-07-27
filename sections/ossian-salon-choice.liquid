@@ -168,6 +168,8 @@
         elsif feat_alt == blank and feat_collection != blank
           assign feat_alt = feat_collection.title
         endif
+
+        assign feat_alt = feat_alt | default: section.settings.feat_heading_white | default: section.settings.feat_heading_accent | default: 'Shop now'
       -%}
       <div class="sc2__feat">
         <div class="sc2__feat-body">
