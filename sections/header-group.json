@@ -53,6 +53,92 @@
     },
     "header_section": {
       "type": "ossian-header",
+      "blocks": {
+        "nav_hair_care": {
+          "type": "nav_item",
+          "settings": {
+            "label": "Hair Care",
+            "link": "/",
+            "enable_dropdown": false
+          }
+        },
+        "nav_skin_care": {
+          "type": "nav_item",
+          "settings": {
+            "label": "Skin Care",
+            "link": "/pages/about-us",
+            "enable_dropdown": true,
+            "column_1_heading": "Concerns",
+            "column_2_heading": "Products",
+            "promo_heading": "Glow Starts With Care",
+            "promo_text": "Discover products that love your skin.",
+            "promo_button_label": "Shop Now",
+            "promo_button_url": "/pages/about-us"
+          }
+        },
+        "nav_salone": {
+          "type": "nav_item",
+          "settings": {
+            "label": "Salone",
+            "link": "/",
+            "enable_dropdown": false
+          }
+        },
+        "nav_science": {
+          "type": "nav_item",
+          "settings": {
+            "label": "Science",
+            "link": "/",
+            "enable_dropdown": false
+          }
+        },
+        "sidebar_skin_care": {
+          "type": "sidebar_category",
+          "settings": {
+            "label": "Skin Care",
+            "link": "/pages/about-us"
+          }
+        },
+        "sidebar_hair_care": {
+          "type": "sidebar_category",
+          "settings": {
+            "label": "Hair Care",
+            "link": "/"
+          }
+        },
+        "sidebar_makeup": {
+          "type": "sidebar_category",
+          "settings": {
+            "label": "Makeup",
+            "link": "/"
+          }
+        },
+        "sidebar_body_care": {
+          "type": "sidebar_category",
+          "settings": {
+            "label": "Body Care",
+            "link": "/"
+          }
+        },
+        "sidebar_fragrances": {
+          "type": "sidebar_category",
+          "settings": {
+            "label": "Fragrances",
+            "link": "/"
+          }
+        }
+      },
+      "block_order": [
+        "nav_hair_care",
+        "nav_skin_care",
+        "nav_salone",
+        "nav_science",
+        "sidebar_skin_care",
+        "sidebar_hair_care",
+        "sidebar_makeup",
+        "sidebar_body_care",
+        "sidebar_fragrances"
+      ],
       "settings": {
         "menu": "main-menu"
       }
