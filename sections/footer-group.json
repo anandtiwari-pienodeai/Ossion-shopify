@@ -39,5 +39,7 @@
       }
     }
   },
-  "order": ["ossian_footer_main"]
+  "order": [
+    "ossian_footer_main"
+  ]
 }
