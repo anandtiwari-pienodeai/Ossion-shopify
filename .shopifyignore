@@ -1,0 +1,7 @@
+# Editor temp/swap files — ignored by Shopify CLI watcher
+*.tmp.*
+*.tmp
+*.swp
+*.swo
+*~
+.DS_Store

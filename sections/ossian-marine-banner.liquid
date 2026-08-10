@@ -1,4 +1,11 @@
 <section class="marine-banner" id="marine-banner-{{ section.id }}">
+  {%- if section.settings.cta_url != blank -%}
+    <a
+      href="{{ section.settings.cta_url }}"
+      class="marine-banner__bg-link"
+      {% if section.settings.cta_label != blank %}aria-hidden="true" tabindex="-1"{% endif %}
+    ></a>
+  {%- endif -%}
   {%- if section.settings.bg_image != blank -%}
     {{
       section.settings.bg_image

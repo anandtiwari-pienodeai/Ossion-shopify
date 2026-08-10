@@ -12,6 +12,15 @@
         type="image/png"
         href="{{ settings.favicon | image_url: width: 32, height: 32 }}"
       >
+    {%- elsif settings.logo != blank -%}
+      <link
+        rel="icon"
+        type="image/png"
+        href="{{ settings.logo | image_url: width: 32, height: 32 }}"
+      >
+    {%- else -%}
+      {%- comment -%} Suppresses the browser's automatic /favicon.ico request (and its console 404) until a favicon is uploaded in Theme Settings. {%- endcomment -%}
+      <link rel="icon" href="data:,">
     {%- endif -%}
 
     {% # theme-check-disable RemoteAsset %}

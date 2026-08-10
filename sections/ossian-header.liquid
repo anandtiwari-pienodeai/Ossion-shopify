@@ -1,0 +1,695 @@
+{%- comment -%}
+  A single, fixed-layout navbar used at every viewport width — logo, nav menu,
+  search bar, and wishlist/account/cart icons all in one row always. No mobile
+  drawer/hamburger variant; elements shrink to fit narrow screens instead of
+  being hidden or collapsed into a menu.
+{%- endcomment -%}
+
+<header-component
+  id="header-component"
+  class="header ossian-navbar"
+  data-skip-node-update
+>
+  <div class="ossian-navbar__inner page-width">
+    <a href="{{ routes.root_url }}" class="ossian-navbar__logo">
+      {%- if settings.logo != blank -%}
+        {{ settings.logo | image_url: width: 300 | image_tag: alt: shop.name, loading: 'eager', fetchpriority: 'high' }}
+      {%- else -%}
+        <span class="ossian-navbar__logo-text">{{ shop.name | default: 'OSSION' }}</span>
+        <span class="ossian-navbar__logo-sub">PROFESSIONAL</span>
+      {%- endif -%}
+    </a>
+
+    {%- liquid
+      assign nav_items = section.blocks | where: 'type', 'nav_item'
+      assign sidebar_items = section.blocks | where: 'type', 'sidebar_category'
+    -%}
+    {%- if nav_items.size > 0 or section.settings.menu != blank -%}
+      <nav class="ossian-navbar__menu" aria-label="{{ 'accessibility.header_navigation_label' | t }}">
+        <ul class="ossian-navbar__menu-list">
+          {%- if nav_items.size > 0 -%}
+            {%- for block in nav_items -%}
+              <li class="ossian-navbar__menu-item" {{ block.shopify_attributes }}>
+                {%- if block.settings.enable_dropdown -%}
+                  <button
+                    type="button"
+                    class="ossian-navbar__menu-link ossian-navbar__menu-trigger"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    data-mega-menu-trigger="{{ forloop.index0 }}"
+                  >
+                    {{ block.settings.label }}
+                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg>
+                  </button>
+                  <div class="ossian-mega-menu" data-mega-menu="{{ forloop.index0 }}" hidden>
+                    <div class="ossian-mega-menu__inner page-width">
+                      {%- if sidebar_items.size > 0 -%}
+                        <div class="ossian-mega-menu__sidebar-col">
+                          <ul class="ossian-mega-menu__sidebar">
+                            {%- for sidebar_block in sidebar_items -%}
+                              <li>
+                                <a
+                                  href="{{ sidebar_block.settings.link }}"
+                                  class="ossian-mega-menu__sidebar-link{% if sidebar_block.settings.label == block.settings.label %} is-active{% endif %}"
+                                >
+                                  {%- if sidebar_block.settings.icon != blank -%}
+                                    <span class="ossian-mega-menu__sidebar-icon">
+                                      {{ sidebar_block.settings.icon | image_url: width: 40 | image_tag: loading: 'lazy', alt: '' }}
+                                    </span>
+                                  {%- endif -%}
+                                  {{ sidebar_block.settings.label }}
+                                </a>
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                          {%- if block.settings.link != blank -%}
+                            <a href="{{ block.settings.link }}" class="ossian-mega-menu__view-all">
+                              View All Products
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </a>
+                          {%- endif -%}
+                        </div>
+                      {%- endif -%}
+
+                      {%- if block.settings.submenu != blank -%}
+                        {%- liquid
+                          assign submenu_links = block.settings.submenu.links
+                          assign total_links = submenu_links.size
+                          assign half = total_links | plus: 1 | divided_by: 2
+                        -%}
+                        <div class="ossian-mega-menu__column">
+                          {%- if block.settings.column_1_heading != blank -%}
+                            <h3 class="ossian-mega-menu__column-heading">{{ block.settings.column_1_heading }}</h3>
+                          {%- endif -%}
+                          <ul class="ossian-mega-menu__column-list">
+                            {%- for link in submenu_links limit: half -%}
+                              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                            {%- endfor -%}
+                          </ul>
+                        </div>
+                        <div class="ossian-mega-menu__column">
+                          {%- if block.settings.column_2_heading != blank -%}
+                            <h3 class="ossian-mega-menu__column-heading">{{ block.settings.column_2_heading }}</h3>
+                          {%- endif -%}
+                          <ul class="ossian-mega-menu__column-list">
+                            {%- for link in submenu_links offset: half -%}
+                              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                            {%- endfor -%}
+                          </ul>
+                        </div>
+                      {%- endif -%}
+
+                      {%- if block.settings.promo_image != blank or block.settings.promo_heading != blank -%}
+                        <div class="ossian-mega-menu__promo">
+                          {%- if block.settings.promo_image != blank -%}
+                            {{ block.settings.promo_image | image_url: width: 400 | image_tag: loading: 'lazy', alt: '' }}
+                          {%- endif -%}
+                          <div class="ossian-mega-menu__promo-content">
+                            {%- if block.settings.promo_heading != blank -%}
+                              <h4>{{ block.settings.promo_heading }}</h4>
+                            {%- endif -%}
+                            {%- if block.settings.promo_text != blank -%}
+                              <p>{{ block.settings.promo_text }}</p>
+                            {%- endif -%}
+                            {%- if block.settings.promo_button_label != blank -%}
+                              <a href="{{ block.settings.promo_button_url | default: '#' }}" class="ossian-mega-menu__promo-btn">
+                                {{ block.settings.promo_button_label }}
+                              </a>
+                            {%- endif -%}
+                          </div>
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                {%- else -%}
+                  <a href="{{ block.settings.link }}" class="ossian-navbar__menu-link">
+                    {{ block.settings.label }}
+                  </a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for link in section.settings.menu.links -%}
+              <li class="ossian-navbar__menu-item">
+                <a
+                  href="{{ link.url }}"
+                  class="ossian-navbar__menu-link"
+                  {% if link.current %}aria-current="page"{% endif %}
+                >
+                  {{ link.title }}
+                </a>
+              </li>
+            {%- endfor -%}
+          {%- endif -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    <div class="ossian-navbar__actions">
+      <button
+        type="button"
+        class="ossian-navbar__search"
+        on:click="#search-modal/showDialog"
+        aria-label="{{ 'content.search_input_label' | t }}"
+        aria-haspopup="dialog"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <span>{{ 'content.search_input_placeholder' | t }}</span>
+      </button>
+
+      {% render 'header-actions', section: section, display_style: 'icon', show_wishlist: false %}
+    </div>
+  </div>
+</header-component>
+
+<script>
+(function () {
+  var triggers = document.querySelectorAll('[data-mega-menu-trigger]');
+  var menus = document.querySelectorAll('[data-mega-menu]');
+
+  function closeAll() {
+    triggers.forEach(function (trigger) {
+      trigger.setAttribute('aria-expanded', 'false');
+    });
+    menus.forEach(function (menu) {
+      menu.hidden = true;
+    });
+  }
+
+  triggers.forEach(function (trigger) {
+    trigger.addEventListener('click', function (event) {
+      event.stopPropagation();
+      var id = trigger.dataset.megaMenuTrigger;
+      var menu = document.querySelector('[data-mega-menu="' + id + '"]');
+      var wasOpen = trigger.getAttribute('aria-expanded') === 'true';
+      closeAll();
+      if (!wasOpen && menu) {
+        trigger.setAttribute('aria-expanded', 'true');
+        menu.hidden = false;
+      }
+    });
+  });
+
+  document.addEventListener('click', function (event) {
+    if (!event.target.closest('.ossian-navbar__menu-item')) closeAll();
+  });
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') closeAll();
+  });
+})();
+</script>
+
+{% stylesheet %}
+  .ossian-navbar {
+    background: var(--color-background, #fff);
+    border-bottom: 1px solid rgb(var(--color-foreground-rgb, 20 24 32) / 0.08);
+    position: relative;
+  }
+
+  .ossian-navbar__inner {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: clamp(6px, 2vw, 32px);
+    padding: 10px 20px;
+  }
+
+  .ossian-navbar__logo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.15;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .ossian-navbar__logo img {
+    display: block;
+    height: clamp(26px, 5vw, 40px);
+    width: auto;
+  }
+
+  .ossian-navbar__logo-text {
+    font-size: clamp(0.85rem, 3vw, 1.5rem);
+    font-weight: 800;
+    color: #1e3a5f;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .ossian-navbar__logo-sub {
+    font-size: clamp(0.45rem, 1.1vw, 0.65rem);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: #1e3a5f;
+    opacity: 0.75;
+    white-space: nowrap;
+  }
+
+  .ossian-navbar__menu {
+    min-width: 0;
+    flex-shrink: 1;
+  }
+
+  .ossian-navbar__menu-list {
+    display: flex;
+    align-items: center;
+    gap: clamp(6px, 1.8vw, 28px);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ossian-navbar__menu-list li {
+    min-width: 0;
+  }
+
+  .ossian-navbar__menu-link {
+    display: block;
+    font-size: clamp(0.62rem, 1.5vw, 0.9rem);
+    font-weight: 600;
+    color: #1e3a5f;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: opacity 0.2s;
+  }
+
+  .ossian-navbar__menu-link:hover {
+    opacity: 0.65;
+  }
+
+  .ossian-navbar__menu-item {
+    position: relative;
+    list-style: none;
+  }
+
+  .ossian-navbar__menu-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .ossian-navbar__menu-trigger svg {
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+
+  .ossian-navbar__menu-trigger[aria-expanded='true'] svg {
+    transform: rotate(180deg);
+  }
+
+  .ossian-mega-menu {
+    position: fixed;
+    top: var(--header-height, 70px);
+    left: 0;
+    right: 0;
+    background: var(--color-background, #fff);
+    border-top: 1px solid rgb(var(--color-foreground-rgb, 20 24 32) / 0.08);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+  }
+
+  .ossian-mega-menu[hidden] {
+    display: none;
+  }
+
+  .ossian-mega-menu__inner {
+    display: grid;
+    grid-template-columns: 220px 1fr 1fr 280px;
+    gap: 32px;
+    padding-block: 32px;
+  }
+
+  .ossian-mega-menu__sidebar-col {
+    border-right: 1px solid rgb(var(--color-foreground-rgb, 20 24 32) / 0.08);
+    padding-right: 24px;
+  }
+
+  .ossian-mega-menu__sidebar {
+    list-style: none;
+    margin: 0 0 16px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .ossian-mega-menu__sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #1e3a5f;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .ossian-mega-menu__sidebar-link:hover {
+    background: rgb(var(--color-foreground-rgb, 20 24 32) / 0.05);
+  }
+
+  .ossian-mega-menu__sidebar-link.is-active {
+    background: rgb(var(--color-primary-rgb) / 0.1);
+    color: var(--color-primary, #6d5bd0);
+    font-weight: 700;
+  }
+
+  .ossian-mega-menu__sidebar-icon {
+    display: flex;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+  }
+
+  .ossian-mega-menu__sidebar-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .ossian-mega-menu__view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-primary, #6d5bd0);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-decoration: none;
+    padding-inline: 10px;
+  }
+
+  .ossian-mega-menu__column-heading {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgb(var(--color-foreground-rgb, 20 24 32) / 0.5);
+    margin: 0 0 16px;
+  }
+
+  .ossian-mega-menu__column-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .ossian-mega-menu__column-list a {
+    color: #1e3a5f;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+
+  .ossian-mega-menu__column-list a:hover {
+    text-decoration: underline;
+  }
+
+  .ossian-mega-menu__promo {
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgb(var(--color-foreground-rgb, 20 24 32) / 0.03);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ossian-mega-menu__promo img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ossian-mega-menu__promo-content {
+    padding: 16px;
+  }
+
+  .ossian-mega-menu__promo-content h4 {
+    margin: 0 0 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1e3a5f;
+  }
+
+  .ossian-mega-menu__promo-content p {
+    margin: 0 0 14px;
+    font-size: 0.85rem;
+    color: rgb(var(--color-foreground-rgb, 20 24 32) / 0.65);
+  }
+
+  .ossian-mega-menu__promo-btn {
+    display: inline-block;
+    background: var(--color-primary, #6d5bd0);
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+  }
+
+  @media (max-width: 989px) {
+    .ossian-mega-menu__inner {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        'sidebar sidebar'
+        'col1 col2'
+        'promo promo';
+    }
+
+    .ossian-mega-menu__sidebar-col {
+      grid-area: sidebar;
+      border-right: none;
+      border-bottom: 1px solid rgb(var(--color-foreground-rgb, 20 24 32) / 0.08);
+      padding-right: 0;
+      padding-bottom: 16px;
+    }
+
+    .ossian-mega-menu__promo {
+      grid-area: promo;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .ossian-mega-menu {
+      max-height: calc(100dvh - var(--header-height, 70px));
+      overflow-y: auto;
+    }
+
+    .ossian-mega-menu__inner {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        'sidebar'
+        'col1'
+        'col2'
+        'promo';
+      gap: 20px;
+    }
+  }
+
+  .ossian-navbar__actions {
+    display: flex;
+    align-items: center;
+    gap: clamp(4px, 1.2vw, 14px);
+    margin-inline-start: auto;
+    flex-shrink: 0;
+  }
+
+  .ossian-navbar__search {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    width: clamp(56px, 16vw, 240px);
+    border: 1px solid rgb(var(--color-foreground-rgb, 20 24 32) / 0.16);
+    border-radius: 999px;
+    padding: clamp(5px, 0.9vw, 9px) clamp(8px, 1.3vw, 16px);
+    background: var(--color-background, #fff);
+    color: rgb(var(--color-foreground-rgb, 20 24 32) / 0.55);
+    cursor: pointer;
+    font-size: clamp(0.62rem, 1.3vw, 0.85rem);
+    font-family: inherit;
+  }
+
+  .ossian-navbar__search svg {
+    flex-shrink: 0;
+  }
+
+  .ossian-navbar__search span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ossian-navbar__actions header-actions {
+    display: flex;
+    align-items: center;
+    gap: clamp(2px, 0.8vw, 8px);
+  }
+
+  .ossian-navbar__actions .header-actions__action {
+    width: clamp(28px, 5vw, 40px);
+    height: clamp(28px, 5vw, 40px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(var(--color-foreground-rgb, 20 24 32) / 0.16);
+    border-radius: 50%;
+    color: #1e3a5f;
+    flex-shrink: 0;
+    padding: 0;
+  }
+
+  /* Fill the circular button above rather than drawing its own border/size,
+     so account and cart icons don't end up with a circle nested inside a circle. */
+  .ossian-navbar__actions shopify-account {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ossian-navbar__actions .header-actions__cart-icon svg,
+  .ossian-navbar__actions .account-button__icon {
+    width: clamp(14px, 2.6vw, 20px);
+    height: clamp(14px, 2.6vw, 20px);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ossion Navbar",
+  "tag": "section",
+  "class": "ossian-header-section",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu (fallback)",
+      "default": "main-menu",
+      "info": "Only used if no Nav Item blocks below are added."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "nav_item",
+      "name": "Nav Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Used as the link when the dropdown is off, and as the \"View All Products\" link when it's on."
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_dropdown",
+          "label": "Enable dropdown menu",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Dropdown columns (if enabled)"
+        },
+        {
+          "type": "link_list",
+          "id": "submenu",
+          "label": "Submenu",
+          "info": "Its links are split in half — first half fills column 1, second half fills column 2."
+        },
+        {
+          "type": "text",
+          "id": "column_1_heading",
+          "label": "Column 1 heading",
+          "default": "Concerns"
+        },
+        {
+          "type": "text",
+          "id": "column_2_heading",
+          "label": "Column 2 heading",
+          "default": "Products"
+        },
+        {
+          "type": "header",
+          "content": "Promo card (if enabled)"
+        },
+        {
+          "type": "image_picker",
+          "id": "promo_image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "promo_heading",
+          "label": "Heading"
+        },
+        {
+          "type": "text",
+          "id": "promo_text",
+          "label": "Text"
+        },
+        {
+          "type": "text",
+          "id": "promo_button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "promo_button_url",
+          "label": "Button link"
+        }
+      ]
+    },
+    {
+      "type": "sidebar_category",
+      "name": "Dropdown Sidebar Category",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Shown in the left column of every Nav Item that has its dropdown enabled. The item matching the open Nav Item's label is auto-highlighted."
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon (small square image, optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ossion Navbar"
+    }
+  ]
+}
+{% endschema %}
