@@ -1,0 +1,353 @@
+{%- comment -%}
+  Ossian About Hero — ocean-depth banner. Layered animated waves over a
+  gradient (or an optional photograph), deliberately restrained copy.
+{%- endcomment -%}
+
+<section
+  class="abh abh--{{ section.settings.height }}"
+  id="abh-{{ section.id }}"
+  style="--abh-overlay: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"
+>
+  <div class="abh__bg" aria-hidden="true">
+    {%- if section.settings.image != blank -%}
+      {{
+        section.settings.image
+        | image_url: width: 2400
+        | image_tag:
+          class: 'abh__img',
+          loading: 'eager',
+          fetchpriority: 'high',
+          widths: '750,1100,1600,2000,2400',
+          sizes: '100vw',
+          alt: ''
+      }}
+    {%- endif -%}
+    <span class="abh__scrim"></span>
+    <span class="abh__caustics"></span>
+  </div>
+
+  <div class="abh__content">
+    <div class="abh__content-inner">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="abh__eyebrow">
+          <span class="abh__eyebrow-rule" aria-hidden="true"></span>
+          {{ section.settings.eyebrow }}
+        </p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h1 class="abh__heading">{{ section.settings.heading }}</h1>
+      {%- endif -%}
+
+      {%- if section.settings.body_text != blank -%}
+        <div class="abh__body">{{ section.settings.body_text }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.show_scroll_cue -%}
+      <span class="abh__cue" aria-hidden="true">
+        <span class="abh__cue-line"></span>
+      </span>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} Three wave layers, each drifting at its own pace {%- endcomment -%}
+  <div class="abh__waves" aria-hidden="true">
+    <svg class="abh__wave abh__wave--back" viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,64 C180,104 360,24 720,56 C1080,88 1260,40 1440,64 L1440,120 L0,120 Z"/>
+    </svg>
+    <svg class="abh__wave abh__wave--mid" viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,80 C220,40 420,100 720,76 C1020,52 1240,96 1440,72 L1440,120 L0,120 Z"/>
+    </svg>
+    <svg class="abh__wave abh__wave--front" viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,96 C240,72 480,112 720,96 C960,80 1200,112 1440,92 L1440,120 L0,120 Z"/>
+    </svg>
+  </div>
+</section>
+
+{% stylesheet %}
+/* ===================== HERO ===================== */
+.abh {
+  position: relative;
+  display: grid;
+  isolation: isolate;
+  overflow: hidden;
+  color: #ffffff;
+  background: #04182b;
+}
+
+.abh--short  { min-height: 380px; }
+.abh--medium { min-height: 500px; }
+.abh--tall   { min-height: 640px; }
+
+.abh__bg,
+.abh__content {
+  grid-area: 1 / 1;
+}
+
+.abh__bg {
+  position: relative;
+  /* Ocean depth: light at the surface, dark below */
+  background: linear-gradient(170deg, #0a4f6e 0%, #06344f 38%, #041f36 72%, #021322 100%);
+}
+
+.abh__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.abh__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    175deg,
+    rgba(4, 31, 54, calc(var(--abh-overlay, 0.55) * 0.75)) 0%,
+    rgba(3, 22, 40, var(--abh-overlay, 0.55)) 60%,
+    rgba(2, 15, 28, calc(0.2 + var(--abh-overlay, 0.55))) 100%
+  );
+}
+
+/* Slow-drifting light, the way sun moves through water */
+.abh__caustics {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(38% 28% at 22% 12%, rgba(120, 214, 233, 0.22) 0%, transparent 70%),
+    radial-gradient(30% 26% at 78% 26%, rgba(124, 92, 191, 0.20) 0%, transparent 72%),
+    radial-gradient(44% 34% at 56% 84%, rgba(10, 92, 122, 0.30) 0%, transparent 76%);
+  animation: abh-drift 22s ease-in-out infinite alternate;
+}
+
+@keyframes abh-drift {
+  from { transform: translate3d(-2%, -1%, 0) scale(1); }
+  to   { transform: translate3d(3%, 2%, 0) scale(1.08); }
+}
+
+/* ===================== CONTENT ===================== */
+.abh__content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 88px 24px 104px;
+}
+
+.abh__content-inner {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+.abh__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 18px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(168, 222, 236, 0.92);
+}
+
+.abh__eyebrow-rule {
+  width: 44px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.abh__heading {
+  margin: 0;
+  max-width: 16ch;
+  font-size: clamp(2.6rem, 7vw, 5.4rem);
+  font-weight: 300;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+
+.abh__body {
+  margin-top: 22px;
+  max-width: 48ch;
+  font-size: clamp(0.95rem, 1.3vw, 1.08rem);
+  font-weight: 300;
+  line-height: 1.75;
+  color: rgba(226, 240, 247, 0.84);
+}
+
+.abh__body p { margin: 0 0 10px; }
+.abh__body p:last-child { margin-bottom: 0; }
+
+/* ===================== SCROLL CUE ===================== */
+.abh__cue {
+  position: absolute;
+  left: 50%;
+  bottom: 42px;
+  width: 1px;
+  height: 46px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.22);
+  transform: translateX(-50%);
+}
+
+.abh__cue-line {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent, #8fd8ea);
+  animation: abh-cue 2.4s ease-in-out infinite;
+}
+
+@keyframes abh-cue {
+  0%   { transform: translateY(-100%); }
+  60%  { transform: translateY(100%); }
+  100% { transform: translateY(100%); }
+}
+
+/* ===================== WAVES ===================== */
+.abh__waves {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: clamp(70px, 9vw, 130px);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.abh__wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+}
+
+.abh__wave path {
+  fill: #ffffff;
+}
+
+.abh__wave--back {
+  opacity: 0.16;
+  animation: abh-swell 19s linear infinite;
+}
+
+.abh__wave--mid {
+  opacity: 0.32;
+  animation: abh-swell 13s linear infinite reverse;
+}
+
+.abh__wave--front {
+  opacity: 1;
+  animation: abh-swell 25s linear infinite;
+}
+
+@keyframes abh-swell {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media screen and (max-width: 749px) {
+  .abh--short  { min-height: 340px; }
+  .abh--medium { min-height: 420px; }
+  .abh--tall   { min-height: 520px; }
+
+  .abh__content {
+    padding: 64px 20px 86px;
+  }
+
+  .abh__heading,
+  .abh__body {
+    max-width: none;
+  }
+
+  .abh__cue {
+    bottom: 34px;
+    height: 36px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .abh__caustics,
+  .abh__wave,
+  .abh__cue-line {
+    animation: none;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "About Hero",
+  "tag": "section",
+  "class": "ossian-about-hero-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "OSSION PROFESSIONAL"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "About Ossion"
+    },
+    {
+      "type": "richtext",
+      "id": "body_text",
+      "label": "Body text"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "paragraph",
+      "content": "Leave the image empty to use the ocean-depth gradient."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image (optional)"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Image overlay",
+      "min": 0,
+      "max": 85,
+      "step": 5,
+      "unit": "%",
+      "default": 55
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Hero height",
+      "options": [
+        { "value": "short", "label": "Short" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "tall", "label": "Tall" }
+      ],
+      "default": "tall"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_scroll_cue",
+      "label": "Show scroll cue",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Hero"
+    }
+  ]
+}
+{% endschema %}

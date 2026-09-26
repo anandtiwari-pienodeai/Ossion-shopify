@@ -92,45 +92,6 @@
     {%- endif -%}
   </div>
 </div>
-
-{%- if section.settings.banner_heading != blank or section.settings.banner_subheading_white != blank or section.settings.banner_subheading_accent != blank -%}
-  <div class="otb">
-    <div class="otb__inner page-width">
-
-      <div class="otb__media otb__media--left">
-        {%- if section.settings.banner_left_image != blank -%}
-          {{ section.settings.banner_left_image | image_url: width: 700 | image_tag: class: 'otb__img', loading: 'lazy', widths: '300,500,700', alt: section.settings.banner_left_image_alt | default: '' }}
-        {%- else -%}
-          {{ 'ossion-science-left.png' | asset_url | image_tag: class: 'otb__img', loading: 'lazy', alt: section.settings.banner_left_image_alt | default: '' }}
-        {%- endif -%}
-      </div>
-
-      <div class="otb__content">
-        {%- if section.settings.banner_heading != blank -%}
-          <h2 class="otb__heading">{{ section.settings.banner_heading }}</h2>
-        {%- endif -%}
-        {%- if section.settings.banner_subheading_white != blank or section.settings.banner_subheading_accent != blank -%}
-          <p class="otb__subheading">
-            {%- if section.settings.banner_subheading_white != blank -%}<em class="otb__subheading-white">{{ section.settings.banner_subheading_white }}</em>{%- endif -%}
-            {%- if section.settings.banner_subheading_accent != blank -%}<em class="otb__subheading-accent">{{ section.settings.banner_subheading_accent }}</em>{%- endif -%}
-          </p>
-        {%- endif -%}
-        {%- if section.settings.banner_body != blank -%}
-          <p class="otb__body">{{ section.settings.banner_body }}</p>
-        {%- endif -%}
-      </div>
-
-      <div class="otb__media otb__media--right">
-        {%- if section.settings.banner_right_image != blank -%}
-          {{ section.settings.banner_right_image | image_url: width: 700 | image_tag: class: 'otb__img', loading: 'lazy', widths: '300,500,700', alt: section.settings.banner_right_image_alt | default: '' }}
-        {%- else -%}
-          {{ 'ossion-science-right.png' | asset_url | image_tag: class: 'otb__img', loading: 'lazy', alt: section.settings.banner_right_image_alt | default: '' }}
-        {%- endif -%}
-      </div>
-
-    </div>
-  </div>
-{%- endif -%}
 </div>
 
 {% stylesheet %}
@@ -138,6 +99,11 @@
   position: relative;
   overflow: hidden;
   background: radial-gradient(120% 160% at 50% 0%, #16294f 0%, #0a1730 55%, #060f24 100%);
+  margin-bottom: 60px;
+}
+
+@media (max-width: 600px) {
+  .ossian-science-wrap { margin-bottom: 36px; }
 }
 
 .ossian-science-wrap__dots {
@@ -166,12 +132,22 @@
 .ossian-science__card {
   position: relative;
   z-index: 1;
-  background: transparent;
+  background-color: #eef4fb;
+  background-image: image-set(
+    url('https://cdn.shopify.com/s/files/1/1021/3716/8155/files/ChatGPT_Image_Jul_12_2026_03_38_49_PM.png?v=1783850951&width=750') 1x,
+    url('https://cdn.shopify.com/s/files/1/1021/3716/8155/files/ChatGPT_Image_Jul_12_2026_03_38_49_PM.png?v=1783850951&width=1500') 2x,
+    url('https://cdn.shopify.com/s/files/1/1021/3716/8155/files/ChatGPT_Image_Jul_12_2026_03_38_49_PM.png?v=1783850951&width=2200') 3x
+  );
+  background-size: cover;
+  background-position: center;
+  border-radius: 28px;
   padding: clamp(18px, 2.5vh, 36px) clamp(20px, 4vw, 48px) clamp(14px, 2vh, 28px);
   text-align: center;
   max-width: 1080px;
   max-height: 100%;
+  overflow-y: auto;
   margin: 0 auto;
+  box-shadow: 0 30px 70px rgba(6, 20, 45, 0.35);
 }
 
 .ossian-science__heading {
@@ -179,25 +155,25 @@
   font-weight: 800;
   letter-spacing: 0.01em;
   text-transform: uppercase;
-  color: #ffffff;
+  color: #1e3a5f;
   margin: 0;
 }
 
 .ossian-science__heading-accent {
-  color: #dba84a;
+  color: #1a63c9;
   margin-left: 0.3em;
 }
 
 .ossian-science__squiggle {
   display: block;
-  color: #dba84a;
+  color: #2f6fed;
   margin: 4px auto 12px;
 }
 
 .ossian-science__description {
   font-size: clamp(0.85rem, 1.1vw + 0.4vh, 1.05rem);
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.82);
+  color: #33507a;
   margin: 0 auto 20px;
   max-width: 700px;
 }
@@ -217,7 +193,7 @@
   flex: 1;
   max-width: 260px;
   padding: 0 24px;
-  border-right: 1px solid rgba(255, 255, 255, 0.18);
+  border-right: 1px solid rgba(30, 58, 95, 0.15);
 }
 
 .ossian-science__badge:last-child {
@@ -246,14 +222,14 @@
   font-weight: 800;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  color: #ffffff;
+  color: #1e3a5f;
   text-align: center;
 }
 
 .ossian-science__badge-desc {
   font-size: 0.78rem;
   line-height: 1.4;
-  color: rgba(255, 255, 255, 0.7);
+  color: #5b7091;
   text-align: center;
   margin: 0;
 }
@@ -263,8 +239,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(30, 58, 95, 0.1);
   border-radius: 18px;
   padding: 10px 10px 10px 18px;
   text-align: left;
@@ -292,7 +268,7 @@
   font-size: 0.92rem;
   font-weight: 600;
   line-height: 1.3;
-  color: #ffffff;
+  color: #1e3a5f;
   margin: 0;
 }
 
@@ -302,7 +278,7 @@
   flex-shrink: 0;
   gap: 10px;
   color: #ffffff;
-  background: linear-gradient(135deg, #b8832a 0%, #dba84a 50%, #c9953a 100%);
+  background: #1e3a5f;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -310,11 +286,11 @@
   text-decoration: none;
   padding: 12px 22px;
   border-radius: 10px;
-  transition: filter 0.2s;
+  transition: background 0.2s;
 }
 
 .ossian-science__cta:hover {
-  filter: brightness(1.08);
+  background: #16304f;
 }
 
 @media (max-width: 768px) {
@@ -341,111 +317,6 @@
 
   .ossian-science__quiz-info { flex-direction: column; text-align: center; }
   .ossian-science__cta { justify-content: center; }
-}
-
-/* ── Transformation Banner (below the science card) ── */
-.otb,
-.otb * {
-  font-family: 'Jost', sans-serif;
-  box-sizing: border-box;
-}
-
-.otb {
-  position: relative;
-  overflow: hidden;
-  padding: 70px 20px;
-}
-
-.otb__inner {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: 1fr 1.3fr 1fr;
-  align-items: center;
-  gap: 40px;
-}
-
-.otb__media {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  height: 100%;
-  min-height: 240px;
-}
-
-.otb__img {
-  width: 100%;
-  height: 100%;
-  max-height: 320px;
-  object-fit: contain;
-  display: block;
-}
-
-.otb__img--placeholder {
-  width: 100%;
-  height: 240px;
-  opacity: 0.55;
-}
-
-.otb__content {
-  text-align: center;
-  padding: 0 12px;
-}
-
-.otb__heading {
-  font-size: clamp(2rem, 4vw, 3.25rem);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #ffffff;
-  margin: 0 0 6px;
-  line-height: 1.15;
-}
-
-.otb__subheading {
-  margin: 0 0 22px;
-  font-size: clamp(1.5rem, 2.6vw, 2.25rem);
-  line-height: 1.2;
-}
-
-.otb__subheading-white,
-.otb__subheading-accent {
-  font-style: italic;
-  font-weight: 500;
-}
-
-.otb__subheading-white {
-  color: #ffffff;
-}
-
-.otb__subheading-accent {
-  color: #dba84a;
-  margin-left: 0.3em;
-}
-
-.otb__body {
-  font-size: clamp(1rem, 1.3vw, 1.25rem);
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.82);
-  line-height: 1.5;
-  margin: 0 auto;
-  max-width: 34ch;
-}
-
-@media (max-width: 900px) {
-  .otb { padding: 48px 20px; }
-  .otb__inner { grid-template-columns: 1fr; gap: 24px; }
-  .otb__media { min-height: 180px; }
-  .otb__media--left { order: 2; }
-  .otb__content { order: 1; }
-  .otb__media--right { order: 3; }
-  .otb__img { max-height: 220px; }
-}
-
-@media (max-width: 600px) {
-  .otb { padding: 40px 16px; }
-  .otb__heading { font-size: 1.75rem; }
-  .otb__subheading { font-size: 1.35rem; margin-bottom: 16px; }
 }
 {% endstylesheet %}
 
@@ -498,54 +369,6 @@
       "type": "url",
       "id": "button_url",
       "label": "Quiz button URL"
-    },
-    {
-      "type": "header",
-      "content": "Transformation Banner"
-    },
-    {
-      "type": "text",
-      "id": "banner_heading",
-      "label": "Banner heading",
-      "default": "Salon Choice"
-    },
-    {
-      "type": "text",
-      "id": "banner_subheading_white",
-      "label": "Banner subheading (white, italic)",
-      "default": "Real"
-    },
-    {
-      "type": "text",
-      "id": "banner_subheading_accent",
-      "label": "Banner subheading accent (gold, italic)",
-      "default": "Transformations"
-    },
-    {
-      "type": "textarea",
-      "id": "banner_body",
-      "label": "Banner body text",
-      "default": "Professional care, Real results, Loved by thousands"
-    },
-    {
-      "type": "image_picker",
-      "id": "banner_left_image",
-      "label": "Banner left image"
-    },
-    {
-      "type": "text",
-      "id": "banner_left_image_alt",
-      "label": "Banner left image alt text"
-    },
-    {
-      "type": "image_picker",
-      "id": "banner_right_image",
-      "label": "Banner right image"
-    },
-    {
-      "type": "text",
-      "id": "banner_right_image_alt",
-      "label": "Banner right image alt text"
     }
   ],
   "blocks": [
@@ -591,11 +414,7 @@
         "heading": "OSSION",
         "heading_accent": "SCIENCE",
         "quiz_text": "Curious about what your skin or hair needs?",
-        "button_label": "TAKE THE QUIZ",
-        "banner_heading": "Salon Choice",
-        "banner_subheading_white": "Real",
-        "banner_subheading_accent": "Transformations",
-        "banner_body": "Professional care, Real results, Loved by thousands"
+        "button_label": "TAKE THE QUIZ"
       },
       "blocks": [
         { "type": "badge", "settings": { "label": "DERMAT TESTED", "icon_type": "droplet", "description": "Gentle on skin, tested for safety and purity." } },

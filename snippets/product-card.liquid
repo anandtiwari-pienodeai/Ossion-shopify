@@ -127,6 +127,8 @@
 
   /* ── Card shell ── */
   .product-card__content {
+    --product-card-inline-padding: 12px;
+
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 2px 10px rgba(30, 58, 95, 0.08);
@@ -134,6 +136,18 @@
     transition: box-shadow 0.25s ease, transform 0.25s ease;
     width: 100%;
     min-width: 0;
+  }
+
+  /* ── Inset the text content so it doesn't sit flush against the card edge.
+     The gallery stays edge-to-edge. ── */
+  .product-card__content > *:not(.card-gallery),
+  .product-card__content > .contents > .text-block {
+    padding-inline: var(--product-card-inline-padding);
+  }
+
+  /* Display:contents wrappers can't take padding themselves */
+  .product-card__content > .contents {
+    padding-inline: 0;
   }
 
   .product-card:hover .product-card__content {
@@ -230,7 +244,7 @@
 
   /* ── Rating ── */
   .product-card .rating-wrapper {
-    padding-inline: 12px;
+    padding-inline: var(--product-card-inline-padding);
   }
 
   .product-card .rating svg {
@@ -294,13 +308,11 @@
   @media screen and (max-width: 749px) {
     /* Tighter card padding on small screens */
     .product-card__content {
+      --product-card-inline-padding: 10px;
+
       border-radius: 8px;
       height: auto;
       width: 100%;
-    }
-
-    .product-card .rating-wrapper {
-      padding-inline: 8px;
     }
 
     /* ATC row on mobile */

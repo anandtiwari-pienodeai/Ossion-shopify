@@ -11,60 +11,13 @@
   "sections": {
     "ossian_pdp_breadcrumb": {
       "type": "ossian-pdp-breadcrumb",
+      "custom_css": [
+        ".pdp-breadcrumb {padding: 20px;}"
+      ],
       "settings": {
         "parent_label": "Hair Care",
         "parent_url": "",
         "collection_url": ""
-      }
-    },
-    "ossian_trust_ticker_c6cjNm": {
-      "type": "ossian-trust-ticker",
-      "blocks": {
-        "badge_z9LYXa": {
-          "type": "badge",
-          "settings": {
-            "icon": "leaf",
-            "title": "Skin Loving Ingredients",
-            "description": "Enriched with natural extracts & nutrients."
-          }
-        },
-        "badge_GMzNML": {
-          "type": "badge",
-          "settings": {
-            "icon": "shield",
-            "title": "Dermatologically Tested",
-            "description": "Safe and gentle for everyday use."
-          }
-        },
-        "badge_qzNxtR": {
-          "type": "badge",
-          "settings": {
-            "icon": "droplet",
-            "title": "Professional Quality",
-            "description": "Salon trusted, expert recommended."
-          }
-        },
-        "badge_dMHwy6": {
-          "type": "badge",
-          "settings": {
-            "icon": "sparkle",
-            "title": "Visible Results",
-            "description": "Healthy, glowing skin you can feel."
-          }
-        }
-      },
-      "block_order": [
-        "badge_z9LYXa",
-        "badge_GMzNML",
-        "badge_qzNxtR",
-        "badge_dMHwy6"
-      ],
-      "name": "Trust Ticker",
-      "settings": {
-        "background_color": "#ffffff",
-        "scroll_speed": 28,
-        "padding_top": 20,
-        "padding_bottom": 20
       }
     },
     "main": {
@@ -75,7 +28,7 @@
           "static": true,
           "settings": {
             "media_presentation": "carousel",
-            "media_columns": "one",
+            "media_columns": "two",
             "image_gap": 4,
             "large_first_image": false,
             "icons_style": "chevron",
@@ -90,7 +43,7 @@
             "media_radius": 8,
             "extend_media": false,
             "zoom": true,
-            "video_loop": false,
+            "video_loop": true,
             "hide_variants": false,
             "padding-block-start": 0,
             "padding-block-end": 0,
@@ -126,47 +79,23 @@
             "padding-inline-end": 0
           },
           "blocks": {
+            "review_nniWtf": {
+              "type": "review",
+              "name": "t:names.product_review_stars",
+              "settings": {
+                "stars_style": "shaded",
+                "show_number": true,
+                "rating_color": "primary",
+                "type_preset": "paragraph",
+                "width": "100%",
+                "alignment": "left"
+              },
+              "blocks": {}
+            },
             "ossian_product_type_badge": {
               "type": "ossian-product-type",
               "settings": {
                 "padding-block-start": 0,
-                "padding-block-end": 4,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_subtitle": {
-              "type": "text",
-              "name": "Product subtitle",
-              "settings": {
-                "text": "<p>{{ closest.product.metafields.descriptors.subtitle.value }}</p>",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "paragraph",
-                "font": "var(--font-body--family)",
-                "font_size": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "ossian_pdp_features_block": {
-              "type": "ossian-pdp-features",
-              "settings": {
-                "features": "Anti-yellow Technology\nFibre Plex Protection\nUp to 9 Levels Lift\nNon-Damaging Formula\nEnriched with Marine actives",
-                "padding-block-start": 4,
                 "padding-block-end": 4,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
@@ -199,15 +128,29 @@
               },
               "blocks": {}
             },
-            "review_stars_R9xNsK": {
-              "type": "review",
+            "text_subtitle": {
+              "type": "text",
+              "name": "Product subtitle",
               "settings": {
-                "stars_style": "shaded",
-                "show_number": true,
-                "rating_color": "primary",
-                "type_preset": "paragraph",
+                "text": "<p>{{ closest.product.metafields.descriptors.subtitle.value }}</p>",
                 "width": "100%",
-                "alignment": "left"
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "paragraph",
+                "font": "var(--font-body--family)",
+                "font_size": "",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
               },
               "blocks": {}
             },
@@ -241,6 +184,17 @@
                 "alignment": "left",
                 "padding-block-start": 0,
                 "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "ossian_pdp_features_block": {
+              "type": "ossian-pdp-features",
+              "settings": {
+                "features": "Anti-yellow Technology\nFibre Plex Protection\nUp to 9 Levels Lift\nNon-Damaging Formula\nEnriched with Marine actives",
+                "padding-block-start": 4,
+                "padding-block-end": 4,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
               },
@@ -295,10 +249,10 @@
             }
           },
           "block_order": [
+            "review_nniWtf",
             "ossian_product_type_badge",
             "text_xrnftG",
             "text_subtitle",
-            "review_stars_R9xNsK",
             "price_tVjtKg",
             "variant_picker_R3rGDr",
             "ossian_pdp_features_block",
@@ -319,53 +273,293 @@
         "padding-block-end": 48
       }
     },
+    "ossian_trust_ticker_c6cjNm": {
+      "type": "ossian-trust-ticker",
+      "blocks": {
+        "badge_z9LYXa": {
+          "type": "badge",
+          "settings": {
+            "icon": "leaf",
+            "title": "Skin Loving Ingredients",
+            "description": "Enriched with natural extracts & nutrients."
+          }
+        },
+        "badge_GMzNML": {
+          "type": "badge",
+          "settings": {
+            "icon": "shield",
+            "title": "Dermatologically Tested",
+            "description": "Safe and gentle for everyday use."
+          }
+        },
+        "badge_qzNxtR": {
+          "type": "badge",
+          "settings": {
+            "icon": "droplet",
+            "title": "Professional Quality",
+            "description": "Salon trusted, expert recommended."
+          }
+        },
+        "badge_dMHwy6": {
+          "type": "badge",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Visible Results",
+            "description": "Healthy, glowing skin you can feel."
+          }
+        }
+      },
+      "block_order": [
+        "badge_z9LYXa",
+        "badge_GMzNML",
+        "badge_qzNxtR",
+        "badge_dMHwy6"
+      ],
+      "name": "Trust Ticker",
+      "settings": {
+        "background_color": "#ffffff",
+        "scroll_speed": 28,
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    },
     "ossian_pdp_tabs": {
       "type": "ossian-pdp-tabs",
       "blocks": {
+        "tab_8wgcGU": {
+          "type": "tab",
+          "settings": {
+            "label": "Ingredients",
+            "layout": "text",
+            "use_product_description": false,
+            "content": "",
+            "features_list": "",
+            "metaobject_metafield": "custom.ingredients",
+            "metaobject_label_field": "label",
+            "metaobject_body_field": "",
+            "metaobject_list_field": "",
+            "metaobject_images_field": "image",
+            "metaobject_images_per_row": 3,
+            "comparison_before_field": "",
+            "comparison_after_field": "",
+            "before_label": "Before",
+            "after_label": "After",
+            "image_heading": "ENRICHED WITH MARINE SCIENCE",
+            "image_cta_text": "Explore Our Science",
+            "image_cta_url": ""
+          }
+        },
+        "tab_DCcUq6": {
+          "type": "tab",
+          "settings": {
+            "label": "Marine Technology",
+            "layout": "text",
+            "use_product_description": false,
+            "content": "",
+            "features_list": "",
+            "metaobject_metafield": "custom.marine_technology",
+            "metaobject_label_field": "label",
+            "metaobject_body_field": "",
+            "metaobject_list_field": "",
+            "metaobject_images_field": "images",
+            "metaobject_images_per_row": 3,
+            "comparison_before_field": "",
+            "comparison_after_field": "",
+            "before_label": "Before",
+            "after_label": "After",
+            "image_heading": "ENRICHED WITH MARINE SCIENCE",
+            "image_cta_text": "Explore Our Science",
+            "image_cta_url": ""
+          }
+        },
         "tab_desc": {
           "type": "tab",
           "settings": {
             "label": "Description",
-            "use_product_description": true,
+            "layout": "text",
+            "use_product_description": false,
             "content": "",
-            "features_list": ""
+            "features_list": "",
+            "metaobject_metafield": "custom.description",
+            "metaobject_label_field": "label",
+            "metaobject_body_field": "description",
+            "metaobject_list_field": "",
+            "metaobject_images_field": "image",
+            "metaobject_images_per_row": 3,
+            "comparison_before_field": "",
+            "comparison_after_field": "",
+            "before_label": "Before",
+            "after_label": "After",
+            "image_heading": "ENRICHED WITH MARINE SCIENCE",
+            "image_cta_text": "Explore Our Science",
+            "image_cta_url": ""
           }
         },
         "tab_benefits": {
           "type": "tab",
           "settings": {
-            "label": "Key Benefits",
+            "label": "Before & After",
+            "layout": "comparison",
             "use_product_description": false,
             "content": "",
-            "features_list": "Anti-Yellow Technology for bright, clean results\nFiber Plex Protection for stronger hair\nUp to 9 levels of lift in one application\nNon-Damaging Formula with Marine Minerals\nAdvanced Plex & Sea Minerals complex"
+            "features_list": "Anti-Yellow Technology for bright, clean results\nFiber Plex Protection for stronger hair\nUp to 9 levels of lift in one application\nNon-Damaging Formula with Marine Minerals\nAdvanced Plex & Sea Minerals complex",
+            "metaobject_metafield": "custom.before_after",
+            "metaobject_label_field": "label,caption",
+            "metaobject_body_field": "caption",
+            "metaobject_list_field": "",
+            "metaobject_images_field": "images",
+            "metaobject_images_per_row": 3,
+            "comparison_before_field": "before_image",
+            "comparison_after_field": "after_image",
+            "before_label": "Before",
+            "after_label": "After",
+            "image_heading": "ENRICHED WITH MARINE SCIENCE",
+            "image_cta_text": "Explore Our Science",
+            "image_cta_url": ""
           }
         },
         "tab_how": {
           "type": "tab",
           "settings": {
             "label": "How To Use",
+            "layout": "text",
             "use_product_description": false,
-            "content": "<p><strong>Step 1:</strong> Mix the product with the developer in a 1:2 ratio.</p><p><strong>Step 2:</strong> Apply to dry, unwashed hair using a brush. Start from the roots and work towards the ends.</p><p><strong>Step 3:</strong> Leave on for 20–40 minutes depending on desired lift level.</p><p><strong>Step 4:</strong> Rinse thoroughly and follow with a toning shampoo and conditioner.</p>",
-            "features_list": ""
-          }
-        },
-        "tab_ingredients": {
-          "type": "tab",
-          "settings": {
-            "label": "Ingredients",
-            "use_product_description": false,
-            "content": "<p>Potassium Persulfate, Ammonium Persulfate, Sodium Persulfate, Kaolin, Marine Minerals Complex, Hydrolysed Keratin, Panthenol (Vitamin B5), Tocopheryl Acetate (Vitamin E).</p>",
-            "features_list": ""
+            "content": "",
+            "features_list": "",
+            "metaobject_metafield": "custom.how_to_use",
+            "metaobject_label_field": "label",
+            "metaobject_body_field": "",
+            "metaobject_list_field": "",
+            "metaobject_images_field": "image",
+            "metaobject_images_per_row": 3,
+            "comparison_before_field": "",
+            "comparison_after_field": "",
+            "before_label": "Before",
+            "after_label": "After",
+            "image_heading": "ENRICHED WITH MARINE SCIENCE",
+            "image_cta_text": "Explore Our Science",
+            "image_cta_url": ""
           }
         }
       },
       "block_order": [
+        "tab_8wgcGU",
+        "tab_DCcUq6",
         "tab_desc",
         "tab_benefits",
-        "tab_how",
-        "tab_ingredients"
+        "tab_how"
       ],
-      "settings": {}
+      "custom_css": [
+        ".pdp-tabs__nav {border-top: 0px;}",
+        ".pdp-tabs {padding: 10px;}"
+      ],
+      "settings": {
+        "show_reviews": false,
+        "reviews_heading": "Customer Reviews",
+        "reviews_link": "",
+        "aggregate_rating": "4.9",
+        "review_count": 240,
+        "five_star_pct": 90,
+        "four_star_pct": 5,
+        "three_star_pct": 2,
+        "two_star_pct": 1,
+        "one_star_pct": 2
+      }
+    },
+    "ossian_pdp_reviews": {
+      "type": "ossian-pdp-reviews",
+      "blocks": {
+        "r1": {
+          "type": "review",
+          "settings": {
+            "author": "Anjali S.",
+            "rating": "5",
+            "date": "12 Aug 2026",
+            "title": "Salon results at home",
+            "body": "Hair felt smoother from the very first wash. Three weeks in and the frizz is genuinely gone. My stylist asked what I had changed.",
+            "verified": true
+          }
+        },
+        "r2": {
+          "type": "review",
+          "settings": {
+            "author": "Rohit M.",
+            "rating": "5",
+            "date": "04 Aug 2026",
+            "title": "Worth every rupee",
+            "body": "I was sceptical about the price, but a little goes a long way. One bottle has lasted me almost two months of daily use.",
+            "verified": true
+          }
+        },
+        "r3": {
+          "type": "review",
+          "settings": {
+            "author": "Priya K.",
+            "rating": "4",
+            "date": "29 Jul 2026",
+            "title": "Lovely texture, subtle scent",
+            "body": "Leaves my hair soft without weighing it down. Would have given five stars if the fragrance lasted a bit longer.",
+            "verified": true
+          }
+        },
+        "r4": {
+          "type": "review",
+          "settings": {
+            "author": "Meera D.",
+            "rating": "5",
+            "date": "21 Jul 2026",
+            "title": "Finally something that works on colour-treated hair",
+            "body": "My highlights were turning brassy within weeks. Since switching, the tone has held and the ends look far healthier.",
+            "verified": true
+          }
+        },
+        "r5": {
+          "type": "review",
+          "settings": {
+            "author": "Sahil T.",
+            "rating": "5",
+            "date": "15 Jul 2026",
+            "title": "Noticeably less hair fall",
+            "body": "Used it through a full monsoon. Far less hair in the drain than usual and the scalp feels much calmer.",
+            "verified": true
+          }
+        },
+        "r6": {
+          "type": "review",
+          "settings": {
+            "author": "Nikita R.",
+            "rating": "4",
+            "date": "08 Jul 2026",
+            "title": "Great product, premium feel",
+            "body": "The packaging alone makes it feel like a salon product. Results built up gradually over about a month for me.",
+            "verified": true
+          }
+        },
+        "r7": {
+          "type": "review",
+          "settings": {
+            "author": "Karan V.",
+            "rating": "5",
+            "date": "30 Jun 2026",
+            "title": "Repurchasing without a second thought",
+            "body": "Second bottle already. Shine is the biggest difference — my hair catches the light in a way it never used to.",
+            "verified": true
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5",
+        "r6",
+        "r7"
+      ],
+      "settings": {
+        "eyebrow": "REAL RESULTS",
+        "heading": "Customer Reviews"
+      }
     },
     "ossian_pdp_benefits": {
       "type": "ossian-pdp-benefits",
@@ -415,6 +609,164 @@
         "subheading": "Powered by Marine Technology with advanced science for professional-grade results."
       }
     },
+    "ossian_instagram_VgRpe7": {
+      "type": "ossian-instagram",
+      "blocks": {
+        "reel_BqGyhU": {
+          "type": "reel",
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/dfc06861678847a8b50cde8d042e294e.mp4",
+            "reel_label": "",
+            "product": "amber-glow-permanent-hair-color-creme-100ml",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "custom_compare_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
+        },
+        "reel_zjzibq": {
+          "type": "reel",
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/65ad5c9836f945a4aea9b1b8bc8fef87.mp4",
+            "reel_label": "",
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "custom_compare_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
+        },
+        "reel_YPYAVg": {
+          "type": "reel",
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/355d10e3f86b4de59f7ff41ffe412ae6.mp4",
+            "reel_label": "",
+            "product": "crimson-veil-permanent-hair-color-creme-100ml",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "custom_compare_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
+        },
+        "reel_kpMfmg": {
+          "type": "reel",
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/65ad5c9836f945a4aea9b1b8bc8fef87.mp4",
+            "reel_label": "",
+            "product": "golden-luster-permanent-hair-color-creme-100ml",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "custom_compare_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
+        },
+        "reel_PdaGit": {
+          "type": "reel",
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/dfc06861678847a8b50cde8d042e294e.mp4",
+            "reel_label": "",
+            "product": "silver-mist-permanent-hair-color-creme-100ml",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "custom_compare_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
+        },
+        "reel_ABTDFB": {
+          "type": "reel",
+          "settings": {
+            "video_url": "",
+            "reel_label": "",
+            "product": "",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "custom_compare_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
+        }
+      },
+      "block_order": [
+        "reel_BqGyhU",
+        "reel_zjzibq",
+        "reel_YPYAVg",
+        "reel_kpMfmg",
+        "reel_PdaGit",
+        "reel_ABTDFB"
+      ],
+      "name": "Ossion Reels",
+      "settings": {
+        "heading": "OSSION",
+        "heading_accent": "gram",
+        "subheading": "Real people. Real results. Real stories",
+        "instagram_handle": "ossion.care"
+      }
+    },
     "ossian_marine_banner_pdp": {
       "type": "ossian-marine-banner",
       "settings": {
@@ -433,10 +785,10 @@
           "name": "t:names.header",
           "settings": {
             "text": "<h3>You May Also Like</h3>",
-            "width": "fit-content",
+            "width": "100%",
             "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h4",
+            "alignment": "center",
+            "type_preset": "h3",
             "font": "var(--font-primary--family)",
             "font_size": "",
             "line_height": "normal",
@@ -447,7 +799,7 @@
             "background": false,
             "background_color": "#00000026",
             "corner_radius": 0,
-            "padding-block-start": 0,
+            "padding-block-start": 24,
             "padding-block-end": 0,
             "padding-inline-start": 0,
             "padding-inline-end": 0
@@ -467,7 +819,7 @@
             "border_opacity": 100,
             "border_radius": 0,
             "padding-block-start": 0,
-            "padding-block-end": 8,
+            "padding-block-end": 12,
             "padding-inline-start": 0,
             "padding-inline-end": 0
           },
@@ -573,16 +925,16 @@
         "icons_style": "arrow",
         "icons_shape": "none",
         "section_width": "page-width",
-        "gap": 28,
+        "gap": 40,
         "color_scheme": "scheme-1",
-        "padding-block-start": 48,
+        "padding-block-start": 80,
         "padding-block-end": 48
       }
     },
     "ossian_explore_category_pdp": {
       "type": "ossian-explore-category",
       "settings": {
-        "heading": "EXPLORE MORE CATEGORY"
+        "heading": ""
       }
     }
   },
@@ -591,7 +943,9 @@
     "main",
     "ossian_trust_ticker_c6cjNm",
     "ossian_pdp_tabs",
+    "ossian_pdp_reviews",
     "ossian_pdp_benefits",
+    "ossian_instagram_VgRpe7",
     "ossian_marine_banner_pdp",
     "product_recommendations_qggXJq",
     "ossian_explore_category_pdp"

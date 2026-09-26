@@ -1,0 +1,45 @@
+{%- comment -%}
+  Renders a line icon used by the Ossian Product Showcase section.
+
+  Accepts:
+  - icon: {String} icon key (flask, drop, shield, leaf, sparkle, beaker, triangle, person)
+  - size: {Number} pixel size of the rendered svg. Default: 24
+
+  Usage:
+  {% render 'ossian-showcase-icon', icon: block.settings.icon, size: 26 %}
+{%- endcomment -%}
+
+{%- liquid
+  assign icon_size = size | default: 24
+-%}
+<svg
+  class="ossian-showcase-icon"
+  width="{{ icon_size }}"
+  height="{{ icon_size }}"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.5"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false">
+  {%- case icon -%}
+    {%- when 'flask', 'beaker' -%}
+      <path d="M9 3h6M9 3v7L4 19a1 1 0 00.93 1.37h14.14A1 1 0 0020 19l-5-9V3"/><line x1="6.3" y1="16" x2="17.7" y2="16"/>
+    {%- when 'drop' -%}
+      <path d="M12 2C12 2 5 10 5 15a7 7 0 0014 0c0-5-7-13-7-13z"/><path d="M9.5 15.5a3 3 0 003 2"/>
+    {%- when 'shield' -%}
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>
+    {%- when 'leaf' -%}
+      <path d="M12 21c0 0-7-4.5-7-10.5A6 6 0 0111 4.5 6 6 0 0119 10.5C19 16.5 12 21 12 21z"/><path d="M12 12v9"/>
+    {%- when 'sparkle' -%}
+      <path d="M12 3v4M12 17v4M4 12h4M16 12h4"/><path d="M6.5 6.5l2.8 2.8M14.7 14.7l2.8 2.8M17.5 6.5l-2.8 2.8M9.3 14.7l-2.8 2.8"/>
+    {%- when 'triangle' -%}
+      <path d="M12 3L2 21h20L12 3z"/><path d="M12 9.5v5"/><circle cx="12" cy="17.6" r="0.7" fill="currentColor" stroke="none"/>
+    {%- when 'person' -%}
+      <circle cx="12" cy="7" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+    {%- else -%}
+      <circle cx="12" cy="12" r="9"/><path d="M8.5 12.2l2.4 2.4 4.6-4.9"/>
+  {%- endcase -%}
+</svg>

@@ -1,0 +1,754 @@
+{%- comment -%}
+  Ossian PDP Reviews — horizontally scrolling customer review carousel.
+  Reviews are theme blocks, so placeholder content can be shipped before the
+  store has real Judge.me data. See the Judge.me override at the end of the
+  stylesheet for the app widget itself.
+{%- endcomment -%}
+
+{%- assign review_blocks = section.blocks | where: 'type', 'review' -%}
+{%- assign review_count = review_blocks.size -%}
+
+{%- assign total_score = 0 -%}
+{%- assign c5 = 0 -%}
+{%- assign c4 = 0 -%}
+{%- assign c3 = 0 -%}
+{%- assign c2 = 0 -%}
+{%- assign c1 = 0 -%}
+{%- for block in review_blocks -%}
+  {%- assign r = block.settings.rating | times: 1 -%}
+  {%- assign total_score = total_score | plus: r -%}
+  {%- case r -%}
+    {%- when 5 -%}{%- assign c5 = c5 | plus: 1 -%}
+    {%- when 4 -%}{%- assign c4 = c4 | plus: 1 -%}
+    {%- when 3 -%}{%- assign c3 = c3 | plus: 1 -%}
+    {%- when 2 -%}{%- assign c2 = c2 | plus: 1 -%}
+    {%- else -%}{%- assign c1 = c1 | plus: 1 -%}
+  {%- endcase -%}
+{%- endfor -%}
+
+{%- if review_count > 0 -%}
+  {%- assign avg_raw = total_score | times: 1.0 | divided_by: review_count -%}
+  {%- assign avg_display = avg_raw | round: 1 -%}
+  {%- assign avg_stars = avg_raw | round -%}
+{%- else -%}
+  {%- assign avg_display = 0 -%}
+  {%- assign avg_stars = 0 -%}
+{%- endif -%}
+
+{%- capture star_svg -%}<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.5l2.47 5.01 5.53.81-4 3.9.94 5.51L10 14.13l-4.94 2.6.94-5.51-4-3.9 5.53-.81z"/></svg>{%- endcapture -%}
+
+<section class="opr" id="opr-{{ section.id }}" data-opr>
+  <div class="page-width opr__inner">
+
+    <div class="opr__header">
+      <div class="opr__headings">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="opr__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="opr__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+      </div>
+
+      {%- if review_count > 0 -%}
+        <div class="opr__summary">
+          <div class="opr__score">
+            <span class="opr__score-num">{{ avg_display }}</span>
+            <span class="opr__score-out">/ 5</span>
+          </div>
+          <div class="opr__score-meta">
+            <div class="opr__stars opr__stars--lg" role="img" aria-label="{{ avg_display }} out of 5 stars">
+              {%- for i in (1..5) -%}
+                <span class="opr__star{% if i > avg_stars %} opr__star--empty{% endif %}">{{ star_svg }}</span>
+              {%- endfor -%}
+            </div>
+            <p class="opr__count">
+              {%- if review_count == 1 -%}
+                Based on 1 review
+              {%- else -%}
+                Based on {{ review_count }} reviews
+              {%- endif -%}
+            </p>
+          </div>
+
+          <div class="opr__bars">
+            {%- assign bar_counts = c5 | append: ',' | append: c4 | append: ',' | append: c3 | append: ',' | append: c2 | append: ',' | append: c1 | split: ',' -%}
+            {%- for bar_count in bar_counts -%}
+              {%- assign star_label = 5 | minus: forloop.index0 -%}
+              {%- assign pct = bar_count | times: 100 | divided_by: review_count -%}
+              <div class="opr__bar-row">
+                <span class="opr__bar-label">{{ star_label }}★</span>
+                <span class="opr__bar-track"><span class="opr__bar-fill" style="width: {{ pct }}%;"></span></span>
+                <span class="opr__bar-count">{{ bar_count }}</span>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if review_count > 0 -%}
+      <div class="opr__carousel-wrap">
+        <button class="opr__nav opr__nav--prev" type="button" data-opr-prev aria-label="Previous reviews">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+
+        <div class="opr__carousel" data-opr-track tabindex="0" role="region" aria-label="Customer reviews">
+          {%- for block in review_blocks -%}
+            {%- assign rating = block.settings.rating | times: 1 -%}
+            {%- assign author = block.settings.author | default: 'Verified Buyer' -%}
+            <article class="opr__card" {{ block.shopify_attributes }}>
+              <div class="opr__card-top">
+                <span class="opr__avatar" aria-hidden="true">{{ author | strip | slice: 0 | upcase }}</span>
+                <div class="opr__who">
+                  <span class="opr__author">{{ author }}</span>
+                  {%- if block.settings.verified -%}
+                    <span class="opr__verified">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                      Verified Purchase
+                    </span>
+                  {%- endif -%}
+                </div>
+                {%- if block.settings.date != blank -%}
+                  <span class="opr__date">{{ block.settings.date }}</span>
+                {%- endif -%}
+              </div>
+
+              <div class="opr__stars" role="img" aria-label="{{ rating }} out of 5 stars">
+                {%- for i in (1..5) -%}
+                  <span class="opr__star{% if i > rating %} opr__star--empty{% endif %}">{{ star_svg }}</span>
+                {%- endfor -%}
+              </div>
+
+              {%- if block.settings.title != blank -%}
+                <h3 class="opr__card-title">{{ block.settings.title }}</h3>
+              {%- endif -%}
+
+              {%- if block.settings.body != blank -%}
+                <p class="opr__card-body">{{ block.settings.body }}</p>
+              {%- endif -%}
+
+              {%- if block.settings.image != blank -%}
+                <div class="opr__card-media">
+                  {{
+                    block.settings.image
+                    | image_url: width: 320
+                    | image_tag: class: 'opr__card-img', loading: 'lazy', widths: '160,320,480', alt: block.settings.title
+                  }}
+                </div>
+              {%- endif -%}
+            </article>
+          {%- endfor -%}
+        </div>
+
+        <button class="opr__nav opr__nav--next" type="button" data-opr-next aria-label="Next reviews">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<script>
+(function () {
+  var section = document.getElementById('opr-{{ section.id }}');
+  if (!section) return;
+
+  var track   = section.querySelector('[data-opr-track]');
+  var prevBtn = section.querySelector('[data-opr-prev]');
+  var nextBtn = section.querySelector('[data-opr-next]');
+  if (!track || !prevBtn || !nextBtn) return;
+
+  function scrollAmount() {
+    var card = track.querySelector('.opr__card');
+    if (!card) return 320;
+    var gap = parseInt(getComputedStyle(track).gap) || 20;
+    return card.offsetWidth + gap;
+  }
+
+  nextBtn.addEventListener('click', function () {
+    track.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
+  });
+  prevBtn.addEventListener('click', function () {
+    track.scrollBy({ left: -scrollAmount(), behavior: 'smooth' });
+  });
+
+  function updateArrows() {
+    var atStart = track.scrollLeft <= 4;
+    var atEnd   = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+    prevBtn.disabled = atStart;
+    nextBtn.disabled = atEnd;
+  }
+
+  track.addEventListener('scroll', updateArrows, { passive: true });
+  window.addEventListener('resize', updateArrows);
+  updateArrows();
+
+  /* Drag to scroll (pointer devices) */
+  var dragging = false, startX = 0, startScroll = 0, moved = false;
+
+  track.addEventListener('mousedown', function (e) {
+    dragging = true; moved = false;
+    startX = e.pageX;
+    startScroll = track.scrollLeft;
+    track.classList.add('is-dragging');
+  });
+
+  document.addEventListener('mousemove', function (e) {
+    if (!dragging) return;
+    var delta = e.pageX - startX;
+    if (Math.abs(delta) > 3) moved = true;
+    track.scrollLeft = startScroll - delta;
+  });
+
+  document.addEventListener('mouseup', function () {
+    if (!dragging) return;
+    dragging = false;
+    track.classList.remove('is-dragging');
+  });
+
+  track.addEventListener('click', function (e) {
+    if (moved) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
+})();
+</script>
+
+{% stylesheet %}
+.opr {
+  background: #ffffff;
+  padding: 52px 0 56px;
+  border-top: 1px solid #e8e8e8;
+}
+
+.opr__inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding-inline: 24px;
+}
+
+/* ===================== HEADER ===================== */
+.opr__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 30px;
+}
+
+.opr__eyebrow {
+  margin: 0 0 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #7c5cbf;
+}
+
+.opr__heading {
+  margin: 0;
+  font-size: clamp(1.4rem, 2.6vw, 2.1rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #1e3a5f;
+}
+
+.opr__summary {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.opr__score {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  color: #1e3a5f;
+}
+
+.opr__score-num {
+  font-size: 2.6rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.opr__score-out {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #5b7091;
+}
+
+.opr__count {
+  margin: 4px 0 0;
+  font-size: 0.82rem;
+  color: #5b7091;
+}
+
+/* ===================== STARS ===================== */
+.opr__stars {
+  display: inline-flex;
+  gap: 2px;
+  color: #f5a623;
+}
+
+.opr__star svg {
+  width: 15px;
+  height: 15px;
+  display: block;
+  fill: currentColor;
+}
+
+.opr__stars--lg .opr__star svg {
+  width: 18px;
+  height: 18px;
+}
+
+.opr__star--empty {
+  color: #dfe4ec;
+}
+
+/* ===================== BREAKDOWN BARS ===================== */
+.opr__bars {
+  display: grid;
+  gap: 4px;
+  min-width: 170px;
+}
+
+.opr__bar-row {
+  display: grid;
+  grid-template-columns: 26px 1fr 18px;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  color: #5b7091;
+}
+
+.opr__bar-label {
+  white-space: nowrap;
+}
+
+.opr__bar-track {
+  height: 6px;
+  border-radius: 99px;
+  background: #eef1f8;
+  overflow: hidden;
+}
+
+.opr__bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  background: #f5a623;
+}
+
+.opr__bar-count {
+  text-align: right;
+}
+
+/* ===================== CAROUSEL ===================== */
+.opr__carousel-wrap {
+  position: relative;
+  padding: 0 52px;
+}
+
+.opr__carousel {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 6px 4px 18px;
+  cursor: grab;
+}
+
+.opr__carousel::-webkit-scrollbar { display: none; }
+
+.opr__carousel.is-dragging {
+  cursor: grabbing;
+  scroll-behavior: auto;
+  user-select: none;
+}
+
+.opr__carousel:focus-visible {
+  outline: 2px solid #7c5cbf;
+  outline-offset: 4px;
+}
+
+/* ===================== CARD ===================== */
+.opr__card {
+  flex: 0 0 clamp(270px, 23vw, 360px);
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid #e8ecf3;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px rgba(30, 58, 95, 0.07);
+  padding: 20px 20px 22px;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.opr__card:hover {
+  box-shadow: 0 8px 28px rgba(30, 58, 95, 0.13);
+  transform: translateY(-3px);
+}
+
+.opr__card-top {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.opr__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #eef1f8;
+  color: #1e3a5f;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.opr__who {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.opr__author {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1e3a5f;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.opr__verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #1e8a5f;
+}
+
+.opr__date {
+  font-size: 0.7rem;
+  color: #8a97ad;
+  white-space: nowrap;
+}
+
+.opr__card-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #1e3a5f;
+  line-height: 1.35;
+}
+
+.opr__card-body {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: #46586f;
+}
+
+.opr__card-media {
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.opr__card-img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+/* ===================== NAV ARROWS ===================== */
+.opr__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #e0e6f0;
+  background: #ffffff;
+  color: #1e3a5f;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(30, 58, 95, 0.12);
+  transition: opacity 0.2s ease, background 0.2s ease;
+  z-index: 2;
+}
+
+.opr__nav:hover:not(:disabled) {
+  background: #1e3a5f;
+  color: #ffffff;
+}
+
+.opr__nav:disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.opr__nav--prev { left: 0; }
+.opr__nav--next { right: 0; }
+
+/* ===================== RESPONSIVE ===================== */
+@media screen and (max-width: 749px) {
+  .opr {
+    padding: 40px 0 44px;
+  }
+
+  .opr__header {
+    gap: 18px;
+  }
+
+  .opr__summary {
+    gap: 16px;
+  }
+
+  .opr__bars {
+    display: none;
+  }
+
+  .opr__inner {
+    padding-inline: 16px;
+  }
+
+  /* Let the track bleed to the screen edges while the header stays inset */
+  .opr__carousel-wrap {
+    padding: 0;
+    margin-inline: -16px;
+  }
+
+  .opr__carousel {
+    padding: 6px 16px 18px;
+    scroll-padding-left: 16px;
+  }
+
+  .opr__card {
+    flex-basis: 85vw;
+    max-width: 350px;
+  }
+
+  .opr__nav {
+    display: none;
+  }
+}
+
+/* =====================================================================
+   Judge.me app widget — force its review list to scroll horizontally
+   instead of stacking vertically, for when real reviews replace the
+   placeholder blocks above.
+   ===================================================================== */
+.jdgm-rev-widg__reviews {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 12px;
+}
+
+.jdgm-rev-widg__reviews::-webkit-scrollbar { display: none; }
+
+.jdgm-rev-widg__reviews .jdgm-rev {
+  flex: 0 0 clamp(270px, 23vw, 360px);
+  scroll-snap-align: start;
+  border: 1px solid #e8ecf3;
+  border-radius: 14px;
+  padding: 18px !important;
+  margin: 0 !important;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Reviews",
+  "tag": "section",
+  "class": "ossian-pdp-reviews-section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "REAL RESULTS"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Customer Reviews"
+    },
+    {
+      "type": "paragraph",
+      "content": "The rating average and breakdown are calculated from the review blocks below."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Reviewer name",
+          "default": "Anjali S."
+        },
+        {
+          "type": "select",
+          "id": "rating",
+          "label": "Rating",
+          "options": [
+            { "value": "5", "label": "5 stars" },
+            { "value": "4", "label": "4 stars" },
+            { "value": "3", "label": "3 stars" },
+            { "value": "2", "label": "2 stars" },
+            { "value": "1", "label": "1 star" }
+          ],
+          "default": "5"
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Date label",
+          "default": "12 Aug 2026"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Review title",
+          "default": "Salon results at home"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Review text",
+          "default": "Hair felt smoother from the very first wash. Three weeks in and the frizz is genuinely gone."
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Show verified purchase badge",
+          "default": true
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo (optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP Reviews",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "author": "Anjali S.",
+            "rating": "5",
+            "date": "12 Aug 2026",
+            "title": "Salon results at home",
+            "body": "Hair felt smoother from the very first wash. Three weeks in and the frizz is genuinely gone. My stylist asked what I had changed.",
+            "verified": true
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "author": "Rohit M.",
+            "rating": "5",
+            "date": "04 Aug 2026",
+            "title": "Worth every rupee",
+            "body": "I was sceptical about the price, but a little goes a long way. One bottle has lasted me almost two months of daily use.",
+            "verified": true
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "author": "Priya K.",
+            "rating": "4",
+            "date": "29 Jul 2026",
+            "title": "Lovely texture, subtle scent",
+            "body": "Leaves my hair soft without weighing it down. Would have given five stars if the fragrance lasted a bit longer.",
+            "verified": true
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "author": "Meera D.",
+            "rating": "5",
+            "date": "21 Jul 2026",
+            "title": "Finally something that works on colour-treated hair",
+            "body": "My highlights were turning brassy within weeks. Since switching, the tone has held and the ends look far healthier.",
+            "verified": true
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "author": "Sahil T.",
+            "rating": "5",
+            "date": "15 Jul 2026",
+            "title": "Noticeably less hair fall",
+            "body": "Used it through a full monsoon. Far less hair in the drain than usual and the scalp feels much calmer.",
+            "verified": true
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "author": "Nikita R.",
+            "rating": "4",
+            "date": "08 Jul 2026",
+            "title": "Great product, premium feel",
+            "body": "The packaging alone makes it feel like a salon product. Results built up gradually over about a month for me.",
+            "verified": true
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "author": "Karan V.",
+            "rating": "5",
+            "date": "30 Jun 2026",
+            "title": "Repurchasing without a second thought",
+            "body": "Second bottle already. Shine is the biggest difference — my hair catches the light in a way it never used to.",
+            "verified": true
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

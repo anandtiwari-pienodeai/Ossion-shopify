@@ -1,18 +1,6 @@
 <section class="sc2" id="sc2-{{ section.id }}">
 
-  {%- comment -%}── 1. Hero Banner ────────────────────────────────{%- endcomment -%}
-  <div class="sc2__hero">
-    {%- if section.settings.banner_link != blank -%}<a href="{{ section.settings.banner_link }}" class="sc2__banner-link">{%- endif -%}
-    {%- if section.settings.banner_image != blank -%}
-      {{ section.settings.banner_image | image_url: width: 1800
-         | image_tag: class: 'sc2__banner-img', loading: 'lazy', widths: '750,1100,1500,1800', sizes: '100vw', alt: section.settings.banner_alt | default: '' }}
-    {%- else -%}
-      <div class="sc2__banner-ph"></div>
-    {%- endif -%}
-    {%- if section.settings.banner_link != blank -%}</a>{%- endif -%}
-  </div>
-
-  {%- comment -%}── 2. Feature Strip ──────────────────────────────{%- endcomment -%}
+  {%- comment -%}── 1. Feature Strip ──────────────────────────────{%- endcomment -%}
   {%- assign pill_blocks = section.blocks | where: 'type', 'feature_pill' -%}
   {%- if pill_blocks.size > 0 -%}
     <div class="sc2__strip" style="background-color: {{ section.settings.strip_bg }};">
@@ -71,7 +59,7 @@
     </div>
   {%- endif -%}
 
-  {%- comment -%}── 3. Bottom section ─────────────────────────────{%- endcomment -%}
+  {%- comment -%}── 2. Bottom section ─────────────────────────────{%- endcomment -%}
   <div class="sc2__bottom" style="background-color: {{ section.settings.bottom_bg }};">
     <div class="sc2__grid">
 
@@ -266,30 +254,6 @@
 .sc2 {
   font-family: 'Jost', sans-serif;
   overflow: hidden;
-}
-
-/* ── Hero Banner ──────────────────────────────────────── */
-.sc2__hero {
-  width: 100%;
-  line-height: 0;
-  margin-top:60px
-}
-
-.sc2__banner-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-}
-
-.sc2__banner-link {
-  display: block;
-}
-
-.sc2__banner-ph {
-  width: 100%;
-  height: 340px;
-  background: #e8e4dc;
 }
 
 /* ── Feature Strip ────────────────────────────────────── */
@@ -732,26 +696,6 @@
   "tag": "section",
   "class": "salon-choice-section",
   "settings": [
-    {
-      "type": "header",
-      "content": "Hero Banner"
-    },
-    {
-      "type": "image_picker",
-      "id": "banner_image",
-      "label": "Banner image"
-    },
-    {
-      "type": "text",
-      "id": "banner_alt",
-      "label": "Banner image alt text"
-    },
-    {
-      "type": "url",
-      "id": "banner_link",
-      "label": "Banner link",
-      "info": "Optional. Makes the hero banner clickable — link to any page, collection, or product."
-    },
     {
       "type": "header",
       "content": "Feature Strip"

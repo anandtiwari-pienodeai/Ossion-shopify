@@ -1,0 +1,190 @@
+{%- comment -%}
+  Ossian About Statement — full-bleed closing line. Ocean depth, a single
+  sentence, nothing competing with it.
+{%- endcomment -%}
+
+<section class="abst" id="abst-{{ section.id }}">
+  <div class="abst__waves" aria-hidden="true">
+    <svg class="abst__wave abst__wave--back" viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,58 C200,92 400,26 720,54 C1040,82 1240,34 1440,60 L1440,120 L0,120 Z"/>
+    </svg>
+    <svg class="abst__wave abst__wave--front" viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,84 C260,52 460,104 720,82 C980,60 1220,100 1440,76 L1440,120 L0,120 Z"/>
+    </svg>
+  </div>
+
+  <div class="abst__inner">
+    {%- if section.settings.mark != blank -%}
+      <span class="abst__mark" aria-hidden="true">{{ section.settings.mark }}</span>
+    {%- endif -%}
+
+    {%- if section.settings.statement != blank -%}
+      <p class="abst__statement">{{ section.settings.statement }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.cta_label != blank -%}
+      <a class="abst__btn" href="{{ section.settings.cta_url | default: '#' }}">
+        {{ section.settings.cta_label }}
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+.abst {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(80px, 11vw, 148px) 24px clamp(72px, 10vw, 128px);
+  text-align: center;
+  color: #ffffff;
+  background:
+    radial-gradient(64% 52% at 50% 18%, rgba(18, 118, 150, 0.5) 0%, transparent 70%),
+    linear-gradient(168deg, #052c45 0%, #041f36 46%, #020f1c 100%);
+}
+
+/* ===================== WAVES ===================== */
+.abst__waves {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: clamp(60px, 8vw, 118px);
+  transform: scaleY(-1);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.abst__wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+}
+
+.abst__wave path {
+  fill: #ffffff;
+}
+
+.abst__wave--back {
+  opacity: 0.08;
+  animation: abst-swell 21s linear infinite reverse;
+}
+
+.abst__wave--front {
+  opacity: 0.14;
+  animation: abst-swell 29s linear infinite;
+}
+
+@keyframes abst-swell {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ===================== CONTENT ===================== */
+.abst__inner {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.abst__mark {
+  display: block;
+  margin: 0 auto 26px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: rgba(143, 216, 234, 0.82);
+}
+
+.abst__statement {
+  margin: 0;
+  font-size: clamp(1.5rem, 4.2vw, 3rem);
+  font-weight: 300;
+  line-height: 1.26;
+  letter-spacing: -0.012em;
+  color: #ffffff;
+  text-wrap: balance;
+}
+
+.abst__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 38px;
+  padding: 14px 32px;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-decoration: none;
+  transition: background 0.24s ease, border-color 0.24s ease, transform 0.24s ease;
+}
+
+.abst__btn:hover {
+  background: rgba(143, 216, 234, 0.16);
+  border-color: rgba(143, 216, 234, 0.8);
+  transform: translateY(-2px);
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media screen and (max-width: 749px) {
+  .abst {
+    padding: 72px 20px 64px;
+  }
+
+  .abst__mark {
+    margin-bottom: 20px;
+    letter-spacing: 0.26em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .abst__wave {
+    animation: none;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "About Statement",
+  "tag": "section",
+  "class": "ossian-about-statement-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "mark",
+      "label": "Small label above",
+      "default": "OSSION PROFESSIONAL"
+    },
+    {
+      "type": "text",
+      "id": "statement",
+      "label": "Statement",
+      "default": "Inspired by the Ocean, Powered by Science."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Statement"
+    }
+  ]
+}
+{% endschema %}

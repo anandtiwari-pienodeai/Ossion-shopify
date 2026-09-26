@@ -1,467 +1,534 @@
-{%- assign product_blocks = section.blocks | where: "type", "product_card" -%}
-{%- assign feature_blocks = section.blocks | where: "type", "feature_item" -%}
+{%- liquid
+  assign product_blocks = section.blocks | where: 'type', 'product_card'
+  assign feature_blocks = section.blocks | where: 'type', 'feature_item'
+  assign card_count = product_blocks.size
+  assign accent = section.settings.accent_color | default: '#2f8cf8'
+  assign deep = section.settings.deep_color | default: '#22345a'
+  assign tint = section.settings.tint_color | default: '#e4edf8'
+-%}
 
-<section class="pshowcase" id="pshowcase-{{ section.id }}">
+<section
+  class="pshowcase{% if section.settings.media_first %} pshowcase--media-first{% endif %}{% if section.settings.image_fit == 'contain' %} pshowcase--fit-contain{% endif %}"
+  id="pshowcase-{{ section.id }}"
+  style="
+    --ps-accent: {{ accent }};
+    --ps-deep: {{ deep }};
+    --ps-tint: {{ tint }};
+    --ps-pad-top: {{ section.settings.padding_top }}px;
+    --ps-pad-bottom: {{ section.settings.padding_bottom }}px;
+  ">
 
-  {%- if section.settings.top_heading != blank or section.settings.top_heading_accent != blank -%}
-    <h2 class="pshowcase__top-heading page-width">
-      {{- section.settings.top_heading }}
-      {%- if section.settings.top_heading_accent != blank -%}
-        <em class="pshowcase__top-heading-accent">{{ section.settings.top_heading_accent }}</em>
-      {%- endif -%}
-    </h2>
+  {%- if section.settings.bg_image != blank -%}
+    <div class="pshowcase__bg" aria-hidden="true">
+      {{
+        section.settings.bg_image
+        | image_url: width: 2000
+        | image_tag: class: 'pshowcase__bg-img', alt: '', loading: 'lazy', widths: '600,900,1200,1600,2000'
+      }}
+    </div>
   {%- endif -%}
 
-  <div class="pshowcase__main page-width">
+  <div class="pshowcase__inner">
 
-    <!-- Left Panel -->
-    <div class="pshowcase__left">
-      <!-- Left panel background image -->
-      {%- if section.settings.bg_image != blank -%}
-        <div class="pshowcase__bg" aria-hidden="true">
-          {{ section.settings.bg_image | image_url: width: 1200 | image_tag: class: 'pshowcase__bg-img', alt: '', loading: 'lazy', widths: '400,700,1000,1200' }}
-        </div>
-      {%- endif -%}
-      {%- if section.settings.category_label != blank -%}
-        <p class="pshowcase__eyebrow">{{ section.settings.category_label }}</p>
-      {%- endif -%}
-      {%- if section.settings.heading != blank -%}
-        <h2 class="pshowcase__heading">{{ section.settings.heading }}</h2>
-      {%- endif -%}
-      {%- if section.settings.body_text != blank -%}
-        <p class="pshowcase__body">{{ section.settings.body_text }}</p>
-      {%- endif -%}
-      {%- if section.settings.cta_text != blank -%}
-        <a href="{{ section.settings.cta_link | default: '#' }}" class="pshowcase__cta">
-          {{ section.settings.cta_text }}
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      {%- endif -%}
-      <div class="pshowcase__trust">
-        {%- for i in (1..3) -%}
-          {%- assign icon_key = 'trust_icon_' | append: i -%}
-          {%- assign label_key = 'trust_label_' | append: i -%}
-          {%- assign label_val = section.settings[label_key] -%}
-          {%- assign icon_val = section.settings[icon_key] -%}
-          {%- if label_val != blank -%}
-            <div class="pshowcase__trust-item">
-              {%- if icon_val == 'flask' -%}
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M9 3v7L4 19a1 1 0 00.93 1.37h14.14A1 1 0 0020 19l-5-9V3"/><line x1="6.3" y1="16" x2="17.7" y2="16"/></svg>
-              {%- elsif icon_val == 'drop' -%}
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2C12 2 5 10 5 15a7 7 0 0014 0c0-5-7-13-7-13z"/></svg>
-              {%- elsif icon_val == 'shield' -%}
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
-              {%- elsif icon_val == 'leaf' -%}
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21c0 0-7-4.5-7-10.5A6 6 0 0111 4.5 6 6 0 0119 10.5C19 16.5 12 21 12 21z"/><path d="M12 12v9"/></svg>
-              {%- elsif icon_val == 'sparkle' -%}
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4M12 17v4M4 12h4M16 12h4"/><path d="M6.5 6.5l2.8 2.8M14.7 14.7l2.8 2.8M17.5 6.5l-2.8 2.8M9.3 14.7l-2.8 2.8"/></svg>
-              {%- else -%}
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/></svg>
-              {%- endif -%}
-              <span>{{ label_val }}</span>
-            </div>
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
-    </div>
-
-    <!-- Center: Featured Card -->
-    {%- for block in product_blocks limit: 1 -%}
-      {%- assign card_url = block.settings.collection.url | default: block.settings.link | default: '#' -%}
-      {%- assign card_name = block.settings.product.title | default: block.settings.custom_name | default: 'View product' -%}
-      <div class="pshowcase__card pshowcase__card--featured" {{ block.shopify_attributes }}>
-        {%- if block.settings.badge_label != blank -%}
-          <span class="pshowcase__badge">{{ block.settings.badge_label }}</span>
+    {%- if section.settings.top_heading != blank or section.settings.top_heading_accent != blank -%}
+      <h2 class="pshowcase__top-heading">
+        {{- section.settings.top_heading -}}
+        {%- if section.settings.top_heading_accent != blank -%}
+          <em class="pshowcase__top-heading-accent">{{ section.settings.top_heading_accent }}</em>
         {%- endif -%}
-        <a href="{{ card_url }}" class="pshowcase__img-link" aria-label="{{ card_name }}">
-          <div class="pshowcase__img-wrap">
-            {%- if block.settings.product != blank -%}
-              {{ block.settings.product.featured_image | image_url: width: 800 | image_tag: class: 'pshowcase__img', alt: block.settings.product.title, loading: 'lazy', widths: '400,600,800' }}
-            {%- elsif block.settings.image != blank -%}
-              {{ block.settings.image | image_url: width: 800 | image_tag: class: 'pshowcase__img', loading: 'lazy', widths: '400,600,800' }}
-            {%- else -%}
-              {{ 'product-1' | placeholder_svg_tag: 'pshowcase__img pshowcase__img--placeholder' }}
-            {%- endif -%}
-          </div>
-        </a>
-        <div class="pshowcase__card-footer">
-          {%- if block.settings.step_label != blank -%}
-            <span class="pshowcase__step">{{ block.settings.step_label }}</span>
-          {%- endif -%}
-          <div class="pshowcase__card-info">
-            <h3 class="pshowcase__name">
-              {%- if block.settings.product != blank -%}{{ block.settings.product.title }}{%- else -%}{{ block.settings.custom_name }}{%- endif -%}
-            </h3>
-            {%- if block.settings.descriptor != blank -%}
-              <p class="pshowcase__descriptor">{{ block.settings.descriptor }}</p>
-            {%- endif -%}
-          </div>
-          <a href="{{ card_url }}" class="pshowcase__arrow" aria-label="View product">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-    {%- endfor -%}
-
-    <!-- Right: Stacked Secondary Cards -->
-    {%- if product_blocks.size > 1 -%}
-      <div class="pshowcase__stack">
-        {%- for block in product_blocks limit: 2 offset: 1 -%}
-          {%- assign card_url = block.settings.collection.url | default: block.settings.link | default: '#' -%}
-          {%- assign card_name = block.settings.product.title | default: block.settings.custom_name | default: 'View product' -%}
-          <div class="pshowcase__card pshowcase__card--secondary" {{ block.shopify_attributes }}>
-            {%- if block.settings.badge_label != blank -%}
-              <span class="pshowcase__badge">{{ block.settings.badge_label }}</span>
-            {%- endif -%}
-            <a href="{{ card_url }}" class="pshowcase__img-link" aria-label="{{ card_name }}">
-              <div class="pshowcase__img-wrap">
-                {%- if block.settings.product != blank -%}
-                  {{ block.settings.product.featured_image | image_url: width: 600 | image_tag: class: 'pshowcase__img', alt: block.settings.product.title, loading: 'lazy', widths: '300,500,600' }}
-                {%- elsif block.settings.image != blank -%}
-                  {{ block.settings.image | image_url: width: 600 | image_tag: class: 'pshowcase__img', loading: 'lazy', widths: '300,500,600' }}
-                {%- else -%}
-                  {{ 'product-2' | placeholder_svg_tag: 'pshowcase__img pshowcase__img--placeholder' }}
-                {%- endif -%}
-              </div>
-            </a>
-            <div class="pshowcase__card-footer">
-              {%- if block.settings.step_label != blank -%}
-                <span class="pshowcase__step">{{ block.settings.step_label }}</span>
-              {%- endif -%}
-              <div class="pshowcase__card-info">
-                <h3 class="pshowcase__name">
-                  {%- if block.settings.product != blank -%}{{ block.settings.product.title }}{%- else -%}{{ block.settings.custom_name }}{%- endif -%}
-                </h3>
-                {%- if block.settings.descriptor != blank -%}
-                  <p class="pshowcase__descriptor">{{ block.settings.descriptor }}</p>
-                {%- endif -%}
-              </div>
-              <a href="{{ card_url }}" class="pshowcase__arrow" aria-label="View product">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-            </div>
-          </div>
-        {%- endfor -%}
-      </div>
+      </h2>
     {%- endif -%}
 
-  </div>
+    <div class="pshowcase__main">
 
-  <!-- Bottom Feature Bar -->
-  {%- if feature_blocks.size > 0 -%}
-    <div class="pshowcase__features">
-      <div class="pshowcase__features-inner page-width">
+      <div class="pshowcase__panel">
+        {%- if section.settings.category_label != blank -%}
+          <p class="pshowcase__eyebrow">
+            <span class="pshowcase__eyebrow-dot" aria-hidden="true"></span>
+            {{ section.settings.category_label }}
+          </p>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h3 class="pshowcase__heading">{{ section.settings.heading }}</h3>
+        {%- endif -%}
+
+        {%- if section.settings.body_text != blank -%}
+          <p class="pshowcase__body">{{ section.settings.body_text }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.cta_text != blank -%}
+          <a href="{{ section.settings.cta_link | default: '#' }}" class="pshowcase__cta">
+            <span>{{ section.settings.cta_text }}</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        {%- endif -%}
+
+        {%- assign has_trust = false -%}
+        {%- for i in (1..3) -%}
+          {%- assign label_key = 'trust_label_' | append: i -%}
+          {%- if section.settings[label_key] != blank -%}
+            {%- assign has_trust = true -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if has_trust -%}
+          <ul class="pshowcase__trust" role="list">
+            {%- for i in (1..3) -%}
+              {%- liquid
+                assign icon_key = 'trust_icon_' | append: i
+                assign label_key = 'trust_label_' | append: i
+                assign label_val = section.settings[label_key]
+                assign icon_val = section.settings[icon_key]
+              -%}
+              {%- if label_val != blank -%}
+                <li class="pshowcase__trust-item">
+                  {% render 'ossian-showcase-icon', icon: icon_val, size: 18 %}
+                  <span>{{ label_val }}</span>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      {%- if card_count > 0 -%}
+        <div class="pshowcase__cards" data-count="{{ card_count }}">
+          {%- for block in product_blocks -%}
+            {%- liquid
+              assign card_url = block.settings.collection.url | default: block.settings.link | default: '#'
+              assign card_name = block.settings.product.title | default: block.settings.custom_name | default: 'View product'
+              assign name_down = block.settings.custom_name | downcase
+              assign default_image = blank
+              if name_down contains 'wax'
+                assign default_image = 'ossion-wax.png'
+              elsif name_down contains 'peel'
+                assign default_image = 'ossion-peel-off.png'
+              elsif name_down contains 'facial kit'
+                assign default_image = 'ossion-facial-kit.png'
+              endif
+
+              assign is_featured = false
+              if forloop.first and card_count == 3
+                assign is_featured = true
+              endif
+            -%}
+            <article
+              class="pshowcase__card{% if is_featured %} pshowcase__card--featured{% endif %}"
+              {{ block.shopify_attributes }}>
+              <a class="pshowcase__card-link" href="{{ card_url }}" aria-label="{{ card_name | escape }}">
+                <div class="pshowcase__media">
+                  {%- if block.settings.badge_label != blank -%}
+                    <span class="pshowcase__badge">{{ block.settings.badge_label }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.step_label != blank -%}
+                    <span class="pshowcase__step">{{ block.settings.step_label }}</span>
+                  {%- endif -%}
+
+                  {%- if block.settings.product != blank -%}
+                    {{
+                      block.settings.product.featured_image
+                      | image_url: width: 900
+                      | image_tag: class: 'pshowcase__img', alt: block.settings.product.title, loading: 'lazy', widths: '300,500,700,900'
+                    }}
+                  {%- elsif block.settings.image != blank -%}
+                    {{
+                      block.settings.image
+                      | image_url: width: 900
+                      | image_tag: class: 'pshowcase__img', alt: card_name, loading: 'lazy', widths: '300,500,700,900'
+                    }}
+                  {%- elsif default_image != blank -%}
+                    <img
+                      src="{{ default_image | asset_url }}"
+                      alt="{{ card_name | escape }}"
+                      class="pshowcase__img"
+                      width="900"
+                      height="900"
+                      loading="lazy">
+                  {%- else -%}
+                    {{ 'product-1' | placeholder_svg_tag: 'pshowcase__img pshowcase__img--placeholder' }}
+                  {%- endif -%}
+                </div>
+
+                <div class="pshowcase__card-footer">
+                  <div class="pshowcase__card-info">
+                    <h4 class="pshowcase__name">{{ card_name }}</h4>
+                    {%- if block.settings.descriptor != blank -%}
+                      <p class="pshowcase__descriptor">{{ block.settings.descriptor }}</p>
+                    {%- endif -%}
+                  </div>
+                  <span class="pshowcase__arrow" aria-hidden="true">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </span>
+                </div>
+              </a>
+            </article>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+    </div>
+
+    {%- if feature_blocks.size > 0 -%}
+      <ul class="pshowcase__features" role="list" data-count="{{ feature_blocks.size }}">
         {%- for block in feature_blocks -%}
-          <div class="pshowcase__feature" {{ block.shopify_attributes }}>
-            <div class="pshowcase__feature-icon">
-              {%- case block.settings.icon -%}
-                {%- when 'beaker' -%}
-                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M9 3v7L4 19a1 1 0 00.93 1.37h14.14A1 1 0 0020 19l-5-9V3"/><line x1="6.3" y1="16" x2="17.7" y2="16"/></svg>
-                {%- when 'triangle' -%}
-                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3L2 21h20L12 3z"/><path d="M12 8v6"/><circle cx="12" cy="17.5" r="0.6" fill="currentColor" stroke="none"/></svg>
-                {%- when 'drop' -%}
-                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2C12 2 5 10 5 15a7 7 0 0014 0c0-5-7-13-7-13z"/><path d="M9.5 15.5a3 3 0 003 2"/></svg>
-                {%- when 'person' -%}
-                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
-                {%- when 'shield' -%}
-                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
-                {%- when 'leaf' -%}
-                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21c0 0-7-4.5-7-10.5A6 6 0 0111 4.5 6 6 0 0119 10.5C19 16.5 12 21 12 21z"/><path d="M12 12v9"/></svg>
-                {%- when 'sparkle' -%}
-                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4M12 17v4M4 12h4M16 12h4"/><path d="M6.5 6.5l2.8 2.8M14.7 14.7l2.8 2.8M17.5 6.5l-2.8 2.8M9.3 14.7l-2.8 2.8"/></svg>
-                {%- else -%}
-                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/></svg>
-              {%- endcase -%}
-            </div>
-            <div class="pshowcase__feature-text">
+          <li class="pshowcase__feature" {{ block.shopify_attributes }}>
+            <span class="pshowcase__feature-icon">
+              {% render 'ossian-showcase-icon', icon: block.settings.icon, size: 24 %}
+            </span>
+            <span class="pshowcase__feature-text">
               {%- if block.settings.title != blank -%}
                 <strong>{{ block.settings.title }}</strong>
               {%- endif -%}
               {%- if block.settings.subtitle != blank -%}
-                <p>{{ block.settings.subtitle }}</p>
+                <span>{{ block.settings.subtitle }}</span>
               {%- endif -%}
-            </div>
-          </div>
+            </span>
+          </li>
         {%- endfor -%}
-      </div>
-    </div>
-  {%- endif -%}
+      </ul>
+    {%- endif -%}
 
+  </div>
 </section>
 
 {% stylesheet %}
 
-/* ── Base ── */
-.pshowcase,
+/* ══ Ossian Product Showcase ══ */
+
+.pshowcase {
+  --ps-gutter: 16px;
+  --ps-radius: 20px;
+  --ps-ink: var(--ps-deep, #22345a);
+  --ps-muted: rgba(34, 52, 90, 0.66);
+  --ps-hairline: rgba(34, 52, 90, 0.1);
+  --ps-shadow: 0 18px 40px -22px rgba(19, 35, 68, 0.55);
+  --ps-shadow-lift: 0 28px 54px -24px rgba(19, 35, 68, 0.6);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: var(--ps-pad-top, 72px) var(--ps-pad-bottom, 72px);
+  background: var(--ps-tint, #e4edf8);
+  font-family: 'Jost', 'Helvetica Neue', Arial, sans-serif;
+  color: var(--ps-ink);
+}
+
 .pshowcase * {
-  font-family: 'Jost', sans-serif;
   box-sizing: border-box;
 }
 
-/* ── Section ── */
-.pshowcase {
-  position: relative;
-  overflow: hidden;
-  background: #e8eef5;
-  padding: 0 0 0;
-  display: flex;
-  flex-direction: column;
-  height: min(850px, 90vh);
-}
-
-/* ── Top Section Heading ── */
-.pshowcase__top-heading {
-  position: relative;
-  z-index: 1;
-  flex-shrink: 0;
-  text-align: center;
-  font-size: clamp(1.75rem, 3.2vw, 2.75rem);
-  font-weight: 500;
-  color: #22345a;
-  line-height: 1.3;
-  margin: 0;
-  padding: 44px 0 0;
-  letter-spacing: -0.01em;
-}
-
-.pshowcase__top-heading-accent {
-  font-style: italic;
-  color: #2f8cf8;
-}
-
-/* ── Background Image — confined to the left text panel ── */
-.pshowcase__bg {
+/* Soft light wash so the flat tint reads as depth, not a colour block */
+.pshowcase::before {
+  content: '';
   position: absolute;
   inset: 0;
   z-index: -1;
+  background:
+    radial-gradient(70% 55% at 8% -5%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 65%),
+    radial-gradient(55% 45% at 100% 105%, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 70%);
+  pointer-events: none;
+}
+
+/* Optional background photo, dimmed behind the content */
+.pshowcase__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
 }
 
 .pshowcase__bg-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
   display: block;
 }
 
-/* ── Main 3-col Grid ── */
-.pshowcase__main {
+.pshowcase__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.72));
+}
+
+.pshowcase__inner {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: 1.35fr 1.2fr 1.15fr;
-  grid-template-rows: minmax(0, 1fr);
-  gap: 20px;
-  align-items: stretch;
-  padding-top: 60px;
-  padding-bottom: 20px;
-  flex: 1;
-  min-height: 0;
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: var(--ps-gutter);
 }
 
-/* ── Left Panel ── */
-.pshowcase__left {
-  position: relative;
+/* ── Section heading ── */
+.pshowcase__top-heading {
+  margin: 0 0 clamp(26px, 3.4vw, 44px);
+  text-align: center;
+  font-size: clamp(1.75rem, 3.1vw, 2.75rem);
+  font-weight: 500;
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+  color: var(--ps-ink);
+  text-wrap: balance;
+}
+
+.pshowcase__top-heading-accent {
+  font-style: italic;
+  color: var(--ps-accent, #2f8cf8);
+  margin-inline-start: 0.22em;
+}
+
+/* ── Main split ── */
+.pshowcase__main {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.42fr);
+  gap: clamp(18px, 2.4vw, 32px);
+  align-items: stretch;
+}
+
+/* Mirrored layout: cards lead, and keep the wider track under them */
+.pshowcase--media-first .pshowcase__main {
+  grid-template-columns: minmax(0, 1.42fr) minmax(0, 0.92fr);
+}
+
+.pshowcase--media-first .pshowcase__panel {
+  order: 2;
+}
+
+/* ── Copy panel ── */
+.pshowcase__panel {
   display: flex;
   flex-direction: column;
-  padding: 60px 40px 60px 40px;
-  min-height: 0;
-  overflow: hidden;
+  justify-content: center;
+  padding: clamp(26px, 2.6vw, 40px);
+  border-radius: var(--ps-radius);
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: var(--ps-shadow);
+  backdrop-filter: blur(6px);
 }
 
-/* Eyebrow — exact Figma: 32px Jost Medium, #005cc8, tracking -0.64px, NOT italic */
 .pshowcase__eyebrow {
-  font-size: clamp(1.25rem, 2.22vw, 2rem);
-  font-weight: 500;
-  font-style: normal;
-  color: #005cc8;
-  letter-spacing: -0.02em;
-  margin: 0 0 10px;
-  line-height: 1.3;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  margin: 0 0 16px;
+  padding: 7px 14px 7px 12px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--ps-hairline);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ps-accent, #2f8cf8);
+  line-height: 1;
 }
 
-/* Heading — exact Figma: 54px Jost Medium, #22345a, line-height 68px */
+.pshowcase__eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
 .pshowcase__heading {
-  font-size: clamp(2rem, 3.75vw, 3.375rem);
+  margin: 0 0 14px;
+  font-size: clamp(1.75rem, 2.5vw, 2.5rem);
   font-weight: 500;
-  color: #22345a;
-  line-height: 1.26;
-  margin: 0 0 20px;
-  letter-spacing: -0.01em;
+  line-height: 1.16;
+  letter-spacing: -0.02em;
+  color: var(--ps-ink);
+  text-wrap: balance;
 }
 
-/* Body — exact Figma: 28px Jost Medium, #22345a, line-height 42px */
 .pshowcase__body {
-  font-size: clamp(1rem, 1.94vw, 1.75rem);
-  font-weight: 500;
-  color: #22345a;
-  line-height: 1.5;
-  margin: 0 0 32px;
+  margin: 0 0 clamp(22px, 2.4vw, 30px);
+  font-size: clamp(1rem, 1.15vw, 1.1875rem);
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--ps-muted);
+  max-width: 34ch;
 }
 
-/* CTA — exact Figma: 20px Jost SemiBold, #22345a, border 2px #2f8cf8, radius 8px */
 .pshowcase__cta {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 14px 22px;
-  background: #fff;
-  border: 2px solid #2f8cf8;
-  border-radius: 8px;
-  color: #22345a;
-  font-size: clamp(0.95rem, 1.39vw, 1.25rem);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  text-decoration: none;
   align-self: flex-start;
-  transition: background 0.22s, color 0.22s, border-color 0.22s;
+  padding: 14px 24px;
+  border-radius: 100px;
+  border: 0;
+  background: var(--ps-ink);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
   white-space: nowrap;
+  transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .pshowcase__cta svg {
-  stroke: #22345a;
-  transition: stroke 0.22s;
   flex-shrink: 0;
+  transition: transform 0.25s ease;
 }
 
 .pshowcase__cta:hover {
-  background: #2f8cf8;
+  background: var(--ps-accent, #2f8cf8);
+  transform: translateY(-2px);
+  box-shadow: var(--ps-shadow);
   color: #fff;
-  border-color: #2f8cf8;
 }
 
 .pshowcase__cta:hover svg {
-  stroke: #fff;
+  transform: translateX(3px);
 }
 
-/* Trust icons pinned to bottom */
+.pshowcase__cta:focus-visible,
+.pshowcase__card-link:focus-visible {
+  outline: 2px solid var(--ps-accent, #2f8cf8);
+  outline-offset: 3px;
+}
+
+/* ── Trust chips, pinned to the bottom of the panel ── */
 .pshowcase__trust {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
-  margin-top: auto;
-  padding-top: 36px;
+  list-style: none;
+  margin: 0;
+  padding: clamp(22px, 2.4vw, 32px) 0 0;
 }
 
 .pshowcase__trust-item {
-  display: flex;
-  flex-direction: column;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  flex: 1;
+  gap: 7px;
+  padding: 8px 13px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--ps-hairline);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--ps-ink);
 }
 
 .pshowcase__trust-item svg {
-  stroke: #005cc8;
+  color: var(--ps-accent, #2f8cf8);
   flex-shrink: 0;
 }
 
-/* Trust label — exact Figma: 14px Jost Medium, #005cc8, tracking -0.28px */
-.pshowcase__trust-item span {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #005cc8;
-  text-align: center;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+/* ── Card grid ── */
+.pshowcase__cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: clamp(12px, 1.4vw, 18px);
+  min-width: 0;
 }
 
-/* ── Cards shared ── */
+.pshowcase__cards[data-count='1'] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.pshowcase__cards[data-count='3'] .pshowcase__card--featured {
+  grid-row: span 2;
+}
+
 .pshowcase__card {
-  background: #fff;
-  border-radius: 16px;
-  overflow: hidden;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 12px 28px rgba(34, 52, 90, 0.12);
+  min-width: 0;
+  border-radius: var(--ps-radius);
+  background: #fff;
+  box-shadow: var(--ps-shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.pshowcase__stack {
+.pshowcase__card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--ps-shadow-lift);
+}
+
+.pshowcase__card-link {
   display: flex;
   flex-direction: column;
-  gap: 16px;
   height: 100%;
-}
-
-.pshowcase__card--secondary {
-  flex: 1;
-}
-
-/* ── Badge — white pill, thin border ── */
-.pshowcase__badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  z-index: 2;
-  background: rgba(255, 255, 255, 0.97);
-  border: 1px solid rgba(34, 52, 90, 0.2);
-  color: #22345a;
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  padding: 5px 12px;
-  border-radius: 100px;
-  line-height: 1;
-}
-
-/* ── Product Image ── */
-.pshowcase__img-link {
-  flex: 1;
-  display: block;
-  text-decoration: none;
-  min-height: 0;
-}
-
-.pshowcase__img-wrap {
+  border-radius: inherit;
   overflow: hidden;
-  background: #eaecef;
-  height: 100%;
+  text-decoration: none;
+  color: inherit;
 }
 
+/* ── Card media ── */
+.pshowcase__media {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: linear-gradient(170deg, #f3f6fb 0%, #e7eef7 100%);
+}
+
+.pshowcase__cards[data-count='3'] .pshowcase__card:not(.pshowcase__card--featured) .pshowcase__media {
+  aspect-ratio: auto;
+  flex: 1;
+  min-height: 150px;
+}
 
 .pshowcase__img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.5s ease;
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.3, 1);
 }
 
-.pshowcase__img--placeholder {
-  width: 100%;
-  height: 100%;
+.pshowcase--fit-contain .pshowcase__img {
+  object-fit: contain;
+  padding: 10%;
 }
 
 .pshowcase__card:hover .pshowcase__img {
-  transform: scale(1.04);
+  transform: scale(1.05);
 }
 
-/* ── Card Footer ── */
+.pshowcase__badge,
+.pshowcase__step {
+  position: absolute;
+  top: 12px;
+  z-index: 2;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: 6px 11px;
+  border-radius: 100px;
+}
+
+.pshowcase__badge {
+  left: 12px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--ps-hairline);
+  color: var(--ps-ink);
+  backdrop-filter: blur(4px);
+}
+
+.pshowcase__step {
+  right: 12px;
+  background: var(--ps-ink);
+  color: #fff;
+}
+
+/* ── Card footer ── */
 .pshowcase__card-footer {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 16px 18px;
   flex-shrink: 0;
-  background: #fff;
-}
-
-/* Step tag — exact Figma: dark navy pill */
-.pshowcase__step {
-  display: inline-flex;
-  align-items: center;
-  background: #22345a;
-  color: #fff;
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 5px 10px;
-  border-radius: 6px;
-  white-space: nowrap;
-  flex-shrink: 0;
-  line-height: 1;
 }
 
 .pshowcase__card-info {
@@ -469,261 +536,220 @@
   min-width: 0;
 }
 
-/* Product name — exact Figma: 20px Jost Bold, #22345a, line-height 26px */
 .pshowcase__name {
-  font-size: clamp(0.95rem, 1.39vw, 1.25rem);
-  font-weight: 700;
-  color: #22345a;
-  margin: 0 0 2px;
-  line-height: 1.3;
-}
-
-/* Descriptor — exact Figma: 18px Jost Medium, #22345a, line-height 26px */
-.pshowcase__descriptor {
-  font-size: clamp(0.85rem, 1.25vw, 1.125rem);
-  font-weight: 500;
-  color: #22345a;
-  opacity: 0.7;
   margin: 0;
-  line-height: 1.44;
+  font-size: clamp(1rem, 1.1vw, 1.1875rem);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--ps-ink);
 }
 
-/* ── Arrow Button ── */
+.pshowcase__descriptor {
+  margin: 3px 0 0;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.35;
+  color: var(--ps-muted);
+}
+
 .pshowcase__arrow {
-  width: 36px;
-  height: 36px;
-  min-width: 36px;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
   border-radius: 50%;
-  border: 1.5px solid #22345a;
+  border: 1.5px solid var(--ps-hairline);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #22345a;
-  text-decoration: none;
-  flex-shrink: 0;
-  transition: background 0.2s, color 0.2s;
+  color: var(--ps-ink);
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
 
-.pshowcase__arrow:hover {
-  background: #22345a;
+.pshowcase__card:hover .pshowcase__arrow {
+  background: var(--ps-accent, #2f8cf8);
+  border-color: var(--ps-accent, #2f8cf8);
   color: #fff;
+  transform: translateX(2px);
 }
 
-/* ── Feature Bar — exact Figma: 16px Jost Medium/Regular, #22345a ── */
+/* ── Feature bar ── */
 .pshowcase__features {
-  position: relative;
-  z-index: 1;
-  flex-shrink: 0;
-  padding:0px 0px 10px 0px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  list-style: none;
+  margin: clamp(18px, 2.4vw, 32px) 0 0;
+  padding: 0;
+  border-radius: var(--ps-radius);
+  background: #fff;
+  box-shadow: var(--ps-shadow);
+  overflow: hidden;
 }
 
-.pshowcase__features-inner {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  background: #fff;
-  box-shadow: 0 10px 24px rgba(34, 52, 90, 0.1);
+.pshowcase__features[data-count='3'] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.pshowcase__features[data-count='2'] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.pshowcase__features[data-count='1'] {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .pshowcase__feature {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 22px 28px;
-  border-right: 1px solid rgba(34, 52, 90, 0.1);
+  gap: 14px;
+  padding: 20px 22px;
+  box-shadow: inset 1px 0 0 var(--ps-hairline);
 }
 
+.pshowcase__feature:first-child {
+  box-shadow: none;
+}
 
 .pshowcase__feature-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
   flex-shrink: 0;
+  border-radius: 12px;
+  background: rgba(47, 140, 248, 0.1);
+  background: color-mix(in srgb, var(--ps-accent, #2f8cf8) 12%, transparent);
+  color: var(--ps-accent, #2f8cf8);
 }
 
-.pshowcase__feature-icon svg {
-  stroke: #005cc8;
-  display: block;
+.pshowcase__feature-text {
+  min-width: 0;
 }
 
-/* Feature title — 16px Jost Medium */
 .pshowcase__feature-text strong {
   display: block;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #22345a;
-  margin-bottom: 2px;
+  font-size: 0.9375rem;
+  font-weight: 600;
   line-height: 1.25;
+  color: var(--ps-ink);
 }
 
-/* Feature subtitle — 16px Jost Regular */
-.pshowcase__feature-text p {
-  font-size: 1rem;
+.pshowcase__feature-text span {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.875rem;
   font-weight: 400;
-  color: #4a5876;
-  margin: 0;
-  line-height: 1.25;
+  line-height: 1.3;
+  color: var(--ps-muted);
 }
 
-/* ── Tablet (900px) ── */
-@media (max-width: 900px) {
+/* ── Desktop gutters ── */
+@media screen and (min-width: 750px) {
   .pshowcase {
-    height: auto;
-    overflow: visible;
-  }
-
-  .pshowcase__main {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: none;
-    gap: 14px;
-    padding-top: 40px;
-    padding-bottom: 16px;
-    flex: none;
-    min-height: 0;
-  }
-
-  .pshowcase__left {
-    grid-column: 1 / -1;
-    padding: 0 0 16px;
-    min-height: 0;
-    overflow: visible;
-  }
-
-  .pshowcase__trust {
-    margin-top: 24px;
-    padding-top: 0;
-    gap: 16px;
-  }
-
-  .pshowcase__trust-item {
-    flex: 0 0 auto;
-  }
-
-  .pshowcase__features-inner {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .pshowcase__feature:nth-child(2) {
-    border-right: none;
-  }
-
-  .pshowcase__feature:nth-child(1),
-  .pshowcase__feature:nth-child(2) {
-    border-bottom: 1px solid rgba(34, 52, 90, 0.1);
-  }
-
-  .pshowcase__feature {
-    padding: 18px 20px;
+    --ps-gutter: 40px;
   }
 }
 
-/* ── Mobile (600px) ── */
-@media (max-width: 600px) {
+/* ── Stack the split ── */
+@media screen and (max-width: 989px) {
   .pshowcase__main {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding-top: 32px;
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .pshowcase__left {
-    padding: 20px 20px 24px;
+  .pshowcase--media-first .pshowcase__main {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .pshowcase__top-heading {
-    padding: 28px 20px 0;
-    font-size: 1.75rem;
-  }
-
-  .pshowcase__eyebrow {
-    font-size: 1.75rem;
-    margin: 0 0 8px;
-  }
-
-  .pshowcase__heading {
-    font-size: 2.5rem;
-    line-height: 1.15;
-    margin: 0 0 16px;
+  .pshowcase--media-first .pshowcase__panel {
+    order: 0;
   }
 
   .pshowcase__body {
-    font-size: 1.125rem;
-    line-height: 1.4;
-    margin: 0 0 24px;
+    max-width: 52ch;
   }
 
-  .pshowcase__cta {
-    border-radius: 100px;
+  .pshowcase__features {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .pshowcase__trust {
-    gap: 0;
-    padding: 20px 0 0;
-    margin: 20px -20px 0;
-    border-top: 1px solid rgba(34, 52, 90, 0.1);
+  .pshowcase__feature:nth-child(odd) {
+    box-shadow: none;
   }
 
-  .pshowcase__trust-item {
-    flex: 1;
-    padding: 0 8px;
-    border-right: 1px solid rgba(34, 52, 90, 0.15);
+  .pshowcase__feature:nth-child(n + 3) {
+    box-shadow: inset 0 1px 0 var(--ps-hairline);
   }
 
-  .pshowcase__trust-item:last-child {
-    border-right: none;
+  .pshowcase__feature:nth-child(even):nth-child(n + 3) {
+    box-shadow: inset 1px 0 0 var(--ps-hairline), inset 0 1px 0 var(--ps-hairline);
+  }
+}
+
+/* ── Mobile: cards become a swipeable rail ── */
+@media screen and (max-width: 749px) {
+  .pshowcase__panel {
+    padding: 24px 20px 22px;
   }
 
-  .pshowcase__stack {
-    flex-direction: row;
-    height: auto;
-    gap: 10px;
+  .pshowcase__cards,
+  .pshowcase__cards[data-count='1'] {
+    display: flex;
+    grid-auto-rows: auto;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--ps-gutter);
+    scrollbar-width: none;
+    margin-inline: calc(var(--ps-gutter) * -1);
+    padding-inline: var(--ps-gutter);
+    padding-block-end: 4px;
   }
 
-  .pshowcase__card--secondary {
-    flex: 1;
+  .pshowcase__cards::-webkit-scrollbar {
+    display: none;
   }
 
-  .pshowcase__card-footer {
-    padding: 10px 12px;
-    gap: 7px;
+  .pshowcase__card {
+    flex: 0 0 74%;
+    max-width: 290px;
+    scroll-snap-align: start;
   }
 
-  .pshowcase__step {
-    font-size: 0.5rem;
-    padding: 4px 7px;
+  .pshowcase__cards[data-count='1'] .pshowcase__card {
+    flex-basis: 100%;
+    max-width: none;
   }
 
-  .pshowcase__name {
-    font-size: 0.85rem;
+  .pshowcase__cards[data-count='3'] .pshowcase__card:not(.pshowcase__card--featured) .pshowcase__media {
+    aspect-ratio: 4 / 5;
+    flex: none;
   }
 
-  .pshowcase__descriptor {
-    font-size: 0.72rem;
-  }
-
-  .pshowcase__arrow {
-    width: 28px;
-    height: 28px;
-    min-width: 28px;
-  }
-
-  .pshowcase__arrow svg {
-    width: 12px;
-    height: 12px;
-  }
-
-  .pshowcase__features-inner {
-    grid-template-columns: repeat(2, 1fr);
+  .pshowcase__features {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .pshowcase__feature {
-    padding: 16px 14px;
-    gap: 10px;
+    padding: 16px 18px;
+    box-shadow: inset 0 1px 0 var(--ps-hairline);
   }
 
-  .pshowcase__feature-icon svg {
-    width: 28px;
-    height: 28px;
+  .pshowcase__feature:first-child {
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pshowcase *,
+  .pshowcase *::before,
+  .pshowcase *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
   }
 
-  .pshowcase__feature-text strong,
-  .pshowcase__feature-text p {
-    font-size: 0.85rem;
+  .pshowcase__card:hover,
+  .pshowcase__cta:hover {
+    transform: none;
   }
 }
 
@@ -748,13 +774,12 @@
     {
       "type": "text",
       "id": "top_heading_accent",
-      "label": "Heading accent (italic, blue)",
+      "label": "Heading accent (italic, accent colour)",
       "default": "Hair Needs"
     },
     {
-      "type": "image_picker",
-      "id": "bg_image",
-      "label": "Section background image"
+      "type": "header",
+      "content": "Copy Panel"
     },
     {
       "type": "text",
@@ -787,7 +812,72 @@
     },
     {
       "type": "header",
-      "content": "Trust Icons"
+      "content": "Layout & Colour"
+    },
+    {
+      "type": "checkbox",
+      "id": "media_first",
+      "label": "Show product cards first (mirrored layout)",
+      "info": "Use on alternating sections so two showcases in a row don't look identical.",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Product image fit",
+      "options": [
+        { "value": "cover", "label": "Fill card (crop)" },
+        { "value": "contain", "label": "Fit whole product (padded)" }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent colour",
+      "default": "#2f8cf8"
+    },
+    {
+      "type": "color",
+      "id": "deep_color",
+      "label": "Text colour",
+      "default": "#22345a"
+    },
+    {
+      "type": "color",
+      "id": "tint_color",
+      "label": "Background tint",
+      "default": "#e4edf8"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Section background image",
+      "info": "Optional. Shown behind a light veil."
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "header",
+      "content": "Trust Chips"
     },
     {
       "type": "select",
