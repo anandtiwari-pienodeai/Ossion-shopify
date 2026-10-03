@@ -61,7 +61,7 @@
       "name": "Hero Carousel",
       "settings": {
         "autoplay": true,
-        "autoplay_speed": "5000"
+        "autoplay_speed": "3000"
       }
     },
     "ossian_brand_pillars": {
@@ -71,52 +71,56 @@
           "type": "pillar",
           "settings": {
             "image": "shopify://shop_images/image_208_1.png",
-            "heading_line1": "From the Depths",
-            "heading_line2": "of Marine Science",
+            "heading_line1": "From the Depths of",
+            "heading_line2": "Marine Science",
             "accent_line2": true,
             "body_text": "Advanced formulations inspired by the ocean. Proven by science.",
             "overlay_opacity": 80,
             "button_label": "Our Science",
-            "button_link": ""
+            "button_link": "",
+            "label": "Our Science"
           }
         },
         "pillar_haircare": {
           "type": "pillar",
           "settings": {
             "image": "shopify://shop_images/image_211.png",
-            "heading_line1": "Heads up:",
-            "heading_line2": "Care Beyond the chair",
+            "heading_line1": "Complete Care for",
+            "heading_line2": "Every Strand",
             "accent_line2": true,
-            "body_text": "Expert care for every strand. Because your hair deserves more than just a salon visit.",
+            "body_text": "Shampoo, conditioner, treatments and more for stronger, healthier hair.",
             "overlay_opacity": 50,
-            "button_label": "Hair Care",
-            "button_link": ""
+            "button_label": "Shop Hair Care",
+            "button_link": "",
+            "label": "Hair Care"
           }
         },
         "pillar_promise": {
           "type": "pillar",
           "settings": {
             "image": "shopify://shop_images/image_209_1.png",
-            "heading_line1": "Water Smart.",
-            "heading_line2": "Every Drop Counts.",
+            "heading_line1": "Style with",
+            "heading_line2": "Confidence",
             "accent_line2": true,
-            "body_text": "We use clean, conscious innovation for a better tomorrow.",
+            "body_text": "Professional styling solutions for every look and occasion.",
             "overlay_opacity": 70,
-            "button_label": "Our Promise",
-            "button_link": ""
+            "button_label": "Shop Styling",
+            "button_link": "",
+            "label": "Styling"
           }
         },
         "pillar_sustainability": {
           "type": "pillar",
           "settings": {
             "image": "shopify://shop_images/image_210_1.png",
-            "heading_line1": "WE ACT",
-            "heading_line2": "On our purpose always",
-            "accent_line2": false,
-            "body_text": "Better ingredients. Cleaner choices. stronger planet. Stronger you.",
+            "heading_line1": "Trusted by",
+            "heading_line2": "Professionals",
+            "accent_line2": true,
+            "body_text": "Salon performance. Everyday confidence.",
             "overlay_opacity": 70,
-            "button_label": "Sustainability",
-            "button_link": ""
+            "button_label": "Our Promise",
+            "button_link": "",
+            "label": "Real Results"
           }
         }
       },
@@ -129,15 +133,9 @@
       "name": "Brand Pillars",
       "settings": {
         "hero_image": "shopify://shop_images/image_212_1.png",
-        "hero_brand": "OSSION",
-        "hero_brand_sub": "PROFESSIONAL",
-        "hero_tagline_line1": "Salon Science",
-        "hero_tagline_line2": "At Its Best",
-        "hero_cta_label": "Explore Ossion",
         "hero_link": "",
-        "eyebrow_script": "Welcome to our world.",
-        "heading_white": "Real Science.",
-        "heading_accent": "Real Results."
+        "section_height": 680,
+        "hero_alt": "OSSION Professional — Salon science at its best"
       }
     },
     "ossian_hair_solutions": {

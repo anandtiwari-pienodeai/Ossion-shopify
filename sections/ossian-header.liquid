@@ -15,6 +15,7 @@
 {%- liquid
   assign nav_items = section.blocks | where: 'type', 'nav_item'
   assign sidebar_items = section.blocks | where: 'type', 'sidebar_category'
+  assign promo_blocks = section.blocks | where: 'type', 'mega_menu_promo'
   assign fallback_links = section.settings.menu.links
   assign has_nav = false
   if nav_items.size > 0 or fallback_links.size > 0
@@ -156,78 +157,42 @@
 
           {%- else -%}
             {%- comment -%}
-              Fallback: render the chosen linklist, including its nested child links.
-              A top-level link with children becomes a dropdown; a child with its own
-              children becomes a headed column inside that dropdown.
+              Fallback: render the chosen linklist. A top-level link with children opens
+              the mega menu (snippets/ossian-mega-menu.liquid); its promo panel is taken
+              from the "Mega menu promo" block whose menu item matches the link title.
             {%- endcomment -%}
             {%- for link in fallback_links -%}
-              <li class="ossian-navbar__menu-item">
+              {%- assign menu_id = 'link-' | append: forloop.index0 -%}
+              <li class="ossian-navbar__menu-item{% if link.links.size > 0 %} ossian-navbar__menu-item--mega{% endif %}">
                 {%- if link.links.size > 0 -%}
-                  {%- assign has_grandchildren = false -%}
-                  {%- for child in link.links -%}
-                    {%- if child.links.size > 0 -%}
-                      {%- assign has_grandchildren = true -%}
-                    {%- endif -%}
-                  {%- endfor -%}
 
                   <button
                     type="button"
                     class="ossian-navbar__menu-link ossian-navbar__menu-trigger{% if link.active or link.child_active %} is-active{% endif %}"
                     aria-expanded="false"
                     aria-haspopup="true"
-                    data-mega-menu-trigger="link-{{ forloop.index0 }}"
+                    data-mega-menu-trigger="{{ menu_id }}"
                   >
                     {{ link.title }}
                     <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg>
                   </button>
 
-                  <div
-                    class="ossian-dropdown{% if has_grandchildren %} ossian-dropdown--columns{% endif %}"
-                    data-mega-menu="link-{{ forloop.index0 }}"
-                    hidden
-                  >
-                    {%- if has_grandchildren -%}
-                      <div class="ossian-dropdown__cols">
-                        {%- for child in link.links -%}
-                          <div class="ossian-dropdown__col">
-                            <a href="{{ child.url }}" class="ossian-dropdown__col-heading">{{ child.title }}</a>
-                            {%- if child.links.size > 0 -%}
-                              <ul class="ossian-dropdown__col-list">
-                                {%- for grandchild in child.links -%}
-                                  <li>
-                                    <a href="{{ grandchild.url }}"{% if grandchild.current %} aria-current="page"{% endif %}>
-                                      {{ grandchild.title }}
-                                    </a>
-                                  </li>
-                                {%- endfor -%}
-                              </ul>
-                            {%- endif -%}
-                          </div>
-                        {%- endfor -%}
-                      </div>
-                    {%- else -%}
-                      <ul class="ossian-dropdown__list">
-                        {%- for child in link.links -%}
-                          <li>
-                            <a
-                              href="{{ child.url }}"
-                              class="ossian-dropdown__link"
-                              {% if child.current %}aria-current="page"{% endif %}
-                            >
-                              {{ child.title }}
-                            </a>
-                          </li>
-                        {%- endfor -%}
-                      </ul>
-                    {%- endif -%}
-
-                    {%- if link.url != blank and link.url != '#' -%}
-                      <a href="{{ link.url }}" class="ossian-dropdown__view-all">
-                        View all {{ link.title }}
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                      </a>
-                    {%- endif -%}
-                  </div>
+                  {%- liquid
+                    assign link_title = link.title | downcase | strip
+                    assign mega_promo = null
+                    for promo_block in promo_blocks
+                      assign promo_match = promo_block.settings.menu_item | downcase | strip
+                      if promo_match == link_title
+                        assign mega_promo = promo_block
+                        break
+                      endif
+                    endfor
+                  -%}
+                  {%- render 'ossian-mega-menu',
+                    link: link,
+                    menu_id: menu_id,
+                    promo: mega_promo
+                  -%}
                 {%- else -%}
                   <a
                     href="{{ link.url }}"
@@ -248,7 +213,8 @@
       <button
         type="button"
         class="ossian-navbar__search"
-        on:click="#search-modal/showDialog"
+        data-ossian-search-open
+        aria-controls="OssianSearch"
         aria-label="{{ 'content.search_input_label' | t }}"
         aria-haspopup="dialog"
       >
@@ -399,6 +365,9 @@
   </nav>
 {%- endif -%}
 
+{% render 'ossian-search-modal', section: section %}
+<script src="{{ 'ossian-search.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
 <script>
 (function () {
   /* ---------- Desktop dropdowns / mega menus ---------- */
@@ -430,6 +399,66 @@
 
   document.addEventListener('click', function (event) {
     if (!event.target.closest('.ossian-navbar__menu-item')) closeAll();
+  });
+
+  /* ---------- Mega menu: hover to open, hover a sub-link to switch its products ---------- */
+  var hoverMedia = window.matchMedia('(hover: hover) and (min-width: 990px)');
+
+  function positionMega(item, mega) {
+    var header = item.closest('.ossian-navbar');
+    var nav = item.closest('.ossian-navbar__menu');
+    var inner = item.closest('.ossian-navbar__inner');
+    if (!header || !nav || !inner) return;
+    var headerRect = header.getBoundingClientRect();
+    var innerRect = inner.getBoundingClientRect();
+    mega.style.left = Math.max(20, nav.getBoundingClientRect().left - headerRect.left - 14) + 'px';
+    mega.style.right = Math.max(20, headerRect.right - innerRect.right + 20) + 'px';
+  }
+
+  document.querySelectorAll('.ossian-navbar__menu-item--mega').forEach(function (item) {
+    var trigger = item.querySelector('[data-mega-menu-trigger]');
+    var mega = item.querySelector('.ossian-mega');
+    if (!trigger || !mega) return;
+    var closeTimer;
+
+    trigger.addEventListener('click', function () {
+      positionMega(item, mega);
+    });
+
+    function open() {
+      clearTimeout(closeTimer);
+      positionMega(item, mega);
+      if (trigger.getAttribute('aria-expanded') === 'true') return;
+      closeAll();
+      trigger.setAttribute('aria-expanded', 'true');
+      mega.hidden = false;
+    }
+
+    item.addEventListener('mouseenter', function () {
+      if (hoverMedia.matches) open();
+    });
+    item.addEventListener('mouseleave', function () {
+      if (!hoverMedia.matches) return;
+      closeTimer = setTimeout(function () {
+        trigger.setAttribute('aria-expanded', 'false');
+        mega.hidden = true;
+      }, 180);
+    });
+
+    function activate(childLink) {
+      var index = childLink.dataset.megaChild;
+      mega.querySelectorAll('[data-mega-child]').forEach(function (el) {
+        el.classList.toggle('is-active', el === childLink);
+      });
+      mega.querySelectorAll('[data-mega-panel]').forEach(function (panel) {
+        panel.hidden = panel.dataset.megaPanel !== index;
+      });
+    }
+
+    mega.querySelectorAll('[data-mega-child]').forEach(function (childLink) {
+      childLink.addEventListener('mouseenter', function () { activate(childLink); });
+      childLink.addEventListener('focus', function () { activate(childLink); });
+    });
   });
 
   /* ---------- Mobile drawer ---------- */
@@ -511,8 +540,15 @@
     z-index: 100;
   }
 
+  /* sections/header.liquid sets ".header { background: transparent }" and this navbar
+     also carries the .header class, so pin the background with a more specific selector
+     (stylesheet bundle order differs between the dev server and the live store). */
+  #header-component.ossian-navbar {
+    background: #fff;
+  }
+
   .ossian-navbar {
-    background: var(--color-background, #fff);
+    background: #fff;
     border-bottom: 1px solid rgb(var(--color-foreground-rgb, 20 24 32) / 0.08);
     position: relative;
   }
@@ -636,115 +672,310 @@
     transform: rotate(180deg);
   }
 
-  /* ---------- Simple dropdown (fallback linklist children) ---------- */
-  .ossian-dropdown {
-    position: absolute;
-    top: calc(100% + 14px);
-    left: 0;
-    z-index: 60;
-    min-width: 230px;
-    padding: 10px;
-    background: var(--color-background, #fff);
-    border: 1px solid rgb(var(--color-foreground-rgb, 20 24 32) / 0.08);
-    border-radius: 12px;
-    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+  /* ---------- Mega menu (fallback linklist children) ---------- */
+  .ossian-navbar__menu-item--mega {
+    position: static;
   }
 
-  .ossian-dropdown[hidden] {
+  .ossian-mega {
+    position: absolute;
+    top: calc(100% - 4px);
+    /* left/right are set from JS so the panel lines up with the nav links */
+    left: 20px;
+    right: 20px;
+    z-index: 60;
+    display: grid;
+    grid-template-columns: minmax(230px, 0.85fr) minmax(0, 1.6fr) minmax(0, 1.35fr);
+    min-height: clamp(360px, 28vw, 420px);
+    background: linear-gradient(100deg, #fdfeff 0%, #f4f7fc 40%, #e4edf8 68%);
+    border-radius: 18px;
+    box-shadow: 0 24px 60px rgba(10, 23, 48, 0.18);
+    overflow: hidden;
+    color: #1e3a5f;
+  }
+
+  .ossian-mega[hidden] {
     display: none;
   }
 
-  /* Bridges the gap between the trigger and the panel so the pointer
-     can travel down without the panel losing hover. */
-  .ossian-dropdown::before {
+  /* Invisible bridge so moving the pointer from the link to the panel keeps it open */
+  .ossian-mega::before {
     content: '';
     position: absolute;
-    top: -14px;
     left: 0;
     right: 0;
+    bottom: 100%;
     height: 14px;
   }
 
-  .ossian-dropdown--columns {
-    min-width: min(760px, 88vw);
-  }
-
-  .ossian-dropdown__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  .ossian-mega__nav {
+    position: relative;
     display: flex;
     flex-direction: column;
+    gap: 4px;
+    list-style: none;
+    margin: 0;
+    padding: clamp(20px, 1.8vw, 28px) clamp(18px, 1.8vw, 34px) clamp(20px, 1.8vw, 28px) clamp(18px, 1.9vw, 36px);
   }
 
-  .ossian-dropdown__link {
-    display: block;
-    padding: 9px 12px;
-    border-radius: 8px;
+  /* Short inset divider between the menu and the promo */
+  .ossian-mega__nav::after {
+    content: '';
+    position: absolute;
+    top: 34px;
+    bottom: 34px;
+    right: 0;
+    width: 1px;
+    background: rgb(30 58 95 / 0.1);
+  }
+
+  .ossian-mega__nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: clamp(11px, 0.95vw, 15px) clamp(14px, 1.4vw, 24px);
+    border-radius: 10px;
     color: #1e3a5f;
-    font-size: 0.88rem;
-    font-weight: 500;
-    text-decoration: none;
+    font-size: clamp(0.92rem, 0.95vw, 1.05rem);
     white-space: nowrap;
-  }
-
-  .ossian-dropdown__link:hover,
-  .ossian-dropdown__link[aria-current='page'] {
-    background: rgb(var(--color-foreground-rgb, 20 24 32) / 0.05);
-  }
-
-  .ossian-dropdown__cols {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-    gap: 8px 24px;
-    padding: 8px 12px;
-  }
-
-  .ossian-dropdown__col-heading {
-    display: block;
-    margin-bottom: 10px;
-    color: #1e3a5f;
-    font-size: 0.74rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-weight: 500;
+    line-height: 1.3;
     text-decoration: none;
+    transition: background-color 0.15s, color 0.15s;
   }
 
-  .ossian-dropdown__col-heading:hover {
-    text-decoration: underline;
+  .ossian-mega__nav-link.is-active,
+  .ossian-mega__nav-link:focus-visible {
+    background: #e6eefa;
+    color: #1f63d6;
   }
 
-  .ossian-dropdown__col-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  .ossian-mega__promo {
+    position: relative;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    align-items: center;
+    padding: clamp(28px, 2.6vw, 44px) clamp(24px, 2.4vw, 40px) clamp(28px, 2.6vw, 44px) clamp(26px, 2.6vw, 44px);
+    overflow: hidden;
   }
 
-  .ossian-dropdown__col-list a {
+  .ossian-mega__promo-copy {
+    position: relative;
+    z-index: 1;
+    max-width: 60%;
+  }
+
+  .ossian-mega__eyebrow {
+    margin: 0 0 16px;
+    font-size: clamp(0.66rem, 0.72vw, 0.78rem);
+    white-space: nowrap;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgb(30 58 95 / 0.75);
+  }
+
+  .ossian-mega__heading {
+    margin: 0 0 16px;
+    font-size: clamp(1.5rem, 2.05vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1.18;
+    letter-spacing: -0.01em;
     color: #1e3a5f;
-    font-size: 0.86rem;
-    text-decoration: none;
   }
 
-  .ossian-dropdown__col-list a:hover {
-    text-decoration: underline;
+  .ossian-mega__text {
+    margin: 0 0 clamp(20px, 2vw, 30px);
+    font-size: clamp(0.95rem, 1vw, 1.12rem);
+    line-height: 1.75;
+    color: rgb(30 58 95 / 0.62);
   }
 
-  .ossian-dropdown__view-all {
+  .ossian-mega__button {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    margin-top: 6px;
-    padding: 9px 12px;
-    color: var(--color-primary, #6d5bd0);
-    font-size: 0.82rem;
+    gap: 12px;
+    padding: clamp(13px, 1.1vw, 17px) clamp(26px, 2.6vw, 42px);
+    border-radius: 999px;
+    background: #1d5fe6;
+    box-shadow: 0 8px 18px rgb(29 95 230 / 0.25);
+    color: #fff;
+    font-size: clamp(0.95rem, 1vw, 1.08rem);
     font-weight: 600;
     text-decoration: none;
     white-space: nowrap;
+    transition: background-color 0.2s;
+  }
+
+  .ossian-mega__button:hover {
+    background: #0a4fc4;
+  }
+
+  .ossian-mega__promo-media {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 48%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .ossian-mega__promo-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: bottom center;
+  }
+
+  .ossian-mega__side {
+    padding: clamp(26px, 2.6vw, 40px) clamp(22px, 2.6vw, 44px);
+    background: #fbfcfe;
+  }
+
+  .ossian-mega__side-panel[hidden] {
+    display: none;
+  }
+
+  .ossian-mega__side-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .ossian-mega__side-title {
+    margin: 0;
+    font-size: clamp(1.25rem, 1.4vw, 1.5rem);
+    font-weight: 700;
+    color: #1e3a5f;
+  }
+
+  .ossian-mega__side-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgb(30 58 95 / 0.8);
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .ossian-mega__side-all:hover {
+    color: #1f5fa8;
+  }
+
+  .ossian-mega__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    margin: 0 0 16px;
+    padding: 0;
+  }
+
+  .ossian-mega__chips a {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid rgb(30 58 95 / 0.12);
+    color: #1e3a5f;
+    font-size: 0.82rem;
+    text-decoration: none;
+  }
+
+  .ossian-mega__chips a:hover {
+    border-color: #1f5fa8;
+    color: #1f5fa8;
+  }
+
+  .ossian-mega__products {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(14px, 1.4vw, 22px);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ossian-mega__product {
+    display: flex;
+    align-items: center;
+    gap: clamp(14px, 1.6vw, 26px);
+    color: #1e3a5f;
+    text-decoration: none;
+  }
+
+  .ossian-mega__product-media {
+    flex-shrink: 0;
+    width: clamp(84px, 7vw, 116px);
+    aspect-ratio: 116 / 108;
+    border-radius: 12px;
+    background: #f0f4f9;
+    overflow: hidden;
+  }
+
+  .ossian-mega__product-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+  }
+
+  .ossian-mega__product-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ossian-mega__product-title {
+    font-size: clamp(0.95rem, 1vw, 1.12rem);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .ossian-mega__product-sub {
+    font-size: clamp(0.85rem, 0.9vw, 1rem);
+    color: rgb(30 58 95 / 0.6);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ossian-mega__product-arrow {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(40px, 3.4vw, 52px);
+    height: clamp(40px, 3.4vw, 52px);
+    border-radius: 50%;
+    background: #eef2f8;
+    color: #1e3a5f;
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  .ossian-mega__product:hover .ossian-mega__product-arrow {
+    background: #0b5ce6;
+    color: #fff;
+  }
+
+  .ossian-mega__product:hover .ossian-mega__product-title {
+    color: #1f5fa8;
+  }
+
+  .ossian-mega__empty {
+    margin: 0;
+    color: rgb(30 58 95 / 0.62);
+    font-size: 0.9rem;
   }
 
   .ossian-mega-menu {
@@ -1253,10 +1484,10 @@
     min-width: 0;
     width: clamp(160px, 22vw, 400px);
     height: 46px;
-    border: 1px solid rgb(30 58 95 / 0.06);
+    border: 1px solid rgb(30 58 95 / 0.16);
     border-radius: 999px;
     padding: 0 20px;
-    background: #eef4fb;
+    background: #fff;
     color: rgb(30 58 95 / 0.6);
     cursor: pointer;
     font-size: clamp(0.78rem, 1.1vw, 0.95rem);
@@ -1342,7 +1573,7 @@
     justify-content: center;
     border: none;
     border-radius: 50%;
-    background: #eef4fb;
+    background: transparent;
     color: #1e3a5f;
     flex-shrink: 0;
     padding: 0;
@@ -1402,12 +1633,12 @@
     height: 46px !important;
     border: none !important;
     border-radius: 50% !important;
-    background: #eef4fb !important;
+    background: transparent !important;
     overflow: visible;
   }
 
   #header-component.ossian-navbar header-actions .header-actions__action:hover {
-    background: #e2ecf8 !important;
+    background: rgb(30 58 95 / 0.06) !important;
   }
 
   /* header.liquid also pins every header icon to 20px with !important */
@@ -1515,6 +1746,99 @@
       "label": "Menu (fallback)",
       "default": "main-menu",
       "info": "Used when no Nav Item blocks are added. Nested sub-menus in this linklist render as dropdowns on desktop and accordions in the mobile drawer."
+    },
+    {
+      "type": "header",
+      "content": "Search pop-up"
+    },
+    {
+      "type": "text",
+      "id": "search_modal_placeholder",
+      "label": "Search input placeholder",
+      "default": "Search for products, categories or solutions..."
+    },
+    {
+      "type": "text",
+      "id": "search_trending_heading",
+      "label": "Trending heading",
+      "default": "Trending Searches"
+    },
+    {
+      "type": "textarea",
+      "id": "search_trending",
+      "label": "Trending searches",
+      "info": "One search term per line.",
+      "default": "Shampoo\nHair Serum\nHair Mask\nKeratin Treatment\nHair Colour\nAnti Dandruff Shampoo\nHair Wax"
+    },
+    {
+      "type": "text",
+      "id": "search_categories_heading",
+      "label": "Categories heading",
+      "default": "Popular Categories",
+      "info": "Add categories with \"Search category\" blocks."
+    },
+    {
+      "type": "image_picker",
+      "id": "search_promo_image",
+      "label": "Promo banner image",
+      "info": "Wide image (about 2100 × 640). Keep the left side light, the text sits there."
+    },
+    {
+      "type": "text",
+      "id": "search_promo_eyebrow",
+      "label": "Promo eyebrow",
+      "default": "Professional Hair Care"
+    },
+    {
+      "type": "text",
+      "id": "search_promo_heading",
+      "label": "Promo heading",
+      "default": "Find Your"
+    },
+    {
+      "type": "text",
+      "id": "search_promo_heading_accent",
+      "label": "Promo heading (blue line)",
+      "default": "Perfect Hair Solution"
+    },
+    {
+      "type": "text",
+      "id": "search_promo_text",
+      "label": "Promo text",
+      "default": "Explore professional hair care products for stronger, smoother and healthier hair."
+    },
+    {
+      "type": "text",
+      "id": "search_promo_button",
+      "label": "Promo button label",
+      "default": "Shop Hair Care"
+    },
+    {
+      "type": "url",
+      "id": "search_promo_link",
+      "label": "Promo link"
+    },
+    {
+      "type": "text",
+      "id": "search_products_heading",
+      "label": "Products heading",
+      "default": "Products"
+    },
+    {
+      "type": "collection",
+      "id": "search_products_collection",
+      "label": "Products to show before typing",
+      "info": "First 4 products of this collection. Defaults to all products."
+    },
+    {
+      "type": "text",
+      "id": "search_recent_heading",
+      "label": "Recent searches heading",
+      "default": "Recent Searches"
+    },
+    {
+      "type": "header",
+      "content": "Behaviour"
     },
     {
       "type": "checkbox",
@@ -1672,6 +1996,107 @@
           "type": "url",
           "id": "promo_button_url",
           "label": "Button link"
+        }
+      ]
+    },
+    {
+      "type": "mega_menu_promo",
+      "name": "Mega menu promo",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Customises the desktop mega menu of a main-menu item that has sub-menus. Without this block the menu uses the linked collection's image and description."
+        },
+        {
+          "type": "text",
+          "id": "menu_item",
+          "label": "Menu item title",
+          "info": "Must match the menu link's title, e.g. Hair Care",
+          "default": "Hair Care"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Promo image",
+          "info": "Transparent PNG product shots work best."
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow",
+          "default": "Professional Hair Care"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Healthy, Stronger Hair Every Day"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Advanced formulas for salon-like care at home."
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "View All Hair Care"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link",
+          "info": "Defaults to the menu item's link"
+        },
+        {
+          "type": "text",
+          "id": "bestsellers_heading",
+          "label": "Products heading",
+          "default": "Bestsellers"
+        },
+        {
+          "type": "range",
+          "id": "products_limit",
+          "label": "Products shown",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 3
+        }
+      ]
+    },
+    {
+      "type": "search_category",
+      "name": "Search category",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Shown under \"Popular Categories\" in the search pop-up."
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "info": "Defaults to the collection title"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Thumbnail",
+          "info": "Defaults to the collection image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Defaults to the collection"
         }
       ]
     },

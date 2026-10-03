@@ -1,4 +1,10 @@
-<div class="hero-carousel" id="hero-carousel-{{ section.id }}" data-autoplay="{{ section.settings.autoplay }}" data-speed="{{ section.settings.autoplay_speed }}">
+<div
+  class="hero-carousel"
+  id="hero-carousel-{{ section.id }}"
+  data-autoplay="{{ section.settings.autoplay }}"
+  data-speed="{{ section.settings.autoplay_speed }}"
+  style="--hero-height: {{ section.settings.banner_height }}vh; --hero-height-mobile: {{ section.settings.banner_height_mobile }}vh;"
+>
   <div class="hero-carousel__track">
     {%- for block in section.blocks -%}
       {%- liquid
@@ -114,7 +120,7 @@
   var dots   = el.querySelectorAll('.hero-carousel__dot');
   var current = 0;
   var autoplay = el.dataset.autoplay === 'true';
-  var speed = parseInt(el.dataset.speed) || 5000;
+  var speed = parseInt(el.dataset.speed) || 3000;
   var timer;
 
   function goTo(n) {
@@ -160,12 +166,16 @@
   line-height: 0;
 }
 
+/* Fixed height: every slide fills the same frame, so the banner never resizes */
 .hero-carousel__track {
   position: relative;
   width: 100%;
+  height: var(--hero-height, 80vh);
 }
 
 .hero-carousel__slide {
+  position: absolute;
+  inset: 0;
   display: none;
 }
 
@@ -173,21 +183,29 @@
   display: block;
 }
 
+.hero-carousel__slide picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .hero-carousel__media {
   width: 100%;
-  height: auto;
-  max-height: 90vh;
+  height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
 }
 
 .hero-carousel__link {
   display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .hero-carousel__placeholder {
   width: 100%;
-  height: 60vh;
+  height: 100%;
   background: #111;
   display: flex;
   align-items: center;
@@ -273,8 +291,8 @@
 }
 
 @media (max-width: 768px) {
-  .hero-carousel__media {
-    max-height: 60vh;
+  .hero-carousel__track {
+    height: var(--hero-height-mobile, 50vh);
   }
 
   .hero-carousel__controls {
@@ -317,7 +335,28 @@
         { "value": "5000", "label": "5 seconds" },
         { "value": "7000", "label": "7 seconds" }
       ],
-      "default": "5000"
+      "default": "3000"
+    },
+    {
+      "type": "range",
+      "id": "banner_height",
+      "label": "Banner height (desktop)",
+      "info": "Percentage of the screen height. All slides use this height; images are cropped to fill it.",
+      "min": 40,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "banner_height_mobile",
+      "label": "Banner height (mobile)",
+      "min": 40,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 50
     }
   ],
   "blocks": [

@@ -1,555 +1,518 @@
-{%- assign pillar_blocks = section.blocks | where: "type", "pillar" -%}
+{%- comment -%}
+  Ossion Brand Pillars — an image panel on the left (separate desktop / mobile images),
+  a scrollable row of numbered pillar
+  cards on the right with prev/next buttons and a progress bar.
+  Every image is set in the theme editor.
+{%- endcomment -%}
 
-<section class="bpillars" id="bpillars-{{ section.id }}">
-  <div class="bpillars__row">
+{%- liquid
+  assign pillar_blocks = section.blocks | where: 'type', 'pillar'
+  assign s = section.settings
+  assign hero_desktop = s.hero_image | default: s.hero_image_mobile
+  assign hero_mobile = s.hero_image_mobile | default: s.hero_image
+  assign hero_ratio = hero_desktop.aspect_ratio | default: 0.9
+-%}
 
-    <!-- Left: hero image + brand lockup + CTA -->
-    <a href="{{ section.settings.hero_link | default: '#' }}" class="bpillars__hero">
-      {%- if section.settings.hero_image != blank -%}
-        {{ section.settings.hero_image | image_url: width: 1200 | image_tag: class: 'bpillars__hero-img', alt: '', loading: 'eager', fetchpriority: 'high', widths: '400,700,1000,1200' }}
-      {%- else -%}
-        <div class="bpillars__hero-ph"></div>
-      {%- endif -%}
-      {%- if section.settings.hero_brand != blank or section.settings.hero_brand_sub != blank -%}
-        <span class="bpillars__hero-brand">
-          {%- if section.settings.hero_brand != blank -%}<span class="bpillars__hero-brand-name">{{ section.settings.hero_brand }}</span>{%- endif -%}
-          {%- if section.settings.hero_brand_sub != blank -%}<span class="bpillars__hero-brand-sub">{{ section.settings.hero_brand_sub }}</span>{%- endif -%}
-        </span>
-      {%- endif -%}
-      {%- if section.settings.hero_tagline_line1 != blank or section.settings.hero_tagline_line2 != blank -%}
-        <span class="bpillars__hero-tagline">
-          {%- if section.settings.hero_tagline_line1 != blank -%}<span>{{ section.settings.hero_tagline_line1 }}</span>{%- endif -%}
-          {%- if section.settings.hero_tagline_line2 != blank -%}<span>{{ section.settings.hero_tagline_line2 }}</span>{%- endif -%}
-        </span>
-      {%- endif -%}
-      {%- if section.settings.hero_cta_label != blank -%}
-        <span class="bpillars__hero-scrim" aria-hidden="true"></span>
-        <span class="bpillars__cta">
-          {{ section.settings.hero_cta_label }}
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </span>
-      {%- endif -%}
-    </a>
+<section
+  class="bpillars"
+  id="bpillars-{{ section.id }}"
+  style="--bp-height: {{ s.section_height }}px; --bp-hero-ratio: {{ hero_ratio }};"
+>
+  {%- comment -%} Left: image only, separate desktop and mobile files {%- endcomment -%}
+  {%- if hero_desktop != blank -%}
+    {%- if s.hero_link != blank -%}
+      <a href="{{ s.hero_link }}" class="bpillars__hero" aria-label="{{ s.hero_alt | default: shop.name | escape }}">
+    {%- else -%}
+      <div class="bpillars__hero">
+    {%- endif -%}
+      <picture>
+        {%- if hero_mobile != hero_desktop -%}
+          <source
+            media="(max-width: 989px)"
+            srcset="
+              {{- hero_mobile | image_url: width: 500 }} 500w,
+              {{ hero_mobile | image_url: width: 750 }} 750w,
+              {{ hero_mobile | image_url: width: 1000 }} 1000w,
+              {{ hero_mobile | image_url: width: 1400 }} 1400w
+            "
+            sizes="100vw"
+            width="{{ hero_mobile.width }}"
+            height="{{ hero_mobile.height }}"
+          >
+        {%- endif -%}
+        {{
+          hero_desktop
+          | image_url: width: 1600
+          | image_tag:
+            class: 'bpillars__hero-img',
+            alt: s.hero_alt,
+            loading: 'lazy',
+            widths: '600, 900, 1200, 1600',
+            sizes: '(min-width: 990px) 50vw, 100vw'
+        }}
+      </picture>
+    {%- if s.hero_link != blank -%}
+      </a>
+    {%- else -%}
+      </div>
+    {%- endif -%}
+  {%- else -%}
+    <div class="bpillars__hero bpillars__hero--empty">
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'bpillars__hero-img' }}
+    </div>
+  {%- endif -%}
 
-    <!-- Right: heading + pillar cards -->
-    <div class="bpillars__right">
-      {%- if section.settings.eyebrow_script != blank or section.settings.heading_white != blank or section.settings.heading_accent != blank -%}
-        <div class="bpillars__heading">
-          {%- if section.settings.eyebrow_script != blank -%}
-            <p class="bpillars__eyebrow">{{ section.settings.eyebrow_script }}</p>
-          {%- endif -%}
-          {%- if section.settings.heading_white != blank or section.settings.heading_accent != blank -%}
-            <p class="bpillars__heading-main">
-              {%- if section.settings.heading_white != blank -%}<span>{{ section.settings.heading_white }}</span>{%- endif -%}
-              {%- if section.settings.heading_accent != blank -%}<span class="bpillars__heading-accent">{{ section.settings.heading_accent }}</span>{%- endif -%}
-            </p>
-          {%- endif -%}
-        </div>
-      {%- endif -%}
-
-      {%- if pillar_blocks.size > 0 -%}
-        <div class="bpillars__cards-wrap">
-        <div class="bpillars__cards" id="bpillars-carousel-{{ section.id }}">
+  {%- comment -%} Right: pillar cards carousel {%- endcomment -%}
+  {%- if pillar_blocks.size > 0 -%}
+    <div class="bpillars__rail" data-bpillars-rail>
+      <div class="bpillars__viewport">
+        <div class="bpillars__track" data-bpillars-track>
           {%- for block in pillar_blocks -%}
-            {%- assign opacity = block.settings.overlay_opacity | default: 70 | divided_by: 100.0 -%}
-            <a href="{{ block.settings.button_link | default: '#' }}" class="pillar-card" {{ block.shopify_attributes }}>
-              {%- if block.settings.image != blank -%}
-                {{ block.settings.image | image_url: width: 600 | image_tag: class: 'pillar-card__img', alt: '', loading: 'lazy', widths: '300,450,600' }}
-              {%- else -%}
-                <div class="pillar-card__img pillar-card__img--placeholder"></div>
+            {%- liquid
+              assign b = block.settings
+              assign opacity = b.overlay_opacity | default: 70 | divided_by: 100.0
+              assign card_index = forloop.index | prepend: '0' | slice: -2, 2
+            -%}
+            <a
+              href="{{ b.button_link | default: '#' }}"
+              class="pillar-card"
+              style="--card-shade: {{ opacity }};"
+              {{ block.shopify_attributes }}
+            >
+              {%- if b.image != blank -%}
+                {{
+                  b.image
+                  | image_url: width: 800
+                  | image_tag:
+                    class: 'pillar-card__img',
+                    alt: '',
+                    loading: 'lazy',
+                    widths: '400, 600, 800',
+                    sizes: '(min-width: 990px) 320px, 78vw'
+                }}
               {%- endif -%}
-              <span class="pillar-card__scrim" style="background: linear-gradient(to bottom, rgba(0,14,38,0) 0%, rgba(0,14,38,{{ opacity }}) 40%, rgba(0,14,38,{{ opacity }}) 100%);" aria-hidden="true"></span>
-              <span class="pillar-card__content">
-                {%- if block.settings.heading_line1 != blank or block.settings.heading_line2 != blank -%}
+              <span class="pillar-card__shade" aria-hidden="true"></span>
+
+              <span class="pillar-card__top">
+                <span class="pillar-card__index">{{ card_index }}</span>
+                {%- if b.label != blank -%}
+                  <span class="pillar-card__label">{{ b.label }}</span>
+                {%- endif -%}
+                {%- if b.heading_line1 != blank or b.heading_line2 != blank -%}
                   <span class="pillar-card__heading">
-                    {%- if block.settings.heading_line1 != blank -%}<span class="pillar-card__heading-line">{{ block.settings.heading_line1 }}</span>{%- endif -%}
-                    {%- if block.settings.heading_line2 != blank -%}
-                      <span class="pillar-card__heading-line{% if block.settings.accent_line2 %} pillar-card__heading-line--accent{% endif %}">{{ block.settings.heading_line2 }}</span>
+                    {%- if b.heading_line1 != blank -%}<span>{{ b.heading_line1 }}</span>{%- endif -%}
+                    {%- if b.heading_line2 != blank -%}
+                      <span{% if b.accent_line2 %} class="bpillars__accent"{% endif %}>{{ b.heading_line2 }}</span>
                     {%- endif -%}
                   </span>
                 {%- endif -%}
-                {%- if block.settings.body_text != blank -%}
-                  <span class="pillar-card__body">{{ block.settings.body_text }}</span>
-                {%- endif -%}
-                {%- if block.settings.button_label != blank -%}
-                  <span class="pillar-card__cta">
-                    {{ block.settings.button_label }}
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                  </span>
+                {%- if b.body_text != blank -%}
+                  <span class="pillar-card__body">{{ b.body_text }}</span>
                 {%- endif -%}
               </span>
+
+              {%- if b.button_label != blank -%}
+                <span class="pillar-card__cta">
+                  <span class="pillar-card__cta-icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                  </span>
+                  <span class="pillar-card__cta-label">{{ b.button_label }}</span>
+                </span>
+              {%- endif -%}
             </a>
           {%- endfor -%}
         </div>
 
-        <button class="bpillars__nav bpillars__nav--prev" id="bpillars-prev-{{ section.id }}" aria-label="Previous">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        <button type="button" class="bpillars__edge-next" data-bpillars-next aria-label="Next">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
         </button>
-        <button class="bpillars__nav bpillars__nav--next" id="bpillars-next-{{ section.id }}" aria-label="Next">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
-        </div>
-      {%- endif -%}
-    </div>
+      </div>
 
-  </div>
+      <div class="bpillars__controls">
+        <button type="button" class="bpillars__nav" data-bpillars-prev aria-label="Previous">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <div class="bpillars__progress" aria-hidden="true">
+          <span class="bpillars__progress-thumb" data-bpillars-thumb></span>
+        </div>
+        <button type="button" class="bpillars__nav" data-bpillars-next aria-label="Next">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
+  {%- endif -%}
 </section>
 
 <script>
-(function () {
-  var carousel = document.getElementById('bpillars-carousel-{{ section.id }}');
-  var prevBtn  = document.getElementById('bpillars-prev-{{ section.id }}');
-  var nextBtn  = document.getElementById('bpillars-next-{{ section.id }}');
-  if (!carousel || !prevBtn || !nextBtn) return;
+  (function () {
+    var root = document.getElementById('bpillars-{{ section.id }}');
+    if (!root) return;
+    var track = root.querySelector('[data-bpillars-track]');
+    var thumb = root.querySelector('[data-bpillars-thumb]');
+    if (!track) return;
 
-  function getScrollAmount() {
-    var card = carousel.querySelector('.pillar-card');
-    if (!card) return 300;
-    return card.offsetWidth;
-  }
+    function step() {
+      var card = track.querySelector('.pillar-card');
+      if (!card) return track.clientWidth;
+      var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      return card.getBoundingClientRect().width + gap;
+    }
 
-  nextBtn.addEventListener('click', function () {
-    carousel.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
-  });
-  prevBtn.addEventListener('click', function () {
-    carousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
-  });
+    function update() {
+      var max = track.scrollWidth - track.clientWidth;
+      var visible = track.scrollWidth ? track.clientWidth / track.scrollWidth : 1;
+      if (thumb) {
+        thumb.style.width = Math.max(visible * 100, 12) + '%';
+        var progress = max > 0 ? track.scrollLeft / max : 0;
+        thumb.style.left = progress * (100 - Math.max(visible * 100, 12)) + '%';
+      }
+      root.querySelectorAll('[data-bpillars-prev]').forEach(function (btn) {
+        btn.disabled = track.scrollLeft <= 2;
+      });
+      root.querySelectorAll('[data-bpillars-next]').forEach(function (btn) {
+        btn.disabled = track.scrollLeft >= max - 2;
+      });
+    }
 
-  function updateArrows() {
-    var atStart = carousel.scrollLeft <= 4;
-    var atEnd   = carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth - 4;
-    prevBtn.style.opacity       = atStart ? '0.35' : '1';
-    prevBtn.style.pointerEvents = atStart ? 'none'  : 'auto';
-    nextBtn.style.opacity       = atEnd   ? '0.35' : '1';
-    nextBtn.style.pointerEvents = atEnd   ? 'none'  : 'auto';
-  }
+    root.querySelectorAll('[data-bpillars-prev]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        track.scrollBy({ left: -step(), behavior: 'smooth' });
+      });
+    });
+    root.querySelectorAll('[data-bpillars-next]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        track.scrollBy({ left: step(), behavior: 'smooth' });
+      });
+    });
 
-  carousel.addEventListener('scroll', updateArrows, { passive: true });
-  updateArrows();
-})();
+    track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
 </script>
 
 {% stylesheet %}
-
-.bpillars,
-.bpillars * {
-  font-family: 'Jost', sans-serif;
-  box-sizing: border-box;
-}
-
-.bpillars {
-  background: #000e26;
-  overflow: hidden;
-  margin-top: 60px;
-}
-
-.bpillars__row {
-  display: flex;
-  width: 100%;
-  aspect-ratio: 1441 / 858;
-}
-
-/* ── Desktop — keep the whole section within one viewport ── */
-@media (min-width: 901px) {
-  .bpillars__row {
-    height: 85vh;
-    max-height: 85vh;
-  }
-}
-
-/* ── Hero ── */
-.bpillars__hero {
-  position: relative;
-  flex: 0 0 36.85%;
-  height: 100%;
-  display: block;
-  overflow: hidden;
-  text-decoration: none;
-}
-
-.bpillars__hero-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.bpillars__hero-ph {
-  position: absolute;
-  inset: 0;
-  background: #0a1830;
-}
-
-.bpillars__hero-scrim {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 22%;
-  background: linear-gradient(to top, rgba(0,14,38,0.75) 0%, rgba(0,14,38,0) 100%);
-}
-
-/* Brand lockup — top-left of hero */
-.bpillars__hero-brand {
-  position: absolute;
-  left: 8.5%;
-  top: 4%;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.bpillars__hero-brand-name {
-  font-size: clamp(1.4rem, 3vw, 2.1rem);
-  font-weight: 700;
-  color: #3b82f6;
-  letter-spacing: -0.01em;
-  line-height: 1.1;
-}
-
-.bpillars__hero-brand-sub {
-  font-size: clamp(0.7rem, 1vw, 0.9rem);
-  font-weight: 600;
-  color: #fff;
-  letter-spacing: 0.18em;
-  line-height: 1.4;
-}
-
-/* Tagline — centered, upper-middle of hero */
-.bpillars__hero-tagline {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 17%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.bpillars__hero-tagline span {
-  font-size: clamp(1.05rem, 1.7vw, 1.5rem);
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: 0.08em;
-  line-height: 1.5;
-  text-transform: uppercase;
-}
-
-/* ── Right column ── */
-.bpillars__right {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-width: 0;
-}
-
-.bpillars__heading {
-  flex: 0 0 25%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 0 48px;
-}
-
-.bpillars__eyebrow {
-  font-family: 'Give You Glory', cursive;
-  font-size: clamp(1.4rem, 2.1vw, 2rem);
-  font-weight: 400;
-  color: #d9a441;
-  margin: 0 0 4px;
-  line-height: 1.2;
-}
-
-.bpillars__heading-main {
-  font-size: clamp(1.6rem, 3.6vw, 3.5rem);
-  font-weight: 700;
-  color: #f1f8fc;
-  margin: 0;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-}
-
-.bpillars__heading-accent {
-  color: #3b82f6;
-}
-
-.bpillars__heading-main span:not(:last-child) {
-  margin-right: 0.3em;
-}
-
-.bpillars__cta {
-  position: absolute;
-  left: 25px;
-  bottom: 24px;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 22px;
-  background: #22345a;
-  border: 2px solid #fff;
-  border-radius: 16px;
-  color: #e5e7eb;
-  font-size: clamp(0.75rem, 0.97vw, 0.875rem);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  white-space: nowrap;
-}
-
-.bpillars__cta svg {
-  flex-shrink: 0;
-}
-
-/* ── Cards row — horizontally scrollable, 3-up in view ── */
-.bpillars__cards-wrap {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-}
-
-.bpillars__cards {
-  height: 100%;
-  display: flex;
-  min-height: 0;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-}
-
-.bpillars__cards::-webkit-scrollbar {
-  display: none;
-}
-
-/* ── Nav arrows ── */
-.bpillars__nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
-  background: rgba(0, 14, 38, 0.72);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #fff;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
-  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s, opacity 0.2s;
-  z-index: 2;
-}
-
-.bpillars__nav:hover {
-  border-color: #fff;
-  background: #22345a;
-}
-
-.bpillars__nav--prev {
-  left: 12px;
-}
-
-.bpillars__nav--next {
-  right: 12px;
-}
-
-.pillar-card {
-  position: relative;
-  flex: 0 0 33.3333%;
-  height: 100%;
-  display: block;
-  overflow: hidden;
-  border: 1px solid #182130;
-  border-radius: 4px;
-  text-decoration: none;
-  scroll-snap-align: start;
-}
-
-.pillar-card__img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.5s ease;
-}
-
-.pillar-card__img--placeholder {
-  background: #0a1830;
-}
-
-.pillar-card:hover .pillar-card__img {
-  transform: scale(1.04);
-}
-
-.pillar-card__scrim {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 48%;
-}
-
-.pillar-card__content {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  padding: 20px 18px 22px;
-  gap: 8px;
-}
-
-/* Heading — exact Figma: 20px Jost Bold, tracking -0.4px */
-.pillar-card__heading {
-  display: flex;
-  flex-direction: column;
-  font-size: clamp(0.95rem, 1.1vw, 1.25rem);
-  font-weight: 700;
-  color: #f1f8fc;
-  line-height: 1.3;
-  letter-spacing: -0.02em;
-}
-
-.pillar-card__heading-line--accent {
-  color: #366cd1;
-}
-
-/* Body — exact Figma: 14px Jost Medium, tracking -0.28px */
-.pillar-card__body {
-  font-size: clamp(0.7rem, 0.85vw, 0.875rem);
-  font-weight: 500;
-  color: #f1f8fc;
-  line-height: 1.4;
-  letter-spacing: -0.02em;
-  opacity: 0.92;
-}
-
-/* CTA — exact Figma: 14px Jost SemiBold, tracking -0.28px */
-.pillar-card__cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  align-self: flex-start;
-  margin-top: 4px;
-  padding: 10px 16px;
-  background: #22345a;
-  border: 2px solid #fff;
-  border-radius: 16px;
-  color: #e5e7eb;
-  font-size: clamp(0.7rem, 0.85vw, 0.875rem);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  white-space: nowrap;
-}
-
-.pillar-card__cta svg {
-  flex-shrink: 0;
-}
-
-/* ── Tablet ── */
-@media (max-width: 900px) {
-  .bpillars__row {
-    flex-direction: column;
-    aspect-ratio: auto;
-  }
-
-  .bpillars__hero {
-    flex: none;
-    height: 340px;
-  }
-
-  .bpillars__right {
-    height: auto;
-  }
-
-  .bpillars__heading {
-    flex: none;
-    padding: 32px 24px 8px;
-  }
-
-  .bpillars__cards {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    overflow-x: visible;
-    scroll-snap-type: none;
-  }
-
-  .bpillars__nav {
-    display: none;
-  }
-
-  .pillar-card {
-    flex: initial;
-    height: auto;
-    aspect-ratio: 228 / 460;
-  }
-}
-
-/* ── Mobile ── */
-@media (max-width: 560px) {
-  .bpillars__hero {
-    height: 300px;
-  }
   .bpillars {
-  overflow: hidden;
-  margin-top: 20px;
-}
-
-  .bpillars__hero-brand {
-    left: 6%;
-    top: 6%;
+    --bp-navy: #0f2546;
+    --bp-blue: #3b86ff;
+    display: grid;
+    /* The image column is as wide as the image needs at the section height, so the
+       image is shown whole (never cropped); the cards take the remaining width. */
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: calc(var(--bp-height, 680px) - 80px);
+    padding: 40px 60px;
+    background: #f2f5f9;
+    color: #fff;
   }
 
-  .bpillars__hero-tagline {
-    top: 24%;
+  .bpillars__accent {
+    color: var(--bp-blue);
   }
 
-  .bpillars__cta {
-    left: 16px;
-    bottom: 16px;
-    padding: 10px 16px;
+  /* ---------- Image panel ---------- */
+  .bpillars__hero {
+    position: relative;
+    display: block;
+    height: 100%;
+    aspect-ratio: var(--bp-hero-ratio, 0.9);
+    max-width: 58vw;
+    overflow: hidden;
+    background: #0a1a36;
   }
 
-  .bpillars__heading {
-    padding: 24px 18px 4px;
+  .bpillars__hero picture {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 
-  .bpillars__cards {
+  .bpillars__hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    /* contain: only matters if a very wide image hits the max-width cap */
+    object-fit: contain;
+    object-position: center;
+  }
+
+  /* ---------- Cards rail ---------- */
+  .bpillars__rail {
     display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding-inline-start: clamp(16px, 1.6vw, 24px);
+  }
+
+  .bpillars__viewport {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .bpillars__track {
+    display: flex;
+    gap: clamp(10px, 1vw, 16px);
+    height: 100%;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    scroll-padding-left: 18px;
-    -webkit-overflow-scrolling: touch;
-    gap: 12px;
-    padding: 4px 18px;
+    scroll-padding-inline: 0;
     scrollbar-width: none;
   }
 
-  .bpillars__cards::-webkit-scrollbar {
+  .bpillars__track::-webkit-scrollbar {
     display: none;
   }
 
   .pillar-card {
-    flex: 0 0 auto;
-    width: 78vw;
-    max-width: 300px;
-    aspect-ratio: 228 / 320;
+    position: relative;
+    flex: 0 0 clamp(250px, 21vw, 320px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    background: linear-gradient(160deg, #1d3b66, #0a1a36);
+    color: #fff;
+    text-decoration: none;
     scroll-snap-align: start;
   }
 
-  .pillar-card__content {
-    padding: 16px 14px 18px;
+  .pillar-card__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
   }
-}
 
+  .pillar-card:hover .pillar-card__img {
+    transform: scale(1.04);
+  }
+
+  /* Darkens the top for the copy and the bottom for the button */
+  .pillar-card__shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgb(4 14 32 / calc(var(--card-shade, 0.7) * 0.95)) 0%,
+      rgb(4 14 32 / calc(var(--card-shade, 0.7) * 0.55)) 38%,
+      rgb(4 14 32 / 0) 60%,
+      rgb(4 14 32 / calc(var(--card-shade, 0.7) * 0.6)) 100%
+    );
+  }
+
+  .pillar-card__top,
+  .pillar-card__cta {
+    position: relative;
+    z-index: 1;
+  }
+
+  .pillar-card__top {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(22px, 2vw, 30px) clamp(20px, 2vw, 30px) 0;
+  }
+
+  .pillar-card__index {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+  }
+
+  .pillar-card__index::after {
+    content: '';
+    width: 38px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.85;
+  }
+
+  .pillar-card__label {
+    margin-top: 14px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+  }
+
+  .pillar-card__heading {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    font-size: clamp(1.45rem, 1.9vw, 1.95rem);
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  .pillar-card__body {
+    margin-top: 12px;
+    color: rgb(255 255 255 / 0.9);
+    font-size: clamp(0.9rem, 1vw, 1.02rem);
+    line-height: 1.4;
+  }
+
+  .pillar-card__cta {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 0 clamp(20px, 2vw, 28px) clamp(20px, 2vw, 28px);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .pillar-card__cta-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--bp-navy);
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  .pillar-card:hover .pillar-card__cta-icon {
+    background: var(--bp-blue);
+    color: #fff;
+  }
+
+  .bpillars__edge-next {
+    position: absolute;
+    top: 50%;
+    right: clamp(8px, 1vw, 18px);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--bp-navy);
+    box-shadow: 0 6px 18px rgb(10 23 48 / 0.2);
+    transform: translateY(-50%);
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .bpillars__edge-next:disabled {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .bpillars__controls {
+    display: flex;
+    align-items: center;
+    gap: clamp(14px, 1.6vw, 24px);
+    padding-top: clamp(14px, 1.4vw, 20px);
+  }
+
+  .bpillars__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    border: 1px solid rgb(15 37 70 / 0.12);
+    border-radius: 50%;
+    background: #fff;
+    color: var(--bp-navy);
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, opacity 0.2s;
+  }
+
+  .bpillars__nav:hover:not(:disabled) {
+    background: var(--bp-navy);
+    color: #fff;
+  }
+
+  .bpillars__nav:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  .bpillars__progress {
+    position: relative;
+    flex: 1;
+    height: 4px;
+    border-radius: 4px;
+    background: rgb(15 37 70 / 0.1);
+  }
+
+  .bpillars__progress-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 25%;
+    border-radius: 4px;
+    background: #1f5fe0;
+    transition: left 0.15s linear, width 0.2s;
+  }
+
+  /* ---------- Tablet / mobile: stack ---------- */
+  @media (max-width: 989px) {
+    .bpillars {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      padding: 24px 16px;
+    }
+
+    .bpillars__hero {
+      height: auto;
+      aspect-ratio: auto;
+      max-width: none;
+    }
+
+    /* Show the whole mobile image at its own proportions */
+    .bpillars__hero-img {
+      position: static;
+      height: auto;
+    }
+
+    .bpillars__hero--empty .bpillars__hero-img {
+      aspect-ratio: 4 / 5;
+    }
+
+    .bpillars__rail {
+      padding: 16px 0 0;
+    }
+
+    .pillar-card {
+      flex-basis: 78vw;
+      max-width: 340px;
+      min-height: 480px;
+    }
+
+    .bpillars__edge-next {
+      display: none;
+    }
+  }
+
+  @media (max-width: 599px) {
+    .bpillars__nav {
+      width: 42px;
+      height: 42px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pillar-card__img {
+      transition: none;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -559,120 +522,96 @@
   "class": "ossian-brand-pillars-section",
   "settings": [
     {
+      "type": "range",
+      "id": "section_height",
+      "label": "Section height (desktop)",
+      "info": "Includes the 40px top/bottom padding. The left image is shown whole at this height; its width follows the image's proportions.",
+      "min": 520,
+      "max": 900,
+      "step": 20,
+      "unit": "px",
+      "default": 680
+    },
+    {
       "type": "header",
-      "content": "Hero"
+      "content": "Left image"
     },
     {
       "type": "image_picker",
       "id": "hero_image",
-      "label": "Hero image"
+      "label": "Desktop image",
+      "info": "Fills the left panel (about 41% wide × section height), cropped to fit. Around 1200 × 1360 works well."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image_mobile",
+      "label": "Mobile image",
+      "info": "Shown below 990px at its full proportions. Leave empty to reuse the desktop image."
     },
     {
       "type": "text",
-      "id": "hero_brand",
-      "label": "Hero brand name",
-      "default": "OSSION"
-    },
-    {
-      "type": "text",
-      "id": "hero_brand_sub",
-      "label": "Hero brand subtitle",
-      "default": "PROFESSIONAL"
-    },
-    {
-      "type": "text",
-      "id": "hero_tagline_line1",
-      "label": "Hero tagline line 1",
-      "default": "Salon Science"
-    },
-    {
-      "type": "text",
-      "id": "hero_tagline_line2",
-      "label": "Hero tagline line 2",
-      "default": "At Its Best"
-    },
-    {
-      "type": "text",
-      "id": "hero_cta_label",
-      "label": "Hero button text",
-      "default": "Explore Ossion"
+      "id": "hero_alt",
+      "label": "Image description (alt text)",
+      "info": "Describe any text in the image for screen readers."
     },
     {
       "type": "url",
       "id": "hero_link",
-      "label": "Hero button link"
-    },
-    {
-      "type": "header",
-      "content": "Heading"
-    },
-    {
-      "type": "text",
-      "id": "eyebrow_script",
-      "label": "Script eyebrow text",
-      "default": "Welcome to our world."
-    },
-    {
-      "type": "text",
-      "id": "heading_white",
-      "label": "Heading (white)",
-      "default": "Real Science."
-    },
-    {
-      "type": "text",
-      "id": "heading_accent",
-      "label": "Heading (accent)",
-      "default": "Real Results."
+      "label": "Image link"
     }
   ],
   "blocks": [
     {
       "type": "pillar",
-      "name": "Pillar Card",
+      "name": "Pillar card",
       "settings": [
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Image"
+          "label": "Image",
+          "info": "Portrait image, about 640 × 1400. Keep the top darker or plain for the text."
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "info": "Small uppercase line under the number, e.g. Our Science"
         },
         {
           "type": "text",
           "id": "heading_line1",
-          "label": "Heading line 1",
-          "default": "From the Depths"
+          "label": "Heading line 1"
         },
         {
           "type": "text",
           "id": "heading_line2",
-          "label": "Heading line 2",
-          "default": "of Marine Science"
+          "label": "Heading line 2"
         },
         {
           "type": "checkbox",
           "id": "accent_line2",
-          "label": "Highlight line 2 in blue",
+          "label": "Show heading line 2 in blue",
           "default": true
         },
         {
           "type": "textarea",
           "id": "body_text",
-          "label": "Body text",
-          "default": "Advanced formulations inspired by the ocean. Proven by science."
+          "label": "Text"
         },
         {
           "type": "range",
           "id": "overlay_opacity",
-          "label": "Overlay darkness",
+          "label": "Image darkening",
           "min": 0,
           "max": 100,
           "step": 5,
+          "unit": "%",
           "default": 70
         },
         {
           "type": "text",
           "id": "button_label",
-          "label": "Button text",
-          "default": "Our Science"
+          "label": "Button label"
         },
         {
           "type": "url",
@@ -685,59 +624,45 @@
   "presets": [
     {
       "name": "Brand Pillars",
-      "settings": {
-        "hero_brand": "OSSION",
-        "hero_brand_sub": "PROFESSIONAL",
-        "hero_tagline_line1": "Salon Science",
-        "hero_tagline_line2": "At Its Best",
-        "hero_cta_label": "Explore Ossion",
-        "eyebrow_script": "Welcome to our world.",
-        "heading_white": "Real Science.",
-        "heading_accent": "Real Results."
-      },
       "blocks": [
         {
           "type": "pillar",
           "settings": {
-            "heading_line1": "From the Depths",
-            "heading_line2": "of Marine Science",
-            "accent_line2": true,
+            "label": "Our Science",
+            "heading_line1": "From the Depths of",
+            "heading_line2": "Marine Science",
             "body_text": "Advanced formulations inspired by the ocean. Proven by science.",
-            "overlay_opacity": 80,
             "button_label": "Our Science"
           }
         },
         {
           "type": "pillar",
           "settings": {
-            "heading_line1": "Heads up:",
-            "heading_line2": "Care Beyond the chair",
-            "accent_line2": true,
-            "body_text": "Expert care for every strand. Because your hair deserves more than just a salon visit.",
-            "overlay_opacity": 50,
-            "button_label": "Hair Care"
+            "label": "Hair Care",
+            "heading_line1": "Complete Care for",
+            "heading_line2": "Every Strand",
+            "body_text": "Shampoo, conditioner, treatments and more for stronger, healthier hair.",
+            "button_label": "Shop Hair Care"
           }
         },
         {
           "type": "pillar",
           "settings": {
-            "heading_line1": "Water Smart.",
-            "heading_line2": "Every Drop Counts.",
-            "accent_line2": true,
-            "body_text": "We use clean, conscious innovation for a better tomorrow.",
-            "overlay_opacity": 70,
+            "label": "Styling",
+            "heading_line1": "Style with",
+            "heading_line2": "Confidence",
+            "body_text": "Professional styling solutions for every look and occasion.",
+            "button_label": "Shop Styling"
+          }
+        },
+        {
+          "type": "pillar",
+          "settings": {
+            "label": "Real Results",
+            "heading_line1": "Trusted by",
+            "heading_line2": "Professionals",
+            "body_text": "Salon performance. Everyday confidence.",
             "button_label": "Our Promise"
-          }
-        },
-        {
-          "type": "pillar",
-          "settings": {
-            "heading_line1": "WE ACT",
-            "heading_line2": "On our purpose always",
-            "accent_line2": false,
-            "body_text": "Better ingredients. Cleaner choices. stronger planet. Stronger you.",
-            "overlay_opacity": 70,
-            "button_label": "Sustainability"
           }
         }
       ]

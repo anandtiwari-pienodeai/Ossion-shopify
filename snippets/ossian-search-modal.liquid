@@ -1,0 +1,915 @@
+{%- doc -%}
+  Ossion search pop-up (a native <dialog>). Opened by any [data-ossian-search-open]
+  element; behaviour lives in assets/ossian-search.js.
+
+  Default state: trending searches, popular categories, a promo banner, featured
+  products and the visitor's recent searches. While typing, the promo is replaced by
+  live product results rendered by sections/ossian-search-results.liquid.
+
+  Everything is editable in the theme editor on the Ossion Navbar section
+  ("Search pop-up" settings and "Search category" blocks).
+
+  @param {object} section - The ossian-header section (settings + blocks)
+{%- enddoc -%}
+
+{%- liquid
+  assign s = section.settings
+  assign category_blocks = section.blocks | where: 'type', 'search_category'
+  assign trending = s.search_trending | newline_to_br | split: '<br />'
+  assign featured_collection = s.search_products_collection | default: collections.all
+
+  # Without "Search category" blocks, list the sub-links of the first menu item that has some
+  assign fallback_categories = null
+  if category_blocks.size == 0
+    for menu_link in s.menu.links
+      if menu_link.links.size > 0
+        assign fallback_categories = menu_link.links
+        break
+      endif
+    endfor
+  endif
+-%}
+
+<dialog
+  id="OssianSearch"
+  class="ossian-search"
+  aria-label="{{ 'content.search_input_label' | t }}"
+  data-ossian-search
+  data-search-url="{{ routes.search_url }}"
+  data-cart-add-url="{{ routes.cart_add_url }}"
+  data-cart-url="{{ routes.cart_url }}"
+>
+  <div class="ossian-search__panel">
+    <div class="ossian-search__top">
+      <form action="{{ routes.search_url }}" method="get" role="search" class="ossian-search__form" data-search-form>
+        <svg class="ossian-search__form-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input
+          type="search"
+          name="q"
+          class="ossian-search__input"
+          placeholder="{{ s.search_modal_placeholder | escape }}"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+          aria-label="{{ 'content.search_input_label' | t }}"
+          data-search-input
+        >
+        <input type="hidden" name="type" value="product">
+        <input type="hidden" name="options[prefix]" value="last">
+      </form>
+      <p class="ossian-search__esc">Press <kbd>ESC</kbd> to close</p>
+      <button type="button" class="ossian-search__close" data-search-close aria-label="{{ 'actions.close' | t }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="ossian-search__body">
+      <aside class="ossian-search__aside">
+        {%- if trending.size > 0 and s.search_trending != blank -%}
+          <section class="ossian-search__block">
+            <h2 class="ossian-search__aside-title">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e5484d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22c4 0 7-2.9 7-7 0-3.4-2.2-5.6-3.6-7.4-.3 1.8-1.3 3-2.4 3.4.2-3-1.2-6.4-4-8-.1 2.7-1.4 4.5-2.8 6.2C4.8 10.9 5 12.8 5 15c0 4.1 3 7 7 7z"/></svg>
+              {{ s.search_trending_heading }}
+            </h2>
+            <ul class="ossian-search__trending" role="list">
+              {%- for term in trending -%}
+                {%- assign term = term | strip -%}
+                {%- if term != blank -%}
+                  <li>
+                    <a href="{{ routes.search_url }}?q={{ term | url_encode }}&type=product" data-search-term="{{ term | escape }}">
+                      <span>{{ term }}</span>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg>
+                    </a>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </section>
+        {%- endif -%}
+
+        {%- if category_blocks.size > 0 or fallback_categories.size > 0 -%}
+          <section class="ossian-search__block ossian-search__block--categories">
+            <h2 class="ossian-search__aside-title">{{ s.search_categories_heading }}</h2>
+            <ul class="ossian-search__categories" role="list">
+              {%- if category_blocks.size > 0 -%}
+                {%- for block in category_blocks -%}
+                  {%- liquid
+                    assign cat_collection = block.settings.collection
+                    assign cat_image = block.settings.image | default: cat_collection.image | default: cat_collection.featured_image
+                    assign cat_label = block.settings.label | default: cat_collection.title
+                    assign cat_url = block.settings.link | default: cat_collection.url | default: routes.all_products_collection_url
+                  -%}
+                  <li {{ block.shopify_attributes }}>
+                    {%- render 'ossian-search-category', url: cat_url, label: cat_label, image: cat_image -%}
+                  </li>
+                {%- endfor -%}
+              {%- else -%}
+                {%- for cat_link in fallback_categories -%}
+                  {%- liquid
+                    assign cat_image = null
+                    if cat_link.type == 'collection_link'
+                      assign cat_image = cat_link.object.image | default: cat_link.object.featured_image
+                    endif
+                  -%}
+                  <li>
+                    {%- render 'ossian-search-category', url: cat_link.url, label: cat_link.title, image: cat_image -%}
+                  </li>
+                {%- endfor -%}
+              {%- endif -%}
+            </ul>
+          </section>
+        {%- endif -%}
+      </aside>
+
+      <div class="ossian-search__main">
+        {%- if s.search_promo_heading != blank or s.search_promo_image != blank -%}
+          <a
+            href="{{ s.search_promo_link | default: routes.all_products_collection_url }}"
+            class="ossian-search__promo"
+            data-search-default
+          >
+            {%- if s.search_promo_image != blank -%}
+              {{ s.search_promo_image | image_url: width: 1400 | image_tag: loading: 'lazy', alt: '', class: 'ossian-search__promo-image', widths: '700, 1000, 1400', sizes: '(min-width: 990px) 70vw, 100vw' }}
+            {%- endif -%}
+            <span class="ossian-search__promo-copy">
+              {%- if s.search_promo_eyebrow != blank -%}
+                <span class="ossian-search__promo-eyebrow">{{ s.search_promo_eyebrow }}</span>
+              {%- endif -%}
+              <span class="ossian-search__promo-heading">
+                {{ s.search_promo_heading }}
+                {%- if s.search_promo_heading_accent != blank -%}
+                  <span class="ossian-search__promo-accent">{{ s.search_promo_heading_accent }}</span>
+                {%- endif -%}
+              </span>
+              {%- if s.search_promo_text != blank -%}
+                <span class="ossian-search__promo-text">{{ s.search_promo_text }}</span>
+              {%- endif -%}
+              {%- if s.search_promo_button != blank -%}
+                <span class="ossian-search__promo-button">
+                  {{ s.search_promo_button }}
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </span>
+              {%- endif -%}
+            </span>
+          </a>
+        {%- endif -%}
+
+        <section class="ossian-search__products" aria-live="polite">
+          <div class="ossian-search__section-head">
+            <h2 class="ossian-search__section-title" data-search-products-title data-default-title="{{ s.search_products_heading | escape }}">
+              {{- s.search_products_heading -}}
+            </h2>
+            <a
+              href="{{ featured_collection.url | default: routes.all_products_collection_url }}"
+              class="ossian-search__view-all"
+              data-search-view-all
+              data-default-href="{{ featured_collection.url | default: routes.all_products_collection_url }}"
+              data-default-label="View All Products ({{ featured_collection.products_count }})"
+            >
+              <span data-search-view-all-label>View All Products ({{ featured_collection.products_count }})</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+
+          <div class="ossian-search__grid" data-search-default-grid data-search-default>
+            {%- for product in featured_collection.products limit: 4 -%}
+              {%- render 'ossian-search-product-card', product: product -%}
+            {%- endfor -%}
+          </div>
+          <div class="ossian-search__grid" data-search-results hidden></div>
+          <p class="ossian-search__empty" data-search-empty hidden></p>
+          <div class="ossian-search__loading" data-search-loading hidden aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </section>
+
+        <section class="ossian-search__recent" data-search-recent hidden>
+          <div class="ossian-search__section-head">
+            <h2 class="ossian-search__section-title ossian-search__section-title--icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              {{ s.search_recent_heading }}
+            </h2>
+            <button type="button" class="ossian-search__clear" data-search-clear-recent>Clear All</button>
+          </div>
+          <ul class="ossian-search__chips" role="list" data-search-recent-list></ul>
+        </section>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+{% stylesheet %}
+  .ossian-search {
+    --search-navy: #1e3a5f;
+    --search-blue: #1f63d6;
+    --search-tint: #eef4fb;
+    --search-line: rgb(30 58 95 / 0.1);
+    width: min(1460px, calc(100vw - 48px));
+    max-width: none;
+    max-height: calc(100dvh - 48px);
+    margin: 24px auto auto;
+    padding: 0;
+    border: none;
+    border-radius: 22px;
+    background: #fff;
+    color: var(--search-navy);
+    box-shadow: 0 30px 80px rgba(10, 23, 48, 0.3);
+    overflow: hidden;
+  }
+
+  .ossian-search[open] {
+    display: flex;
+    animation: ossian-search-in 0.22s ease;
+  }
+
+  .ossian-search::backdrop {
+    background: rgba(12, 24, 44, 0.45);
+    backdrop-filter: blur(6px);
+  }
+
+  @keyframes ossian-search-in {
+    from {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+  }
+
+  html.ossian-search-lock {
+    overflow: hidden;
+  }
+
+  .ossian-search__panel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 0;
+  }
+
+  /* Top bar */
+  .ossian-search__top {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 26px 28px 22px;
+  }
+
+  .ossian-search__form {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .ossian-search__form-icon {
+    position: absolute;
+    left: 28px;
+    color: var(--search-navy);
+    pointer-events: none;
+  }
+
+  .ossian-search__input {
+    width: 100%;
+    height: 56px;
+    padding: 0 24px 0 78px;
+    border: 1px solid rgb(30 58 95 / 0.06);
+    border-radius: 999px;
+    background: var(--search-tint);
+    color: var(--search-navy);
+    font: inherit;
+    font-size: 1.08rem;
+    outline: none;
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .ossian-search__input::placeholder {
+    color: rgb(30 58 95 / 0.62);
+  }
+
+  .ossian-search__input:focus {
+    border-color: rgb(31 99 214 / 0.35);
+    box-shadow: 0 0 0 4px rgb(31 99 214 / 0.1);
+  }
+
+  .ossian-search__input::-webkit-search-cancel-button {
+    display: none;
+  }
+
+  .ossian-search__esc {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding-inline-start: 26px;
+    border-inline-start: 1px solid var(--search-line);
+    color: rgb(30 58 95 / 0.6);
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .ossian-search__esc kbd {
+    padding: 4px 9px;
+    border-radius: 6px;
+    background: var(--search-tint);
+    color: var(--search-blue);
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .ossian-search__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--search-tint);
+    color: var(--search-navy);
+    cursor: pointer;
+  }
+
+  .ossian-search__close:hover {
+    background: #e2ecf8;
+  }
+
+  /* Body */
+  .ossian-search__body {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.27fr) minmax(0, 1fr);
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .ossian-search__aside {
+    padding: 4px 28px 32px;
+    border-inline-end: 1px solid var(--search-line);
+  }
+
+  .ossian-search__block + .ossian-search__block {
+    margin-top: 18px;
+    padding-top: 26px;
+    border-top: 1px solid var(--search-line);
+  }
+
+  .ossian-search__aside-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 12px;
+    font-size: 1.12rem;
+    font-weight: 700;
+    color: var(--search-navy);
+  }
+
+  .ossian-search__trending,
+  .ossian-search__categories {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ossian-search__trending a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: var(--search-navy);
+    font-size: 1.05rem;
+    text-decoration: none;
+  }
+
+  .ossian-search__trending a:hover,
+  .ossian-search__trending a:focus-visible {
+    background: var(--search-tint);
+    color: var(--search-blue);
+  }
+
+  .ossian-search__categories {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .ossian-search__categories a {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 4px;
+    border-radius: 10px;
+    color: var(--search-navy);
+    font-size: 1rem;
+    text-decoration: none;
+  }
+
+  .ossian-search__categories a:hover {
+    background: var(--search-tint);
+  }
+
+  .ossian-search__category-media {
+    flex-shrink: 0;
+    width: 66px;
+    height: 46px;
+    border-radius: 8px;
+    background: var(--search-tint);
+    overflow: hidden;
+  }
+
+  .ossian-search__category-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .ossian-search__category-label {
+    flex: 1;
+  }
+
+  .ossian-search__main {
+    min-width: 0;
+    padding: 4px 28px 32px;
+  }
+
+  /* Promo */
+  .ossian-search__promo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 320px;
+    margin-bottom: 30px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(105deg, #dfeaf6 0%, #eef4fb 45%, #dbe7f4 100%);
+    color: var(--search-navy);
+    text-decoration: none;
+  }
+
+  .ossian-search__promo[hidden] {
+    display: none;
+  }
+
+  .ossian-search__promo-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: right center;
+  }
+
+  .ossian-search__promo-copy {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 46%;
+    padding: 40px 46px;
+  }
+
+  .ossian-search__promo-eyebrow {
+    margin-bottom: 18px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--search-blue);
+  }
+
+  .ossian-search__promo-heading {
+    font-size: clamp(1.9rem, 2.6vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1.12;
+    color: #0f2546;
+  }
+
+  .ossian-search__promo-accent {
+    display: block;
+    color: var(--search-blue);
+  }
+
+  .ossian-search__promo-text {
+    margin-top: 16px;
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: rgb(30 58 95 / 0.8);
+  }
+
+  .ossian-search__promo-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+    padding: 15px 30px;
+    border-radius: 999px;
+    background: #0f2546;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s;
+  }
+
+  .ossian-search__promo:hover .ossian-search__promo-button {
+    background: var(--search-blue);
+  }
+
+  /* Products */
+  .ossian-search__section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .ossian-search__section-title {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--search-navy);
+  }
+
+  .ossian-search__section-title--icon {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 1.2rem;
+  }
+
+  .ossian-search__view-all,
+  .ossian-search__clear {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--search-blue);
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .ossian-search__view-all[hidden] {
+    display: none;
+  }
+
+  .ossian-search__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .ossian-search__grid[hidden],
+  .ossian-search__empty[hidden],
+  .ossian-search__loading[hidden],
+  .ossian-search__recent[hidden] {
+    display: none;
+  }
+
+  .ossian-search__empty {
+    margin: 0;
+    padding: 36px 0;
+    color: rgb(30 58 95 / 0.65);
+    font-size: 1rem;
+  }
+
+  .ossian-search__loading {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .ossian-search__loading span {
+    height: 290px;
+    border-radius: 14px;
+    background: linear-gradient(90deg, #f1f5fa 0%, #e6edf6 50%, #f1f5fa 100%);
+    background-size: 200% 100%;
+    animation: ossian-search-shimmer 1.2s linear infinite;
+  }
+
+  @keyframes ossian-search-shimmer {
+    to {
+      background-position: -200% 0;
+    }
+  }
+
+  /* Product card */
+  .ossian-search-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(10, 23, 48, 0.06), 0 4px 16px rgba(10, 23, 48, 0.06);
+    overflow: hidden;
+  }
+
+  .ossian-search-card__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 238 / 162;
+    background: #f1f5fa;
+    overflow: hidden;
+  }
+
+  .ossian-search-card__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+  }
+
+  .ossian-search-card__wish {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--search-navy);
+    cursor: pointer;
+  }
+
+  .ossian-search-card__wish:hover {
+    background: rgb(255 255 255 / 0.85);
+  }
+
+  .ossian-search-card__wish[aria-pressed='true'] svg {
+    fill: #e5484d;
+    stroke: #e5484d;
+  }
+
+  .ossian-search-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 16px 18px 16px;
+  }
+
+  .ossian-search-card__vendor {
+    margin: 0 0 2px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: rgb(30 58 95 / 0.85);
+  }
+
+  .ossian-search-card__title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: #0f2546;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.35;
+    text-decoration: none;
+  }
+
+  .ossian-search-card__title:hover {
+    color: var(--search-blue);
+  }
+
+  .ossian-search-card__rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 10px 0 0;
+    font-size: 0.85rem;
+    color: rgb(30 58 95 / 0.65);
+  }
+
+  .ossian-search-card__stars {
+    display: inline-flex;
+    gap: 1px;
+  }
+
+  .ossian-search-card__stars svg {
+    fill: #dfe3ea;
+  }
+
+  .ossian-search-card__stars svg.is-filled {
+    fill: #f5a524;
+  }
+
+  .ossian-search-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 8px;
+  }
+
+  .ossian-search-card__price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f2546;
+  }
+
+  .ossian-search-card__add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--search-tint);
+    color: var(--search-blue);
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  .ossian-search-card__add:hover {
+    background: var(--search-blue);
+    color: #fff;
+  }
+
+  .ossian-search-card__add.is-loading {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .ossian-search-card__add.is-added {
+    background: #1f9d55;
+    color: #fff;
+  }
+
+  /* Recent searches */
+  .ossian-search__recent {
+    margin-top: 30px;
+  }
+
+  .ossian-search__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ossian-search__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px 8px 16px;
+    border-radius: 999px;
+    background: var(--search-tint);
+    color: var(--search-navy);
+    font-size: 0.92rem;
+  }
+
+  .ossian-search__chip-term {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .ossian-search__chip-remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .ossian-search__chip-remove:hover {
+    background: rgb(30 58 95 / 0.1);
+  }
+
+  /* Tablet */
+  @media (max-width: 1199px) {
+    .ossian-search__grid,
+    .ossian-search__loading {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    /* Featured products: show one row of three */
+    [data-search-default-grid] > :nth-child(n + 4) {
+      display: none;
+    }
+  }
+
+  /* Mobile: full screen, sidebar moves below the results */
+  @media (max-width: 989px) {
+    .ossian-search {
+      width: 100vw;
+      max-height: 100dvh;
+      height: 100dvh;
+      margin: 0;
+      border-radius: 0;
+    }
+
+    .ossian-search__top {
+      gap: 12px;
+      padding: 14px 16px;
+    }
+
+    .ossian-search__esc {
+      display: none;
+    }
+
+    .ossian-search__input {
+      height: 50px;
+      padding-left: 56px;
+      font-size: 1rem;
+    }
+
+    .ossian-search__form-icon {
+      left: 20px;
+      width: 22px;
+      height: 22px;
+    }
+
+    .ossian-search__body {
+      grid-template-columns: 1fr;
+    }
+
+    .ossian-search__aside {
+      order: 2;
+      padding: 8px 16px 32px;
+      border-inline-end: none;
+      border-top: 1px solid var(--search-line);
+    }
+
+    .ossian-search__main {
+      padding: 4px 16px 24px;
+    }
+
+    .ossian-search__promo {
+      min-height: 220px;
+    }
+
+    .ossian-search__promo-copy {
+      max-width: 70%;
+      padding: 26px 22px;
+    }
+
+    .ossian-search__grid,
+    .ossian-search__loading {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    [data-search-default-grid] > :nth-child(n + 4) {
+      display: flex;
+    }
+  }
+
+  @media (max-width: 599px) {
+    .ossian-search__promo-copy {
+      max-width: 100%;
+      padding: 22px 20px;
+      background: linear-gradient(90deg, rgb(238 244 251 / 0.95) 55%, rgb(238 244 251 / 0));
+    }
+
+    .ossian-search__promo-heading {
+      font-size: 1.6rem;
+    }
+
+    .ossian-search-card__body {
+      padding: 12px;
+    }
+
+    .ossian-search-card__add {
+      width: 38px;
+      height: 38px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ossian-search[open] {
+      animation: none;
+    }
+  }
+{% endstylesheet %}

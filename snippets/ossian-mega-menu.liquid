@@ -1,0 +1,148 @@
+{%- doc -%}
+  Desktop mega menu for one top-level menu link with child links.
+
+  Three columns:
+    1. The child links. Hovering/focusing one switches column 3 to that child.
+    2. A promo panel (eyebrow, heading, text, button, image). Content comes from a
+       matching "Mega menu promo" block, falling back to the linked collection.
+    3. "Bestsellers": the first products of the hovered child's collection (or the
+       parent's collection when the child isn't a collection link), plus the child's
+       own sub-links when it has any. Product subtitles use the custom.tagline (or
+       custom.subtitle) product metafield, else the start of the description.
+
+  @param {object} link - Top-level linklist link (with child links)
+  @param {string} menu_id - Unique id used to pair the trigger and panel
+  @param {object} [promo] - Matching mega_menu_promo block
+{%- enddoc -%}
+
+{%- liquid
+  assign parent_collection = null
+  if link.type == 'collection_link'
+    assign parent_collection = link.object
+  endif
+
+  assign promo_eyebrow = promo.settings.eyebrow | default: 'Professional'
+  if promo == blank
+    assign promo_eyebrow = 'Professional ' | append: link.title
+  endif
+  assign promo_heading = promo.settings.heading | default: parent_collection.title | default: link.title
+  assign promo_text = promo.settings.text
+  if promo_text == blank and parent_collection.description != blank
+    assign promo_text = parent_collection.description | strip_html | truncatewords: 14
+  endif
+  assign promo_button = promo.settings.button_label | default: 'View All '
+  if promo.settings.button_label == blank
+    assign promo_button = 'View All ' | append: link.title
+  endif
+  assign promo_url = promo.settings.button_link | default: link.url
+  assign promo_image = promo.settings.image | default: parent_collection.image | default: parent_collection.featured_image
+  assign bestsellers_heading = promo.settings.bestsellers_heading | default: 'Bestsellers'
+  assign products_limit = promo.settings.products_limit | default: 3
+-%}
+
+<div
+  class="ossian-mega"
+  data-mega-menu="{{ menu_id }}"
+  hidden
+>
+  <ul class="ossian-mega__nav" role="list">
+    {%- for child in link.links -%}
+      <li>
+        <a
+          href="{{ child.url }}"
+          class="ossian-mega__nav-link{% if forloop.first %} is-active{% endif %}"
+          data-mega-child="{{ forloop.index0 }}"
+          {% if child.current %}aria-current="page"{% endif %}
+        >
+          <span>{{ child.title }}</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+
+  <div class="ossian-mega__promo" {{ promo.shopify_attributes }}>
+    <div class="ossian-mega__promo-copy">
+      {%- if promo_eyebrow != blank -%}
+        <p class="ossian-mega__eyebrow">{{ promo_eyebrow }}</p>
+      {%- endif -%}
+      <p class="ossian-mega__heading">{{ promo_heading }}</p>
+      {%- if promo_text != blank -%}
+        <p class="ossian-mega__text">{{ promo_text }}</p>
+      {%- endif -%}
+      {%- if promo_url != blank and promo_url != '#' -%}
+        <a href="{{ promo_url }}" class="ossian-mega__button">
+          {{ promo_button }}
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      {%- endif -%}
+    </div>
+    {%- if promo_image != blank -%}
+      <div class="ossian-mega__promo-media">
+        {{ promo_image | image_url: width: 700 | image_tag: loading: 'lazy', alt: promo_heading, widths: '300, 500, 700', sizes: '320px' }}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="ossian-mega__side">
+    {%- for child in link.links -%}
+      {%- liquid
+        assign side_collection = parent_collection
+        if child.type == 'collection_link'
+          assign side_collection = child.object
+        endif
+        assign side_url = child.url | default: link.url
+      -%}
+      <div class="ossian-mega__side-panel" data-mega-panel="{{ forloop.index0 }}"{% unless forloop.first %} hidden{% endunless %}>
+        <div class="ossian-mega__side-head">
+          <p class="ossian-mega__side-title">{{ bestsellers_heading }}</p>
+          <a href="{{ side_url }}" class="ossian-mega__side-all">
+            View All
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+
+        {%- if child.links.size > 0 -%}
+          <ul class="ossian-mega__chips" role="list">
+            {%- for grandchild in child.links -%}
+              <li><a href="{{ grandchild.url }}"{% if grandchild.current %} aria-current="page"{% endif %}>{{ grandchild.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- if side_collection.products.size > 0 -%}
+          <ul class="ossian-mega__products" role="list">
+            {%- for product in side_collection.products limit: products_limit -%}
+              {%- liquid
+                assign subtitle = product.metafields.custom.tagline | default: product.metafields.custom.subtitle
+                if subtitle == blank
+                  assign subtitle = product.description | strip_html | remove_first: product.title | strip | truncatewords: 4, ''
+                endif
+              -%}
+              <li>
+                <a href="{{ product.url }}" class="ossian-mega__product">
+                  <span class="ossian-mega__product-media">
+                    {%- if product.featured_image != blank -%}
+                      {{ product.featured_image | image_url: width: 180 | image_tag: loading: 'lazy', alt: product.title, widths: '90, 180, 270', sizes: '116px' }}
+                    {%- endif -%}
+                  </span>
+                  <span class="ossian-mega__product-info">
+                    <span class="ossian-mega__product-title">{{ product.title }}</span>
+                    {%- if subtitle != blank -%}
+                      <span class="ossian-mega__product-sub">{{ subtitle }}</span>
+                    {%- endif -%}
+                  </span>
+                  <span class="ossian-mega__product-arrow" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- elsif child.links.size == 0 -%}
+          <p class="ossian-mega__empty">Explore the full {{ child.title }} range.</p>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>

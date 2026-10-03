@@ -1,0 +1,85 @@
+{%- doc -%}
+  Product card used in the Ossion search pop-up (default products and live results).
+
+  Rating comes from the reviews.rating / reviews.rating_count metafields (Shopify
+  product reviews standard); stars are hidden when the product has no rating.
+  Single-variant products get a quick add-to-cart button; others link to the product.
+
+  @param {object} product - The product to render
+{%- enddoc -%}
+
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign rating_value = product.metafields.reviews.rating.value
+  assign rating = rating_value.rating | default: rating_value
+  assign rating_count = product.metafields.reviews.rating_count.value | default: 0
+  assign rating_rounded = rating | times: 1.0 | round
+  assign can_quick_add = false
+  if product.has_only_default_variant and variant.available
+    assign can_quick_add = true
+  endif
+-%}
+
+<article class="ossian-search-card">
+  <a href="{{ product.url }}" class="ossian-search-card__media" data-search-product-link tabindex="-1">
+    {%- if product.featured_image != blank -%}
+      {{
+        product.featured_image
+        | image_url: width: 400
+        | image_tag: loading: 'lazy', alt: product.featured_image.alt | default: product.title, widths: '200, 300, 400', sizes: '(min-width: 990px) 220px, 45vw'
+      }}
+    {%- endif -%}
+  </a>
+
+  <button
+    type="button"
+    class="ossian-search-card__wish"
+    data-search-wishlist="{{ product.id }}"
+    aria-pressed="false"
+    aria-label="Add {{ product.title | escape }} to wishlist"
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+  </button>
+
+  <div class="ossian-search-card__body">
+    {%- if product.vendor != blank -%}
+      <p class="ossian-search-card__vendor">{{ product.vendor }}</p>
+    {%- endif -%}
+    <a href="{{ product.url }}" class="ossian-search-card__title" data-search-product-link>{{ product.title }}</a>
+
+    {%- if rating != blank -%}
+      <p class="ossian-search-card__rating">
+        <span class="ossian-search-card__stars" aria-hidden="true">
+          {%- for i in (1..5) -%}
+            <svg width="14" height="14" viewBox="0 0 24 24" class="{% if i <= rating_rounded %}is-filled{% endif %}"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17.1l-5.9 3.2 1.3-6.5L2.5 9.3l6.6-.8z"/></svg>
+          {%- endfor -%}
+        </span>
+        <span class="visually-hidden">{{ rating }} / 5</span>
+        {%- if rating_count > 0 -%}
+          <span class="ossian-search-card__count">({{ rating_count }})</span>
+        {%- endif -%}
+      </p>
+    {%- endif -%}
+
+    <div class="ossian-search-card__footer">
+      <span class="ossian-search-card__price">
+        {%- if product.price_varies -%}From {% endif -%}
+        {{- product.price | money_without_trailing_zeros -}}
+      </span>
+      {%- if can_quick_add -%}
+        <button
+          type="button"
+          class="ossian-search-card__add"
+          data-search-add="{{ variant.id }}"
+          aria-label="{{ 'products.product.add_to_cart' | t }}: {{ product.title | escape }}"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/><path d="M12 11v5M9.5 13.5h5" class="ossian-search-card__add-plus"/></svg>
+        </button>
+      {%- else -%}
+        <a href="{{ product.url }}" class="ossian-search-card__add" aria-label="View {{ product.title | escape }}" data-search-product-link>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</article>
