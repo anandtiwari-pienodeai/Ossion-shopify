@@ -1,0 +1,40 @@
+{%- doc -%}
+  Renders the Ossion logo. Uses the image chosen in the theme editor when one is set,
+  otherwise the bundled assets/ossion-logo.png.
+
+  @param {object} [image] - Logo image from the theme editor (image_picker)
+  @param {string} [class] - Extra class for the link
+  @param {string} [loading] - Image loading strategy, defaults to 'lazy'
+{%- enddoc -%}
+
+{%- liquid
+  assign logo_loading = loading | default: 'lazy'
+  assign logo_priority = 'auto'
+  if logo_loading == 'eager'
+    assign logo_priority = 'high'
+  endif
+-%}
+
+<a href="{{ routes.root_url }}" class="ossian-navbar__logo{% if class %} {{ class }}{% endif %}">
+  {%- if image != blank -%}
+    {{
+      image
+      | image_url: width: 600
+      | image_tag:
+        alt: shop.name,
+        loading: logo_loading,
+        fetchpriority: logo_priority,
+        widths: '200, 300, 450, 600',
+        sizes: '(min-width: 990px) 200px, 160px'
+    }}
+  {%- else -%}
+    <img
+      src="{{ 'ossion-logo.png' | asset_url }}"
+      alt="{{ shop.name | escape }}"
+      width="720"
+      height="193"
+      loading="{{ logo_loading }}"
+      fetchpriority="{{ logo_priority }}"
+    >
+  {%- endif -%}
+</a>
