@@ -17,7 +17,7 @@
           "settings": {
             "media_type": "image",
             "image": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_09_01_51_PM.png",
-            "image_mobile": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_08_52_42_PM.png",
+            "image_mobile": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_39_19_PM.png",
             "link": "",
             "link_label": ""
           }
@@ -26,27 +26,8 @@
           "type": "slide",
           "settings": {
             "media_type": "image",
-            "image": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_01_14_49_AM_8ee11181-bf24-4739-ab3e-0cc29f81c329.png",
-            "image_mobile": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_08_55_15_PM.png",
-            "link": "",
-            "link_label": ""
-          }
-        },
-        "slide_XCaAHR": {
-          "type": "slide",
-          "settings": {
-            "media_type": "image",
-            "image": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_01_32_28_AM.png",
-            "image_mobile": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_08_56_44_PM.png",
-            "link": "",
-            "link_label": ""
-          }
-        },
-        "slide_JcP94N": {
-          "type": "slide",
-          "settings": {
-            "media_type": "image",
-            "image": "shopify://shop_images/Ossion.png",
+            "image": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_40_46_PM.png",
+            "image_mobile": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_42_40_PM.png",
             "link": "",
             "link_label": ""
           }
@@ -54,14 +35,15 @@
       },
       "block_order": [
         "slide_6ehiiH",
-        "slide_npPbYc",
-        "slide_XCaAHR",
-        "slide_JcP94N"
+        "slide_npPbYc"
       ],
       "name": "Hero Carousel",
       "settings": {
         "autoplay": true,
-        "autoplay_speed": "3000"
+        "autoplay_speed": "3000",
+        "banner_height": 80,
+        "banner_height_mobile": 50,
+        "mobile_fit_image": true
       }
     },
     "ossian_brand_pillars": {
@@ -71,56 +53,56 @@
           "type": "pillar",
           "settings": {
             "image": "shopify://shop_images/image_208_1.png",
+            "label": "Our Science",
             "heading_line1": "From the Depths of",
             "heading_line2": "Marine Science",
             "accent_line2": true,
             "body_text": "Advanced formulations inspired by the ocean. Proven by science.",
             "overlay_opacity": 80,
             "button_label": "Our Science",
-            "button_link": "",
-            "label": "Our Science"
+            "button_link": ""
           }
         },
         "pillar_haircare": {
           "type": "pillar",
           "settings": {
             "image": "shopify://shop_images/image_211.png",
+            "label": "Hair Care",
             "heading_line1": "Complete Care for",
             "heading_line2": "Every Strand",
             "accent_line2": true,
             "body_text": "Shampoo, conditioner, treatments and more for stronger, healthier hair.",
             "overlay_opacity": 50,
             "button_label": "Shop Hair Care",
-            "button_link": "",
-            "label": "Hair Care"
+            "button_link": ""
           }
         },
         "pillar_promise": {
           "type": "pillar",
           "settings": {
             "image": "shopify://shop_images/image_209_1.png",
+            "label": "Styling",
             "heading_line1": "Style with",
             "heading_line2": "Confidence",
             "accent_line2": true,
             "body_text": "Professional styling solutions for every look and occasion.",
             "overlay_opacity": 70,
             "button_label": "Shop Styling",
-            "button_link": "",
-            "label": "Styling"
+            "button_link": ""
           }
         },
         "pillar_sustainability": {
           "type": "pillar",
           "settings": {
             "image": "shopify://shop_images/image_210_1.png",
+            "label": "Real Results",
             "heading_line1": "Trusted by",
             "heading_line2": "Professionals",
             "accent_line2": true,
             "body_text": "Salon performance. Everyday confidence.",
             "overlay_opacity": 70,
             "button_label": "Our Promise",
-            "button_link": "",
-            "label": "Real Results"
+            "button_link": ""
           }
         }
       },
@@ -132,111 +114,129 @@
       ],
       "name": "Brand Pillars",
       "settings": {
-        "hero_image": "shopify://shop_images/image_212_1.png",
-        "hero_link": "",
         "section_height": 680,
-        "hero_alt": "OSSION Professional — Salon science at its best"
+        "hero_image": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_25_52_PM.png",
+        "hero_image_mobile": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_36_28_PM.png",
+        "hero_alt": "OSSION Professional — Salon science at its best",
+        "hero_link": ""
       }
     },
     "ossian_hair_solutions": {
-      "type": "ossian-product-showcase",
+      "type": "ossian-solutions-showcase",
       "blocks": {
-        "card_straighten": {
-          "type": "product_card",
+        "image_card_1": {
+          "type": "image_card",
           "settings": {
             "product": "",
-            "image": "shopify://shop_images/ChatGPT_Image_Sep_7_2026_12_25_56_AM.png",
-            "custom_name": "STRAIGHTEN",
-            "descriptor": "Silk-smooth, frizz free finish",
-            "badge_label": "BEST SELLER",
-            "step_label": "STEP 1",
-            "collection": "collectionone",
+            "collection": "",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.03.jpg",
+            "alt": "Step 1 Straighten Cream — silk-smooth, frizz free finish",
             "link": ""
           }
         },
-        "card_developer": {
-          "type": "product_card",
+        "image_card_2": {
+          "type": "image_card",
           "settings": {
-            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy-1",
-            "image": "shopify://shop_images/ChatGPT_Image_Sep_7_2026_12_27_01_AM.png",
-            "custom_name": "Developer",
-            "descriptor": "Precision color, zero damage",
-            "badge_label": "NEW LAUNCH",
-            "step_label": "STEP 2",
-            "collection": "collectiontwo",
+            "product": "",
+            "collection": "",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.17.jpg",
+            "alt": "Step 2 Developer — precision color, zero damage",
             "link": ""
           }
         },
-        "card_hair_mask": {
-          "type": "product_card",
+        "image_card_3": {
+          "type": "image_card",
           "settings": {
-            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy",
-            "image": "shopify://shop_images/ChatGPT_Image_Sep_7_2026_12_28_04_AM.png",
-            "custom_name": "Hair Mask",
-            "descriptor": "Up to 10X repair",
-            "badge_label": "DEEP REPAIR",
-            "step_label": "STEP 3",
-            "collection": "shopall",
+            "product": "",
+            "collection": "",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.31.jpg",
+            "alt": "Step 3 Hair Mask — up to 10X repair for visibly healthier hair",
             "link": ""
-          }
-        },
-        "feature_all_hair_types": {
-          "type": "feature_item",
-          "settings": {
-            "icon": "beaker",
-            "title": "For All Hair Types",
-            "subtitle": "Suitable for every hair type"
-          }
-        },
-        "feature_keratin": {
-          "type": "feature_item",
-          "settings": {
-            "icon": "triangle",
-            "title": "Keratin Complex",
-            "subtitle": "Strengthens from within"
-          }
-        },
-        "feature_long_lasting": {
-          "type": "feature_item",
-          "settings": {
-            "icon": "drop",
-            "title": "Long Lasting results",
-            "subtitle": "Salon results that last"
-          }
-        },
-        "feature_trusted": {
-          "type": "feature_item",
-          "settings": {
-            "icon": "person",
-            "title": "Trusted by professionals",
-            "subtitle": "Used in salons worldwide"
           }
         }
       },
       "block_order": [
-        "card_straighten",
-        "card_developer",
-        "card_hair_mask",
-        "feature_all_hair_types",
-        "feature_keratin",
-        "feature_long_lasting",
-        "feature_trusted"
+        "image_card_1",
+        "image_card_2",
+        "image_card_3"
       ],
-      "name": "Professional Hair Solutions",
+      "name": "Hair Solutions",
       "settings": {
-        "top_heading": "Only what your",
-        "top_heading_accent": "Hair Needs",
-        "category_label": "Hair Care",
-        "heading": "Professional Hair Solutions",
-        "body_text": "Advanced formulas for stronger, smoother & healthier hair.",
-        "cta_text": "Explore Collection",
-        "cta_link": "",
-        "trust_icon_1": "flask",
-        "trust_label_1": "Salon Quality",
-        "trust_icon_2": "drop",
-        "trust_label_2": "Advanced Technology",
-        "trust_icon_3": "shield",
-        "trust_label_3": "Safe & Effective"
+        "background_image": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_56_32_PM.png",
+        "background_image_mobile": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.17.jpg",
+        "eyebrow": "Professional Hair Care",
+        "heading_line1": "Only What Your",
+        "heading_line2": "Hair Needs",
+        "text": "Advanced formulas for stronger, smoother and healthier hair.",
+        "button_label": "Explore Collection",
+        "button_link": "",
+        "feature_1": "Deep\nNourishment",
+        "feature_1_icon": "drop",
+        "feature_2": "Suitable\nfor All Hair Types",
+        "feature_2_icon": "shield",
+        "feature_3": "Visible\nResults",
+        "feature_3_icon": "sparkle",
+        "feature_4": "Clean & Safe\nIngredients",
+        "feature_4_icon": "leaf"
+      }
+    },
+    "ossian_solutions_showcase_qbdC4a": {
+      "type": "ossian-solutions-showcase",
+      "blocks": {
+        "image_card_jf6CQz": {
+          "type": "image_card",
+          "settings": {
+            "product": "",
+            "collection": "",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.03.jpg",
+            "alt": "Step 1 Straighten Cream — silk-smooth, frizz free finish",
+            "link": ""
+          }
+        },
+        "image_card_CFMkPe": {
+          "type": "image_card",
+          "settings": {
+            "product": "",
+            "collection": "",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.17.jpg",
+            "alt": "Step 2 Developer — precision color, zero damage",
+            "link": ""
+          }
+        },
+        "image_card_qnnXXE": {
+          "type": "image_card",
+          "settings": {
+            "product": "",
+            "collection": "",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.31.jpg",
+            "alt": "Step 3 Hair Mask — up to 10X repair for visibly healthier hair",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_card_jf6CQz",
+        "image_card_CFMkPe",
+        "image_card_qnnXXE"
+      ],
+      "name": "Hair Solutions",
+      "settings": {
+        "background_image": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_56_32_PM.png",
+        "background_image_mobile": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.17.jpg",
+        "eyebrow": "Professional Hair Care",
+        "heading_line1": "Only What Your",
+        "heading_line2": "Hair Needs",
+        "text": "Advanced formulas for stronger, smoother and healthier hair.",
+        "button_label": "Explore Collection",
+        "button_link": "",
+        "feature_1": "Deep\nNourishment",
+        "feature_1_icon": "drop",
+        "feature_2": "Suitable\nfor All Hair Types",
+        "feature_2_icon": "shield",
+        "feature_3": "Visible\nResults",
+        "feature_3_icon": "sparkle",
+        "feature_4": "Clean & Safe\nIngredients",
+        "feature_4_icon": "leaf"
       }
     },
     "ossian_skin_needs": {
@@ -883,6 +883,7 @@
     "ossian_hero_slider",
     "ossian_brand_pillars",
     "ossian_hair_solutions",
+    "ossian_solutions_showcase_qbdC4a",
     "ossian_skin_needs",
     "ossian_best_sellers",
     "ossian_science",

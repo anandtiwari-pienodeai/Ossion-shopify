@@ -1,9 +1,19 @@
+{%- liquid
+  comment
+    Mobile "fit image": the banner takes the first slide's mobile image proportions so it
+    is shown whole; other slides are fitted inside that frame (never cropped) and the
+    height stays the same while the carousel rotates.
+  endcomment
+  assign first_slide = section.blocks.first
+  assign first_mobile = first_slide.settings.image_mobile | default: first_slide.settings.image
+  assign mobile_ratio = first_mobile.aspect_ratio | default: 0.8
+-%}
 <div
-  class="hero-carousel"
+  class="hero-carousel{% if section.settings.mobile_fit_image %} hero-carousel--mobile-fit{% endif %}"
   id="hero-carousel-{{ section.id }}"
   data-autoplay="{{ section.settings.autoplay }}"
   data-speed="{{ section.settings.autoplay_speed }}"
-  style="--hero-height: {{ section.settings.banner_height }}vh; --hero-height-mobile: {{ section.settings.banner_height_mobile }}vh;"
+  style="--hero-height: {{ section.settings.banner_height }}vh; --hero-height-mobile: {{ section.settings.banner_height_mobile }}vh; --hero-ratio-mobile: {{ mobile_ratio }};"
 >
   <div class="hero-carousel__track">
     {%- for block in section.blocks -%}
@@ -151,6 +161,24 @@
     dot.addEventListener('click', function () { stop(); goTo(parseInt(dot.dataset.index)); start(); });
   });
 
+  /* Swipe left/right (the arrow + dots bar is hidden on mobile) */
+  var touchStartX = null;
+  var touchStartY = null;
+  el.addEventListener('touchstart', function (event) {
+    touchStartX = event.touches[0].clientX;
+    touchStartY = event.touches[0].clientY;
+  }, { passive: true });
+  el.addEventListener('touchend', function (event) {
+    if (touchStartX === null) return;
+    var dx = event.changedTouches[0].clientX - touchStartX;
+    var dy = event.changedTouches[0].clientY - touchStartY;
+    touchStartX = null;
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+    stop();
+    goTo(dx < 0 ? current + 1 : current - 1);
+    start();
+  }, { passive: true });
+
   var firstVideo = slides[0] && slides[0].querySelector('video');
   if (firstVideo) firstVideo.play().catch(function () {});
   start();
@@ -295,20 +323,18 @@
     height: var(--hero-height-mobile, 50vh);
   }
 
+  .hero-carousel--mobile-fit .hero-carousel__track {
+    height: auto;
+    aspect-ratio: var(--hero-ratio-mobile, 0.8);
+  }
+
+  .hero-carousel--mobile-fit .hero-carousel__media {
+    object-fit: contain;
+  }
+
+  /* No arrow + dots bar on mobile; slides change by swipe and autoplay */
   .hero-carousel__controls {
-    bottom: 14px;
-    padding: 5px 8px;
-    gap: 4px;
-  }
-
-  .hero-carousel__arrow {
-    width: 24px;
-    height: 24px;
-  }
-
-  .hero-carousel__dot::after {
-    width: 7px;
-    height: 7px;
+    display: none;
   }
 }
 {% endstylesheet %}
@@ -352,11 +378,19 @@
       "type": "range",
       "id": "banner_height_mobile",
       "label": "Banner height (mobile)",
+      "info": "Used when \"Show full image on mobile\" is off.",
       "min": 40,
       "max": 100,
       "step": 5,
       "unit": "vh",
       "default": 50
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_fit_image",
+      "label": "Show full image on mobile",
+      "info": "Banner follows the first slide's mobile image proportions, so images are never cropped. Upload all mobile slides at the same size.",
+      "default": true
     }
   ],
   "blocks": [

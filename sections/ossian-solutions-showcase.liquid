@@ -1,0 +1,769 @@
+{%- comment -%}
+  Ossion Solutions Showcase — copy, CTA and feature icons on the left; a carousel of
+  image-only cards on the right. Cards are grouped in pages of three: one tall card
+  plus two stacked cards; each card links to its product or collection. All imagery
+  (background + cards) is set in the theme editor;
+  assets/ossion-solutions-bg.jpg is only the default background.
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign cards = section.blocks | where: 'type', 'image_card'
+  assign page_count = cards.size | plus: 2 | divided_by: 3
+-%}
+
+<section class="osol" id="osol-{{ section.id }}">
+  <div class="osol__bg" aria-hidden="true">
+    {%- if s.background_image != blank -%}
+      <picture>
+        {%- if s.background_image_mobile != blank -%}
+          <source
+            media="(max-width: 989px)"
+            srcset="{{ s.background_image_mobile | image_url: width: 800 }} 800w, {{ s.background_image_mobile | image_url: width: 1200 }} 1200w"
+            sizes="100vw"
+          >
+        {%- endif -%}
+        {{ s.background_image | image_url: width: 2400 | image_tag: loading: 'lazy', alt: '', widths: '900, 1400, 1900, 2400', sizes: '100vw' }}
+      </picture>
+    {%- else -%}
+      <img src="{{ 'ossion-solutions-bg.jpg' | asset_url }}" alt="" width="1848" height="851" loading="lazy">
+    {%- endif -%}
+  </div>
+
+  <div class="osol__inner">
+    <div class="osol__copy">
+      {%- if s.eyebrow != blank -%}
+        <p class="osol__eyebrow">{{ s.eyebrow }}</p>
+      {%- endif -%}
+      {%- if s.heading_line1 != blank or s.heading_line2 != blank -%}
+        <h2 class="osol__heading">
+          {%- if s.heading_line1 != blank -%}<span>{{ s.heading_line1 }}</span>{%- endif -%}
+          {%- if s.heading_line2 != blank -%}<span class="osol__accent">{{ s.heading_line2 }}</span>{%- endif -%}
+        </h2>
+      {%- endif -%}
+      {%- if s.text != blank -%}
+        <p class="osol__text">{{ s.text }}</p>
+      {%- endif -%}
+      {%- if s.button_label != blank -%}
+        <a href="{{ s.button_link | default: routes.all_products_collection_url }}" class="osol__button">
+          {{ s.button_label }}
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      {%- endif -%}
+
+      <ul class="osol__features" role="list">
+        {%- for i in (1..4) -%}
+          {%- liquid
+            case i
+              when 1
+                assign f_text = s.feature_1
+                assign f_icon = s.feature_1_icon
+              when 2
+                assign f_text = s.feature_2
+                assign f_icon = s.feature_2_icon
+              when 3
+                assign f_text = s.feature_3
+                assign f_icon = s.feature_3_icon
+              else
+                assign f_text = s.feature_4
+                assign f_icon = s.feature_4_icon
+            endcase
+          -%}
+          {%- if f_text != blank -%}
+            <li class="osol__feature">
+              <span class="osol__feature-icon" aria-hidden="true">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  {%- case f_icon -%}
+                    {%- when 'shield' -%}
+                      <path d="M12 3l7.5 3v5.5c0 4.6-3.2 8.3-7.5 9.5-4.3-1.2-7.5-4.9-7.5-9.5V6z"/><path d="M8.8 12l2.2 2.2 4.2-4.4"/>
+                    {%- when 'sparkle' -%}
+                      <path d="M10 3l1.6 4.4L16 9l-4.4 1.6L10 15l-1.6-4.4L4 9l4.4-1.6z"/><path d="M18 13l.9 2.1L21 16l-2.1.9L18 19l-.9-2.1L15 16l2.1-.9z"/>
+                    {%- when 'leaf' -%}
+                      <path d="M5 19c0-8 5-14 15-14 0 10-6 15-14 15"/><path d="M5 19l9-9"/>
+                    {%- when 'flask' -%}
+                      <path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3"/><path d="M7.5 15h9"/>
+                    {%- when 'star' -%}
+                      <path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/>
+                    {%- else -%}
+                      <path d="M12 3c3.5 4.5 6 8 6 11a6 6 0 0 1-12 0c0-3 2.5-6.5 6-11z"/>
+                  {%- endcase -%}
+                </svg>
+              </span>
+              <span class="osol__feature-text">{{ f_text | newline_to_br }}</span>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+
+    <div class="osol__carousel">
+      <div class="osol__track" data-osol-track>
+        {%- for block in cards -%}
+          {%- assign position = forloop.index0 | modulo: 3 -%}
+          {%- if position == 0 -%}
+            <div class="osol__page">
+          {%- endif -%}
+
+          {%- liquid
+            assign card_product = block.settings.product
+            assign card_collection = block.settings.collection
+            assign card_url = card_product.url | default: card_collection.url | default: block.settings.link
+            assign card_image = block.settings.image | default: card_product.featured_image | default: card_collection.image | default: card_collection.featured_image
+            assign card_image_mobile = block.settings.image_mobile
+            assign card_alt = block.settings.alt | default: card_product.title | default: card_collection.title
+            assign card_style = ''
+            if card_image_mobile != blank
+              assign card_style = '--card-ratio-mobile: ' | append: card_image_mobile.aspect_ratio | append: ';'
+            endif
+            assign card_class = 'osol__card'
+            if position == 0
+              assign card_class = 'osol__card osol__card--tall'
+            endif
+          -%}
+          {%- if card_url != blank -%}
+            <a href="{{ card_url }}" class="{{ card_class }}" style="{{ card_style }}" {{ block.shopify_attributes }} aria-label="{{ card_alt | escape }}">
+          {%- else -%}
+            <div class="{{ card_class }}" style="{{ card_style }}" {{ block.shopify_attributes }}>
+          {%- endif -%}
+            {%- if card_image != blank or card_image_mobile != blank -%}
+              {%- assign card_desktop = card_image | default: card_image_mobile -%}
+              <picture>
+                {%- if card_image_mobile != blank and card_image_mobile != card_desktop -%}
+                  <source
+                    media="(max-width: 989px)"
+                    srcset="
+                      {{- card_image_mobile | image_url: width: 400 }} 400w,
+                      {{ card_image_mobile | image_url: width: 600 }} 600w,
+                      {{ card_image_mobile | image_url: width: 800 }} 800w,
+                      {{ card_image_mobile | image_url: width: 1100 }} 1100w
+                    "
+                    sizes="92vw"
+                    width="{{ card_image_mobile.width }}"
+                    height="{{ card_image_mobile.height }}"
+                  >
+                {%- endif -%}
+                {{
+                  card_desktop
+                  | image_url: width: 1200
+                  | image_tag: loading: 'lazy', alt: card_alt, widths: '400, 600, 800, 1000, 1200', sizes: '(min-width: 990px) 34vw, 92vw', class: 'osol__card-img'
+                }}
+              </picture>
+            {%- else -%}
+              {{ 'product-apparel-1' | placeholder_svg_tag: 'osol__card-img osol__card-img--placeholder' }}
+            {%- endif -%}
+          {%- if card_url != blank -%}
+            </a>
+          {%- else -%}
+            </div>
+          {%- endif -%}
+
+          {%- if position == 2 or forloop.last -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      {%- if page_count > 1 -%}
+        <div class="osol__controls">
+          <button type="button" class="osol__nav" data-osol-prev aria-label="Previous">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+          <div class="osol__segments" role="tablist" aria-label="Slides">
+            {%- for i in (1..page_count) -%}
+              <button
+                type="button"
+                class="osol__segment{% if forloop.first %} is-active{% endif %}"
+                data-osol-dot="{{ forloop.index0 }}"
+                aria-label="Go to slide {{ i }}"
+              ></button>
+            {%- endfor -%}
+          </div>
+          <button type="button" class="osol__nav" data-osol-next aria-label="Next">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var root = document.getElementById('osol-{{ section.id }}');
+    if (!root) return;
+    var track = root.querySelector('[data-osol-track]');
+    var dots = root.querySelectorAll('[data-osol-dot]');
+    if (!track) return;
+
+    function currentPage() {
+      return Math.round(track.scrollLeft / Math.max(track.clientWidth, 1));
+    }
+
+    function goTo(index) {
+      var pages = track.children.length;
+      var target = Math.max(0, Math.min(index, pages - 1));
+      track.scrollTo({ left: target * track.clientWidth, behavior: 'smooth' });
+    }
+
+    function update() {
+      var page = currentPage();
+      dots.forEach(function (dot, i) {
+        dot.classList.toggle('is-active', i === page);
+        dot.setAttribute('aria-selected', i === page ? 'true' : 'false');
+      });
+      var prev = root.querySelector('[data-osol-prev]');
+      var next = root.querySelector('[data-osol-next]');
+      if (prev) prev.disabled = page <= 0;
+      if (next) next.disabled = page >= track.children.length - 1;
+    }
+
+    root.querySelector('[data-osol-prev]')?.addEventListener('click', function () { goTo(currentPage() - 1); });
+    root.querySelector('[data-osol-next]')?.addEventListener('click', function () { goTo(currentPage() + 1); });
+    dots.forEach(function (dot) {
+      dot.addEventListener('click', function () { goTo(parseInt(dot.dataset.osolDot, 10)); });
+    });
+
+    var ticking = false;
+    track.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { update(); ticking = false; });
+    }, { passive: true });
+    update();
+  })();
+</script>
+
+{% stylesheet %}
+  .osol {
+    --osol-navy: #12284b;
+    --osol-blue: #1463f3;
+    position: relative;
+    overflow: hidden;
+    background: #eef4fb;
+    color: var(--osol-navy);
+  }
+
+  .osol__bg,
+  .osol__bg picture {
+    position: absolute;
+    inset: 0;
+  }
+
+  .osol__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .osol__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.9fr);
+    align-items: center;
+    gap: clamp(28px, 4vw, 64px);
+    max-width: 1680px;
+    margin-inline: auto;
+    padding: clamp(48px, 5vw, 72px) clamp(20px, 4.2vw, 64px) clamp(36px, 3.5vw, 52px);
+  }
+
+  /* ---------- Copy ---------- */
+  .osol__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin: 0 0 22px;
+    color: rgb(18 40 75 / 0.8);
+    font-size: clamp(0.72rem, 0.85vw, 0.9rem);
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+  }
+
+  .osol__eyebrow::after {
+    content: '';
+    width: 90px;
+    height: 1px;
+    background: rgb(18 40 75 / 0.35);
+  }
+
+  .osol__heading {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 24px;
+    color: var(--osol-navy);
+    font-size: clamp(2.2rem, 3.6vw, 3.8rem);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+  }
+
+  .osol__accent {
+    color: var(--osol-blue);
+  }
+
+  .osol__text {
+    margin: 0 0 32px;
+    max-width: 440px;
+    color: rgb(18 40 75 / 0.72);
+    font-size: clamp(1.05rem, 1.35vw, 1.4rem);
+    line-height: 1.45;
+  }
+
+  .osol__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    padding: clamp(14px, 1.2vw, 18px) clamp(28px, 2.6vw, 40px);
+    border-radius: 999px;
+    background: var(--osol-blue);
+    color: #fff;
+    font-size: clamp(1.02rem, 1.3vw, 1.3rem);
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 12px 26px rgb(20 99 243 / 0.28);
+    transition: background-color 0.2s, transform 0.2s;
+  }
+
+  .osol__button:hover {
+    background: #0d52d1;
+    transform: translateY(-1px);
+  }
+
+  .osol__features {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    list-style: none;
+    margin: clamp(40px, 4.5vw, 64px) 0 0;
+    padding: 0;
+  }
+
+  .osol__feature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding-inline: 8px;
+    text-align: center;
+  }
+
+  .osol__feature + .osol__feature {
+    border-inline-start: 1px solid rgb(18 40 75 / 0.12);
+  }
+
+  .osol__feature-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(52px, 4.6vw, 70px);
+    height: clamp(52px, 4.6vw, 70px);
+    border: 1.5px solid rgb(20 99 243 / 0.55);
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.55);
+    color: var(--osol-blue);
+  }
+
+  .osol__feature-text {
+    color: var(--osol-navy);
+    font-size: clamp(0.8rem, 0.95vw, 1rem);
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  /* ---------- Cards ---------- */
+  .osol__carousel {
+    min-width: 0;
+  }
+
+  .osol__track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+
+  .osol__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .osol__page {
+    flex: 0 0 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 0.96fr) minmax(0, 1fr);
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: clamp(10px, 1vw, 16px);
+    aspect-ratio: 1150 / 676;
+    scroll-snap-align: start;
+  }
+
+  .osol__card {
+    position: relative;
+    display: block;
+    min-height: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    background: rgb(255 255 255 / 0.5);
+    box-shadow: 0 14px 34px rgb(18 40 75 / 0.14);
+  }
+
+  .osol__card--tall {
+    grid-row: 1 / span 2;
+  }
+
+  /* A page with only one card: let it fill the page */
+  .osol__card--tall:only-child {
+    grid-column: 1 / -1;
+  }
+
+  .osol__card picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .osol__card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .osol__card-img--placeholder {
+    background: #dfe8f3;
+    fill: rgb(18 40 75 / 0.25);
+  }
+
+  a.osol__card:hover .osol__card-img {
+    transform: scale(1.025);
+  }
+
+  .osol__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin-top: clamp(20px, 2vw, 30px);
+  }
+
+  .osol__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    border: 1px solid rgb(18 40 75 / 0.14);
+    border-radius: 50%;
+    background: #fff;
+    color: var(--osol-navy);
+    cursor: pointer;
+    transition: opacity 0.2s, background-color 0.2s, color 0.2s;
+  }
+
+  .osol__nav:hover:not(:disabled) {
+    background: var(--osol-navy);
+    color: #fff;
+  }
+
+  .osol__nav:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+
+  .osol__segments {
+    display: flex;
+    gap: 8px;
+  }
+
+  .osol__segment {
+    width: 56px;
+    height: 5px;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    background: rgb(18 40 75 / 0.12);
+    cursor: pointer;
+    transition: background-color 0.25s;
+  }
+
+  .osol__segment.is-active {
+    background: var(--osol-blue);
+  }
+
+  /* ---------- Tablet / mobile ---------- */
+  @media (max-width: 989px) {
+    .osol__inner {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      padding: 44px 16px 36px;
+    }
+
+    .osol__bg img {
+      object-position: 75% center;
+    }
+
+    .osol__features {
+      margin-top: 32px;
+    }
+
+    .osol__page {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      aspect-ratio: auto;
+    }
+
+    .osol__card--tall {
+      grid-row: auto;
+      grid-column: 1 / -1;
+      aspect-ratio: 555 / 676;
+    }
+
+    .osol__card:not(.osol__card--tall) {
+      aspect-ratio: 575 / 330;
+    }
+
+    /* A mobile image is shown at its own proportions (never cropped) */
+    .osol__card[style*='--card-ratio-mobile'] {
+      aspect-ratio: var(--card-ratio-mobile);
+    }
+  }
+
+  @media (max-width: 599px) {
+    .osol__card:not(.osol__card--tall) {
+      grid-column: 1 / -1;
+    }
+
+    .osol__features {
+      gap: 4px;
+    }
+
+    .osol__feature {
+      padding-inline: 2px;
+    }
+
+    .osol__segment {
+      width: 36px;
+    }
+
+    .osol__nav {
+      width: 42px;
+      height: 42px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .osol__card-img,
+    .osol__button {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ossion Solutions Showcase",
+  "tag": "section",
+  "class": "ossian-solutions-showcase-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image",
+      "info": "Wide image, about 2400 × 1100, light on the left where the text sits. Leave empty for the default spa background."
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image_mobile",
+      "label": "Background image (mobile)",
+      "info": "Optional. Uses the desktop background when empty."
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Professional Hair Care"
+    },
+    {
+      "type": "text",
+      "id": "heading_line1",
+      "label": "Heading line 1",
+      "default": "Only What Your"
+    },
+    {
+      "type": "text",
+      "id": "heading_line2",
+      "label": "Heading line 2 (blue)",
+      "default": "Hair Needs"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Advanced formulas for stronger, smoother and healthier hair."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Explore Collection"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Features"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_1",
+      "label": "Feature 1",
+      "info": "Use a line break to split over two lines.",
+      "default": "Deep\nNourishment"
+    },
+    {
+      "type": "select",
+      "id": "feature_1_icon",
+      "label": "Feature 1 icon",
+      "options": [
+        { "value": "drop", "label": "Drop" },
+        { "value": "shield", "label": "Shield" },
+        { "value": "sparkle", "label": "Sparkle" },
+        { "value": "leaf", "label": "Leaf" },
+        { "value": "flask", "label": "Flask" },
+        { "value": "star", "label": "Star" }
+      ],
+      "default": "drop"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_2",
+      "label": "Feature 2",
+      "default": "Suitable\nfor All Hair Types"
+    },
+    {
+      "type": "select",
+      "id": "feature_2_icon",
+      "label": "Feature 2 icon",
+      "options": [
+        { "value": "drop", "label": "Drop" },
+        { "value": "shield", "label": "Shield" },
+        { "value": "sparkle", "label": "Sparkle" },
+        { "value": "leaf", "label": "Leaf" },
+        { "value": "flask", "label": "Flask" },
+        { "value": "star", "label": "Star" }
+      ],
+      "default": "shield"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_3",
+      "label": "Feature 3",
+      "default": "Visible\nResults"
+    },
+    {
+      "type": "select",
+      "id": "feature_3_icon",
+      "label": "Feature 3 icon",
+      "options": [
+        { "value": "drop", "label": "Drop" },
+        { "value": "shield", "label": "Shield" },
+        { "value": "sparkle", "label": "Sparkle" },
+        { "value": "leaf", "label": "Leaf" },
+        { "value": "flask", "label": "Flask" },
+        { "value": "star", "label": "Star" }
+      ],
+      "default": "sparkle"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_4",
+      "label": "Feature 4",
+      "default": "Clean & Safe\nIngredients"
+    },
+    {
+      "type": "select",
+      "id": "feature_4_icon",
+      "label": "Feature 4 icon",
+      "options": [
+        { "value": "drop", "label": "Drop" },
+        { "value": "shield", "label": "Shield" },
+        { "value": "sparkle", "label": "Sparkle" },
+        { "value": "leaf", "label": "Leaf" },
+        { "value": "flask", "label": "Flask" },
+        { "value": "star", "label": "Star" }
+      ],
+      "default": "leaf"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image_card",
+      "name": "Image card",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Cards are shown in groups of three: the 1st, 4th, 7th… card is the tall one (desktop about 1110 × 1350); the others are wide (desktop about 1150 × 660). On mobile, cards stack full width."
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "The card links to this product. Takes priority over the collection."
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection",
+          "info": "Used when no product is selected."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Desktop image",
+          "info": "Your designed card for desktop. Falls back to the product or collection image when empty."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Mobile image",
+          "info": "Shown below 990px at its own proportions. Uses the desktop image when empty."
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Image description (alt text)",
+          "info": "Describe the text in the image for screen readers. Defaults to the product or collection title."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Custom link",
+          "info": "Only used when no product or collection is selected."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ossion Solutions Showcase",
+      "blocks": [
+        { "type": "image_card" },
+        { "type": "image_card" },
+        { "type": "image_card" }
+      ]
+    }
+  ]
+}
+{% endschema %}
