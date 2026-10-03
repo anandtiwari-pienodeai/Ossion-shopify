@@ -163,13 +163,21 @@
       "name": "Hair Solutions",
       "settings": {
         "background_image": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_56_32_PM.png",
-        "background_image_mobile": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.17.jpg",
+        "background_image_mobile": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.12.22.jpg",
         "eyebrow": "Professional Hair Care",
         "heading_line1": "Only What Your",
         "heading_line2": "Hair Needs",
         "text": "Advanced formulas for stronger, smoother and healthier hair.",
         "button_label": "Explore Collection",
         "button_link": "",
+        "color_eyebrow": "#3d4e6b",
+        "color_heading": "#12284b",
+        "color_heading_accent": "#1463f3",
+        "color_text": "#5a6981",
+        "color_button_bg": "#1463f3",
+        "color_button_text": "#ffffff",
+        "color_feature_icon": "#1463f3",
+        "color_feature_text": "#12284b",
         "feature_1": "Deep\nNourishment",
         "feature_1_icon": "drop",
         "feature_2": "Suitable\nfor All Hair Types",
@@ -188,7 +196,7 @@
           "settings": {
             "product": "",
             "collection": "",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.03.jpg",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.24.15.jpg",
             "alt": "Step 1 Straighten Cream — silk-smooth, frizz free finish",
             "link": ""
           }
@@ -198,7 +206,7 @@
           "settings": {
             "product": "",
             "collection": "",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.17.jpg",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.24.31.jpg",
             "alt": "Step 2 Developer — precision color, zero damage",
             "link": ""
           }
@@ -208,7 +216,7 @@
           "settings": {
             "product": "",
             "collection": "",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.31.jpg",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.24.45.jpg",
             "alt": "Step 3 Hair Mask — up to 10X repair for visibly healthier hair",
             "link": ""
           }
@@ -221,7 +229,7 @@
       ],
       "name": "Hair Solutions",
       "settings": {
-        "background_image": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_56_32_PM.png",
+        "background_image": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_10_25_12_PM.png",
         "background_image_mobile": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.17.jpg",
         "eyebrow": "Professional Hair Care",
         "heading_line1": "Only What Your",
@@ -229,6 +237,14 @@
         "text": "Advanced formulas for stronger, smoother and healthier hair.",
         "button_label": "Explore Collection",
         "button_link": "",
+        "color_eyebrow": "#6B483D",
+        "color_heading": "#4B3D12",
+        "color_heading_accent": "#1463f3",
+        "color_text": "#5a6981",
+        "color_button_bg": "#F3147C",
+        "color_button_text": "#ffffff",
+        "color_feature_icon": "#F31457",
+        "color_feature_text": "#12284b",
         "feature_1": "Deep\nNourishment",
         "feature_1_icon": "drop",
         "feature_2": "Suitable\nfor All Hair Types",

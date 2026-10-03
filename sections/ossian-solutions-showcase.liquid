@@ -12,7 +12,20 @@
   assign page_count = cards.size | plus: 2 | divided_by: 3
 -%}
 
-<section class="osol" id="osol-{{ section.id }}">
+<section
+  class="osol"
+  id="osol-{{ section.id }}"
+  style="
+    --osol-eyebrow: {{ s.color_eyebrow }};
+    --osol-heading: {{ s.color_heading }};
+    --osol-accent: {{ s.color_heading_accent }};
+    --osol-body: {{ s.color_text }};
+    --osol-button-bg: {{ s.color_button_bg }};
+    --osol-button-text: {{ s.color_button_text }};
+    --osol-icon: {{ s.color_feature_icon }};
+    --osol-feature-text: {{ s.color_feature_text }};
+  "
+>
   <div class="osol__bg" aria-hidden="true">
     {%- if s.background_image != blank -%}
       <picture>
@@ -273,7 +286,7 @@
     align-items: center;
     gap: 28px;
     margin: 0 0 22px;
-    color: rgb(18 40 75 / 0.8);
+    color: var(--osol-eyebrow, rgb(18 40 75 / 0.8));
     font-size: clamp(0.72rem, 0.85vw, 0.9rem);
     font-weight: 500;
     letter-spacing: 0.32em;
@@ -284,14 +297,15 @@
     content: '';
     width: 90px;
     height: 1px;
-    background: rgb(18 40 75 / 0.35);
+    background: currentColor;
+    opacity: 0.45;
   }
 
   .osol__heading {
     display: flex;
     flex-direction: column;
     margin: 0 0 24px;
-    color: var(--osol-navy);
+    color: var(--osol-heading, var(--osol-navy));
     font-size: clamp(2.2rem, 3.6vw, 3.8rem);
     font-weight: 700;
     line-height: 1.08;
@@ -299,13 +313,13 @@
   }
 
   .osol__accent {
-    color: var(--osol-blue);
+    color: var(--osol-accent, var(--osol-blue));
   }
 
   .osol__text {
     margin: 0 0 32px;
     max-width: 440px;
-    color: rgb(18 40 75 / 0.72);
+    color: var(--osol-body, rgb(18 40 75 / 0.72));
     font-size: clamp(1.05rem, 1.35vw, 1.4rem);
     line-height: 1.45;
   }
@@ -316,17 +330,17 @@
     gap: 16px;
     padding: clamp(14px, 1.2vw, 18px) clamp(28px, 2.6vw, 40px);
     border-radius: 999px;
-    background: var(--osol-blue);
-    color: #fff;
+    background: var(--osol-button-bg, var(--osol-blue));
+    color: var(--osol-button-text, #fff);
     font-size: clamp(1.02rem, 1.3vw, 1.3rem);
     font-weight: 600;
     text-decoration: none;
-    box-shadow: 0 12px 26px rgb(20 99 243 / 0.28);
+    box-shadow: 0 12px 26px color-mix(in srgb, var(--osol-button-bg, #1463f3) 28%, transparent);
     transition: background-color 0.2s, transform 0.2s;
   }
 
   .osol__button:hover {
-    background: #0d52d1;
+    filter: brightness(0.92);
     transform: translateY(-1px);
   }
 
@@ -357,14 +371,14 @@
     justify-content: center;
     width: clamp(52px, 4.6vw, 70px);
     height: clamp(52px, 4.6vw, 70px);
-    border: 1.5px solid rgb(20 99 243 / 0.55);
+    border: 1.5px solid color-mix(in srgb, var(--osol-icon, #1463f3) 55%, transparent);
     border-radius: 50%;
     background: rgb(255 255 255 / 0.55);
-    color: var(--osol-blue);
+    color: var(--osol-icon, var(--osol-blue));
   }
 
   .osol__feature-text {
-    color: var(--osol-navy);
+    color: var(--osol-feature-text, var(--osol-navy));
     font-size: clamp(0.8rem, 0.95vw, 1rem);
     font-weight: 500;
     line-height: 1.3;
@@ -620,6 +634,58 @@
       "type": "url",
       "id": "button_link",
       "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "color_eyebrow",
+      "label": "Eyebrow",
+      "default": "#3d4e6b"
+    },
+    {
+      "type": "color",
+      "id": "color_heading",
+      "label": "Heading line 1",
+      "default": "#12284b"
+    },
+    {
+      "type": "color",
+      "id": "color_heading_accent",
+      "label": "Heading line 2",
+      "default": "#1463f3"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Text",
+      "default": "#5a6981"
+    },
+    {
+      "type": "color",
+      "id": "color_button_bg",
+      "label": "Button background",
+      "default": "#1463f3"
+    },
+    {
+      "type": "color",
+      "id": "color_button_text",
+      "label": "Button text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_feature_icon",
+      "label": "Feature icons",
+      "default": "#1463f3"
+    },
+    {
+      "type": "color",
+      "id": "color_feature_text",
+      "label": "Feature text",
+      "default": "#12284b"
     },
     {
       "type": "header",
