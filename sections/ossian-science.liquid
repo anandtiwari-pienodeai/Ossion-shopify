@@ -1,3 +1,5 @@
+<div class="ossian-science-wrap">
+<div class="ossian-science-wrap__dots" aria-hidden="true"></div>
 <div
   class="ossian-science"
   style="
@@ -90,28 +92,41 @@
     {%- endif -%}
   </div>
 </div>
+</div>
 
 {% stylesheet %}
-.ossian-science {
-  background-color: #0d2444;
-  background-image: var(--science-bg, none);
-  background-size: cover;
-  background-position: center;
-  padding: clamp(16px, 3vh, 48px) 20px;
+.ossian-science-wrap {
   position: relative;
+  overflow: hidden;
+  background: radial-gradient(120% 160% at 50% 0%, #16294f 0%, #0a1730 55%, #060f24 100%);
+  margin-bottom: 60px;
+}
+
+@media (max-width: 600px) {
+  .ossian-science-wrap { margin-bottom: 36px; }
+}
+
+.ossian-science-wrap__dots {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1.5px, transparent 1.5px);
+  background-size: 46px 46px;
+  background-position: 10px 10px;
+  mask-image: radial-gradient(60% 90% at 50% 50%, rgba(0, 0, 0, 0.6), transparent 100%);
+  pointer-events: none;
+}
+
+.ossian-science {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  padding: clamp(16px, 3vh, 48px) 20px;
   min-height: 80svh;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.ossian-science::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(10, 22, 45, 0.65);
-  pointer-events: none;
 }
 
 .ossian-science__card {

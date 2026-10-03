@@ -16,28 +16,47 @@
           "type": "slide",
           "settings": {
             "media_type": "image",
-            "image": "shopify://shop_images/OssionBannerthree.png"
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_09_01_51_PM.png",
+            "image_mobile": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_08_52_42_PM.png",
+            "link": "",
+            "link_label": ""
           }
         },
-        "slide_1": {
+        "slide_npPbYc": {
           "type": "slide",
           "settings": {
             "media_type": "image",
-            "image": "shopify://shop_images/OssionBannertwo.png"
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_01_14_49_AM_8ee11181-bf24-4739-ab3e-0cc29f81c329.png",
+            "image_mobile": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_08_55_15_PM.png",
+            "link": "",
+            "link_label": ""
           }
         },
-        "slide_2": {
+        "slide_XCaAHR": {
           "type": "slide",
           "settings": {
             "media_type": "image",
-            "image": "shopify://shop_images/OssionBannerthree.png"
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_01_32_28_AM.png",
+            "image_mobile": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_08_56_44_PM.png",
+            "link": "",
+            "link_label": ""
+          }
+        },
+        "slide_JcP94N": {
+          "type": "slide",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/Ossion.png",
+            "link": "",
+            "link_label": ""
           }
         }
       },
       "block_order": [
         "slide_6ehiiH",
-        "slide_1",
-        "slide_2"
+        "slide_npPbYc",
+        "slide_XCaAHR",
+        "slide_JcP94N"
       ],
       "name": "Hero Carousel",
       "settings": {
@@ -51,7 +70,7 @@
         "pillar_science": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/image_208.png",
+            "image": "shopify://shop_images/image_208_1.png",
             "heading_line1": "From the Depths",
             "heading_line2": "of Marine Science",
             "accent_line2": true,
@@ -64,7 +83,7 @@
         "pillar_haircare": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/image_209.png",
+            "image": "shopify://shop_images/image_211.png",
             "heading_line1": "Heads up:",
             "heading_line2": "Care Beyond the chair",
             "accent_line2": true,
@@ -77,7 +96,7 @@
         "pillar_promise": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/image_210.png",
+            "image": "shopify://shop_images/image_209_1.png",
             "heading_line1": "Water Smart.",
             "heading_line2": "Every Drop Counts.",
             "accent_line2": true,
@@ -90,7 +109,7 @@
         "pillar_sustainability": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/image_209.png",
+            "image": "shopify://shop_images/image_210_1.png",
             "heading_line1": "WE ACT",
             "heading_line2": "On our purpose always",
             "accent_line2": false,
@@ -109,7 +128,7 @@
       ],
       "name": "Brand Pillars",
       "settings": {
-        "hero_image": "shopify://shop_images/image_212.png",
+        "hero_image": "shopify://shop_images/image_212_1.png",
         "hero_brand": "OSSION",
         "hero_brand_sub": "PROFESSIONAL",
         "hero_tagline_line1": "Salon Science",
@@ -128,7 +147,7 @@
           "type": "product_card",
           "settings": {
             "product": "",
-            "image": "shopify://shop_images/C12.png",
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_7_2026_12_25_56_AM.png",
             "custom_name": "STRAIGHTEN",
             "descriptor": "Silk-smooth, frizz free finish",
             "badge_label": "BEST SELLER",
@@ -141,7 +160,7 @@
           "type": "product_card",
           "settings": {
             "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy-1",
-            "image": "shopify://shop_images/DEVELOPER_GROUP_SHOT_copy.png",
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_7_2026_12_27_01_AM.png",
             "custom_name": "Developer",
             "descriptor": "Precision color, zero damage",
             "badge_label": "NEW LAUNCH",
@@ -154,6 +173,7 @@
           "type": "product_card",
           "settings": {
             "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy",
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_7_2026_12_28_04_AM.png",
             "custom_name": "Hair Mask",
             "descriptor": "Up to 10X repair",
             "badge_label": "DEEP REPAIR",
@@ -206,104 +226,8 @@
       ],
       "name": "Professional Hair Solutions",
       "settings": {
-        "category_label": "Hair Care",
-        "heading": "Professional Hair Solutions",
-        "body_text": "Advanced formulas for stronger, smoother & healthier hair.",
-        "cta_text": "Explore Collection",
-        "cta_link": "",
-        "trust_icon_1": "flask",
-        "trust_label_1": "Salon Quality",
-        "trust_icon_2": "drop",
-        "trust_label_2": "Advanced Technology",
-        "trust_icon_3": "shield",
-        "trust_label_3": "Safe & Effective"
-      }
-    },
-    "ossian_product_showcase_LAeCxW": {
-      "type": "ossian-product-showcase",
-      "blocks": {
-        "product_card_gfxYkB": {
-          "type": "product_card",
-          "settings": {
-            "product": "",
-            "image": "shopify://shop_images/C12.png",
-            "custom_name": "STRAIGHTEN",
-            "descriptor": "Silk-smooth, frizz free finish",
-            "badge_label": "BEST SELLER",
-            "step_label": "STEP 1",
-            "collection": "",
-            "link": ""
-          }
-        },
-        "product_card_FPVM3F": {
-          "type": "product_card",
-          "settings": {
-            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy-1",
-            "image": "shopify://shop_images/DEVELOPER_GROUP_SHOT_copy.png",
-            "custom_name": "Developer",
-            "descriptor": "Precision color, zero damage",
-            "badge_label": "NEW LAUNCH",
-            "step_label": "STEP 2",
-            "collection": "",
-            "link": ""
-          }
-        },
-        "product_card_ipzPTP": {
-          "type": "product_card",
-          "settings": {
-            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy",
-            "custom_name": "Hair Mask",
-            "descriptor": "Up to 10X repair",
-            "badge_label": "DEEP REPAIR",
-            "step_label": "STEP 3",
-            "collection": "",
-            "link": ""
-          }
-        },
-        "feature_item_kwJfjc": {
-          "type": "feature_item",
-          "settings": {
-            "icon": "beaker",
-            "title": "For All Hair Types",
-            "subtitle": "Suitable for every hair type"
-          }
-        },
-        "feature_item_YcBKk3": {
-          "type": "feature_item",
-          "settings": {
-            "icon": "triangle",
-            "title": "Keratin Complex",
-            "subtitle": "Strengthens from within"
-          }
-        },
-        "feature_item_EJfLHi": {
-          "type": "feature_item",
-          "settings": {
-            "icon": "drop",
-            "title": "Long Lasting results",
-            "subtitle": "Salon results that last"
-          }
-        },
-        "feature_item_xXh3VN": {
-          "type": "feature_item",
-          "settings": {
-            "icon": "person",
-            "title": "Trusted by professionals",
-            "subtitle": "Used in salons worldwide"
-          }
-        }
-      },
-      "block_order": [
-        "product_card_gfxYkB",
-        "product_card_FPVM3F",
-        "product_card_ipzPTP",
-        "feature_item_kwJfjc",
-        "feature_item_YcBKk3",
-        "feature_item_EJfLHi",
-        "feature_item_xXh3VN"
-      ],
-      "name": "Professional Hair Solutions",
-      "settings": {
+        "top_heading": "Only what your",
+        "top_heading_accent": "Hair Needs",
         "category_label": "Hair Care",
         "heading": "Professional Hair Solutions",
         "body_text": "Advanced formulas for stronger, smoother & healthier hair.",
@@ -320,26 +244,26 @@
     "ossian_skin_needs": {
       "type": "ossian-product-showcase",
       "blocks": {
-        "card_1": {
+        "card_2": {
           "type": "product_card",
           "settings": {
             "product": "",
-            "custom_name": "Peel - Off Mask",
-            "descriptor": "COOLING HYDRO GLOW",
+            "custom_name": "Pre - Wax Prep Gel",
+            "descriptor": "Soft - skin, zero fuss",
             "badge_label": "BEST SELLER",
             "step_label": "STEP 1",
             "collection": "",
             "link": ""
           }
         },
-        "card_2": {
+        "card_1": {
           "type": "product_card",
           "settings": {
             "product": "",
-            "custom_name": "Pre - Wax Prep Gel",
-            "descriptor": "SOFT SKIN, ZERO FUSS",
-            "badge_label": "BEST SELLER",
-            "step_label": "STEP 1",
+            "custom_name": "Peel - Off Mask",
+            "descriptor": "Cooling hydro glow",
+            "badge_label": "COOLING EFFECT",
+            "step_label": "STEP 2",
             "collection": "",
             "link": ""
           }
@@ -349,113 +273,70 @@
           "settings": {
             "product": "",
             "custom_name": "Facial Kit",
-            "descriptor": "BRIGHTEN • NOURISH • GLOW",
-            "badge_label": "BEST SELLER",
-            "step_label": "STEP 1",
+            "descriptor": "Brighten, Nourish & Glow",
+            "badge_label": "NEW LAUNCH",
+            "step_label": "STEP 3",
             "collection": "",
             "link": ""
           }
+        },
+        "feature_dermat": {
+          "type": "feature_item",
+          "settings": {
+            "icon": "shield",
+            "title": "Dermatologically Tested",
+            "subtitle": "Safe for all skin Types"
+          }
+        },
+        "feature_natural": {
+          "type": "feature_item",
+          "settings": {
+            "icon": "leaf",
+            "title": "Natural Extracts",
+            "subtitle": "Enriched with nature's best"
+          }
+        },
+        "feature_nourish": {
+          "type": "feature_item",
+          "settings": {
+            "icon": "drop",
+            "title": "Deep Nourishment",
+            "subtitle": "Hydrates & revitalize"
+          }
+        },
+        "feature_visible": {
+          "type": "feature_item",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Visible Results",
+            "subtitle": "Glow you can see & feel"
+          }
         }
       },
       "block_order": [
-        "card_1",
         "card_2",
-        "card_3"
+        "card_1",
+        "card_3",
+        "feature_dermat",
+        "feature_natural",
+        "feature_nourish",
+        "feature_visible"
       ],
-      "disabled": true,
       "name": "Skin Needs Showcase",
       "settings": {
-        "category_label": "EXPLORE BY CATEGORY",
-        "heading": "Professional Hair Solutions",
-        "body_text": "Advanced formulas for stronger, smoother & healthier hair.",
+        "top_heading": "Only what your",
+        "top_heading_accent": "Skin Needs",
+        "category_label": "Skin Care",
+        "heading": "Reveal Your Natural Glow",
+        "body_text": "Nourishing care for radiant, healthy & beautiful skin.",
         "cta_text": "Explore Collection",
         "cta_link": "",
-        "trust_icon_1": "flask",
-        "trust_label_1": "Salon Quality",
+        "trust_icon_1": "leaf",
+        "trust_label_1": "Clean & gentle",
         "trust_icon_2": "drop",
-        "trust_label_2": "Advanced Technology",
-        "trust_icon_3": "shield",
-        "trust_label_3": "Safe & Effective"
-      }
-    },
-    "ossian_salon_choice": {
-      "type": "ossian-salon-choice",
-      "blocks": {
-        "feature_pill_YpdVXj": {
-          "type": "feature_pill",
-          "settings": {
-            "icon": "sparkle",
-            "label": "BLONDE LIFT",
-            "subtitle": "Anti-Yellow",
-            "highlighted": false
-          }
-        },
-        "feature_pill_9hW9Ma": {
-          "type": "feature_pill",
-          "settings": {
-            "icon": "sparkle",
-            "label": "BLONDE LIFT",
-            "subtitle": "Anti-Yellow",
-            "highlighted": false
-          }
-        },
-        "feature_pill_b8cGfP": {
-          "type": "feature_pill",
-          "settings": {
-            "icon": "sparkle",
-            "label": "BLONDE LIFT",
-            "subtitle": "Anti-Yellow",
-            "highlighted": false
-          }
-        },
-        "feature_pill_KMwVhx": {
-          "type": "feature_pill",
-          "settings": {
-            "icon": "sparkle",
-            "label": "BLONDE LIFT",
-            "subtitle": "Anti-Yellow",
-            "highlighted": false
-          }
-        },
-        "pill_6": {
-          "type": "feature_pill",
-          "settings": {
-            "icon": "star",
-            "label": "GLOW BOOST",
-            "subtitle": "Radiant & Bright",
-            "highlighted": false
-          }
-        }
-      },
-      "block_order": [
-        "feature_pill_YpdVXj",
-        "feature_pill_9hW9Ma",
-        "feature_pill_b8cGfP",
-        "feature_pill_KMwVhx",
-        "pill_6"
-      ],
-      "name": "Salon Choice",
-      "settings": {
-        "banner_image": "shopify://shop_images/WhatsApp_Image_2026-07-12_at_11.52.14.jpg",
-        "banner_alt": "",
-        "concern_heading": "Choose Your Concern",
-        "strip_bg": "#eef1f8",
-        "ba_label": "REAL CLIENT RESULT",
-        "before_image": "shopify://shop_images/ChatGPT_Image_Jun_29_2026_01_26_46_AM.png",
-        "after_image": "shopify://shop_images/ChatGPT_Image_Jun_29_2026_01_28_10_AM.png",
-        "feat_product": "",
-        "feat_collection": "",
-        "feat_link": "",
-        "feat_image": "shopify://shop_images/image_169.png",
-        "feat_alt": "",
-        "feat_eyebrow": "Recommended for this result",
-        "feat_heading_white": "Blonder Fiber Plex",
-        "feat_heading_accent": "Blue",
-        "feat_subheading": "Up to 9 levels up",
-        "feat_body": "Advanced lightening with anti-yellow molecules for bright, cool blonde results.",
-        "feat_cta_label": "Learn more",
-        "feat_label": "",
-        "bottom_bg": "#1e3a5f"
+        "trust_label_2": "Hydrating & Nourishing",
+        "trust_icon_3": "sparkle",
+        "trust_label_3": "Visible Radiance"
       }
     },
     "ossian_best_sellers": {
@@ -463,58 +344,8 @@
       "name": "Best Sellers",
       "settings": {
         "heading": "Best Sellers",
-        "collection": "shopall",
-        "products_count": 4
-      }
-    },
-    "ossian_trust_ticker": {
-      "type": "ossian-trust-ticker",
-      "blocks": {
-        "badge_leaf": {
-          "type": "badge",
-          "settings": {
-            "icon": "leaf",
-            "title": "Skin Loving Ingredients",
-            "description": "Enriched with natural extracts & nutrients."
-          }
-        },
-        "badge_shield": {
-          "type": "badge",
-          "settings": {
-            "icon": "shield",
-            "title": "Dermatologically Tested",
-            "description": "Safe and gentle for everyday use."
-          }
-        },
-        "badge_droplet": {
-          "type": "badge",
-          "settings": {
-            "icon": "droplet",
-            "title": "Professional Quality",
-            "description": "Salon trusted, expert recommended."
-          }
-        },
-        "badge_sparkle": {
-          "type": "badge",
-          "settings": {
-            "icon": "sparkle",
-            "title": "Visible Results",
-            "description": "Healthy, glowing skin you can feel."
-          }
-        }
-      },
-      "block_order": [
-        "badge_leaf",
-        "badge_shield",
-        "badge_droplet",
-        "badge_sparkle"
-      ],
-      "name": "Trust Ticker",
-      "settings": {
-        "background_color": "#ffffff",
-        "scroll_speed": 28,
-        "padding_top": 20,
-        "padding_bottom": 20
+        "collection": "bestseller",
+        "products_count": 12
       }
     },
     "ossian_science": {
@@ -523,7 +354,6 @@
         "badge_1": {
           "type": "badge",
           "settings": {
-            "icon": "shopify://shop_images/OssionSc1.png",
             "icon_type": "droplet",
             "label": "DERMAT TESTED",
             "description": "Gentle on skin, tested for safety and purity."
@@ -532,7 +362,6 @@
         "badge_2": {
           "type": "badge",
           "settings": {
-            "icon": "shopify://shop_images/OssionSc2.png",
             "icon_type": "leaf",
             "label": "VEGAN FORMULA",
             "description": "Plant-powered ingredients for a conscious choice."
@@ -541,7 +370,6 @@
         "badge_3": {
           "type": "badge",
           "settings": {
-            "icon": "shopify://shop_images/OssionSc3.png",
             "icon_type": "wave",
             "label": "MARINE TECHNOLOGY",
             "description": "Harnessing ocean science for effective solutions."
@@ -555,7 +383,6 @@
       ],
       "name": "Ossion Science",
       "settings": {
-        "background_image": "shopify://shop_images/OssionScience.png",
         "heading": "The Ossion Difference",
         "heading_accent": "",
         "description": "The Ocean is the earth’s oldest living laboratory - a realm of extraordinary depth, perpetual renewal, and silent precision. For millennia, its tides have refined minerals, concentrated bioactive compounds, and cultivated ingredients of rare potency. <br>\n<br> \nThis is haircare and skincare stripped of excess and elevated in purpose. \nNo embellishment. No compromise.",
@@ -564,58 +391,93 @@
         "button_url": ""
       }
     },
-    "ossian_shop_by_category": {
-      "type": "ossian-shop-by-category",
+    "ossian_transformation_banner": {
+      "type": "ossian-transformation-banner",
+      "settings": {
+        "heading": "Salon Choice",
+        "subheading_white": "Real",
+        "subheading_accent": "Transformations",
+        "body": "Professional care, Real results, Loved by thousands",
+        "left_image_alt": "",
+        "right_image_alt": ""
+      }
+    },
+    "ossian_salon_choice": {
+      "type": "ossian-salon-choice",
       "blocks": {
-        "cat_1": {
-          "type": "category",
+        "feature_pill_YpdVXj": {
+          "type": "feature_pill",
           "settings": {
-            "image": "shopify://shop_images/Caviar_Mask.png",
-            "name": "Heat Protector",
-            "description": "Smooth | Shield | Style",
-            "link": ""
+            "icon": "sparkle",
+            "label": "BLONDE LIFT",
+            "subtitle": "Anti-Yellow",
+            "highlighted": true
           }
         },
-        "cat_2": {
-          "type": "category",
+        "feature_pill_9hW9Ma": {
+          "type": "feature_pill",
           "settings": {
-            "image": "shopify://shop_images/DEVELOPER_GROUP_SHOT_copy.png",
-            "name": "Permanent Hair Color",
-            "description": "Enriched with Amino Acids",
-            "link": ""
+            "icon": "waves",
+            "label": "FRIZZ CONTROL",
+            "subtitle": "Smooth & Manageable",
+            "highlighted": false
           }
         },
-        "cat_3": {
-          "type": "category",
+        "feature_pill_b8cGfP": {
+          "type": "feature_pill",
           "settings": {
-            "image": "shopify://shop_images/Hair_Color.png",
-            "name": "Red Wine Wax",
-            "description": "Enriched with Wine Polyphenol Extract",
-            "link": ""
+            "icon": "person",
+            "label": "GREY COVERAGE",
+            "subtitle": "100% Coverage",
+            "highlighted": false
           }
         },
-        "cat_4": {
-          "type": "category",
+        "feature_pill_KMwVhx": {
+          "type": "feature_pill",
           "settings": {
-            "image": "shopify://shop_images/Hair_Repair_Spa_Silk_Amino_Acid.png",
-            "name": "After-Wax Calming Oil",
-            "description": "Leaves the skin soft, smooth and nourished",
-            "link": ""
+            "icon": "drop",
+            "label": "COLOR REVIVAL",
+            "subtitle": "Vibrant & Long-Lasting",
+            "highlighted": false
+          }
+        },
+        "pill_6": {
+          "type": "feature_pill",
+          "settings": {
+            "icon": "shield",
+            "label": "DAMAGE REPAIR",
+            "subtitle": "Stronger Hair",
+            "highlighted": false
           }
         }
       },
       "block_order": [
-        "cat_1",
-        "cat_2",
-        "cat_3",
-        "cat_4"
+        "feature_pill_YpdVXj",
+        "feature_pill_9hW9Ma",
+        "feature_pill_b8cGfP",
+        "feature_pill_KMwVhx",
+        "pill_6"
       ],
-      "disabled": true,
-      "name": "Shop by Category",
+      "name": "Salon Choice",
       "settings": {
-        "eyebrow": "OSSION SALONE",
-        "heading": "Shop by Category",
-        "tagline": "MARINE - BASED TECHNOLOGY  |  PROFESSIONAL USE  |  FREE SHIPPING ABOVE ₹999"
+        "concern_heading": "Choose Your Concern",
+        "strip_bg": "#eef1f8",
+        "ba_label": "REAL CLIENT RESULT",
+        "before_image": "shopify://shop_images/57cb6ecf-6647-4106-b8dc-0e3f59a47039.png",
+        "after_image": "shopify://shop_images/ChatGPT_Image_Sep_7_2026_12_14_57_AM.png",
+        "feat_product": "ossion-hair-intense-mask-silk-amino-acid",
+        "feat_collection": "",
+        "feat_link": "",
+        "feat_image": "shopify://shop_images/image_169_1.png",
+        "feat_alt": "",
+        "feat_eyebrow": "Recommended for this result",
+        "feat_heading_white": "Blonder Fiber Plex",
+        "feat_heading_accent": "Blue",
+        "feat_subheading": "Up to 9 levels up",
+        "feat_body": "Advanced lightening with anti-yellow molecules for bright, cool blonde results.",
+        "feat_cta_label": "Learn more",
+        "feat_label": "",
+        "bottom_bg": "#1e3a5f"
       }
     },
     "ossian_instagram": {
@@ -770,11 +632,209 @@
       ],
       "name": "Ossion Reels",
       "settings": {
-        "background_image": "shopify://shop_images/Ossiongmbg.png",
         "heading": "OSSION",
         "heading_accent": "gram",
         "subheading": "Real people. Real results. Real stories",
         "instagram_handle": "ossion.care"
+      }
+    },
+    "ossian_trust_ticker": {
+      "type": "ossian-trust-ticker",
+      "blocks": {
+        "badge_leaf": {
+          "type": "badge",
+          "settings": {
+            "icon": "leaf",
+            "title": "Skin Loving Ingredients",
+            "description": "Enriched with natural extracts & nutrients."
+          }
+        },
+        "badge_shield": {
+          "type": "badge",
+          "settings": {
+            "icon": "shield",
+            "title": "Dermatologically Tested",
+            "description": "Safe and gentle for everyday use."
+          }
+        },
+        "badge_droplet": {
+          "type": "badge",
+          "settings": {
+            "icon": "droplet",
+            "title": "Professional Quality",
+            "description": "Salon trusted, expert recommended."
+          }
+        },
+        "badge_sparkle": {
+          "type": "badge",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Visible Results",
+            "description": "Healthy, glowing skin you can feel."
+          }
+        }
+      },
+      "block_order": [
+        "badge_leaf",
+        "badge_shield",
+        "badge_droplet",
+        "badge_sparkle"
+      ],
+      "name": "Trust Ticker",
+      "settings": {
+        "background_color": "#ffffff",
+        "scroll_speed": 28,
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    },
+    "ossian_product_showcase_LAeCxW": {
+      "type": "ossian-product-showcase",
+      "blocks": {
+        "product_card_gfxYkB": {
+          "type": "product_card",
+          "settings": {
+            "product": "",
+            "custom_name": "STRAIGHTEN",
+            "descriptor": "Silk-smooth, frizz free finish",
+            "badge_label": "BEST SELLER",
+            "step_label": "STEP 1",
+            "collection": "",
+            "link": ""
+          }
+        },
+        "product_card_FPVM3F": {
+          "type": "product_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy-copy-1",
+            "custom_name": "Developer",
+            "descriptor": "Precision color, zero damage",
+            "badge_label": "NEW LAUNCH",
+            "step_label": "STEP 2",
+            "collection": "",
+            "link": ""
+          }
+        },
+        "product_card_ipzPTP": {
+          "type": "product_card",
+          "settings": {
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml-copy",
+            "custom_name": "Hair Mask",
+            "descriptor": "Up to 10X repair",
+            "badge_label": "DEEP REPAIR",
+            "step_label": "STEP 3",
+            "collection": "",
+            "link": ""
+          }
+        },
+        "feature_item_kwJfjc": {
+          "type": "feature_item",
+          "settings": {
+            "icon": "beaker",
+            "title": "For All Hair Types",
+            "subtitle": "Suitable for every hair type"
+          }
+        },
+        "feature_item_YcBKk3": {
+          "type": "feature_item",
+          "settings": {
+            "icon": "triangle",
+            "title": "Keratin Complex",
+            "subtitle": "Strengthens from within"
+          }
+        },
+        "feature_item_EJfLHi": {
+          "type": "feature_item",
+          "settings": {
+            "icon": "drop",
+            "title": "Long Lasting results",
+            "subtitle": "Salon results that last"
+          }
+        },
+        "feature_item_xXh3VN": {
+          "type": "feature_item",
+          "settings": {
+            "icon": "person",
+            "title": "Trusted by professionals",
+            "subtitle": "Used in salons worldwide"
+          }
+        }
+      },
+      "block_order": [
+        "product_card_gfxYkB",
+        "product_card_FPVM3F",
+        "product_card_ipzPTP",
+        "feature_item_kwJfjc",
+        "feature_item_YcBKk3",
+        "feature_item_EJfLHi",
+        "feature_item_xXh3VN"
+      ],
+      "disabled": true,
+      "name": "Professional Hair Solutions",
+      "settings": {
+        "top_heading": "Only what your",
+        "top_heading_accent": "Hair Needs",
+        "category_label": "Hair Care",
+        "heading": "Professional Hair Solutions",
+        "body_text": "Advanced formulas for stronger, smoother & healthier hair.",
+        "cta_text": "Explore Collection",
+        "cta_link": "",
+        "trust_icon_1": "flask",
+        "trust_label_1": "Salon Quality",
+        "trust_icon_2": "drop",
+        "trust_label_2": "Advanced Technology",
+        "trust_icon_3": "shield",
+        "trust_label_3": "Safe & Effective"
+      }
+    },
+    "ossian_shop_by_category": {
+      "type": "ossian-shop-by-category",
+      "blocks": {
+        "cat_1": {
+          "type": "category",
+          "settings": {
+            "name": "Heat Protector",
+            "description": "Smooth | Shield | Style",
+            "link": ""
+          }
+        },
+        "cat_2": {
+          "type": "category",
+          "settings": {
+            "name": "Permanent Hair Color",
+            "description": "Enriched with Amino Acids",
+            "link": ""
+          }
+        },
+        "cat_3": {
+          "type": "category",
+          "settings": {
+            "name": "Red Wine Wax",
+            "description": "Enriched with Wine Polyphenol Extract",
+            "link": ""
+          }
+        },
+        "cat_4": {
+          "type": "category",
+          "settings": {
+            "name": "After-Wax Calming Oil",
+            "description": "Leaves the skin soft, smooth and nourished",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "cat_1",
+        "cat_2",
+        "cat_3",
+        "cat_4"
+      ],
+      "disabled": true,
+      "name": "Shop by Category",
+      "settings": {
+        "eyebrow": "OSSION SALONE",
+        "heading": "Shop by Category",
+        "tagline": "MARINE - BASED TECHNOLOGY  |  PROFESSIONAL USE  |  FREE SHIPPING ABOVE ₹999"
       }
     },
     "ossian_available_on": {
@@ -784,7 +844,6 @@
           "type": "platform",
           "settings": {
             "platform_name": "Blinkit",
-            "logo": "shopify://shop_images/Sho1.png",
             "url": ""
           }
         },
@@ -792,7 +851,6 @@
           "type": "platform",
           "settings": {
             "platform_name": "Amazon",
-            "logo": "shopify://shop_images/sh4.png",
             "url": ""
           }
         },
@@ -800,7 +858,6 @@
           "type": "platform",
           "settings": {
             "platform_name": "Zepto",
-            "logo": "shopify://shop_images/sh3.png",
             "url": ""
           }
         },
@@ -808,7 +865,6 @@
           "type": "platform",
           "settings": {
             "platform_name": "Swiggy Instamart",
-            "logo": "shopify://shop_images/sh2.png",
             "url": ""
           }
         }
@@ -829,14 +885,15 @@
     "ossian_hero_slider",
     "ossian_brand_pillars",
     "ossian_hair_solutions",
-    "ossian_product_showcase_LAeCxW",
     "ossian_skin_needs",
-    "ossian_salon_choice",
     "ossian_best_sellers",
-    "ossian_trust_ticker",
     "ossian_science",
-    "ossian_shop_by_category",
+    "ossian_transformation_banner",
+    "ossian_salon_choice",
     "ossian_instagram",
+    "ossian_trust_ticker",
+    "ossian_product_showcase_LAeCxW",
+    "ossian_shop_by_category",
     "ossian_available_on"
   ]
 }

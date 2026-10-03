@@ -1,0 +1,297 @@
+{%- comment -%}
+  Renders one metaobject entry inside a PDP info tab.
+
+  Liquid cannot enumerate a metaobject's field keys, so each role (heading, body,
+  checklist, images, before/after) is resolved from a comma separated candidate
+  list: the key configured in the theme editor first, then the conventional key
+  names. A candidate may use dot notation to reach a nested metaobject, e.g.
+  "pair.before_image".
+
+  Accepts:
+    entry           - {Metaobject} the entry to render
+    layout          - {String} 'comparison' renders a before/after slider
+    heading_keys    - {String} comma separated candidate keys
+    body_keys       - {String} comma separated candidate keys
+    list_keys       - {String} comma separated candidate keys
+    image_keys      - {String} comma separated candidate keys
+    before_keys     - {String} comma separated candidate keys
+    after_keys      - {String} comma separated candidate keys
+    images_per_row  - {Number} desktop columns for the image grid
+    before_label    - {String} slider label for the before image
+    after_label     - {String} slider label for the after image
+    check_icon      - {String} markup for the checklist bullet
+{%- endcomment -%}
+
+{%- liquid
+  assign mo_heading = nil
+  assign mo_heading_key = nil
+  assign mo_body = nil
+  assign mo_list_items = nil
+  assign mo_images = nil
+  assign mo_images_is_list = false
+  assign mo_before = nil
+  assign mo_after = nil
+
+  # ---- Heading: a single or multi line text field ----
+  assign candidates = heading_keys | split: ','
+  for candidate in candidates
+    assign candidate = candidate | strip
+    if candidate == blank
+      continue
+    endif
+    assign node = entry
+    assign parts = candidate | split: '.'
+    for part in parts
+      assign node = node[part]
+      unless forloop.last
+        assign node = node.value | default: node
+      endunless
+    endfor
+    if node.value != blank
+      if node.type == 'single_line_text_field' or node.type == 'multi_line_text_field'
+        assign mo_heading = node.value
+        assign mo_heading_key = candidate
+        break
+      endif
+    endif
+  endfor
+
+  # ---- Body copy: rich text, multi line, or a single line fallback ----
+  assign candidates = body_keys | split: ','
+  for candidate in candidates
+    assign candidate = candidate | strip
+    if candidate == blank or candidate == mo_heading_key
+      continue
+    endif
+    assign node = entry
+    assign parts = candidate | split: '.'
+    for part in parts
+      assign node = node[part]
+      unless forloop.last
+        assign node = node.value | default: node
+      endunless
+    endfor
+    if node.value == blank
+      continue
+    endif
+    if node.type == 'rich_text_field' or node.type == 'multi_line_text_field' or node.type == 'single_line_text_field'
+      assign mo_body = node
+      break
+    endif
+  endfor
+
+  # ---- Checklist: a list of text values ----
+  assign candidates = list_keys | split: ','
+  for candidate in candidates
+    assign candidate = candidate | strip
+    if candidate == blank
+      continue
+    endif
+    assign node = entry
+    assign parts = candidate | split: '.'
+    for part in parts
+      assign node = node[part]
+      unless forloop.last
+        assign node = node.value | default: node
+      endunless
+    endfor
+    if node.value == blank
+      continue
+    endif
+    if node.type == 'list.single_line_text_field' or node.type == 'list.multi_line_text_field'
+      assign mo_list_items = node.value
+      break
+    endif
+  endfor
+
+  # ---- Images ----
+  assign candidates = image_keys | split: ','
+  for candidate in candidates
+    assign candidate = candidate | strip
+    if candidate == blank
+      continue
+    endif
+    assign node = entry
+    assign parts = candidate | split: '.'
+    for part in parts
+      assign node = node[part]
+      unless forloop.last
+        assign node = node.value | default: node
+      endunless
+    endfor
+    if node.value != blank and node.type contains 'file_reference'
+      assign mo_images = node.value
+      if node.type contains 'list.'
+        assign mo_images_is_list = true
+      endif
+      break
+    endif
+  endfor
+
+  # ---- Before / after pair ----
+  if layout == 'comparison'
+    assign candidates = before_keys | split: ','
+    for candidate in candidates
+      assign candidate = candidate | strip
+      if candidate == blank
+        continue
+      endif
+      assign node = entry
+      assign parts = candidate | split: '.'
+      for part in parts
+        assign node = node[part]
+        unless forloop.last
+          assign node = node.value | default: node
+        endunless
+      endfor
+      if node.value != blank and node.type contains 'file_reference'
+        assign mo_before = node.value
+        break
+      endif
+    endfor
+
+    assign candidates = after_keys | split: ','
+    for candidate in candidates
+      assign candidate = candidate | strip
+      if candidate == blank
+        continue
+      endif
+      assign node = entry
+      assign parts = candidate | split: '.'
+      for part in parts
+        assign node = node[part]
+        unless forloop.last
+          assign node = node.value | default: node
+        endunless
+      endfor
+      if node.value != blank and node.type contains 'file_reference'
+        assign mo_after = node.value
+        break
+      endif
+    endfor
+
+    # An image list field holding the pair works too.
+    if mo_before == blank and mo_after == blank and mo_images_is_list
+      for mo_pair_image in mo_images
+        if forloop.index == 1
+          assign mo_before = mo_pair_image
+        elsif forloop.index == 2
+          assign mo_after = mo_pair_image
+          break
+        endif
+      endfor
+      if mo_after == blank
+        assign mo_before = nil
+      endif
+    endif
+  endif
+
+  assign has_comparison = false
+  if layout == 'comparison' and mo_before != blank and mo_after != blank
+    assign has_comparison = true
+  endif
+-%}
+
+{%- if mo_heading == blank and mo_body == blank and mo_list_items == blank and mo_images == blank and has_comparison == false -%}
+  {%- if request.design_mode -%}
+    <div class="pdp-tabs__entry pdp-tabs__entry--unmatched">
+      <p>
+        Metaobject <strong>{{ entry.system.type }}</strong> found, but none of its fields matched.
+        Set the field keys on this tab to match the definition. Keys tried:
+      </p>
+      <ul>
+        <li>Heading: {{ heading_keys }}</li>
+        <li>Body: {{ body_keys }}</li>
+        <li>Checklist: {{ list_keys }}</li>
+        <li>Images: {{ image_keys }}</li>
+        {%- if layout == 'comparison' -%}
+          <li>Before image: {{ before_keys }}</li>
+          <li>After image: {{ after_keys }}</li>
+        {%- endif -%}
+      </ul>
+    </div>
+  {%- endif -%}
+{%- else -%}
+  <div class="pdp-tabs__entry">
+    {%- if mo_body != blank or mo_list_items != blank -%}
+      <div class="pdp-tabs__entry-text">
+        {%- if mo_body != blank -%}
+          <div class="pdp-tabs__rte rte">
+            {%- if mo_body.type == 'rich_text_field' -%}
+              {{ mo_body | metafield_tag }}
+            {%- elsif mo_body.type == 'multi_line_text_field' -%}
+              {{ mo_body.value | newline_to_br }}
+            {%- else -%}
+              <p>{{ mo_body.value }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+        {%- if mo_list_items != blank -%}
+          <ul class="pdp-tabs__features">
+            {%- for item in mo_list_items -%}
+              {%- assign trimmed = item | strip -%}
+              {%- if trimmed != blank -%}
+                <li class="pdp-tabs__feature-item">{{ check_icon }}{{ trimmed }}</li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if mo_heading != blank -%}
+      <h3 class="pdp-tabs__meta-label">{{ mo_heading }}</h3>
+    {%- endif -%}
+
+    {%- if has_comparison -%}
+      {%- assign before_img = mo_before.preview_image | default: mo_before -%}
+      {%- assign after_img = mo_after.preview_image | default: mo_after -%}
+      {%- assign before_alt = before_img.alt | default: before_label -%}
+      {%- assign after_alt = after_img.alt | default: after_label -%}
+      <div class="pdp-compare" data-pdp-compare>
+        {{ after_img | image_url: width: 1400 | image_tag: class: 'pdp-compare__img', loading: 'lazy', widths: '400,600,800,1000,1400', alt: after_alt }}
+        <div class="pdp-compare__clip">
+          {{ before_img | image_url: width: 1400 | image_tag: class: 'pdp-compare__img', loading: 'lazy', widths: '400,600,800,1000,1400', alt: before_alt }}
+        </div>
+        <span class="pdp-compare__tag pdp-compare__tag--before">{{ before_label }}</span>
+        <span class="pdp-compare__tag pdp-compare__tag--after">{{ after_label }}</span>
+        <span class="pdp-compare__divider" aria-hidden="true"></span>
+        <span class="pdp-compare__handle" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </span>
+        <input
+          type="range"
+          class="pdp-compare__range"
+          min="0"
+          max="100"
+          value="50"
+          aria-label="{{ before_label | escape }} / {{ after_label | escape }} comparison slider"
+        >
+      </div>
+    {%- elsif mo_images != blank -%}
+      {%- assign mo_cols = images_per_row | default: 3 -%}
+      {%- if mo_images_is_list -%}
+        <ul class="pdp-tabs__meta-images" style="--pdp-meta-cols: {{ mo_cols }};">
+          {%- for mo_image in mo_images -%}
+            {%- assign mo_img = mo_image.preview_image | default: mo_image -%}
+            {%- if mo_img != blank -%}
+              {%- assign mo_img_alt = mo_img.alt | default: mo_heading -%}
+              <li class="pdp-tabs__meta-image">
+                {{ mo_img | image_url: width: 800 | image_tag: class: 'pdp-tabs__meta-img', loading: 'lazy', widths: '200,300,400,600,800', alt: mo_img_alt }}
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- else -%}
+        {%- assign mo_img = mo_images.preview_image | default: mo_images -%}
+        {%- assign mo_img_alt = mo_img.alt | default: mo_heading -%}
+        <ul class="pdp-tabs__meta-images" style="--pdp-meta-cols: 1;">
+          <li class="pdp-tabs__meta-image">
+            {{ mo_img | image_url: width: 800 | image_tag: class: 'pdp-tabs__meta-img', loading: 'lazy', widths: '200,300,400,600,800', alt: mo_img_alt }}
+          </li>
+        </ul>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+{%- endif -%}

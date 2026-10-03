@@ -1,9 +1,19 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "collection_hero": {
       "type": "ossian-collection-hero",
       "settings": {
-        "banner_image": "shopify://shop_images/PLPbanner.png",
+        "banner_image": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_01_14_49_AM.png",
+        "banner_link": "",
         "banner_height": 400,
         "banner_height_mobile": 220
       }
@@ -147,7 +157,7 @@
             "rating": "4.8",
             "review_count": "210",
             "cta_label": "View all",
-            "link": ""
+            "link": "shopify://collections/hair-care"
           }
         },
         "cat_2": {

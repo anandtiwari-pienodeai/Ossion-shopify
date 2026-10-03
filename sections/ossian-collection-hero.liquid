@@ -1,23 +1,90 @@
-<section class="collection-hero" id="collection-hero-{{ section.id }}">
-  <div class="collection-hero__banner">
-    {%- if section.settings.banner_link != blank -%}<a href="{{ section.settings.banner_link }}" class="collection-hero__link">{%- endif -%}
-    {%- if section.settings.banner_image != blank -%}
-      {{
-        section.settings.banner_image
-        | image_url: width: 2000
-        | image_tag:
-          class: 'collection-hero__img',
-          loading: 'eager',
-          fetchpriority: 'high',
-          widths: '750,1100,1600,2000',
-          alt: section.settings.banner_image.alt | default: collection.title
-      }}
-    {%- else -%}
-      <div class="collection-hero__placeholder"></div>
-    {%- endif -%}
-    {%- if section.settings.banner_link != blank -%}</a>{%- endif -%}
-  </div>
-</section>
+{%- comment -%}
+  Ossian Collection Hero — per-collection, per-device banner.
+
+  Image resolution order (first non-empty wins):
+    1. Collection metafields  custom.banner_desktop / custom.banner_mobile
+       (set on the collection itself in admin — these win as a PAIR, so a
+       collection's desktop art is never mixed with the global mobile art)
+    2. The section's default images, used for collections that have no
+       metafield set and on templates where `collection` is nil (homepage)
+
+  The mobile image falls back to the desktop image when not supplied, and
+  vice versa, so a single upload still works.
+{%- endcomment -%}
+
+{%- liquid
+  assign mf_desktop = collection.metafields.custom.banner_desktop.value
+  assign mf_mobile = collection.metafields.custom.banner_mobile.value
+  assign mf_link = collection.metafields.custom.banner_link.value
+
+  if mf_desktop != blank or mf_mobile != blank
+    assign desktop_image = mf_desktop
+    assign mobile_image = mf_mobile
+  else
+    assign desktop_image = section.settings.banner_image
+    assign mobile_image = section.settings.banner_image_mobile
+  endif
+
+  assign has_mobile = false
+  if mobile_image != blank
+    assign has_mobile = true
+  endif
+
+  if desktop_image == blank
+    assign desktop_image = mobile_image
+  endif
+  if mobile_image == blank
+    assign mobile_image = desktop_image
+  endif
+
+  assign banner_link = section.settings.banner_link
+  if mf_link != blank
+    assign banner_link = mf_link
+  endif
+
+  assign alt_text = desktop_image.alt | default: collection.title | default: shop.name
+-%}
+
+{%- if desktop_image != blank or request.design_mode -%}
+  <section class="collection-hero collection-hero--{{ section.settings.sizing }}" id="collection-hero-{{ section.id }}">
+    <div class="collection-hero__banner">
+      {%- if banner_link != blank -%}
+        <a href="{{ banner_link }}" class="collection-hero__link">
+      {%- endif -%}
+
+      {%- if desktop_image != blank -%}
+        <picture class="collection-hero__picture">
+          {%- if has_mobile -%}
+            <source
+              media="(max-width: 749px)"
+              srcset="{{ mobile_image | image_url: width: 500 }} 500w, {{ mobile_image | image_url: width: 750 }} 750w, {{ mobile_image | image_url: width: 1100 }} 1100w, {{ mobile_image | image_url: width: 1500 }} 1500w"
+              sizes="100vw"
+              width="{{ mobile_image.width }}"
+              height="{{ mobile_image.height }}"
+            >
+          {%- endif -%}
+          {{
+            desktop_image
+            | image_url: width: 2000
+            | image_tag:
+              class: 'collection-hero__img',
+              loading: 'eager',
+              fetchpriority: 'high',
+              widths: '750,1100,1600,2000',
+              sizes: '100vw',
+              alt: alt_text
+          }}
+        </picture>
+      {%- else -%}
+        <div class="collection-hero__placeholder"></div>
+      {%- endif -%}
+
+      {%- if banner_link != blank -%}
+        </a>
+      {%- endif -%}
+    </div>
+  </section>
+{%- endif -%}
 
 {% stylesheet %}
 .collection-hero {
@@ -29,28 +96,44 @@
   width: 100%;
   display: block;
   line-height: 0;
-  padding:0px 10px
+  padding: 0 10px;
 }
 
 @media screen and (max-width: 749px) {
   .collection-hero__banner {
-   
     padding: 0 8px;
   }
 }
 
+.collection-hero__picture {
+  display: block;
+  width: 100%;
+}
+
 .collection-hero__img {
   width: 100%;
-  height: 100%;
+  height: auto;
+  display: block;
   object-fit: cover;
   object-position: center;
-  display: block;
+}
+
+/* Fixed-height mode crops the art to the heights set in the editor.
+   Natural mode (default) lets each image keep its own aspect ratio,
+   which is usually what you want when desktop and mobile art differ. */
+.collection-hero--fixed .collection-hero__img {
+  height: var(--collection-hero-height, 480px);
+}
+
+@media screen and (max-width: 749px) {
+  .collection-hero--fixed .collection-hero__img {
+    height: var(--collection-hero-height-mobile, 220px);
+  }
 }
 
 .collection-hero__link {
   display: block;
   width: 100%;
-  height: 100%;
 }
 
 .collection-hero__placeholder {
@@ -70,15 +153,44 @@
   },
   "settings": [
     {
+      "type": "paragraph",
+      "content": "Each collection can have its own banner. Set it on the collection in Products > Collections, under 'Collection banner (desktop)' and 'Collection banner (mobile)'. The images below are only used for collections that have none set."
+    },
+    {
+      "type": "header",
+      "content": "Default banner"
+    },
+    {
       "type": "image_picker",
       "id": "banner_image",
-      "label": "Banner image"
+      "label": "Default banner — desktop"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image_mobile",
+      "label": "Default banner — mobile",
+      "info": "Shown at 749px and below. Leave empty to reuse the desktop image."
     },
     {
       "type": "url",
       "id": "banner_link",
-      "label": "Banner link",
-      "info": "Optional. Makes the whole banner clickable — link to any page, collection, or product."
+      "label": "Default banner link",
+      "info": "Optional. A collection's own 'Collection banner link' metafield overrides this."
+    },
+    {
+      "type": "header",
+      "content": "Sizing"
+    },
+    {
+      "type": "select",
+      "id": "sizing",
+      "label": "Banner sizing",
+      "options": [
+        { "value": "natural", "label": "Natural image height" },
+        { "value": "fixed", "label": "Fixed height (crops the image)" }
+      ],
+      "default": "natural",
+      "info": "Natural keeps each image's own aspect ratio — best when desktop and mobile art are cropped differently."
     },
     {
       "type": "range",
@@ -88,7 +200,8 @@
       "max": 700,
       "step": 20,
       "unit": "px",
-      "default": 480
+      "default": 480,
+      "visible_if": "{{ section.settings.sizing == 'fixed' }}"
     },
     {
       "type": "range",
@@ -98,13 +211,15 @@
       "max": 400,
       "step": 10,
       "unit": "px",
-      "default": 220
+      "default": 220,
+      "visible_if": "{{ section.settings.sizing == 'fixed' }}"
     }
   ],
   "presets": [
     {
       "name": "Collection Hero Banner",
       "settings": {
+        "sizing": "natural",
         "banner_height": 480,
         "banner_height_mobile": 220
       }

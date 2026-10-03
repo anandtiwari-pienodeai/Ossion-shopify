@@ -40,7 +40,7 @@
     --ossian-plp-columns-mobile: {{ mobile_columns }};
   "
 >
-  {% render 'skip-to-content-link', href: '#OssianPlpGrid-' | append: section.id, text: 'accessibility.skip_to_results_list' %}
+  {% render 'skip-to-content-link', href: '#OssianPlpGrid-', append: section.id, text: 'accessibility.skip_to_results_list' %}
 
   <div class="ossian-plp__toolbar">
     <button type="button" class="ossian-plp__filter-toggle" data-ossian-plp-drawer-open aria-haspopup="dialog">
@@ -752,3 +752,15 @@
   "presets": []
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'skip-to-content-link', href: '#OssianPlpGrid-' | append: section.id,
+    text: 'accessibility.skip_to_results_list' %}"
+  to: "{% render 'skip-to-content-link', href: '#OssianPlpGrid-', append: section.id,
+    text: 'accessibility.skip_to_results_list' %}"
+  position: 1655..1779
+{% endcomment %}

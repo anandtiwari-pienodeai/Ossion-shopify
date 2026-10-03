@@ -2,61 +2,204 @@
   <div class="page-width pdp-tabs__inner">
 
     <div class="pdp-tabs__nav" role="tablist" aria-label="Product information">
-      {%- assign first_tab = true -%}
+      {%- assign nav_index = 0 -%}
       {%- for block in section.blocks -%}
         {%- if block.type == 'tab' and block.settings.label != blank -%}
+          {%- assign nav_index = nav_index | plus: 1 -%}
           <button
-            class="pdp-tabs__nav-btn{% if first_tab %} pdp-tabs__nav-btn--active{% endif %}"
+            class="pdp-tabs__nav-btn{% if nav_index == 1 %} pdp-tabs__nav-btn--active{% endif %}"
             role="tab"
-            aria-selected="{% if first_tab %}true{% else %}false{% endif %}"
-            aria-controls="pdp-tab-panel-{{ section.id }}-{{ forloop.index }}"
-            id="pdp-tab-{{ section.id }}-{{ forloop.index }}"
-            data-tab-index="{{ forloop.index }}"
+            aria-selected="{% if nav_index == 1 %}true{% else %}false{% endif %}"
+            aria-controls="pdp-tab-panel-{{ section.id }}-{{ nav_index }}"
+            id="pdp-tab-{{ section.id }}-{{ nav_index }}"
+            data-tab-index="{{ nav_index }}"
             {{ block.shopify_attributes }}
           >
             {{ block.settings.label }}
           </button>
-          {%- assign first_tab = false -%}
         {%- endif -%}
       {%- endfor -%}
     </div>
+
+    {%- capture check_icon -%}
+      <span class="pdp-tabs__feature-check" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </span>
+    {%- endcapture -%}
 
     {%- assign panel_index = 0 -%}
     {%- for block in section.blocks -%}
       {%- if block.type == 'tab' and block.settings.label != blank -%}
         {%- assign panel_index = panel_index | plus: 1 -%}
+        {%- liquid
+          # ---- Resolve the product metafield this tab points at ----
+          assign mo_mf = nil
+          assign mo_field = block.settings.metaobject_metafield | strip
+          if mo_field != blank
+            assign mo_field = mo_field | remove_first: 'product.metafields.'
+            assign mo_parts = mo_field | split: '.'
+            assign mo_ns = mo_parts[0]
+            assign mo_key = mo_parts[1]
+            if mo_ns != blank and mo_key != blank
+              assign mo_mf = product.metafields[mo_ns][mo_key]
+            endif
+          endif
+
+          # The metafield is either one metaobject entry, a list of entries, or a
+          # plain value. Trust the declared type, then fall back to shape checks
+          # so a tab still renders if the definition is not a reference type.
+          assign mo_kind = nil
+          assign mo_value = mo_mf.value
+          if mo_mf != blank and mo_value != blank
+            if mo_mf.type == 'metaobject_reference'
+              assign mo_kind = 'entry'
+            elsif mo_mf.type == 'list.metaobject_reference'
+              assign mo_kind = 'entry_list'
+            elsif mo_value.system != blank
+              assign mo_kind = 'entry'
+            else
+              assign mo_kind = 'plain'
+            endif
+          endif
+
+          # Candidate key lists: the key set in the theme editor wins, then the
+          # conventional names. Any setting may hold several comma separated keys.
+          assign heading_keys = block.settings.metaobject_label_field | append: ',label,heading,title,name,step_title' | split: ',' | join: ','
+          assign body_keys = block.settings.metaobject_body_field | append: ',body,description,content,text,details,caption,summary,copy' | split: ',' | join: ','
+          assign list_keys = block.settings.metaobject_list_field | append: ',steps,points,bullets,benefits,features,highlights,instructions' | split: ',' | join: ','
+          assign image_keys = block.settings.metaobject_images_field | append: ',image,images,photo,photos,media,gallery' | split: ',' | join: ','
+          assign before_keys = block.settings.comparison_before_field | append: ',before,before_image,image_before,before_photo,left_image' | split: ',' | join: ','
+          assign after_keys = block.settings.comparison_after_field | append: ',after,after_image,image_after,after_photo,right_image' | split: ',' | join: ','
+
+          assign is_comparison = false
+          if block.settings.layout == 'comparison'
+            assign is_comparison = true
+          endif
+
+          assign show_split = false
+          if is_comparison == false and block.settings.featured_image != blank
+            assign show_split = true
+          endif
+
+          assign has_text = false
+          if block.settings.use_product_description and product.description != blank
+            assign has_text = true
+          endif
+          if block.settings.content != blank
+            assign has_text = true
+          endif
+          if block.settings.features_list != blank
+            assign has_text = true
+          endif
+
+          assign before_label = block.settings.before_label | default: 'Before'
+          assign after_label = block.settings.after_label | default: 'After'
+        -%}
         <div
-          class="pdp-tabs__panel{% if panel_index == 1 %} pdp-tabs__panel--active{% endif %}{% if block.settings.featured_image != blank %} pdp-tabs__panel--split{% endif %}"
+          class="pdp-tabs__panel{% if panel_index == 1 %} pdp-tabs__panel--active{% endif %}{% if show_split %} pdp-tabs__panel--split{% endif %}"
           role="tabpanel"
           id="pdp-tab-panel-{{ section.id }}-{{ panel_index }}"
           aria-labelledby="pdp-tab-{{ section.id }}-{{ panel_index }}"
           {% if panel_index != 1 %}hidden{% endif %}
         >
-          <div class="pdp-tabs__panel-text">
-            {%- if block.settings.use_product_description -%}
-              <div class="pdp-tabs__rte rte">{{ product.description }}</div>
-            {%- elsif block.settings.content != blank -%}
-              <div class="pdp-tabs__rte rte">{{ block.settings.content }}</div>
-            {%- endif -%}
-            {%- if block.settings.features_list != blank -%}
-              <ul class="pdp-tabs__features">
-                {%- assign lines = block.settings.features_list | newline_to_br | split: '<br />' -%}
-                {%- for line in lines -%}
-                  {%- assign trimmed = line | strip -%}
-                  {%- if trimmed != blank -%}
-                    <li class="pdp-tabs__feature-item">
-                      <span class="pdp-tabs__feature-check" aria-hidden="true">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                      </span>
-                      {{ trimmed }}
-                    </li>
-                  {%- endif -%}
-                {%- endfor -%}
-              </ul>
-            {%- endif -%}
-          </div>
+          {%- if has_text -%}
+            <div class="pdp-tabs__panel-text">
+              {%- if block.settings.use_product_description -%}
+                <div class="pdp-tabs__rte rte">{{ product.description }}</div>
+              {%- elsif block.settings.content != blank -%}
+                <div class="pdp-tabs__rte rte">{{ block.settings.content }}</div>
+              {%- endif -%}
+              {%- if block.settings.features_list != blank -%}
+                <ul class="pdp-tabs__features">
+                  {%- assign lines = block.settings.features_list | newline_to_br | split: '<br />' -%}
+                  {%- for line in lines -%}
+                    {%- assign trimmed = line | strip -%}
+                    {%- if trimmed != blank -%}
+                      <li class="pdp-tabs__feature-item">{{ check_icon }}{{ trimmed }}</li>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
 
-          {%- if block.settings.featured_image != blank -%}
+          {%- case mo_kind -%}
+            {%- when 'entry' -%}
+              {%- render 'ossian-pdp-tab-metaobject',
+                entry: mo_value,
+                layout: block.settings.layout,
+                heading_keys: heading_keys,
+                body_keys: body_keys,
+                list_keys: list_keys,
+                image_keys: image_keys,
+                before_keys: before_keys,
+                after_keys: after_keys,
+                images_per_row: block.settings.metaobject_images_per_row,
+                before_label: before_label,
+                after_label: after_label,
+                check_icon: check_icon
+              -%}
+            {%- when 'entry_list' -%}
+              {%- for mo_entry in mo_value -%}
+                {%- render 'ossian-pdp-tab-metaobject',
+                  entry: mo_entry,
+                  layout: block.settings.layout,
+                  heading_keys: heading_keys,
+                  body_keys: body_keys,
+                  list_keys: list_keys,
+                  image_keys: image_keys,
+                  before_keys: before_keys,
+                  after_keys: after_keys,
+                  images_per_row: block.settings.metaobject_images_per_row,
+                  before_label: before_label,
+                  after_label: after_label,
+                  check_icon: check_icon
+                -%}
+              {%- endfor -%}
+            {%- when 'plain' -%}
+              {%- comment -%} The metafield is a value, not a metaobject reference. {%- endcomment -%}
+              <div class="pdp-tabs__entry">
+                {%- if mo_mf.type == 'rich_text_field' -%}
+                  <div class="pdp-tabs__rte rte">{{ mo_mf | metafield_tag }}</div>
+                {%- elsif mo_mf.type == 'multi_line_text_field' -%}
+                  <div class="pdp-tabs__rte rte">{{ mo_value | newline_to_br }}</div>
+                {%- elsif mo_mf.type == 'single_line_text_field' -%}
+                  <div class="pdp-tabs__rte rte"><p>{{ mo_value }}</p></div>
+                {%- elsif mo_mf.type == 'list.single_line_text_field' or mo_mf.type == 'list.multi_line_text_field' -%}
+                  <ul class="pdp-tabs__features">
+                    {%- for item in mo_value -%}
+                      {%- assign trimmed = item | strip -%}
+                      {%- if trimmed != blank -%}
+                        <li class="pdp-tabs__feature-item">{{ check_icon }}{{ trimmed }}</li>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </ul>
+                {%- elsif mo_mf.type contains 'file_reference' -%}
+                  {%- assign mo_cols = block.settings.metaobject_images_per_row | default: 3 -%}
+                  <ul class="pdp-tabs__meta-images" style="--pdp-meta-cols: {{ mo_cols }};">
+                    {%- if mo_mf.type contains 'list.' -%}
+                      {%- for mo_image in mo_value -%}
+                        {%- assign mo_img = mo_image.preview_image | default: mo_image -%}
+                        {%- if mo_img != blank -%}
+                          <li class="pdp-tabs__meta-image">
+                            {{ mo_img | image_url: width: 800 | image_tag: class: 'pdp-tabs__meta-img', loading: 'lazy', widths: '200,300,400,600,800', alt: mo_img.alt }}
+                          </li>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- else -%}
+                      {%- assign mo_img = mo_value.preview_image | default: mo_value -%}
+                      <li class="pdp-tabs__meta-image">
+                        {{ mo_img | image_url: width: 800 | image_tag: class: 'pdp-tabs__meta-img', loading: 'lazy', widths: '200,300,400,600,800', alt: mo_img.alt }}
+                      </li>
+                    {%- endif -%}
+                  </ul>
+                {%- else -%}
+                  <div class="pdp-tabs__rte rte">{{ mo_mf | metafield_tag }}</div>
+                {%- endif -%}
+              </div>
+          {%- endcase -%}
+
+          {%- if show_split -%}
             {%- assign img_alt = block.settings.image_heading | default: '' -%}
             <div class="pdp-tabs__panel-image">
               {{ block.settings.featured_image | image_url: width: 900 | image_tag: class: 'pdp-tabs__panel-img', loading: 'lazy', alt: img_alt }}
@@ -193,6 +336,17 @@
         panels[i].hidden = false;
       });
     });
+  });
+
+  var compares = document.querySelectorAll('[data-pdp-compare]');
+  compares.forEach(function(compare) {
+    var range = compare.querySelector('.pdp-compare__range');
+    if (!range) return;
+    var sync = function() {
+      compare.style.setProperty('--pdp-compare-pos', range.value + '%');
+    };
+    range.addEventListener('input', sync);
+    sync();
   });
 })();
 </script>
@@ -378,6 +532,209 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Metaobject entry: heading + copy + image grid or comparison */
+.pdp-tabs__entry {
+  text-align: center;
+}
+
+.pdp-tabs__panel--split .pdp-tabs__entry {
+  grid-column: 1 / -1;
+}
+
+.pdp-tabs__panel-text + .pdp-tabs__entry,
+.pdp-tabs__entry + .pdp-tabs__entry {
+  margin-block-start: 40px;
+}
+
+.pdp-tabs__entry-text {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Checklists stay left aligned so the checkmarks line up */
+.pdp-tabs__entry-text .pdp-tabs__features {
+  text-align: start;
+}
+
+/* Tabs whose copy sits above the heading need more air around it */
+.pdp-tabs__entry-text + .pdp-tabs__meta-label {
+  margin-block-start: 36px;
+  margin-block-end: 56px;
+}
+
+/* Theme editor only: shown when a metaobject resolves but no field key matches */
+.pdp-tabs__entry--unmatched {
+  border: 1px dashed #c3512f;
+  border-radius: 8px;
+  padding: 16px 18px;
+  text-align: start;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #7a3a22;
+  background: #fdf6f3;
+}
+
+.pdp-tabs__entry--unmatched ul {
+  margin: 8px 0 0;
+  padding-inline-start: 18px;
+}
+
+.pdp-tabs__meta-label {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e3a5f;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.35;
+  text-align: center;
+  margin: 0 0 24px;
+  font-family: var(--font-heading--family, sans-serif);
+}
+
+.pdp-tabs__meta-images {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.pdp-tabs__meta-image {
+  flex: 0 0 auto;
+  width: calc(100% / var(--pdp-meta-cols, 3) / 2);
+  margin: 0;
+}
+
+.pdp-tabs__meta-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* ===== Before / after comparison ===== */
+.pdp-compare {
+  --pdp-compare-pos: 50%;
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  aspect-ratio: 4 / 3;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f1f5f9;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.pdp-compare__img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.pdp-compare__clip {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 calc(100% - var(--pdp-compare-pos)) 0 0);
+}
+
+.pdp-compare__tag {
+  position: absolute;
+  top: 14px;
+  z-index: 2;
+  padding: 5px 12px;
+  border-radius: 99px;
+  background: rgba(10, 25, 55, 0.72);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  pointer-events: none;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.pdp-compare__tag--before { left: 14px; }
+.pdp-compare__tag--after { right: 14px; }
+
+.pdp-compare__divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--pdp-compare-pos);
+  z-index: 3;
+  width: 3px;
+  margin-left: -1.5px;
+  background: #fff;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+}
+
+.pdp-compare__handle {
+  position: absolute;
+  top: 50%;
+  left: var(--pdp-compare-pos);
+  z-index: 4;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fff;
+  color: #1e3a5f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.22);
+  pointer-events: none;
+}
+
+.pdp-compare__range {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  background: transparent;
+  cursor: ew-resize;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.pdp-compare__range::-webkit-slider-thumb {
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: 0;
+  cursor: ew-resize;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.pdp-compare__range::-moz-range-thumb {
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: 0;
+  cursor: ew-resize;
+}
+
+.pdp-compare__range:focus-visible ~ .pdp-compare__handle {
+  box-shadow: 0 0 0 3px #1e3a5f, 0 2px 14px rgba(0, 0, 0, 0.22);
 }
 
 /* ===== Reviews section ===== */
@@ -573,6 +930,47 @@
 
   .pdp-tabs__panel { padding-block-start: 22px; }
 
+  .pdp-tabs__entry + .pdp-tabs__entry,
+  .pdp-tabs__panel-text + .pdp-tabs__entry {
+    margin-block-start: 28px;
+  }
+
+  .pdp-tabs__meta-label {
+    font-size: 15px;
+    margin-bottom: 18px;
+  }
+
+  .pdp-tabs__entry-text + .pdp-tabs__meta-label {
+    margin-block-start: 26px;
+    margin-block-end: 32px;
+  }
+
+  .pdp-tabs__meta-images {
+    gap: 6px;
+  }
+
+  .pdp-tabs__meta-image {
+    width: 30%;
+  }
+
+  .pdp-compare {
+    aspect-ratio: 1 / 1;
+  }
+
+  .pdp-compare__tag {
+    top: 10px;
+    padding: 4px 9px;
+    font-size: 10px;
+  }
+
+  .pdp-compare__tag--before { left: 10px; }
+  .pdp-compare__tag--after { right: 10px; }
+
+  .pdp-compare__handle {
+    width: 34px;
+    height: 34px;
+  }
+
   .pdp-reviews { padding: 36px 0 48px; }
 
   .pdp-reviews__summary {
@@ -616,7 +1014,9 @@
   "tag": "section",
   "class": "ossian-pdp-tabs-section",
   "enabled_on": {
-    "templates": ["product"]
+    "templates": [
+      "product"
+    ]
   },
   "settings": [
     {
@@ -696,6 +1096,22 @@
           "default": "Description"
         },
         {
+          "type": "select",
+          "id": "layout",
+          "label": "Tab layout",
+          "options": [
+            {
+              "value": "text",
+              "label": "Text + image grid"
+            },
+            {
+              "value": "comparison",
+              "label": "Before / after comparison"
+            }
+          ],
+          "default": "text"
+        },
+        {
           "type": "checkbox",
           "id": "use_product_description",
           "label": "Use product description",
@@ -706,7 +1122,7 @@
           "type": "richtext",
           "id": "content",
           "label": "Tab content",
-          "info": "Used if 'Use product description' is off"
+          "info": "Used if 'Use product description' is off. Leave empty when the content comes from a metaobject."
         },
         {
           "type": "textarea",
@@ -716,29 +1132,125 @@
         },
         {
           "type": "header",
-          "content": "Featured image (creates split layout)"
+          "content": "Metaobject content"
+        },
+        {
+          "type": "text",
+          "id": "metaobject_metafield",
+          "label": "Product metafield",
+          "info": "Type the namespace.key by hand, e.g. custom.ingredients — do not use the dynamic source picker here"
+        },
+        {
+          "type": "text",
+          "id": "metaobject_label_field",
+          "label": "Heading field key",
+          "default": "label",
+          "info": "Text field rendered as the centred heading. Accepts several comma separated keys, tried in order."
+        },
+        {
+          "type": "text",
+          "id": "metaobject_body_field",
+          "label": "Body field key",
+          "info": "Rich text or multi-line text field rendered as the tab copy, e.g. description"
+        },
+        {
+          "type": "text",
+          "id": "metaobject_list_field",
+          "label": "Checklist field key",
+          "info": "List of text values rendered as a checkmark list, e.g. steps"
+        },
+        {
+          "type": "text",
+          "id": "metaobject_images_field",
+          "label": "Images field key",
+          "default": "image",
+          "info": "Metaobject field holding the file / image list"
+        },
+        {
+          "type": "range",
+          "id": "metaobject_images_per_row",
+          "label": "Images per row (desktop)",
+          "min": 2,
+          "max": 6,
+          "step": 1,
+          "default": 3,
+          "visible_if": "{{ block.settings.layout != 'comparison' }}"
+        },
+        {
+          "type": "header",
+          "content": "Before / after comparison",
+          "visible_if": "{{ block.settings.layout == 'comparison' }}"
+        },
+        {
+          "type": "text",
+          "id": "comparison_before_field",
+          "label": "Before image field key",
+          "info": "Metaobject file field for the before image. Falls back to the first two images of the images field.",
+          "visible_if": "{{ block.settings.layout == 'comparison' }}"
+        },
+        {
+          "type": "text",
+          "id": "comparison_after_field",
+          "label": "After image field key",
+          "visible_if": "{{ block.settings.layout == 'comparison' }}"
+        },
+        {
+          "type": "image_picker",
+          "id": "before_image",
+          "label": "Before image fallback",
+          "info": "Used when the metaobject has no before image",
+          "visible_if": "{{ block.settings.layout == 'comparison' }}"
+        },
+        {
+          "type": "image_picker",
+          "id": "after_image",
+          "label": "After image fallback",
+          "visible_if": "{{ block.settings.layout == 'comparison' }}"
+        },
+        {
+          "type": "text",
+          "id": "before_label",
+          "label": "Before label",
+          "default": "Before",
+          "visible_if": "{{ block.settings.layout == 'comparison' }}"
+        },
+        {
+          "type": "text",
+          "id": "after_label",
+          "label": "After label",
+          "default": "After",
+          "visible_if": "{{ block.settings.layout == 'comparison' }}"
+        },
+        {
+          "type": "header",
+          "content": "Featured image (creates split layout)",
+          "visible_if": "{{ block.settings.layout != 'comparison' }}"
         },
         {
           "type": "image_picker",
           "id": "featured_image",
-          "label": "Featured image"
+          "label": "Featured image",
+          "visible_if": "{{ block.settings.layout != 'comparison' }}"
         },
         {
           "type": "text",
           "id": "image_heading",
           "label": "Image heading",
-          "default": "ENRICHED WITH MARINE SCIENCE"
+          "default": "ENRICHED WITH MARINE SCIENCE",
+          "visible_if": "{{ block.settings.layout != 'comparison' }}"
         },
         {
           "type": "text",
           "id": "image_cta_text",
           "label": "Button text",
-          "default": "Explore Our Science"
+          "default": "Explore Our Science",
+          "visible_if": "{{ block.settings.layout != 'comparison' }}"
         },
         {
           "type": "url",
           "id": "image_cta_url",
-          "label": "Button URL"
+          "label": "Button URL",
+          "visible_if": "{{ block.settings.layout != 'comparison' }}"
         }
       ]
     },
@@ -782,37 +1294,61 @@
           "type": "tab",
           "settings": {
             "label": "Description",
-            "use_product_description": true,
-            "image_heading": "ENRICHED WITH MARINE SCIENCE",
-            "image_cta_text": "Explore Our Science"
+            "layout": "text",
+            "use_product_description": false,
+            "metaobject_metafield": "custom.description",
+            "metaobject_label_field": "label",
+            "metaobject_body_field": "description",
+            "metaobject_images_field": "image",
+            "metaobject_images_per_row": 3
           }
         },
         {
           "type": "tab",
           "settings": {
             "label": "Ingredients",
-            "content": "<p>Potassium Persulfate, Ammonium Persulfate, Sodium Persulfate, Kaolin, Sodium Silicate, Polyacrylamide, Silica, Marine Minerals Complex, Hydrolysed Keratin, Panthenol (Vitamin B5), Tocopheryl Acetate (Vitamin E).</p><p><em>Free from PPD, Resorcinol and Ammonia.</em></p>"
+            "layout": "text",
+            "metaobject_metafield": "custom.ingredients",
+            "metaobject_label_field": "label",
+            "metaobject_images_field": "image",
+            "metaobject_images_per_row": 3
           }
         },
         {
           "type": "tab",
           "settings": {
             "label": "How To Use",
-            "content": "<p><strong>Step 1:</strong> Mix the product with the developer in a 1:2 ratio.</p><p><strong>Step 2:</strong> Apply to dry, unwashed hair using a brush. Start from the roots and work towards the ends.</p><p><strong>Step 3:</strong> Leave on for 20–40 minutes depending on desired lift level.</p><p><strong>Step 4:</strong> Rinse thoroughly and follow with a toning shampoo and conditioner.</p><p><em>Professional use recommended. Always perform a strand test before full application.</em></p>"
+            "layout": "text",
+            "metaobject_metafield": "custom.how_to_use",
+            "metaobject_label_field": "label",
+            "metaobject_images_field": "image",
+            "metaobject_images_per_row": 3
           }
         },
         {
           "type": "tab",
           "settings": {
             "label": "Marine Technology",
-            "content": "<p>Our exclusive Marine Science complex harnesses the power of deep-sea minerals and marine extracts to protect and strengthen hair during the lightening process. Rich in Sea Minerals, the formula reinforces the hair fibre while delivering brilliant, brass-free results.</p>"
+            "layout": "text",
+            "metaobject_metafield": "custom.marine_technology",
+            "metaobject_label_field": "label",
+            "metaobject_images_field": "images",
+            "metaobject_images_per_row": 3
           }
         },
         {
           "type": "tab",
           "settings": {
             "label": "Before & After",
-            "content": "<p>See the transformation possible with OSSION Bleach Plus — delivering beautiful, bright results while maintaining hair integrity. Achieve up to 9 levels of lift with minimal damage thanks to our advanced Marine Science formula.</p>"
+            "layout": "comparison",
+            "metaobject_metafield": "custom.before_after",
+            "metaobject_label_field": "label,caption",
+            "metaobject_body_field": "caption",
+            "metaobject_images_field": "images",
+            "comparison_before_field": "before_image",
+            "comparison_after_field": "after_image",
+            "before_label": "Before",
+            "after_label": "After"
           }
         },
         {

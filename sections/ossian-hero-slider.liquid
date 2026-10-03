@@ -6,6 +6,17 @@
         unless slide_link_label != blank
           assign slide_link_label = 'Slide ' | append: forloop.index
         endunless
+
+        comment
+          Resolve the two image pickers up front so a slide works with either one
+          filled in: mobile-only slides fall back to the mobile file on desktop,
+          and desktop-only slides keep using the desktop file on mobile.
+        endcomment
+        assign desktop_image = block.settings.image
+        assign mobile_image = block.settings.image_mobile
+        if desktop_image == blank
+          assign desktop_image = mobile_image
+        endif
       -%}
       <div class="hero-carousel__slide{% if forloop.first %} is-active{% endif %}" {{ block.shopify_attributes }}>
         {%- if block.settings.link != blank -%}
@@ -33,7 +44,7 @@
               <source src="{{ source.url }}" type="{{ source.mime_type }}">
             {%- endfor -%}
           </video>
-        {%- elsif block.settings.image != blank -%}
+        {%- elsif desktop_image != blank -%}
           {%- liquid
             if forloop.first
               assign img_loading = 'eager'
@@ -44,19 +55,22 @@
             endif
           -%}
           <picture>
-            {%- if block.settings.image_mobile != blank -%}
+            {%- if mobile_image != blank and mobile_image != desktop_image -%}
               <source
                 media="(max-width: 768px)"
                 srcset="
-                  {{- block.settings.image_mobile | image_url: width: 400 }} 400w,
-                  {{ block.settings.image_mobile | image_url: width: 700 }} 700w,
-                  {{ block.settings.image_mobile | image_url: width: 900 }} 900w
+                  {{- mobile_image | image_url: width: 400 }} 400w,
+                  {{ mobile_image | image_url: width: 700 }} 700w,
+                  {{ mobile_image | image_url: width: 900 }} 900w,
+                  {{ mobile_image | image_url: width: 1200 }} 1200w
                 "
                 sizes="100vw"
+                width="{{ mobile_image.width }}"
+                height="{{ mobile_image.height }}"
               >
             {%- endif -%}
             {{
-              block.settings.image
+              desktop_image
               | image_url: width: 1920
               | image_tag:
                 class: 'hero-carousel__media',
@@ -324,13 +338,14 @@
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Desktop image"
+          "label": "Desktop image",
+          "info": "Shown at 769px and above. Use a wide crop — around 1920x800."
         },
         {
           "type": "image_picker",
           "id": "image_mobile",
           "label": "Mobile image (optional)",
-          "info": "Shown below 768px width. If left blank, the desktop image is used on mobile too."
+          "info": "Shown at 768px and below. Use a taller crop — around 900x1100. If left blank, the desktop image is used on mobile too."
         },
         {
           "type": "video",

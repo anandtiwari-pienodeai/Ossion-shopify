@@ -1,115 +1,96 @@
-<section class="explore-cat" id="explore-cat-{{ section.id }}">
-  <div class="explore-cat__inner page-width">
-    {%- if section.settings.heading != blank -%}
-      <h2 class="explore-cat__heading">{{ section.settings.heading }}</h2>
-    {%- endif -%}
+{%- comment -%}
+  Ossian Explore More Category.
 
-    <div class="explore-cat__grid">
-      {%- for block in section.blocks -%}
-        {%- if block.type == 'category_card' -%}
-          {%- assign ec_product = block.settings.product -%}
-          {%- assign card_link = block.settings.link | default: ec_product.url | default: '#' -%}
-          <div class="explore-cat__card" {{ block.shopify_attributes }}>
-            <!-- Image -->
-            <div class="explore-cat__media">
-              <a href="{{ card_link }}" class="explore-cat__media-link" aria-hidden="true" tabindex="-1">
-              {%- if block.settings.image != blank -%}
-                {{
-                  block.settings.image
-                  | image_url: width: 400
-                  | image_tag:
-                    class: 'explore-cat__img',
-                    loading: 'lazy',
-                    widths: '200,300,400'
-                }}
-              {%- elsif ec_product != blank and ec_product.featured_image != blank -%}
-                {{
-                  ec_product.featured_image
-                  | image_url: width: 400
-                  | image_tag:
-                    class: 'explore-cat__img',
-                    loading: 'lazy',
-                    alt: ec_product.title,
-                    widths: '200,300,400'
-                }}
-              {%- else -%}
-                {{ 'product-1' | placeholder_svg_tag: 'explore-cat__img explore-cat__img--placeholder' }}
-              {%- endif -%}
-              </a>
-            </div>
+  Card source, in order:
+    1. The current collection's `custom.explore_categories` metafield — a list
+       of collections. One card per collection, each illustrated by the first
+       product in that collection (so the collection's own sort order decides
+       which product appears).
+    2. The section's manually configured Category Card blocks, used when the
+       collection has no mapping and on non-collection templates.
+{%- endcomment -%}
 
-            <!-- Info -->
-            <div class="explore-cat__info">
+{%- liquid
+  assign mapped = collection.metafields.custom.explore_categories.value
+  assign max_cards = section.settings.max_cards | default: 4
+
+  assign mapped_count = 0
+  if mapped != blank
+    for cat in mapped
+      if cat == blank
+        continue
+      endif
+      if section.settings.hide_current and cat.id == collection.id
+        continue
+      endif
+      assign mapped_count = mapped_count | plus: 1
+    endfor
+  endif
+-%}
+
+{%- if mapped_count > 0 or section.blocks.size > 0 -%}
+  <section class="explore-cat" id="explore-cat-{{ section.id }}">
+    <div class="explore-cat__inner page-width">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="explore-cat__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      <div class="explore-cat__grid">
+        {%- if mapped_count > 0 -%}
+
+          {%- assign shown = 0 -%}
+          {%- for cat in mapped -%}
+            {%- if shown >= max_cards -%}{%- break -%}{%- endif -%}
+            {%- if cat == blank -%}{%- continue -%}{%- endif -%}
+            {%- if section.settings.hide_current and cat.id == collection.id -%}{%- continue -%}{%- endif -%}
+
+            {%- assign cat_product = cat.products.first -%}
+            {%- render 'explore-category-card',
+              ec_collection: cat,
+              ec_product: cat_product,
+              ec_label: cat.title,
+              ec_cta: section.settings.cta_label
+            -%}
+            {%- assign shown = shown | plus: 1 -%}
+          {%- endfor -%}
+
+        {%- else -%}
+
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'category_card' -%}
               {%- liquid
-                assign cat_label = ec_product.type | default: block.settings.category_label
-
-                assign card_title = block.settings.name
-                if ec_product != blank
-                  assign card_title = ec_product.title
+                assign b_collection = block.settings.collection
+                assign b_product = block.settings.product
+                if b_product == blank and b_collection != blank
+                  assign b_product = b_collection.products.first
                 endif
 
-                assign rating_val = block.settings.rating
-                assign review_count_val = block.settings.review_count
-                if ec_product.metafields.reviews.rating.value.rating != blank
-                  assign rating_val = ec_product.metafields.reviews.rating.value.rating
-                endif
-                if ec_product.metafields.reviews.rating_count != blank
-                  assign review_count_val = ec_product.metafields.reviews.rating_count
+                assign b_label = block.settings.category_label
+                if b_product != blank and b_product.type != blank
+                  assign b_label = b_product.type
                 endif
               -%}
+              {%- render 'explore-category-card',
+                ec_collection: b_collection,
+                ec_product: b_product,
+                ec_image: block.settings.image,
+                ec_label: b_label,
+                ec_name: block.settings.name,
+                ec_price: block.settings.price,
+                ec_rating: block.settings.rating,
+                ec_reviews: block.settings.review_count,
+                ec_link: block.settings.link,
+                ec_cta: block.settings.cta_label,
+                ec_attrs: block.shopify_attributes
+              -%}
+            {%- endif -%}
+          {%- endfor -%}
 
-              {%- if cat_label != blank -%}
-                <span class="explore-cat__cat-label">{{ cat_label }}</span>
-              {%- endif -%}
-
-              <h3 class="explore-cat__name">
-                {{ card_title | default: 'Product Name' }}
-              </h3>
-
-              <!-- Rating -->
-              {%- if rating_val != blank -%}
-                <div class="explore-cat__rating">
-                  <span class="explore-cat__stars" aria-hidden="true">
-                    {%- assign r = rating_val | times: 1.0 | round -%}
-                    {%- for i in (1..5) -%}
-                      {%- if i <= r -%}
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="#f5a623"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                      {%- else -%}
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                      {%- endif -%}
-                    {%- endfor -%}
-                  </span>
-                  <span class="explore-cat__rating-val">{{ rating_val }}</span>
-                  {%- if review_count_val != blank -%}
-                    <span class="explore-cat__review-count">({{ review_count_val }})</span>
-                  {%- endif -%}
-                </div>
-              {%- endif -%}
-
-              <!-- Price -->
-              {%- if ec_product != blank -%}
-                <p class="explore-cat__price">{{ ec_product.price | money }}</p>
-              {%- elsif block.settings.price != blank -%}
-                <p class="explore-cat__price">{{ block.settings.price }}</p>
-              {%- endif -%}
-
-              <!-- View All -->
-              <a
-                href="{{ card_link }}"
-                class="explore-cat__viewall"
-              >
-                {{ block.settings.cta_label | default: 'View all' }}
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </a>
-            </div>
-          </div>
         {%- endif -%}
-      {%- endfor -%}
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+{%- endif -%}
 
 {% stylesheet %}
 .explore-cat {
@@ -341,10 +322,40 @@
   "class": "ossian-explore-category-section",
   "settings": [
     {
+      "type": "paragraph",
+      "content": "On a collection page, the cards come from that collection's 'Explore more categories' metafield — set it in Products > Collections. Each card shows the first product in the collection it points to. The Category Card blocks below are the fallback for collections with no mapping."
+    },
+    {
       "type": "text",
       "id": "heading",
       "label": "Section heading",
       "default": "EXPLORE MORE CATEGORY"
+    },
+    {
+      "type": "header",
+      "content": "Mapped cards"
+    },
+    {
+      "type": "range",
+      "id": "max_cards",
+      "label": "Maximum cards",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_current",
+      "label": "Hide the collection being viewed",
+      "default": true,
+      "info": "Skips a mapped collection if the shopper is already on it."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "View all"
     }
   ],
   "blocks": [
@@ -352,6 +363,12 @@
       "type": "category_card",
       "name": "Category Card",
       "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection",
+          "info": "The card links here and, if no product is chosen below, shows the first product in it."
+        },
         {
           "type": "product",
           "id": "product",
@@ -400,7 +417,7 @@
         {
           "type": "url",
           "id": "link",
-          "label": "Link (overrides product URL)"
+          "label": "Link (overrides collection / product URL)"
         }
       ]
     }
@@ -410,13 +427,7 @@
       "name": "Explore More Category",
       "settings": {
         "heading": "EXPLORE MORE CATEGORY"
-      },
-      "blocks": [
-        { "type": "category_card", "settings": { "category_label": "HAIR CARE", "name": "Caviar Mask", "rating": "4.8", "review_count": "210", "price": "₹1,999", "cta_label": "View all" } },
-        { "type": "category_card", "settings": { "category_label": "HAIR CARE", "name": "Caviar Mask", "rating": "4.8", "review_count": "210", "price": "₹1,999", "cta_label": "View all" } },
-        { "type": "category_card", "settings": { "category_label": "HAIR CARE", "name": "Caviar Mask", "rating": "4.8", "review_count": "210", "price": "₹1,999", "cta_label": "View all" } },
-        { "type": "category_card", "settings": { "category_label": "HAIR CARE", "name": "Caviar Mask", "rating": "4.8", "review_count": "210", "price": "₹1,999", "cta_label": "View all" } }
-      ]
+      }
     }
   ]
 }

@@ -3,6 +3,15 @@
 
 <section class="pshowcase" id="pshowcase-{{ section.id }}">
 
+  {%- if section.settings.top_heading != blank or section.settings.top_heading_accent != blank -%}
+    <h2 class="pshowcase__top-heading page-width">
+      {{- section.settings.top_heading }}
+      {%- if section.settings.top_heading_accent != blank -%}
+        <em class="pshowcase__top-heading-accent">{{ section.settings.top_heading_accent }}</em>
+      {%- endif -%}
+    </h2>
+  {%- endif -%}
+
   <div class="pshowcase__main page-width">
 
     <!-- Left Panel -->
@@ -42,6 +51,10 @@
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2C12 2 5 10 5 15a7 7 0 0014 0c0-5-7-13-7-13z"/></svg>
               {%- elsif icon_val == 'shield' -%}
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+              {%- elsif icon_val == 'leaf' -%}
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21c0 0-7-4.5-7-10.5A6 6 0 0111 4.5 6 6 0 0119 10.5C19 16.5 12 21 12 21z"/><path d="M12 12v9"/></svg>
+              {%- elsif icon_val == 'sparkle' -%}
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4M12 17v4M4 12h4M16 12h4"/><path d="M6.5 6.5l2.8 2.8M14.7 14.7l2.8 2.8M17.5 6.5l-2.8 2.8M9.3 14.7l-2.8 2.8"/></svg>
               {%- else -%}
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/></svg>
               {%- endif -%}
@@ -56,6 +69,16 @@
     {%- for block in product_blocks limit: 1 -%}
       {%- assign card_url = block.settings.collection.url | default: block.settings.link | default: '#' -%}
       {%- assign card_name = block.settings.product.title | default: block.settings.custom_name | default: 'View product' -%}
+      {%- assign name_down = block.settings.custom_name | downcase -%}
+      {%- if name_down contains 'wax' -%}
+        {%- assign default_image = 'ossion-wax.png' -%}
+      {%- elsif name_down contains 'peel' -%}
+        {%- assign default_image = 'ossion-peel-off.png' -%}
+      {%- elsif name_down contains 'facial kit' -%}
+        {%- assign default_image = 'ossion-facial-kit.png' -%}
+      {%- else -%}
+        {%- assign default_image = blank -%}
+      {%- endif -%}
       <div class="pshowcase__card pshowcase__card--featured" {{ block.shopify_attributes }}>
         {%- if block.settings.badge_label != blank -%}
           <span class="pshowcase__badge">{{ block.settings.badge_label }}</span>
@@ -66,6 +89,14 @@
               {{ block.settings.product.featured_image | image_url: width: 800 | image_tag: class: 'pshowcase__img', alt: block.settings.product.title, loading: 'lazy', widths: '400,600,800' }}
             {%- elsif block.settings.image != blank -%}
               {{ block.settings.image | image_url: width: 800 | image_tag: class: 'pshowcase__img', loading: 'lazy', widths: '400,600,800' }}
+            {%- elsif default_image != blank -%}
+              <img
+                src="{{ default_image | asset_url }}"
+                alt="{{ block.settings.custom_name | escape }}"
+                class="pshowcase__img"
+                width="800"
+                height="800"
+                loading="lazy">
             {%- else -%}
               {{ 'product-1' | placeholder_svg_tag: 'pshowcase__img pshowcase__img--placeholder' }}
             {%- endif -%}
@@ -96,6 +127,16 @@
         {%- for block in product_blocks limit: 2 offset: 1 -%}
           {%- assign card_url = block.settings.collection.url | default: block.settings.link | default: '#' -%}
           {%- assign card_name = block.settings.product.title | default: block.settings.custom_name | default: 'View product' -%}
+          {%- assign name_down = block.settings.custom_name | downcase -%}
+          {%- if name_down contains 'wax' -%}
+            {%- assign default_image = 'ossion-wax.png' -%}
+          {%- elsif name_down contains 'peel' -%}
+            {%- assign default_image = 'ossion-peel-off.png' -%}
+          {%- elsif name_down contains 'facial kit' -%}
+            {%- assign default_image = 'ossion-facial-kit.png' -%}
+          {%- else -%}
+            {%- assign default_image = blank -%}
+          {%- endif -%}
           <div class="pshowcase__card pshowcase__card--secondary" {{ block.shopify_attributes }}>
             {%- if block.settings.badge_label != blank -%}
               <span class="pshowcase__badge">{{ block.settings.badge_label }}</span>
@@ -106,6 +147,14 @@
                   {{ block.settings.product.featured_image | image_url: width: 600 | image_tag: class: 'pshowcase__img', alt: block.settings.product.title, loading: 'lazy', widths: '300,500,600' }}
                 {%- elsif block.settings.image != blank -%}
                   {{ block.settings.image | image_url: width: 600 | image_tag: class: 'pshowcase__img', loading: 'lazy', widths: '300,500,600' }}
+                {%- elsif default_image != blank -%}
+                  <img
+                    src="{{ default_image | asset_url }}"
+                    alt="{{ block.settings.custom_name | escape }}"
+                    class="pshowcase__img"
+                    width="600"
+                    height="600"
+                    loading="lazy">
                 {%- else -%}
                   {{ 'product-2' | placeholder_svg_tag: 'pshowcase__img pshowcase__img--placeholder' }}
                 {%- endif -%}
@@ -150,6 +199,12 @@
                   <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2C12 2 5 10 5 15a7 7 0 0014 0c0-5-7-13-7-13z"/><path d="M9.5 15.5a3 3 0 003 2"/></svg>
                 {%- when 'person' -%}
                   <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+                {%- when 'shield' -%}
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                {%- when 'leaf' -%}
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21c0 0-7-4.5-7-10.5A6 6 0 0111 4.5 6 6 0 0119 10.5C19 16.5 12 21 12 21z"/><path d="M12 12v9"/></svg>
+                {%- when 'sparkle' -%}
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4M12 17v4M4 12h4M16 12h4"/><path d="M6.5 6.5l2.8 2.8M14.7 14.7l2.8 2.8M17.5 6.5l-2.8 2.8M9.3 14.7l-2.8 2.8"/></svg>
                 {%- else -%}
                   <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/></svg>
               {%- endcase -%}
@@ -190,6 +245,26 @@
   height: min(850px, 90vh);
 }
 
+/* ── Top Section Heading ── */
+.pshowcase__top-heading {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  text-align: center;
+  font-size: clamp(1.75rem, 3.2vw, 2.75rem);
+  font-weight: 500;
+  color: #22345a;
+  line-height: 1.3;
+  margin: 0;
+  padding: 44px 0 0;
+  letter-spacing: -0.01em;
+}
+
+.pshowcase__top-heading-accent {
+  font-style: italic;
+  color: #2f8cf8;
+}
+
 /* ── Background Image — confined to the left text panel ── */
 .pshowcase__bg {
   position: absolute;
@@ -210,7 +285,7 @@
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: 1fr 1.5fr 1.45fr;
+  grid-template-columns: 1.35fr 1.2fr 1.15fr;
   grid-template-rows: minmax(0, 1fr);
   gap: 20px;
   align-items: stretch;
@@ -586,6 +661,11 @@
     padding: 20px 20px 24px;
   }
 
+  .pshowcase__top-heading {
+    padding: 28px 20px 0;
+    font-size: 1.75rem;
+  }
+
   .pshowcase__eyebrow {
     font-size: 1.75rem;
     margin: 0 0 8px;
@@ -692,6 +772,22 @@
   "class": "ossian-product-showcase-section",
   "settings": [
     {
+      "type": "header",
+      "content": "Top Heading"
+    },
+    {
+      "type": "text",
+      "id": "top_heading",
+      "label": "Heading",
+      "default": "Only what your"
+    },
+    {
+      "type": "text",
+      "id": "top_heading_accent",
+      "label": "Heading accent (italic, blue)",
+      "default": "Hair Needs"
+    },
+    {
       "type": "image_picker",
       "id": "bg_image",
       "label": "Section background image"
@@ -736,7 +832,9 @@
       "options": [
         { "value": "flask", "label": "Flask" },
         { "value": "drop", "label": "Drop" },
-        { "value": "shield", "label": "Shield" }
+        { "value": "shield", "label": "Shield" },
+        { "value": "leaf", "label": "Leaf" },
+        { "value": "sparkle", "label": "Sparkle" }
       ],
       "default": "flask"
     },
@@ -753,7 +851,9 @@
       "options": [
         { "value": "flask", "label": "Flask" },
         { "value": "drop", "label": "Drop" },
-        { "value": "shield", "label": "Shield" }
+        { "value": "shield", "label": "Shield" },
+        { "value": "leaf", "label": "Leaf" },
+        { "value": "sparkle", "label": "Sparkle" }
       ],
       "default": "drop"
     },
@@ -770,7 +870,9 @@
       "options": [
         { "value": "flask", "label": "Flask" },
         { "value": "drop", "label": "Drop" },
-        { "value": "shield", "label": "Shield" }
+        { "value": "shield", "label": "Shield" },
+        { "value": "leaf", "label": "Leaf" },
+        { "value": "sparkle", "label": "Sparkle" }
       ],
       "default": "shield"
     },
@@ -844,7 +946,10 @@
             { "value": "beaker", "label": "Beaker / Lab" },
             { "value": "triangle", "label": "Triangle" },
             { "value": "drop", "label": "Drop" },
-            { "value": "person", "label": "Person" }
+            { "value": "person", "label": "Person" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "sparkle", "label": "Sparkle" }
           ],
           "default": "beaker"
         },
@@ -867,6 +972,8 @@
     {
       "name": "Ossian Product Showcase",
       "settings": {
+        "top_heading": "Only what your",
+        "top_heading_accent": "Hair Needs",
         "category_label": "Hair Care",
         "heading": "Professional Hair Solutions",
         "body_text": "Advanced formulas for stronger, smoother & healthier hair.",
