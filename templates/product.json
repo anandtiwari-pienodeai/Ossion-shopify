@@ -971,7 +971,8 @@
         "color_scheme": "scheme-1",
         "padding-block-start": 80,
         "padding-block-end": 48
-      }
+      },
+      "disabled": true
     },
     "ossian_explore_category_pdp": {
       "type": "ossian-explore-category",
@@ -980,6 +981,14 @@
         "max_cards": 4,
         "hide_current": true,
         "cta_label": "View all"
+      }
+    },
+    "ossian_you_may_like": {
+      "type": "ossian-you-may-like",
+      "settings": {
+        "eyebrow": "Complete Your Hair Care Routine",
+        "heading": "You May Also Like",
+        "max_products": 8
       }
     }
   },
@@ -992,6 +1001,7 @@
     "ossian_pdp_benefits",
     "ossian_instagram_VgRpe7",
     "ossian_marine_banner_pdp",
+    "ossian_you_may_like",
     "product_recommendations_qggXJq",
     "ossian_explore_category_pdp"
   ]

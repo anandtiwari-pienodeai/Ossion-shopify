@@ -821,6 +821,291 @@
     --shopify-accelerated-checkout-button-block-size: 48px;
     --shopify-accelerated-checkout-button-border-radius: 10px;
   }
+
+  /* ══ Image zoom popup (opens when a product image is clicked) ══════ */
+  .product-information .dialog-zoomed-gallery__dialog[open] {
+    position: fixed;
+    inset: 0;
+    width: min(1200px, calc(100vw - 48px));
+    height: min(820px, calc(100dvh - 48px));
+    max-width: none;
+    max-height: none;
+    margin: auto;
+    padding: 18px;
+    border: 0;
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 30px 80px rgb(0 0 0 / 0.35);
+    display: grid;
+    grid-template-columns: 132px minmax(0, 1fr);
+    gap: 18px;
+    overflow: hidden;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog::backdrop {
+    background: rgb(15 23 42 / 0.72);
+    backdrop-filter: blur(4px);
+  }
+
+  /* Thumbnail column */
+  .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list-container {
+    position: static;
+    grid-column: 1;
+    grid-row: 1;
+    width: auto;
+    min-height: 0;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list {
+    position: static;
+    inset: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-height: 100%;
+    margin: 0;
+    padding: 4px;
+    overflow-y: auto;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list::after {
+    display: none;
+  }
+
+  /* The theme's slide-in ends at translateY(-50%) for its floating strip; use a plain fade here */
+  .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list,
+  .product-information .dialog-zoomed-gallery__dialog.dialog--closed .dialog-thumbnails-list {
+    transform: none;
+    animation: ossian-zoom-thumbs-in 0.25s ease forwards;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog.dialog--closed .dialog-thumbnails-list {
+    animation-name: ossian-zoom-thumbs-out;
+  }
+
+  @keyframes ossian-zoom-thumbs-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes ossian-zoom-thumbs-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  /* Every thumbnail stays visible: tiles shrink to share the panel height instead of scrolling */
+  .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list {
+    height: 100%;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list__thumbnail {
+    width: 100%;
+    height: auto;
+    flex: 0 1 124px;
+    min-height: 56px;
+    border-radius: 14px;
+    background: #f2f5fa;
+
+    img {
+      width: 100%;
+      height: 100%;
+      aspect-ratio: auto;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    &[aria-selected='true'] {
+      outline: 3px solid #2f6fd6;
+      outline-offset: 2px;
+      border: 0;
+    }
+  }
+
+  /* Main image: one at a time, snapping */
+  .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    height: 100%;
+    min-width: 0;
+    margin: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior: contain;
+    border: 1px solid #e3e8f1;
+    border-radius: 16px;
+    background: #fff;
+    cursor: default;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery::-webkit-scrollbar {
+    display: none;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery > .product-media-container {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    scroll-snap-align: start;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery .product-media,
+  .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery drag-zoom-wrapper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Close button */
+  .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery__close-button.close-button {
+    position: absolute;
+    top: 34px;
+    inset-inline-end: 34px;
+    z-index: 3;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #fff;
+    color: #13233f;
+    box-shadow: 0 6px 20px rgb(0 0 0 / 0.18);
+    --button-color: #13233f;
+    --button-background-color: #fff;
+    /* the theme's close button uses mix-blend-mode: difference, which turns white dark on a white panel */
+    mix-blend-mode: normal;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery__close-button.close-button:hover {
+    background: #f2f5fa;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery__close-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Prev / next arrows over the main image */
+  .product-information .dialog-zoomed-gallery__nav {
+    position: absolute;
+    top: 50%;
+    z-index: 3;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgb(15 23 42 / 0.75);
+    color: #fff;
+    transform: translateY(-50%);
+    transition: background 0.2s ease;
+  }
+
+  .product-information .dialog-zoomed-gallery__nav:hover {
+    background: rgb(15 23 42 / 0.92);
+  }
+
+  .product-information .dialog-zoomed-gallery__nav svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .product-information .dialog-zoomed-gallery__nav--prev {
+    /* panel padding + thumbnail column + gap + inset */
+    inset-inline-start: calc(18px + 132px + 18px + 20px);
+  }
+
+  .product-information .dialog-zoomed-gallery__nav--next {
+    inset-inline-end: 38px;
+  }
+
+  .product-information .dialog-zoomed-gallery__close-button:focus-visible,
+  .product-information .dialog-zoomed-gallery__nav:focus-visible,
+  .product-information .dialog-thumbnails-list__thumbnail:focus-visible {
+    outline: 3px solid #2f6fd6;
+    outline-offset: 2px;
+  }
+
+  [dir='rtl'] .product-information .dialog-zoomed-gallery__nav svg {
+    transform: scaleX(-1);
+  }
+
+  /* Phones: full screen, image on top, thumbnails in a row underneath */
+  @media screen and (max-width: 749px) {
+    .product-information .dialog-zoomed-gallery__dialog[open] {
+      width: 100vw;
+      height: 100dvh;
+      padding: 12px;
+      border-radius: 0;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1fr) auto;
+      gap: 12px;
+    }
+
+    .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list-container {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list {
+      flex-direction: row;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list {
+      height: auto;
+    }
+
+    .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list__thumbnail {
+      flex: 0 0 68px;
+      width: 68px;
+      height: 68px;
+    }
+
+    .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery__close-button.close-button {
+      top: 24px;
+      inset-inline-end: 24px;
+      width: 44px;
+      height: 44px;
+    }
+
+    .product-information .dialog-zoomed-gallery__nav {
+      width: 42px;
+      height: 42px;
+      /* centre on the image, not the whole screen (thumbnail row is ~96px) */
+      top: calc(50% - 48px);
+    }
+
+    .product-information .dialog-zoomed-gallery__nav--prev {
+      inset-inline-start: 22px;
+    }
+
+    .product-information .dialog-zoomed-gallery__nav--next {
+      inset-inline-end: 22px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .product-information .dialog-zoomed-gallery__nav {
+      transition: none;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}

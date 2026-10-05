@@ -1,0 +1,526 @@
+{% comment %}
+  Section contract.
+  "You May Also Like" product carousel for the product page: eyebrow with side rules,
+  heading, and cards (framed image, title, subtitle, rating, price, round "+" quick add)
+  with prev/next arrows. Products come from the hand-picked list when set, otherwise the
+  current product's first collection, otherwise all products; the current product is left out.
+  @example
+  <!-- templates/product.json → ossian_you_may_like, below the product details -->
+{% endcomment %}
+
+{%- liquid
+  assign current = closest.product
+  if section.settings.products != blank and section.settings.products.size > 0
+    assign source_products = section.settings.products
+  else
+    assign source_collection = section.settings.collection
+    if source_collection == blank and current != blank
+      for c in current.collections
+        if c.handle != 'frontpage' and c.products_count > 1
+          assign source_collection = c
+          break
+        endif
+      endfor
+    endif
+    if source_collection == blank
+      assign source_collection = collections.all
+    endif
+    assign source_products = source_collection.products
+  endif
+  assign max = section.settings.max_products
+-%}
+
+<section class="oyml" id="oyml-{{ section.id }}">
+  <div class="oyml__wrap">
+    <div class="oyml__head">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="oyml__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="oyml__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+    </div>
+
+    <div class="oyml__carousel">
+      <button type="button" class="oyml__arrow oyml__arrow--prev" data-oyml-prev aria-label="{{ 'accessibility.slideshow_previous' | t }}" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+
+      <ul class="oyml__track" role="list" data-oyml-track>
+        {%- liquid
+          # Hand-picked / collection products first, then top up from all products so the row is never short
+          assign shown = 0
+          assign seen = ','
+          if current != blank
+            assign seen = seen | append: current.id | append: ','
+          endif
+        -%}
+        {%- for pool in (1..2) -%}
+          {%- if pool == 1 -%}
+            {%- assign pool_products = source_products -%}
+          {%- else -%}
+            {%- assign pool_products = collections.all.products -%}
+          {%- endif -%}
+          {%- for product in pool_products -%}
+            {%- if shown >= max -%}{%- break -%}{%- endif -%}
+            {%- assign product_key = ',' | append: product.id | append: ',' -%}
+            {%- if seen contains product_key -%}{%- continue -%}{%- endif -%}
+            {%- if section.settings.hide_sold_out and product.available == false -%}{%- continue -%}{%- endif -%}
+            {%- assign seen = seen | append: product.id | append: ',' -%}
+          {%- liquid
+            assign shown = shown | plus: 1
+            assign variant = product.selected_or_first_available_variant
+            assign subtitle = product.metafields.descriptors.subtitle.value
+            assign rating_value = product.metafields.reviews.rating.value
+            assign rating = rating_value.rating | default: rating_value
+            assign rating_count = product.metafields.reviews.rating_count.value | default: 0
+            assign can_quick_add = false
+            if product.variants.size == 1 and variant.available
+              assign can_quick_add = true
+            endif
+          -%}
+          <li class="oyml__item">
+            <article class="oyml-card">
+              <a class="oyml-card__media" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+                {%- if product.featured_image != blank -%}
+                  {{
+                    product.featured_image
+                    | image_url: width: 800
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '300,450,600,800',
+                      sizes: '(min-width: 990px) 25vw, (min-width: 750px) 40vw, 75vw',
+                      alt: ''
+                  }}
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'oyml-card__ph' }}
+                {%- endif -%}
+              </a>
+
+              <div class="oyml-card__body">
+                <h3 class="oyml-card__title"><a href="{{ product.url }}">{{ product.title | escape }}</a></h3>
+                {%- if subtitle != blank -%}
+                  <p class="oyml-card__sub">{{ subtitle | escape }}</p>
+                {%- endif -%}
+                {%- if rating != blank and rating_count > 0 -%}
+                  {%- assign rating_rounded = rating | times: 2 | round | divided_by: 2.0 -%}
+                  <p class="oyml-card__rating">
+                    <span class="oyml-card__stars" style="--rating: {{ rating_rounded }};" aria-hidden="true"></span>
+                    <span class="oyml-card__rating-value">{{ rating | round: 1 }}</span>
+                    <span class="oyml-card__rating-count">({{ rating_count }} {{ 'content.ossian_ymal.reviews' | t }})</span>
+                    <span class="visually-hidden">{{ 'content.ossian_ymal.rating_label' | t: rating: rating, count: rating_count }}</span>
+                  </p>
+                {%- endif -%}
+
+                <div class="oyml-card__foot">
+                  <span class="oyml-card__price">
+                    {{ variant.price | default: product.price | money }}
+                    {%- if variant.compare_at_price > variant.price -%}
+                      <s class="oyml-card__compare">{{ variant.compare_at_price | money }}</s>
+                    {%- endif -%}
+                  </span>
+
+                  {%- if can_quick_add -%}
+                    {%- assign form_id = 'OymlAtc-' | append: section.id | append: '-' | append: product.id -%}
+                    <product-form-component
+                      class="oyml-card__atc"
+                      data-section-id="{{ section.id }}"
+                      data-product-id="{{ product.id }}"
+                      data-product-url="{{ product.url }}"
+                      on:submit="/handleSubmit"
+                      data-quantity-default="1"
+                      data-quantity-error-max="{{ 'products.product.quantity_error_max' | t }}"
+                    >
+                      <div class="visually-hidden" aria-live="assertive" role="status" aria-atomic="true" ref="liveRegion"></div>
+                      {%- form 'product', product, id: form_id, data-type: 'add-to-cart-form' -%}
+                        <input type="hidden" name="id" value="{{ variant.id }}" ref="variantId">
+                        <input type="hidden" name="quantity" value="1">
+                        <add-to-cart-component ref="addToCartButtonContainer">
+                          <button
+                            type="submit"
+                            name="add"
+                            ref="addToCartButton"
+                            on:click="/handleClick"
+                            class="oyml-card__plus"
+                            aria-label="{{ 'products.product.add_to_cart' | t }}: {{ product.title | escape }}"
+                          >
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                          </button>
+                        </add-to-cart-component>
+                      {%- endform -%}
+                    </product-form-component>
+                  {%- else -%}
+                    <a class="oyml-card__plus" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                  {%- endif -%}
+                </div>
+              </div>
+            </article>
+          </li>
+          {%- endfor -%}
+        {%- endfor -%}
+      </ul>
+
+      <button type="button" class="oyml__arrow oyml__arrow--next" data-oyml-next aria-label="{{ 'accessibility.slideshow_next' | t }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var root = document.getElementById('oyml-{{ section.id }}');
+    if (!root) return;
+    var track = root.querySelector('[data-oyml-track]');
+    var prev = root.querySelector('[data-oyml-prev]');
+    var next = root.querySelector('[data-oyml-next]');
+    if (!track) return;
+    var rtl = getComputedStyle(track).direction === 'rtl';
+
+    function step() {
+      var items = track.children;
+      return items.length > 1 ? Math.abs(items[1].offsetLeft - items[0].offsetLeft) : track.clientWidth;
+    }
+    function update() {
+      var max = track.scrollWidth - track.clientWidth;
+      var pos = Math.abs(track.scrollLeft);
+      root.classList.toggle('oyml--static', max <= 2);
+      if (prev) prev.disabled = pos <= 2;
+      if (next) next.disabled = pos >= max - 2;
+    }
+    function move(dir) {
+      var target = (Math.round(Math.abs(track.scrollLeft) / step()) + dir) * step();
+      track.scrollTo({ left: rtl ? -target : target, behavior: 'smooth' });
+    }
+    if (prev) prev.addEventListener('click', function () { move(-1); });
+    if (next) next.addEventListener('click', function () { move(1); });
+    var ticking = false;
+    track.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { ticking = false; update(); });
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+</script>
+
+{% stylesheet %}
+  .oyml {
+    --oyml-ink: #13233f;
+    --oyml-muted: #5b6577;
+    --oyml-line: #e3e8f1;
+    --oyml-gap: 22px;
+    --oyml-per-view: 4;
+    padding-block: 48px 56px;
+    background: #fff;
+  }
+
+  .oyml__wrap {
+    width: 100%;
+    max-width: 1320px;
+    margin-inline: auto;
+    padding-inline: 76px;
+  }
+
+  .oyml__head {
+    text-align: center;
+    margin-bottom: 26px;
+  }
+
+  .oyml__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--oyml-ink);
+  }
+
+  .oyml__eyebrow::before,
+  .oyml__eyebrow::after {
+    content: '';
+    width: 56px;
+    height: 1px;
+    background: #9aa3b2;
+  }
+
+  .oyml__heading {
+    margin: 0;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--oyml-ink);
+  }
+
+  /* Carousel */
+  .oyml__carousel {
+    position: relative;
+  }
+
+  .oyml__track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - (var(--oyml-per-view) - 1) * var(--oyml-gap)) / var(--oyml-per-view));
+    gap: var(--oyml-gap);
+    margin: 0;
+    padding: 4px 2px 12px;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+
+  .oyml__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .oyml__item {
+    display: flex;
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  .oyml__arrow {
+    position: absolute;
+    top: 40%;
+    z-index: 2;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--oyml-line);
+    border-radius: 50%;
+    background: #fff;
+    color: var(--oyml-ink);
+    box-shadow: 0 6px 18px rgb(20 40 74 / 0.1);
+    cursor: pointer;
+    transform: translateY(-50%);
+    transition: opacity 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .oyml__arrow svg { width: 22px; height: 22px; }
+  .oyml__arrow:hover:not(:disabled) { box-shadow: 0 8px 22px rgb(20 40 74 / 0.18); }
+  .oyml__arrow:disabled { opacity: 0.35; cursor: default; }
+  .oyml__arrow:focus-visible { outline: 2px solid #2f6fd6; outline-offset: 3px; }
+  .oyml__arrow--prev { inset-inline-start: -70px; }
+  .oyml__arrow--next { inset-inline-end: -70px; }
+  .oyml--static .oyml__arrow { display: none; }
+  .oyml--static .oyml__track { justify-content: center; }
+  [dir='rtl'] .oyml__arrow svg { transform: scaleX(-1); }
+
+  /* Card */
+  .oyml-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--oyml-line);
+    border-radius: 14px;
+    background: #fff;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  .oyml-card:hover {
+    box-shadow: 0 14px 34px rgb(20 40 74 / 0.12);
+    transform: translateY(-3px);
+  }
+
+  .oyml-card__media {
+    display: block;
+    aspect-ratio: 1;
+    margin: 6px 6px 0;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #f4f7fc;
+  }
+
+  .oyml-card__media img,
+  .oyml-card__ph {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+
+  .oyml-card__ph { fill: rgb(30 58 95 / 0.25); }
+  .oyml-card:hover .oyml-card__media img { transform: scale(1.04); }
+
+  .oyml-card__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 6px;
+    padding: 16px 20px 18px;
+  }
+
+  .oyml-card__title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--oyml-ink);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .oyml-card__title a { color: inherit; text-decoration: none; }
+  .oyml-card__title a:hover { text-decoration: underline; }
+
+  .oyml-card__sub {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.4;
+    color: var(--oyml-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .oyml-card__rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 2px 0 0;
+    font-size: 0.86rem;
+    color: var(--oyml-muted);
+  }
+
+  /* Five stars filled to --rating (0–5) */
+  .oyml-card__stars {
+    --star: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9L12 2.5Z'/%3E%3C/svg%3E");
+    width: 92px;
+    height: 17px;
+    flex-shrink: 0;
+    background: linear-gradient(90deg, #f5b301 calc(var(--rating) / 5 * 100%), #dfe3ea 0);
+    -webkit-mask: var(--star) 0 0 / 18.4px 17px repeat-x;
+    mask: var(--star) 0 0 / 18.4px 17px repeat-x;
+  }
+
+  .oyml-card__rating-value {
+    font-weight: 700;
+    color: var(--oyml-ink);
+  }
+
+  .oyml-card__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 8px;
+  }
+
+  .oyml-card__price {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--oyml-ink);
+  }
+
+  .oyml-card__compare {
+    font-size: 0.86rem;
+    font-weight: 400;
+    color: var(--oyml-muted);
+  }
+
+  .oyml-card__atc form,
+  .oyml-card__atc add-to-cart-component {
+    display: block;
+    margin: 0;
+  }
+
+  .oyml-card__plus {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1.5px solid var(--oyml-ink);
+    border-radius: 50%;
+    background: #fff;
+    color: var(--oyml-ink);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .oyml-card__plus svg { width: 22px; height: 22px; }
+  .oyml-card__plus:hover { background: var(--oyml-ink); color: #fff; }
+  .oyml-card__plus:focus-visible { outline: 2px solid #2f6fd6; outline-offset: 2px; }
+  .oyml-card__plus:disabled { opacity: 0.6; cursor: progress; }
+
+  @media screen and (max-width: 1199px) {
+    .oyml { --oyml-per-view: 3; }
+  }
+
+  @media screen and (max-width: 989px) {
+    .oyml { --oyml-per-view: 2; }
+    .oyml__wrap { padding-inline: 32px; }
+    .oyml__arrow { display: none; }
+  }
+
+  @media screen and (max-width: 749px) {
+    .oyml { --oyml-gap: 12px; padding-block: 36px 40px; }
+    .oyml__wrap { padding-inline: 0; }
+    .oyml__head { padding-inline: 16px; margin-bottom: 18px; }
+    .oyml__eyebrow { gap: 10px; font-size: 0.7rem; letter-spacing: 0.14em; }
+    .oyml__eyebrow::before,
+    .oyml__eyebrow::after { width: 28px; }
+
+    /* One card plus a peek of the next */
+    .oyml__track {
+      grid-auto-columns: 72%;
+      padding-inline: 16px;
+      scroll-padding-inline: 16px;
+    }
+
+    .oyml-card__body { padding: 12px 14px 14px; }
+    .oyml-card__title { font-size: 0.95rem; }
+    .oyml-card__sub { font-size: 0.8rem; }
+    .oyml-card__price { font-size: 1rem; }
+    .oyml-card__plus { width: 40px; height: 40px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .oyml-card,
+    .oyml-card__media img,
+    .oyml__arrow,
+    .oyml-card__plus { transition: none; }
+    .oyml-card:hover { transform: none; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ossian You May Also Like",
+  "tag": "div",
+  "class": "section-ossian-you-may-like",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Complete Your Hair Care Routine" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "You May Also Like" },
+    { "type": "header", "content": "Products" },
+    { "type": "product_list", "id": "products", "label": "Hand-picked products", "limit": 12, "info": "Leave empty to show products from this product's collection. Short lists are topped up with other products." },
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "Used when no products are hand-picked. Defaults to the current product's collection, then all products." },
+    { "type": "range", "id": "max_products", "label": "Number of products", "min": 2, "max": 12, "step": 1, "default": 8 },
+    { "type": "checkbox", "id": "hide_sold_out", "label": "Hide sold-out products", "default": true }
+  ],
+  "presets": [{ "name": "Ossian You May Also Like" }]
+}
+{% endschema %}

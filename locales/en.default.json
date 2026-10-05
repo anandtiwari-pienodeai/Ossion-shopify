@@ -179,6 +179,10 @@
       "subscribed": "Thanks for subscribing!",
       "pagination": "Article pages"
     },
+    "ossian_ymal": {
+      "reviews": "reviews",
+      "rating_label": "Rated {{ rating }} out of 5 from {{ count }} reviews"
+    },
     "ossian_newsletter": {
       "email_label": "Email address",
       "success": "Thanks for subscribing! Look out for tips and offers in your inbox."

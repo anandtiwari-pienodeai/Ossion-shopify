@@ -561,6 +561,8 @@
           class="dialog-zoomed-gallery__dialog"
           ref="dialog"
           on:keydown="/handleKeyDown"
+          on:click="/handleBackdropClick"
+          aria-label="{{ selected_product.title | escape }}"
           scroll-lock
         >
           <button
@@ -618,6 +620,24 @@
               {% endif %}
             </scroll-hint>
           </div>
+          {%- if sorted_media.size > 1 -%}
+            <button
+              type="button"
+              class="button button-unstyled dialog-zoomed-gallery__nav dialog-zoomed-gallery__nav--prev"
+              aria-label="{{ 'accessibility.slideshow_previous' | t }}"
+              on:click="/showPrevious"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <button
+              type="button"
+              class="button button-unstyled dialog-zoomed-gallery__nav dialog-zoomed-gallery__nav--next"
+              aria-label="{{ 'accessibility.slideshow_next' | t }}"
+              on:click="/showNext"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+          {%- endif -%}
           <ul
             class="dialog-zoomed-gallery list-unstyled"
           >
@@ -627,9 +647,6 @@
                 class="{{ product_media_container_class | remove: 'media-fit-cover' }} product-media-container--{{ media.media_type }}{% if media.media_type == 'image' %} product-media-container--zoomable{% endif %}"
                 style="{% if block_settings.aspect_ratio == 'adapt' %} --media-preview-ratio: {{ media.preview_image.aspect_ratio | default: 1.0 }};{% endif %}"
                 ref="media[]"
-                {% if media.media_type == 'image' %}
-                  on:click="/close"
-                {% endif %}
               >
                 {% if media.media_type == 'image' %}
                   <drag-zoom-wrapper class="product-media__drag-zoom-wrapper">
