@@ -6,6 +6,24 @@
   lang="{{ request.locale.iso_code }}"
 >
   <head>
+    {%- if settings.cart_type == 'drawer' and template.name == 'cart' -%}
+      {%- comment -%}
+        The store uses the cart drawer, so the cart page is never shown: send the shopper back to where they came
+        from (or home) with ?cart=open, which opens the drawer there.
+      {%- endcomment -%}
+      <script>
+        (function () {
+          var back = {{ routes.root_url | json }};
+          try {
+            var ref = new URL(document.referrer);
+            if (ref.origin === location.origin && !/\/cart\/?$/.test(ref.pathname)) back = ref.pathname + ref.search;
+          } catch (e) {}
+          var target = new URL(back, location.origin);
+          target.searchParams.set('cart', 'open');
+          location.replace(target.toString());
+        })();
+      </script>
+    {%- endif -%}
     {%- if settings.favicon != blank -%}
       <link
         rel="icon"

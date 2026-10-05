@@ -211,6 +211,8 @@
     "work_quickly_to_ship": "<p>We will work quickly to ship your order as soon as possible. Once your order has shipped, you will receive an email with further information. Delivery times vary depending on your location.</p>"
   },
   "info": {
+    "cart_badge_tag": "Products with this tag show it as a badge in the cart drawer, e.g. Bestseller. Leave empty for no badge.",
+    "cart_delivery_compare": "Optional. Shown crossed out next to the delivery text.",
     "actions_display_style": "Icons are always used on mobile",
     "applies_on_image_only": "Applies to images only",
     "aspect_ratio_adjusted": "Adjusted in some layouts",
@@ -807,6 +809,10 @@
     // Setting label for cart display format (page vs drawer)
     "cart_type": "Type",
     "auto_open_cart_drawer": "\"Add to cart\" auto-opens drawer",
+    "cart_badge_tag": "Cart badge tag",
+    "show_cart_delivery": "Show delivery charges line",
+    "cart_delivery_text": "Delivery charges text",
+    "cart_delivery_compare": "Delivery charges struck-through amount",
     // Text case setting for typography (uppercase/lowercase)
     "case": "Case",
     "checkout_buttons": "Accelerated checkout buttons",

@@ -1,0 +1,38 @@
+{%- doc -%}
+  Renders a 24px line icon for the Ossian about-page sections.
+
+  @param {string} icon - diamond, flask, leaf, people, shield, headset, badge, sparkle, check, heart, drop, molecule, star
+
+  @example
+  {% render 'ossian-about-icon', icon: 'flask' %}
+{%- enddoc -%}
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  {%- case icon -%}
+    {%- when 'diamond' -%}
+      <path d="M6 3h12l3 6-9 12L3 9l3-6Z"/><path d="M3 9h18M9 3 7.5 9 12 21l4.5-12L15 3"/>
+    {%- when 'flask' -%}
+      <path d="M9 3h6M10 3v6L4.5 18.5A1.7 1.7 0 0 0 6 21h12a1.7 1.7 0 0 0 1.5-2.5L14 9V3"/><path d="M7 15h10"/>
+    {%- when 'leaf' -%}
+      <path d="M5 19c0-8 5-14 15-15-1 10-7 15-15 15Z"/><path d="M5 19 13 11"/>
+    {%- when 'people' -%}
+      <circle cx="12" cy="8" r="3"/><circle cx="5.5" cy="10" r="2.2"/><circle cx="18.5" cy="10" r="2.2"/><path d="M7 20v-1.5a5 5 0 0 1 10 0V20"/><path d="M2.5 19v-1a3.5 3.5 0 0 1 4.6-3.3M21.5 19v-1a3.5 3.5 0 0 0-4.6-3.3"/>
+    {%- when 'shield' -%}
+      <path d="M12 3 4.5 6v6c0 4.5 3.2 7.8 7.5 9 4.3-1.2 7.5-4.5 7.5-9V6L12 3Z"/><path d="m8.8 12 2.2 2.2 4.2-4.4"/>
+    {%- when 'headset' -%}
+      <path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/>
+    {%- when 'badge' -%}
+      <circle cx="12" cy="9" r="6"/><path d="m9 14.5-1.5 6.5L12 18.5l4.5 2.5-1.5-6.5"/><path d="m9.7 9 1.6 1.6L14.5 7.5"/>
+    {%- when 'sparkle' -%}
+      <path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>
+    {%- when 'check' -%}
+      <circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16.5 9.5"/>
+    {%- when 'heart' -%}
+      <path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.3a4.3 4.3 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20Z"/>
+    {%- when 'drop' -%}
+      <path d="M12 3s6.5 7.2 6.5 11.5a6.5 6.5 0 0 1-13 0C5.5 10.2 12 3 12 3Z"/>
+    {%- when 'molecule' -%}
+      <circle cx="12" cy="12" r="2.5"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6.6 7.3 10 10.4M17.4 7.3 14 10.4M12 14.5V18"/>
+    {%- else -%}
+      <path d="m12 3 2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7L12 3Z"/>
+  {%- endcase -%}
+</svg>

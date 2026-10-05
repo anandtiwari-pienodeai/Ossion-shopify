@@ -1,0 +1,116 @@
+{%- doc -%}
+  Style owner for the shared Ossian about-page primitives (container,
+  eyebrow, accent headings, buttons, image picture). Render it from every
+  ossian-about-* section that uses these classes.
+
+  @example
+  {% render 'ossian-about-styles' %}
+{%- enddoc -%}
+
+{% stylesheet %}
+.oab {
+  --oab-navy: #1e3a5f;
+  --oab-navy-deep: #0b1f3d;
+  --oab-ink: #13233f;
+  --oab-accent-dark: #2f6fd6;
+  --oab-accent-light: #7fb0ff;
+  --oab-muted: #5b6577;
+  --oab-page: #f2f6fc;
+}
+
+.oab-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 1240px;
+  margin-inline: auto;
+  padding-inline: 40px;
+}
+
+.oab-eyebrow {
+  margin: 0 0 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--oab-accent-dark);
+}
+
+.oab--dark .oab-eyebrow { color: var(--oab-accent-light); }
+
+.oab-heading {
+  margin: 0 0 18px;
+  font-size: clamp(2rem, 3.6vw, 3rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: var(--oab-ink);
+  overflow-wrap: break-word;
+}
+
+.oab-heading--xl { font-size: clamp(2.2rem, 4.2vw, 3.5rem); }
+.oab-heading--md { font-size: clamp(1.6rem, 2.6vw, 2.2rem); }
+.oab--dark .oab-heading { color: #fff; }
+
+.oab-accent { color: var(--oab-accent-dark); }
+.oab--dark .oab-accent { color: var(--oab-accent-light); }
+
+.oab-text {
+  margin: 0 0 26px;
+  max-width: 46ch;
+  font-size: clamp(0.92rem, 1.1vw, 1.05rem);
+  line-height: 1.6;
+  color: var(--oab-muted);
+}
+
+.oab-text p { margin: 0 0 0.6em; }
+.oab-text p:last-child { margin-bottom: 0; }
+.oab--dark .oab-text { color: rgba(255, 255, 255, 0.85); }
+
+.oab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 46px;
+  padding: 0 24px;
+  border-radius: 8px;
+  border: 1.5px solid currentColor;
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.oab-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+.oab-btn:focus-visible { outline: 2px solid var(--oab-accent-dark); outline-offset: 3px; }
+
+.oab-btn--solid { background: #fff; border-color: #fff; color: var(--oab-ink); }
+.oab-btn--solid:hover { background: transparent; color: #fff; }
+
+.oab-btn--outline { background: transparent; color: var(--oab-ink); border-color: rgba(19, 35, 63, 0.55); }
+.oab-btn--outline:hover { background: var(--oab-ink); border-color: var(--oab-ink); color: #fff; }
+.oab--dark .oab-btn--outline { color: #fff; border-color: rgba(255, 255, 255, 0.7); }
+.oab--dark .oab-btn--outline:hover { background: #fff; color: var(--oab-ink); }
+
+[dir='rtl'] .oab-btn svg { transform: scaleX(-1); }
+
+.oab-picture,
+.oab-picture img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.oab-picture img { object-fit: cover; }
+
+@media (max-width: 749px) {
+  .oab-wrap { padding-inline: 20px; }
+  .oab-eyebrow { font-size: 0.68rem; margin-bottom: 10px; }
+  .oab-heading { margin-bottom: 14px; }
+  .oab-text { margin-bottom: 20px; }
+  .oab-btn { min-height: 44px; padding: 0 20px; font-size: 0.88rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oab-btn { transition: none; }
+}
+{% endstylesheet %}

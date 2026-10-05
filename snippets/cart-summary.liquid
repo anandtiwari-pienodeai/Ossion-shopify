@@ -3,10 +3,15 @@
 
   @param {string} [accelerated_checkout_buttons_layout] - { 'vertical' } Forced layout of the additional checkout buttons, instead of relying on platform's layout.
   @param {string} [section_id] - The section ID for cart discount component.
+  @param {string} [part] - { 'all' | 'drawer_top' | 'drawer_bottom' } Cart drawer splits the summary: the top part (discount,
+  subtotal) scrolls with the items, the bottom part (total, checkout) stays pinned. Defaults to 'all'.
 {%- enddoc -%}
 
-<div class="cart-totals">
+{%- assign summary_part = part | default: 'all' -%}
+
+<div class="cart-totals{% if summary_part != 'all' %} cart-totals--{{ summary_part | replace: '_', '-' }}{% endif %}">
   {% # We need to keep this node in place to allow morphing to work properly # %}
+  {%- if summary_part == 'all' -%}
   <div class="cart-totals__original-container cart-primary-typography">
     {%- if cart.cart_level_discount_applications.size > 0 -%}
       <span class="cart-totals__item cart-totals__original">
@@ -37,8 +42,9 @@
       </ul>
     {%- endif -%}
   </div>
+  {%- endif -%}
 
-  {% if settings.show_cart_note or settings.show_add_discount_code %}
+  {% if summary_part != 'drawer_bottom' and settings.show_cart_note or summary_part != 'drawer_bottom' and settings.show_add_discount_code %}
     <div class="cart-actions">
       {% if settings.show_cart_note %}
         <script
@@ -120,13 +126,26 @@
               open
             {% endif %}
           >
-            <summary class="cart-discount__summary">
-              <span class="cart-discount__label cart-primary-typography">{{ 'content.discount' | t }}</span>
+            {%- if summary_part == 'drawer_top' -%}
+              <summary class="cart-discount__summary cart-discount__summary--card">
+                <span class="cart-discount__badge" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
+                </span>
+                <span class="cart-discount__text">
+                  <span class="cart-discount__label cart-primary-typography">{{ 'content.ossian_cart.apply_discount' | t }}</span>
+                  <span class="cart-discount__hint">{{ 'content.ossian_cart.discount_hint' | t }}</span>
+                </span>
+                <span class="cart-discount__toggle" aria-hidden="true"></span>
+              </summary>
+            {%- else -%}
+              <summary class="cart-discount__summary">
+                <span class="cart-discount__label cart-primary-typography">{{ 'content.discount' | t }}</span>
 
-              <span class="cart-totals__icon">
-                {{- 'icon-plus.svg' | inline_asset_content -}}
-              </span>
-            </summary>
+                <span class="cart-totals__icon">
+                  {{- 'icon-plus.svg' | inline_asset_content -}}
+                </span>
+              </summary>
+            {%- endif -%}
 
             <div class="details-content">
               <div id="cart-discount-disclosure">
@@ -219,6 +238,22 @@
     </div>
   {% endif %}
 
+  {%- if summary_part == 'drawer_top' -%}
+    <dl class="cart-drawer-rows">
+      <div class="cart-drawer-rows__row">
+        <dt>{{ 'content.ossian_cart.subtotal_items' | t: count: cart.item_count }}</dt>
+        <dd class="cart-secondary-typography">{{ cart.items_subtotal_price | money }}</dd>
+      </div>
+      <div class="cart-drawer-rows__row">
+        <dt>{{ 'content.ossian_cart.discount' | t }}</dt>
+        <dd class="cart-secondary-typography">
+          {%- assign drawer_discount = cart.items_subtotal_price | minus: cart.total_price -%}
+          {%- if drawer_discount > 0 -%}-{{ drawer_discount | money }}{%- else -%}-{%- endif -%}
+        </dd>
+      </div>
+    </dl>
+  {%- endif -%}
+
   {%- liquid
     if settings.currency_code_enabled_cart_total
       assign total_price = cart.total_price | money_with_currency
@@ -227,12 +262,19 @@
     endif
   -%}
 
+  {%- if summary_part != 'drawer_top' -%}
   <div class="cart-totals__container{% if settings.show_installments %} cart-totals__container--has-installments{% endif %}">
     <span
       class="cart-totals__item cart-totals__total"
       role="status"
     >
-      <span class="cart-totals__total-label cart-primary-typography">{{ 'content.cart_estimated_total' | t }}</span>
+      <span class="cart-totals__total-label cart-primary-typography">
+        {%- if summary_part == 'drawer_bottom' -%}
+          {{ 'content.ossian_cart.total' | t }}
+        {%- else -%}
+          {{ 'content.cart_estimated_total' | t }}
+        {%- endif -%}
+      </span>
       <text-component
         ref="cartTotal"
         value="{{ total_price | strip_html }}"
@@ -251,12 +293,27 @@
         {% endform %}
       </span>
     {% endif %}
-    <div class="cart-totals__item cart-totals__tax-note cart-primary-typography">
-      {% render 'tax-info', has_discounts_enabled: settings.show_add_discount_code %}
-    </div>
+    {%- if summary_part == 'drawer_bottom' and settings.show_cart_delivery and settings.cart_delivery_text != blank -%}
+      <div class="cart-totals__item cart-totals__delivery">
+        <span>{{ 'content.ossian_cart.delivery' | t }}</span>
+        <span class="cart-totals__delivery-value">
+          <span class="cart-totals__delivery-text">{{ settings.cart_delivery_text | escape }}</span>
+          {%- if settings.cart_delivery_compare != blank -%}
+            <s class="cart-totals__delivery-compare">{{ settings.cart_delivery_compare | escape }}</s>
+          {%- endif -%}
+        </span>
+      </div>
+    {%- endif -%}
+    {%- if summary_part != 'drawer_bottom' -%}
+      <div class="cart-totals__item cart-totals__tax-note cart-primary-typography">
+        {% render 'tax-info', has_discounts_enabled: settings.show_add_discount_code %}
+      </div>
+    {%- endif -%}
   </div>
+  {%- endif -%}
 </div>
 
+{%- if summary_part != 'drawer_top' -%}
 <div class="cart__ctas">
   <button
     type="submit"
@@ -269,7 +326,11 @@
     form="cart-form"
   >
     <span class="button-text">
-      {{ 'content.checkout' | t }}
+      {%- if summary_part == 'drawer_bottom' -%}
+        {{ 'content.ossian_cart.checkout' | t }}
+      {%- else -%}
+        {{ 'content.checkout' | t }}
+      {%- endif -%}
     </span>
   </button>
 
@@ -283,7 +344,9 @@
       {{ content_for_additional_checkout_buttons }}
     </div>
   {% endif %}
+
 </div>
+{%- endif -%}
 
 {% stylesheet %}
   .cart-actions {

@@ -543,7 +543,17 @@
   /* sections/header.liquid sets ".header { background: transparent }" and this navbar
      also carries the .header class, so pin the background with a more specific selector
      (stylesheet bundle order differs between the dev server and the live store). */
+  /* <header-component> is a custom element, so it is display: inline unless a stylesheet
+     says otherwise. Locally sections/header.liquid's ".header { display: block }" happened to
+     apply; on the live theme that stylesheet isn't loaded, the element stayed inline and its
+     white background only painted behind the text (the banner showed through). */
   #header-component.ossian-navbar {
+    display: block;
+    background: #fff;
+  }
+
+  /* Belt and braces: the section wrapper is white too. */
+  .ossian-header-section {
     background: #fff;
   }
 

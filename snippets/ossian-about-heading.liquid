@@ -1,0 +1,18 @@
+{%- doc -%}
+  Renders merchant heading text with the Ossian accent markup:
+  [words] become the blue accent and | forces a line break.
+
+  @param {string} text - Plain heading text, e.g. "Professional [Care for] Real People"
+  @param {string} [tag] - Heading element, defaults to h2
+  @param {string} [class] - Extra classes for the heading
+
+  @example
+  {% render 'ossian-about-heading', text: section.settings.heading, tag: 'h1', class: 'oab-heading--xl' %}
+{%- enddoc -%}
+{%- liquid
+  assign heading_tag = tag | default: 'h2'
+  assign heading_html = text | escape | replace: '[', '<span class="oab-accent">' | replace: ']', '</span>' | replace: '|', '<br>'
+-%}
+{%- if text != blank -%}
+  <{{ heading_tag }} class="oab-heading {{ class }}">{{ heading_html }}</{{ heading_tag }}>
+{%- endif -%}

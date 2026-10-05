@@ -1,0 +1,907 @@
+{% comment %}
+  Section contract.
+  Ossian contact page: navy hero with trust features, contact form beside
+  "other ways to reach us", then a map beside a "visit us" location card.
+  Feature and contact-method rows are blocks so merchants control them.
+  @example
+  <!-- Added to templates/page.contact.json; reached at /pages/contact-us -->
+{% endcomment %}
+
+{%- liquid
+  assign feature_blocks = section.blocks | where: 'type', 'feature'
+  assign method_blocks = section.blocks | where: 'type', 'method'
+  assign form_id = 'ContactForm-' | append: section.id
+  assign map_query = section.settings.map_query | default: section.settings.location_heading
+  assign directions_url = section.settings.directions_url
+  if directions_url == blank and map_query != blank
+    assign map_query_encoded = map_query | url_encode
+    assign directions_url = 'https://www.google.com/maps/dir/?api=1&destination=' | append: map_query_encoded
+  endif
+-%}
+
+<section class="ctc" id="ctc-{{ section.id }}">
+  {%- comment -%}── Hero ─────────────────────────────────────────{%- endcomment -%}
+  <div class="ctc__hero">
+    {%- if section.settings.hero_image != blank or section.settings.hero_image_mobile != blank -%}
+      <div class="ctc__hero-media">
+        {%- assign hero_desktop = section.settings.hero_image | default: section.settings.hero_image_mobile -%}
+        {%- assign hero_mobile = section.settings.hero_image_mobile | default: section.settings.hero_image -%}
+        <picture>
+          <source
+            media="(max-width: 749px)"
+            srcset="
+              {{ hero_mobile | image_url: width: 750 }} 750w,
+              {{ hero_mobile | image_url: width: 1100 }} 1100w
+            "
+            sizes="100vw"
+            width="{{ hero_mobile.width }}"
+            height="{{ hero_mobile.height }}"
+          >
+          {{
+            hero_desktop
+            | image_url: width: 2000
+            | image_tag:
+              class: 'ctc__hero-img',
+              loading: 'eager',
+              fetchpriority: 'high',
+              widths: '900,1200,1600,2000',
+              sizes: '(min-width: 750px) 60vw, 100vw',
+              alt: ''
+          }}
+        </picture>
+      </div>
+    {%- endif -%}
+
+    <div class="ctc__hero-inner ctc__wrap">
+      <div class="ctc__hero-copy">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="ctc__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank or section.settings.heading_accent != blank -%}
+          <h1 class="ctc__heading">
+            {%- if section.settings.heading != blank -%}<span>{{ section.settings.heading | escape }}</span>{%- endif -%}
+            {%- if section.settings.heading_accent != blank -%}<span class="ctc__heading-accent">{{ section.settings.heading_accent | escape }}</span>{%- endif -%}
+          </h1>
+        {%- endif -%}
+        {%- if section.settings.body != blank -%}
+          <p class="ctc__lead">{{ section.settings.body | escape }}</p>
+        {%- endif -%}
+
+        {%- if feature_blocks.size > 0 -%}
+          <ul class="ctc__features" role="list">
+            {%- for block in feature_blocks -%}
+              <li class="ctc__feature" {{ block.shopify_attributes }}>
+                <span class="ctc__feature-icon" aria-hidden="true">
+                  {%- render 'ossian-contact-icon', icon: block.settings.icon -%}
+                </span>
+                <span class="ctc__feature-text">
+                  {%- if block.settings.title != blank -%}
+                    <span class="ctc__feature-title">{{ block.settings.title | escape }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.text != blank -%}
+                    <span class="ctc__feature-sub">{{ block.settings.text | escape }}</span>
+                  {%- endif -%}
+                </span>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%}── Body grid ────────────────────────────────────{%- endcomment -%}
+  <div class="ctc__body ctc__wrap">
+    {%- comment -%} Form card {%- endcomment -%}
+    <div class="ctc__card ctc__form-card">
+      {%- if section.settings.form_heading != blank -%}
+        <h2 class="ctc__card-title">{{ section.settings.form_heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.form_text != blank -%}
+        <p class="ctc__card-sub">{{ section.settings.form_text | escape }}</p>
+      {%- endif -%}
+
+      {%- form 'contact', id: form_id, class: 'ctc__form' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="ctc__alert ctc__alert--success" role="status" tabindex="-1" autofocus>
+            {{ 'blocks.contact_form.post_success' | t }}
+          </p>
+        {%- elsif form.errors -%}
+          <div class="ctc__alert ctc__alert--error" role="alert" tabindex="-1" autofocus>
+            <p>{{ 'blocks.contact_form.error_heading' | t }}</p>
+            <ul>
+              {%- for field in form.errors -%}
+                <li>
+                  {%- if field == 'form' -%}
+                    {{ form.errors.messages[field] }}
+                  {%- else -%}
+                    {{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        <div class="ctc__row ctc__row--split">
+          <div class="ctc__field">
+            <label class="visually-hidden" for="{{ form_id }}-name">{{ 'content.ossian_contact.full_name' | t }}</label>
+            <input
+              class="ctc__input"
+              type="text"
+              id="{{ form_id }}-name"
+              name="contact[name]"
+              autocomplete="name"
+              placeholder="{{ 'content.ossian_contact.full_name' | t }} *"
+              value="{{ form.name }}"
+              required
+            >
+          </div>
+          <div class="ctc__field">
+            <label class="visually-hidden" for="{{ form_id }}-email">{{ 'content.ossian_contact.email' | t }}</label>
+            <input
+              class="ctc__input"
+              type="email"
+              id="{{ form_id }}-email"
+              name="contact[email]"
+              autocomplete="email"
+              autocapitalize="off"
+              spellcheck="false"
+              placeholder="{{ 'content.ossian_contact.email' | t }} *"
+              value="{% if form.email != blank %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+              {% if form.errors contains 'email' %}aria-invalid="true"{% endif %}
+              required
+            >
+          </div>
+        </div>
+
+        <div class="ctc__field">
+          <label class="visually-hidden" for="{{ form_id }}-phone">{{ 'content.ossian_contact.phone' | t }}</label>
+          <input
+            class="ctc__input"
+            type="tel"
+            id="{{ form_id }}-phone"
+            name="contact[phone]"
+            autocomplete="tel"
+            pattern="[0-9\-\+\s\(\)]*"
+            placeholder="{{ 'content.ossian_contact.phone' | t }}"
+            value="{{ form.phone }}"
+          >
+        </div>
+
+        {%- assign subjects = section.settings.subjects | newline_to_br | split: '<br />' -%}
+        <div class="ctc__field ctc__field--select">
+          <label class="visually-hidden" for="{{ form_id }}-subject">{{ 'content.ossian_contact.subject' | t }}</label>
+          <select class="ctc__input ctc__select" id="{{ form_id }}-subject" name="contact[subject]" required>
+            <option value="" disabled selected>{{ 'content.ossian_contact.subject' | t }} *</option>
+            {%- for subject in subjects -%}
+              {%- assign subject_clean = subject | strip -%}
+              {%- if subject_clean != blank -%}
+                <option value="{{ subject_clean | escape }}">{{ subject_clean | escape }}</option>
+              {%- endif -%}
+            {%- endfor -%}
+          </select>
+          <svg class="ctc__select-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+
+        <div class="ctc__field ctc__field--textarea">
+          <label class="visually-hidden" for="{{ form_id }}-body">{{ 'content.ossian_contact.message' | t }}</label>
+          <textarea
+            class="ctc__input ctc__textarea"
+            id="{{ form_id }}-body"
+            name="contact[body]"
+            rows="4"
+            maxlength="500"
+            placeholder="{{ 'content.ossian_contact.message' | t }} *"
+            aria-describedby="{{ form_id }}-count"
+            data-ctc-message
+            required
+          >{{ form.body }}</textarea>
+          <span class="ctc__count" id="{{ form_id }}-count" data-ctc-count>{{ form.body | size }}/500</span>
+        </div>
+
+        <button type="submit" class="ctc__submit">
+          {{ 'content.ossian_contact.send' | t }}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      {%- endform -%}
+    </div>
+
+    {%- comment -%} Other ways card {%- endcomment -%}
+    <div class="ctc__card ctc__ways">
+      {%- if section.settings.ways_heading != blank -%}
+        <h2 class="ctc__card-title">{{ section.settings.ways_heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.ways_text != blank -%}
+        <p class="ctc__card-sub">{{ section.settings.ways_text | escape }}</p>
+      {%- endif -%}
+
+      {%- if method_blocks.size > 0 -%}
+        <ul class="ctc__methods" role="list">
+          {%- for block in method_blocks -%}
+            <li class="ctc__method" {{ block.shopify_attributes }}>
+              <span class="ctc__method-icon" aria-hidden="true">
+                {%- render 'ossian-contact-icon', icon: block.settings.icon, filled: true -%}
+              </span>
+              <div class="ctc__method-text">
+                {%- if block.settings.title != blank -%}
+                  <p class="ctc__method-title">{{ block.settings.title | escape }}</p>
+                {%- endif -%}
+                {%- if block.settings.value != blank -%}
+                  {%- if block.settings.link != blank -%}
+                    <a class="ctc__method-value" href="{{ block.settings.link }}">{{ block.settings.value }}</a>
+                  {%- else -%}
+                    <div class="ctc__method-value">{{ block.settings.value }}</div>
+                  {%- endif -%}
+                {%- endif -%}
+                {%- if block.settings.note != blank -%}
+                  <p class="ctc__method-note">{{ block.settings.note | escape }}</p>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Map {%- endcomment -%}
+    <div class="ctc__map">
+      {%- if section.settings.map_image != blank -%}
+        {{
+          section.settings.map_image
+          | image_url: width: 1400
+          | image_tag:
+            class: 'ctc__map-img',
+            loading: 'lazy',
+            widths: '600,900,1200,1400',
+            sizes: '(min-width: 990px) 50vw, 100vw',
+            alt: section.settings.map_image.alt | default: map_query
+          }}
+      {%- elsif map_query != blank -%}
+        <iframe
+          class="ctc__map-frame"
+          src="https://maps.google.com/maps?q={{ map_query | url_encode }}&z={{ section.settings.map_zoom }}&output=embed"
+          title="{{ map_query | escape }}"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      {%- else -%}
+        <div class="ctc__map-ph">{{ 'image' | placeholder_svg_tag }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Location card {%- endcomment -%}
+    <div class="ctc__location">
+      {%- if section.settings.location_eyebrow != blank -%}
+        <p class="ctc__location-eyebrow">{{ section.settings.location_eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.location_heading != blank -%}
+        <h2 class="ctc__location-title">{{ section.settings.location_heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.location_text != blank -%}
+        <p class="ctc__location-text">{{ section.settings.location_text | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.location_button != blank and directions_url != blank -%}
+        <a class="ctc__location-btn" href="{{ directions_url }}" target="_blank" rel="noopener">
+          {{ section.settings.location_button | escape }}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var root = document.getElementById('ctc-{{ section.id }}');
+    if (!root) return;
+    var field = root.querySelector('[data-ctc-message]');
+    var count = root.querySelector('[data-ctc-count]');
+    if (!field || !count) return;
+    var max = field.maxLength > 0 ? field.maxLength : 500;
+    function update() { count.textContent = field.value.length + '/' + max; }
+    field.addEventListener('input', update);
+    update();
+  })();
+</script>
+
+{% stylesheet %}
+.ctc {
+  --ctc-navy: #1e3a5f;
+  --ctc-navy-deep: #0b1f3d;
+  --ctc-ink: #14284a;
+  --ctc-accent: #6fa8ff;
+  --ctc-muted: #5b6577;
+  --ctc-line: #d7deea;
+  --ctc-page: #f2f5fa;
+  background: var(--ctc-page);
+  color: var(--ctc-ink);
+  padding-bottom: 56px;
+}
+
+.ctc__wrap {
+  width: 100%;
+  max-width: 1240px;
+  margin-inline: auto;
+  padding-inline: 32px;
+}
+
+/* ── Hero ─────────────────────────────────────────────── */
+.ctc__hero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: radial-gradient(120% 140% at 80% 30%, #1f4c8f 0%, var(--ctc-navy-deep) 55%, #061328 100%);
+  color: #fff;
+}
+
+.ctc__hero-media {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: 62%;
+  z-index: -1;
+}
+
+.ctc__hero-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--ctc-navy-deep) 0%, rgba(11, 31, 61, 0.55) 30%, rgba(11, 31, 61, 0) 60%);
+}
+
+.ctc__hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.ctc__hero-inner {
+  display: flex;
+  align-items: center;
+  min-height: clamp(380px, 32vw, 460px);
+  padding-block: 56px;
+}
+
+.ctc__hero-copy {
+  max-width: 700px;
+  min-width: 0;
+}
+
+.ctc__eyebrow {
+  margin: 0 0 18px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--ctc-accent);
+}
+
+.ctc__heading {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 22px;
+  font-size: clamp(2.2rem, 4.4vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
+.ctc__heading-accent { color: var(--ctc-accent); }
+
+.ctc__lead {
+  margin: 0 0 30px;
+  max-width: 46ch;
+  font-size: clamp(0.95rem, 1.2vw, 1.12rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.ctc__features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 26px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ctc__feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.ctc__feature-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  color: #fff;
+}
+
+.ctc__feature-icon svg { width: 20px; height: 20px; }
+
+.ctc__feature-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ctc__feature-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.ctc__feature-sub {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* ── Body grid ────────────────────────────────────────── */
+.ctc__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.ctc__card {
+  min-width: 0;
+  padding: 26px 26px 24px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 6px 24px rgba(20, 40, 74, 0.07);
+}
+
+.ctc__ways {
+  background: linear-gradient(160deg, #eef3fb 0%, #e3ebf7 100%);
+  box-shadow: none;
+}
+
+.ctc__card-title {
+  margin: 0 0 6px;
+  font-size: clamp(1.2rem, 1.6vw, 1.45rem);
+  font-weight: 700;
+  color: var(--ctc-ink);
+}
+
+.ctc__card-sub {
+  margin: 0 0 20px;
+  font-size: 0.9rem;
+  color: var(--ctc-muted);
+}
+
+/* Form */
+.ctc__form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ctc__row--split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+
+.ctc__field {
+  position: relative;
+  min-width: 0;
+}
+
+.ctc__input {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 14px;
+  border: 1px solid var(--ctc-line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ctc-ink);
+  font: inherit;
+  font-size: 0.92rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ctc__input::placeholder { color: #6b7587; }
+
+.ctc__input:focus-visible {
+  outline: none;
+  border-color: var(--ctc-navy);
+  box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.15);
+}
+
+.ctc__input[aria-invalid='true'] { border-color: #c0392b; }
+
+.ctc__select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-inline-end: 40px;
+  cursor: pointer;
+}
+
+.ctc__select:invalid { color: #6b7587; }
+
+.ctc__select-caret {
+  position: absolute;
+  inset-inline-end: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ctc-ink);
+  pointer-events: none;
+}
+
+.ctc__textarea {
+  min-height: 96px;
+  padding-bottom: 28px;
+  resize: vertical;
+}
+
+.ctc__count {
+  position: absolute;
+  inset-inline-end: 12px;
+  bottom: 8px;
+  font-size: 0.78rem;
+  color: var(--ctc-muted);
+  pointer-events: none;
+}
+
+.ctc__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 46px;
+  margin-top: 2px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--ctc-navy-deep);
+  color: #fff;
+  font: inherit;
+  font-size: 0.98rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.ctc__submit:hover { background: var(--ctc-navy); }
+.ctc__submit:focus-visible { outline: 2px solid var(--ctc-navy); outline-offset: 3px; }
+
+.ctc__alert {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.ctc__alert p { margin: 0; }
+.ctc__alert ul { margin: 6px 0 0; padding-inline-start: 18px; }
+.ctc__alert--success { background: #e7f6ec; color: #1d6b38; }
+.ctc__alert--error { background: #fdecea; color: #a12a1f; }
+
+/* Contact methods */
+.ctc__methods {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ctc__method {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  min-width: 0;
+}
+
+.ctc__method-icon {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #dce6f5;
+  color: var(--ctc-navy-deep);
+}
+
+.ctc__method-icon svg { width: 22px; height: 22px; }
+
+.ctc__method-text {
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.ctc__method-title {
+  margin: 0 0 2px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ctc-ink);
+}
+
+.ctc__method-value {
+  display: block;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--ctc-ink);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.ctc__method-value p { margin: 0; }
+a.ctc__method-value:hover { text-decoration: underline; }
+
+.ctc__method-note {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  color: var(--ctc-muted);
+}
+
+/* Map + location */
+.ctc__map {
+  position: relative;
+  min-height: 240px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #e5e9f0;
+}
+
+.ctc__map-frame,
+.ctc__map-img,
+.ctc__map-ph {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  object-fit: cover;
+}
+
+.ctc__map-ph svg { width: 100%; height: 100%; fill: rgba(30, 58, 95, 0.2); }
+
+.ctc__location {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  padding: 28px;
+  border-radius: 14px;
+  background: radial-gradient(120% 160% at 100% 0%, #24539a 0%, var(--ctc-navy-deep) 60%);
+  color: #fff;
+}
+
+.ctc__location-eyebrow {
+  margin: 0 0 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.ctc__location-title {
+  margin: 0 0 12px;
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
+  font-weight: 700;
+  color: #fff;
+}
+
+.ctc__location-text {
+  margin: 0 0 22px;
+  max-width: 44ch;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.ctc__location-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.ctc__location-btn:hover { background: #fff; color: var(--ctc-navy-deep); }
+.ctc__location-btn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+[dir='rtl'] .ctc__submit svg,
+[dir='rtl'] .ctc__location-btn svg { transform: scaleX(-1); }
+
+/* ── Tablet ───────────────────────────────────────────── */
+@media (max-width: 989px) {
+  .ctc__body { grid-template-columns: minmax(0, 1fr); }
+  .ctc__hero-media { width: 70%; }
+}
+
+/* ── Mobile ───────────────────────────────────────────── */
+@media (max-width: 749px) {
+  .ctc { padding-bottom: 32px; }
+  .ctc__wrap { padding-inline: 16px; }
+
+  .ctc__hero { display: flex; flex-direction: column; }
+
+  .ctc__hero-inner {
+    order: 1;
+    min-height: 0;
+    padding-block: 28px 18px;
+  }
+
+  .ctc__hero-media {
+    order: 2;
+    position: relative;
+    width: 100%;
+    height: 220px;
+    z-index: 0;
+  }
+
+  .ctc__hero-media::after {
+    background: linear-gradient(180deg, var(--ctc-navy-deep) 0%, rgba(11, 31, 61, 0) 45%);
+  }
+
+  .ctc__eyebrow { font-size: 0.68rem; margin-bottom: 10px; }
+  .ctc__heading { font-size: clamp(1.8rem, 8vw, 2.2rem); margin-bottom: 14px; }
+  .ctc__lead { font-size: 0.88rem; margin-bottom: 20px; }
+
+  .ctc__features {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+  }
+
+  .ctc__feature {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+    padding-inline: 6px;
+  }
+
+  .ctc__feature + .ctc__feature { border-inline-start: 1px solid rgba(255, 255, 255, 0.18); }
+  .ctc__feature-icon { width: 36px; height: 36px; }
+  .ctc__feature-icon svg { width: 18px; height: 18px; }
+  .ctc__feature-title { font-size: 0.78rem; }
+  .ctc__feature-sub { display: none; }
+
+  .ctc__body { margin-top: 12px; gap: 12px; }
+  .ctc__card { padding: 20px 16px; }
+  .ctc__card-sub { font-size: 0.82rem; margin-bottom: 14px; }
+  .ctc__row--split { grid-template-columns: minmax(0, 1fr); }
+
+  .ctc__methods { gap: 16px; }
+  .ctc__method { gap: 14px; }
+  .ctc__method-icon { width: 42px; height: 42px; }
+  .ctc__method-icon svg { width: 18px; height: 18px; }
+  .ctc__method-title,
+  .ctc__method-value { font-size: 0.85rem; }
+  .ctc__method-note { font-size: 0.78rem; }
+
+  .ctc__map { min-height: 200px; }
+  .ctc__location { padding: 22px 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ctc__input,
+  .ctc__submit,
+  .ctc__location-btn { transition: none; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ossian Contact",
+  "tag": "div",
+  "class": "section-ossian-contact",
+  "settings": [
+    { "type": "header", "content": "Hero" },
+    { "type": "image_picker", "id": "hero_image", "label": "Hero image (desktop)", "info": "Shown on the right side. Product shots on a dark background work best." },
+    { "type": "image_picker", "id": "hero_image_mobile", "label": "Hero image (mobile)", "info": "Shown below the text on mobile. Falls back to the desktop image." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Get in touch" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "We’re here" },
+    { "type": "text", "id": "heading_accent", "label": "Heading accent line", "default": "to help" },
+    { "type": "textarea", "id": "body", "label": "Intro text", "default": "Have a question about our products, your order, or anything else? Our team is always happy to assist you." },
+
+    { "type": "header", "content": "Contact form" },
+    { "type": "text", "id": "form_heading", "label": "Heading", "default": "Send us a message" },
+    { "type": "text", "id": "form_text", "label": "Text", "default": "Fill in the details below and we’ll get back to you as soon as possible." },
+    { "type": "textarea", "id": "subjects", "label": "Subject options", "info": "One option per line.", "default": "Product enquiry\nOrder & delivery\nReturns & refunds\nSalon partnership\nOther" },
+
+    { "type": "header", "content": "Other ways to reach us" },
+    { "type": "text", "id": "ways_heading", "label": "Heading", "default": "Other ways to reach us" },
+    { "type": "text", "id": "ways_text", "label": "Text", "default": "Prefer a different way? Connect with us here." },
+
+    { "type": "header", "content": "Map & location" },
+    { "type": "text", "id": "map_query", "label": "Map address", "info": "Address or place name shown on the embedded Google map.", "default": "Sector 44, Gurugram, Haryana 122003" },
+    { "type": "range", "id": "map_zoom", "label": "Map zoom", "min": 10, "max": 18, "step": 1, "default": 14 },
+    { "type": "image_picker", "id": "map_image", "label": "Map image (optional)", "info": "Replaces the embedded map with a static image." },
+    { "type": "url", "id": "directions_url", "label": "Directions link", "info": "Leave empty to open Google Maps directions to the map address." },
+    { "type": "text", "id": "location_eyebrow", "label": "Eyebrow", "default": "Visit us" },
+    { "type": "text", "id": "location_heading", "label": "Heading", "default": "Our Location" },
+    { "type": "textarea", "id": "location_text", "label": "Text", "default": "We’d love to hear from you or meet you in person. Drop by our office during business hours." },
+    { "type": "text", "id": "location_button", "label": "Button label", "default": "Get Directions" }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Hero feature",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "shield",
+          "options": [
+            { "value": "shield", "label": "Shield" },
+            { "value": "headset", "label": "Headset" },
+            { "value": "chat", "label": "Chat bubble" },
+            { "value": "mail", "label": "Mail" },
+            { "value": "phone", "label": "Phone" },
+            { "value": "pin", "label": "Location pin" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Genuine Support" },
+        { "type": "text", "id": "text", "label": "Text", "default": "From product experts" }
+      ]
+    },
+    {
+      "type": "method",
+      "name": "Contact method",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "mail",
+          "options": [
+            { "value": "mail", "label": "Mail" },
+            { "value": "phone", "label": "Phone" },
+            { "value": "pin", "label": "Location pin" },
+            { "value": "chat", "label": "Chat bubble" },
+            { "value": "headset", "label": "Headset" },
+            { "value": "shield", "label": "Shield" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Email" },
+        { "type": "richtext", "id": "value", "label": "Details", "default": "<p>support@ossion.com</p>" },
+        { "type": "url", "id": "link", "label": "Link", "info": "Use mailto: or tel: links for email and phone." },
+        { "type": "text", "id": "note", "label": "Note", "default": "We typically reply within 24 hours." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ossian Contact",
+      "blocks": [
+        { "type": "feature", "settings": { "icon": "shield", "title": "Genuine Support", "text": "From product experts" } },
+        { "type": "feature", "settings": { "icon": "headset", "title": "Quick Response", "text": "Within 24 hours" } },
+        { "type": "feature", "settings": { "icon": "chat", "title": "Here for You", "text": "Before & after purchase" } },
+        { "type": "method", "settings": { "icon": "mail", "title": "Email", "value": "<p>support@ossion.com</p>", "link": "mailto:support@ossion.com", "note": "We typically reply within 24 hours." } },
+        { "type": "method", "settings": { "icon": "phone", "title": "Call Us", "value": "<p>+91 98765 43210</p>", "link": "tel:+919876543210", "note": "Mon – Sat, 10:00 AM – 6:00 PM (IST)" } },
+        { "type": "method", "settings": { "icon": "pin", "title": "Our Office", "value": "<p>Plot No. 123, Sector 44<br>Gurugram, Haryana 122003<br>India</p>", "note": "" } },
+        { "type": "method", "settings": { "icon": "chat", "title": "Live Chat", "value": "<p>Chat with us on our website</p>", "note": "Mon – Sat, 10:00 AM – 6:00 PM (IST)" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

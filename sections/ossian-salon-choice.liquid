@@ -1,4 +1,8 @@
-<section class="sc2" id="sc2-{{ section.id }}">
+<section
+  class="sc2"
+  id="sc2-{{ section.id }}"
+  style="--sc2-strip-bg: {{ section.settings.strip_bg }}; --sc2-bottom-bg: {{ section.settings.bottom_bg }};"
+>
 
   {%- comment -%}── 1. Feature Strip ──────────────────────────────{%- endcomment -%}
   {%- assign pill_blocks = section.blocks | where: 'type', 'feature_pill' -%}
@@ -9,7 +13,26 @@
       {%- endif -%}
       <div class="sc2__strip-inner">
         {%- for block in pill_blocks -%}
-          <div class="sc2__pill{% if block.settings.highlighted %} sc2__pill--gold{% endif %}" {{ block.shopify_attributes }}>
+          {%- liquid
+            # Collection wins over product; custom link is the fallback
+            assign pill_url = ''
+            if block.settings.collection != blank
+              assign pill_url = block.settings.collection.url
+            elsif block.settings.product != blank
+              assign pill_url = block.settings.product.url
+            elsif block.settings.link != blank
+              assign pill_url = block.settings.link
+            endif
+            assign pill_tag = 'div'
+            if pill_url != blank
+              assign pill_tag = 'a'
+            endif
+          -%}
+          <{{ pill_tag }}
+            class="sc2__pill{% if block.settings.highlighted %} sc2__pill--gold{% endif %}{% if pill_tag == 'a' %} sc2__pill--link{% endif %}"
+            {% if pill_tag == 'a' %}href="{{ pill_url }}"{% endif %}
+            {{ block.shopify_attributes }}
+          >
             <div class="sc2__pill-icon" aria-hidden="true">
               {%- case block.settings.icon -%}
                 {%- when 'sparkle' -%}
@@ -53,14 +76,14 @@
                 <span class="sc2__pill-sub">{{ block.settings.subtitle }}</span>
               {%- endif -%}
             </div>
-          </div>
+          </{{ pill_tag }}>
         {%- endfor -%}
       </div>
     </div>
   {%- endif -%}
 
   {%- comment -%}── 2. Bottom section ─────────────────────────────{%- endcomment -%}
-  <div class="sc2__bottom" style="background-color: {{ section.settings.bottom_bg }};">
+  <div class="sc2__bottom">
     <div class="sc2__grid">
 
       {%- comment -%}── Before / After card ───────────────────────{%- endcomment -%}
@@ -179,7 +202,12 @@
             <p class="sc2__feat-desc">{{ section.settings.feat_body }}</p>
           {%- endif -%}
           {%- if section.settings.feat_cta_label != blank -%}
-            <a href="{{ feat_href }}" class="sc2__feat-cta">{{ section.settings.feat_cta_label }}</a>
+            <a href="{{ feat_href }}" class="sc2__feat-cta">
+              {{- section.settings.feat_cta_label -}}
+              <svg class="sc2__feat-cta-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M6 3.5 L10.5 8 L6 12.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
           {%- endif -%}
         </div>
         <a href="{{ feat_href }}" class="sc2__feat-media" aria-label="{{ feat_alt }}">
@@ -210,7 +238,7 @@
 
   function setPos(pct) {
     cur = Math.max(0, Math.min(100, pct));
-    if (after)  after.style.clipPath = 'inset(0 ' + (100 - cur) + '% 0 0)';
+    if (after)  after.style.clipPath = 'inset(0 0 0 ' + cur + '%)';
     if (sep)    sep.style.left       = cur + '%';
     if (handle) handle.style.left    = cur + '%';
     if (range)  range.value          = cur;
@@ -259,12 +287,7 @@
 /* ── Feature Strip ────────────────────────────────────── */
 .sc2__strip {
   padding: 32px 24px 28px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
 }
-
-.sc2__strip::-webkit-scrollbar { display: none; }
 
 .sc2__strip-heading {
   text-align: center;
@@ -276,15 +299,25 @@
   margin: 0 0 22px;
 }
 
+/* Only the pill row scrolls; the heading stays in place */
 .sc2__strip-inner {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 14px;
-  min-width: max-content;
   margin: 0 auto;
   max-width: 1380px;
+  padding-block: 6px 12px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+
+.sc2__strip-inner::-webkit-scrollbar { display: none; }
+
+/* Auto margins centre the row when it fits and keep the first pill reachable when it overflows */
+.sc2__strip-inner > :first-child { margin-inline-start: auto; }
+.sc2__strip-inner > :last-child { margin-inline-end: auto; }
 
 .sc2__pill {
   display: flex;
@@ -297,6 +330,28 @@
   box-shadow: 0 3px 10px rgba(20, 40, 74, 0.18);
   flex-shrink: 0;
   cursor: default;
+}
+
+.sc2__pill--link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sc2__pill--link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(20, 40, 74, 0.28);
+}
+
+.sc2__pill--link:focus-visible {
+  outline: 2px solid #dba84a;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc2__pill--link { transition: none; }
+  .sc2__pill--link:hover { transform: none; }
 }
 
 .sc2__pill--gold {
@@ -342,7 +397,7 @@
 
 /* ── Bottom ───────────────────────────────────────────── */
 .sc2__bottom {
-  background: #1e3a5f;
+  background: var(--sc2-bottom-bg, #1e3a5f);
   padding: 0;
 }
 
@@ -409,7 +464,7 @@
 }
 
 .sc2__bac-before { z-index: 1; }
-.sc2__bac-after  { z-index: 2; clip-path: inset(0 50% 0 0); }
+.sc2__bac-after  { z-index: 2; clip-path: inset(0 0 0 50%); }
 
 .sc2__bac-ph {
   display: flex;
@@ -623,6 +678,13 @@
   transition: filter 0.2s;
 }
 
+.sc2__feat-cta-icon {
+  display: none;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
 .sc2__feat-cta:hover {
   filter: brightness(1.08);
 }
@@ -678,15 +740,92 @@
     white-space: normal;
   }
 
-  .sc2__feat { flex-direction: column; }
-  .sc2__feat-media { height: 200px; flex: none; padding: 16px; }
-  .sc2__feat-body { padding: 28px 20px; }
-  .sc2__feat-desc { max-width: none; }
+  /* Framed card: before/after on top, dark product panel below */
+  .sc2__bottom {
+    background: var(--sc2-strip-bg, #eef1f8);
+    padding: 4px 16px 28px;
+  }
+
+  .sc2__grid {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(20, 40, 74, 0.18);
+  }
+
+  .sc2__bac { aspect-ratio: 7 / 5; }
+
+  .sc2__bac-tag {
+    top: 12px;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    padding: 6px 12px;
+    border-radius: 6px;
+  }
+
+  .sc2__bac-tag--b { left: 12px; }
+  .sc2__bac-tag--a { right: 12px; }
+
+  .sc2__bac-handle,
+  .sc2__bac-handle svg { width: 42px; height: 42px; }
+
+  /* Copy sits on the left, product image anchors the bottom-right corner */
+  .sc2__feat {
+    display: block;
+    min-height: 340px;
+  }
+
+  .sc2__feat-body {
+    position: relative;
+    z-index: 2;
+    padding: 28px 20px 30px;
+  }
+
+  .sc2__feat-eyebrow { font-size: 0.85rem; margin-bottom: 10px; }
+
+  .sc2__feat-heading {
+    font-size: clamp(1.6rem, 7.6vw, 2rem);
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+
+  .sc2__feat-subheading { font-size: 1rem; margin-bottom: 12px; }
+
+  .sc2__feat-desc,
+  .sc2__feat-cta { max-width: 58%; }
+
+  .sc2__feat-desc {
+    font-size: 0.85rem;
+    line-height: 1.55;
+    margin-bottom: 20px;
+  }
+
+  .sc2__feat-cta {
+    gap: 10px;
+    padding: 12px 22px;
+    border-radius: 10px;
+    color: #14284a;
+    font-size: 0.95rem;
+  }
+
+  .sc2__feat-cta-icon { display: block; }
+
+  .sc2__feat-media {
+    position: absolute;
+    z-index: 1;
+    inset-inline-end: 0;
+    bottom: 0;
+    width: 46%;
+    height: 64%;
+    padding: 0 8px 14px 0;
+  }
+
+  .sc2__feat-img { object-position: right bottom; }
 
   .sc2__ba-title { font-size: 0.85rem; }
 
-  .sc2__strip { padding: 24px 16px 20px; }
-  .sc2__strip-heading { margin: 0 0 16px; }
+  .sc2__strip { padding: 24px 0 20px; }
+  .sc2__strip-heading { margin: 0 0 16px; padding-inline: 16px; }
+  .sc2__strip-inner { padding-inline: 16px; scroll-padding-inline: 16px; }
 }
 {% endstylesheet %}
 
@@ -880,6 +1019,28 @@
           "id": "subtitle",
           "label": "Subtitle",
           "default": "Anti-Yellow"
+        },
+        {
+          "type": "header",
+          "content": "Pill destination"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection",
+          "info": "Clicking the pill opens this collection page."
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Used when no collection is selected. Opens the product page."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Custom link",
+          "info": "Used only when no collection or product is selected."
         },
         {
           "type": "checkbox",

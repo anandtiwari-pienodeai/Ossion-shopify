@@ -161,6 +161,57 @@
   },
   "content": {
     "cancel": "Cancel",
+    "reel": "Reel",
+    "ossian_blog": {
+      "read_more": "Read More",
+      "read_time": {
+        "one": "{{ count }} min read",
+        "other": "{{ count }} min read"
+      },
+      "search_label": "Search articles",
+      "search_placeholder": "Search articles...",
+      "all_articles": "All Articles",
+      "categories": "Article categories",
+      "empty": "No articles here yet. Check back soon.",
+      "email_label": "Email address",
+      "email_placeholder": "Enter your email",
+      "subscribe": "Subscribe",
+      "subscribed": "Thanks for subscribing!",
+      "pagination": "Article pages"
+    },
+    "ossian_newsletter": {
+      "email_label": "Email address",
+      "success": "Thanks for subscribing! Look out for tips and offers in your inbox."
+    },
+    "ossian_cart": {
+      "title": "Your Cart",
+      "checkout": "Checkout",
+      "apply_discount": "Discount code",
+      "discount_hint": "Enter a code to apply discount",
+      "total": "Total:",
+      "delivery": "Delivery Charges:",
+      "subtotal_items": {
+        "one": "Subtotal ({{ count }} item)",
+        "other": "Subtotal ({{ count }} items)"
+      },
+      "discount": "Discount"
+    },
+    "ossian_article": {
+      "breadcrumb": "Breadcrumb",
+      "home": "Home",
+      "share": "Share Article",
+      "share_on": "Share on {{ network }}",
+      "copy_link": "Copy link",
+      "link_copied": "Link copied"
+    },
+    "ossian_contact": {
+      "full_name": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "subject": "Subject",
+      "message": "Your Message",
+      "send": "Send Message"
+    },
     "discount": "Discount",
     "account_title": "Account",
     "terms_and_policies": "Terms and Policies",

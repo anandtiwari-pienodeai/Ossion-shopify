@@ -251,6 +251,7 @@
     --osol-navy: #12284b;
     --osol-blue: #1463f3;
     position: relative;
+    margin: 20px 60px;
     overflow: hidden;
     background: #eef4fb;
     color: var(--osol-navy);
@@ -277,7 +278,7 @@
     gap: clamp(28px, 4vw, 64px);
     max-width: 1680px;
     margin-inline: auto;
-    padding: clamp(48px, 5vw, 72px) clamp(20px, 4.2vw, 64px) clamp(36px, 3.5vw, 52px);
+    padding: 20px 60px;
   }
 
   /* ---------- Copy ---------- */
@@ -507,10 +508,14 @@
 
   /* ---------- Tablet / mobile ---------- */
   @media (max-width: 989px) {
+    .osol {
+      margin: 20px 16px;
+    }
+
     .osol__inner {
       grid-template-columns: 1fr;
       gap: 32px;
-      padding: 44px 16px 36px;
+      padding: 20px 16px;
     }
 
     .osol__bg img {

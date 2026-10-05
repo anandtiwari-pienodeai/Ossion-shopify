@@ -1,0 +1,144 @@
+{% comment %}
+  Section contract.
+  Row of brand values: outlined icon circle, title and short text per block.
+  Four across on desktop, two across on mobile.
+  @example
+  <!-- templates/page.about.json → about_values -->
+{% endcomment %}
+
+{%- render 'ossian-about-styles' -%}
+
+<section class="oab oabv" id="oabv-{{ section.id }}" style="--oabv-bg: {{ section.settings.background }};">
+  <div class="oab-wrap">
+    {%- if section.blocks.size > 0 -%}
+      <ul class="oabv__list" role="list">
+        {%- for block in section.blocks -%}
+          <li class="oabv__item" {{ block.shopify_attributes }}>
+            <span class="oabv__icon">{%- render 'ossian-about-icon', icon: block.settings.icon -%}</span>
+            {%- if block.settings.title != blank -%}
+              <h3 class="oabv__title">{{ block.settings.title | escape }}</h3>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              <p class="oabv__text">{{ block.settings.text | escape }}</p>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+.oabv {
+  background: var(--oabv-bg, #eef3fb);
+  padding-block: 44px;
+}
+
+.oabv__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 28px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.oabv__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 0;
+}
+
+.oabv__icon {
+  width: 68px;
+  height: 68px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1.5px solid rgba(30, 58, 95, 0.55);
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--oab-navy);
+}
+
+.oabv__icon svg { width: 30px; height: 30px; }
+
+.oabv__title {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--oab-ink);
+}
+
+.oabv__text {
+  margin: 0;
+  max-width: 22ch;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--oab-muted);
+}
+
+@media (max-width: 749px) {
+  .oabv { padding-block: 32px; }
+  .oabv__list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 12px; }
+  .oabv__icon { width: 56px; height: 56px; margin-bottom: 10px; }
+  .oabv__icon svg { width: 24px; height: 24px; }
+  .oabv__title { font-size: 0.9rem; }
+  .oabv__text { font-size: 0.78rem; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ossian About Values",
+  "tag": "div",
+  "class": "section-ossian-about-values",
+  "settings": [
+    { "type": "color", "id": "background", "label": "Background", "default": "#eef3fb" }
+  ],
+  "blocks": [
+    {
+      "type": "value",
+      "name": "Value",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "diamond",
+          "options": [
+            { "value": "diamond", "label": "Diamond" },
+            { "value": "flask", "label": "Flask" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "people", "label": "People" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "badge", "label": "Badge" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "drop", "label": "Drop" },
+            { "value": "sparkle", "label": "Sparkle" },
+            { "value": "molecule", "label": "Molecule" },
+            { "value": "check", "label": "Check" },
+            { "value": "star", "label": "Star" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Salon Trusted" },
+        { "type": "text", "id": "text", "label": "Text", "default": "Preferred by professionals" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ossian About Values",
+      "blocks": [
+        { "type": "value", "settings": { "icon": "diamond", "title": "Salon Trusted", "text": "Preferred by professionals" } },
+        { "type": "value", "settings": { "icon": "flask", "title": "Science Backed", "text": "Advanced formulations for real results" } },
+        { "type": "value", "settings": { "icon": "leaf", "title": "Gentle & Effective", "text": "Caring for your hair & skin" } },
+        { "type": "value", "settings": { "icon": "people", "title": "For Everyone", "text": "Quality care, accessible to all" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

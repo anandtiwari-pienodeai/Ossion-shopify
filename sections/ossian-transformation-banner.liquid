@@ -1,180 +1,88 @@
-{%- if section.settings.heading != blank or section.settings.subheading_white != blank or section.settings.subheading_accent != blank -%}
-<div class="otb-wrap">
-  <div class="otb-wrap__dots" aria-hidden="true"></div>
+{%- comment -%}
+  Transformation Banner — image only. Separate desktop and mobile images, each shown at
+  its own proportions (never cropped); optional link and alt text. The bundled
+  assets/ossion-salon-choice-*.jpg banners are only the defaults.
+{%- endcomment -%}
 
-  <div class="otb">
-    <div class="otb__inner page-width">
+{%- liquid
+  assign s = section.settings
+  assign desktop_image = s.image | default: s.image_mobile
+  assign mobile_image = s.image_mobile | default: s.image
+-%}
 
-      <div class="otb__media otb__media--left">
-        {%- if section.settings.left_image != blank -%}
-          {{ section.settings.left_image | image_url: width: 700 | image_tag: class: 'otb__img', loading: 'lazy', widths: '300,500,700', alt: section.settings.left_image_alt }}
-        {%- else -%}
-          <img
-            class="otb__img"
-            src="{{ 'ossion-science-left.png' | asset_url }}"
-            alt="{{ section.settings.left_image_alt | escape }}"
-            width="287"
-            height="352"
-            loading="lazy">
+<div class="otb-image">
+  {%- if s.link != blank -%}
+    <a href="{{ s.link }}" class="otb-image__media" aria-label="{{ s.alt | default: shop.name | escape }}">
+  {%- else -%}
+    <div class="otb-image__media">
+  {%- endif -%}
+    <picture>
+      {%- if desktop_image != blank -%}
+        {%- if mobile_image != desktop_image -%}
+          <source
+            media="(max-width: 749px)"
+            srcset="
+              {{- mobile_image | image_url: width: 500 }} 500w,
+              {{ mobile_image | image_url: width: 750 }} 750w,
+              {{ mobile_image | image_url: width: 1000 }} 1000w,
+              {{ mobile_image | image_url: width: 1400 }} 1400w
+            "
+            sizes="100vw"
+            width="{{ mobile_image.width }}"
+            height="{{ mobile_image.height }}"
+          >
         {%- endif -%}
-      </div>
-
-      <div class="otb__content">
-        {%- if section.settings.heading != blank -%}
-          <h2 class="otb__heading">{{ section.settings.heading }}</h2>
-        {%- endif -%}
-        {%- if section.settings.subheading_white != blank or section.settings.subheading_accent != blank -%}
-          <p class="otb__subheading">
-            {%- if section.settings.subheading_white != blank -%}<em class="otb__subheading-white">{{ section.settings.subheading_white }}</em>{%- endif -%}
-            {%- if section.settings.subheading_accent != blank -%}<em class="otb__subheading-accent">{{ section.settings.subheading_accent }}</em>{%- endif -%}
-          </p>
-        {%- endif -%}
-        {%- if section.settings.body != blank -%}
-          <p class="otb__body">{{ section.settings.body }}</p>
-        {%- endif -%}
-      </div>
-
-      <div class="otb__media otb__media--right">
-        {%- if section.settings.right_image != blank -%}
-          {{ section.settings.right_image | image_url: width: 700 | image_tag: class: 'otb__img', loading: 'lazy', widths: '300,500,700', alt: section.settings.right_image_alt }}
-        {%- else -%}
-          <img
-            class="otb__img"
-            src="{{ 'ossion-science-right.png' | asset_url }}"
-            alt="{{ section.settings.right_image_alt | escape }}"
-            width="348"
-            height="358"
-            loading="lazy">
-        {%- endif -%}
-      </div>
-
+        {{
+          desktop_image
+          | image_url: width: 2400
+          | image_tag:
+            class: 'otb-image__img',
+            alt: s.alt,
+            loading: 'lazy',
+            widths: '750, 1100, 1500, 1900, 2400',
+            sizes: '100vw'
+        }}
+      {%- else -%}
+        {%- comment -%} Defaults bundled with the theme, used until images are picked {%- endcomment -%}
+        <source
+          media="(max-width: 749px)"
+          srcset="{{ 'ossion-salon-choice-mobile.jpg' | asset_url }}"
+          width="1774"
+          height="887"
+        >
+        <img
+          class="otb-image__img"
+          src="{{ 'ossion-salon-choice-desktop.jpg' | asset_url }}"
+          alt="{{ s.alt | escape }}"
+          width="2000"
+          height="668"
+          loading="lazy"
+        >
+      {%- endif -%}
+    </picture>
+  {%- if s.link != blank -%}
+    </a>
+  {%- else -%}
     </div>
-  </div>
+  {%- endif -%}
 </div>
-{%- endif -%}
 
 {% stylesheet %}
-.otb-wrap {
-  position: relative;
-  overflow: hidden;
-  background: radial-gradient(120% 160% at 50% 0%, #16294f 0%, #0a1730 55%, #060f24 100%);
-}
+  .otb-image__media {
+    display: block;
+    line-height: 0;
+  }
 
-.otb-wrap__dots {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1.5px, transparent 1.5px);
-  background-size: 46px 46px;
-  background-position: 10px 10px;
-  mask-image: radial-gradient(60% 90% at 50% 50%, rgba(0, 0, 0, 0.6), transparent 100%);
-  pointer-events: none;
-}
+  .otb-image__media picture {
+    display: block;
+  }
 
-.otb,
-.otb * {
-  font-family: 'Jost', sans-serif;
-  box-sizing: border-box;
-}
+  .otb-image__img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
 
-.otb {
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-  padding: 70px 20px;
-}
-
-.otb__inner {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: 1fr 1.3fr 1fr;
-  align-items: center;
-  gap: 40px;
-}
-
-.otb__media {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  height: 100%;
-  min-height: 240px;
-}
-
-.otb__img {
-  width: 100%;
-  height: 100%;
-  max-height: 320px;
-  object-fit: contain;
-  display: block;
-}
-
-.otb__img--placeholder {
-  width: 100%;
-  height: 240px;
-  opacity: 0.55;
-}
-
-.otb__content {
-  text-align: center;
-  padding: 0 12px;
-}
-
-.otb__heading {
-  font-size: clamp(2rem, 4vw, 3.25rem);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #ffffff;
-  margin: 0 0 6px;
-  line-height: 1.15;
-}
-
-.otb__subheading {
-  margin: 0 0 22px;
-  font-size: clamp(1.5rem, 2.6vw, 2.25rem);
-  line-height: 1.2;
-}
-
-.otb__subheading-white,
-.otb__subheading-accent {
-  font-style: italic;
-  font-weight: 500;
-}
-
-.otb__subheading-white {
-  color: #ffffff;
-}
-
-.otb__subheading-accent {
-  color: #dba84a;
-  margin-left: 0.3em;
-}
-
-.otb__body {
-  font-size: clamp(1rem, 1.3vw, 1.25rem);
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.82);
-  line-height: 1.5;
-  margin: 0 auto;
-  max-width: 34ch;
-}
-
-@media (max-width: 900px) {
-  .otb { padding: 48px 20px; }
-  .otb__inner { grid-template-columns: 1fr; gap: 24px; }
-  .otb__media { min-height: 180px; }
-  .otb__media--left { order: 2; }
-  .otb__content { order: 1; }
-  .otb__media--right { order: 3; }
-  .otb__img { max-height: 220px; }
-}
-
-@media (max-width: 600px) {
-  .otb { padding: 40px 16px; }
-  .otb__heading { font-size: 1.75rem; }
-  .otb__subheading { font-size: 1.35rem; margin-bottom: 16px; }
-}
 {% endstylesheet %}
 
 {% schema %}
@@ -184,59 +92,32 @@
   "class": "ossian-transformation-banner-section",
   "settings": [
     {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Salon Choice"
-    },
-    {
-      "type": "text",
-      "id": "subheading_white",
-      "label": "Subheading (white, italic)",
-      "default": "Real"
-    },
-    {
-      "type": "text",
-      "id": "subheading_accent",
-      "label": "Subheading accent (gold, italic)",
-      "default": "Transformations"
-    },
-    {
-      "type": "textarea",
-      "id": "body",
-      "label": "Body text",
-      "default": "Professional care, Real results, Loved by thousands"
+      "type": "image_picker",
+      "id": "image",
+      "label": "Desktop image",
+      "info": "Shown full width at its own proportions (not cropped), e.g. 2400 × 800. Leave empty for the default Salon Choice banner."
     },
     {
       "type": "image_picker",
-      "id": "left_image",
-      "label": "Left image"
+      "id": "image_mobile",
+      "label": "Mobile image",
+      "info": "Shown below 750px at its own proportions. Uses the desktop image when empty (or the default mobile banner when both are empty)."
     },
     {
       "type": "text",
-      "id": "left_image_alt",
-      "label": "Left image alt text"
+      "id": "alt",
+      "label": "Image description (alt text)",
+      "info": "Describe any text in the image, e.g. Salon Choice — Real Transformations."
     },
     {
-      "type": "image_picker",
-      "id": "right_image",
-      "label": "Right image"
-    },
-    {
-      "type": "text",
-      "id": "right_image_alt",
-      "label": "Right image alt text"
+      "type": "url",
+      "id": "link",
+      "label": "Link"
     }
   ],
   "presets": [
     {
-      "name": "Transformation Banner",
-      "settings": {
-        "heading": "Salon Choice",
-        "subheading_white": "Real",
-        "subheading_accent": "Transformations",
-        "body": "Professional care, Real results, Loved by thousands"
-      }
+      "name": "Transformation Banner"
     }
   ]
 }

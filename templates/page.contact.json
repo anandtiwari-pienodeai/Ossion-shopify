@@ -9,144 +9,85 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "main-page",
+    "ossian_contact": {
+      "type": "ossian-contact",
       "blocks": {
-        "title": {
-          "type": "text",
-          "name": "t:names.title",
+        "feature_support": {
+          "type": "feature",
           "settings": {
-            "text": "<h1>{{ closest.page.title }}</h1>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "h2",
-            "font": "var(--font-primary--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "icon": "shield",
+            "title": "Genuine Support",
+            "text": "From product experts"
+          }
         },
-        "content": {
-          "type": "text",
-          "name": "t:names.content",
+        "feature_response": {
+          "type": "feature",
           "settings": {
-            "text": "{{ closest.page.content }}",
-            "width": "100%",
-            "max_width": "narrow",
-            "alignment": "center",
-            "type_preset": "rte",
-            "font": "var(--font-primary--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "icon": "headset",
+            "title": "Quick Response",
+            "text": "Within 24 hours"
+          }
+        },
+        "feature_here": {
+          "type": "feature",
+          "settings": {
+            "icon": "chat",
+            "title": "Here for You",
+            "text": "Before & after purchase"
+          }
+        },
+        "method_email": {
+          "type": "method",
+          "settings": {
+            "icon": "mail",
+            "title": "Email",
+            "value": "<p>support@ossion.com</p>",
+            "link": "mailto:support@ossion.com",
+            "note": "We typically reply within 24 hours."
+          }
+        },
+        "method_phone": {
+          "type": "method",
+          "settings": {
+            "icon": "phone",
+            "title": "Call Us",
+            "value": "<p>+91 98765 43210</p>",
+            "link": "tel:+919876543210",
+            "note": "Mon – Sat, 10:00 AM – 6:00 PM (IST)"
+          }
+        },
+        "method_office": {
+          "type": "method",
+          "settings": {
+            "icon": "pin",
+            "title": "Our Office",
+            "value": "<p>Plot No. 123, Sector 44<br>Gurugram, Haryana 122003<br>India</p>",
+            "note": ""
+          }
+        },
+        "method_chat": {
+          "type": "method",
+          "settings": {
+            "icon": "chat",
+            "title": "Live Chat",
+            "value": "<p>Chat with us on our website</p>",
+            "note": "Mon – Sat, 10:00 AM – 6:00 PM (IST)"
+          }
         }
       },
       "block_order": [
-        "title",
-        "content"
+        "feature_support",
+        "feature_response",
+        "feature_here",
+        "method_email",
+        "method_phone",
+        "method_office",
+        "method_chat"
       ],
-      "settings": {
-        "content_direction": "column",
-        "gap": 32,
-        "color_scheme": "",
-        "padding-block-start": 40,
-        "padding-block-end": 0
-      }
-    },
-    "form": {
-      "type": "section",
-      "blocks": {
-        "contact_form_UwiCkQ": {
-          "type": "contact-form",
-          "settings": {
-            "width": "custom",
-            "custom_width": 50,
-            "width_mobile": "custom",
-            "custom_width_mobile": 100,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "submit-button": {
-              "type": "contact-form-submit-button",
-              "static": true,
-              "settings": {
-                "label": "Submit",
-                "style_class": "button",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": []
-        }
-      },
-      "block_order": [
-        "contact_form_UwiCkQ"
-      ],
-      "name": "t:names.contact_form",
-      "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 32,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-1",
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 32,
-        "padding-block-end": 84
-      }
+      "settings": {}
     }
   },
   "order": [
-    "main",
-    "form"
+    "ossian_contact"
   ]
 }

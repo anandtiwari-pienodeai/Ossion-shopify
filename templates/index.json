@@ -230,20 +230,20 @@
       "name": "Hair Solutions",
       "settings": {
         "background_image": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_10_25_12_PM.png",
-        "background_image_mobile": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.17.jpg",
+        "background_image_mobile": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_10_39_06_PM.png",
         "eyebrow": "Professional Hair Care",
         "heading_line1": "Only What Your",
         "heading_line2": "Hair Needs",
         "text": "Advanced formulas for stronger, smoother and healthier hair.",
         "button_label": "Explore Collection",
         "button_link": "",
-        "color_eyebrow": "#6B483D",
-        "color_heading": "#4B3D12",
+        "color_eyebrow": "#6b483d",
+        "color_heading": "#4b3d12",
         "color_heading_accent": "#1463f3",
         "color_text": "#5a6981",
-        "color_button_bg": "#F3147C",
+        "color_button_bg": "#f3147c",
         "color_button_text": "#ffffff",
-        "color_feature_icon": "#F31457",
+        "color_feature_icon": "#f31457",
         "color_feature_text": "#12284b",
         "feature_1": "Deep\nNourishment",
         "feature_1_icon": "drop",
@@ -336,6 +336,7 @@
         "feature_nourish",
         "feature_visible"
       ],
+      "disabled": true,
       "name": "Skin Needs Showcase",
       "settings": {
         "top_heading": "Only what your",
@@ -408,12 +409,8 @@
     "ossian_transformation_banner": {
       "type": "ossian-transformation-banner",
       "settings": {
-        "heading": "Salon Choice",
-        "subheading_white": "Real",
-        "subheading_accent": "Transformations",
-        "body": "Professional care, Real results, Loved by thousands",
-        "left_image_alt": "",
-        "right_image_alt": ""
+        "alt": "Salon Choice — Real Transformations. Professional care, real results, loved by thousands.",
+        "link": ""
       }
     },
     "ossian_salon_choice": {
@@ -425,7 +422,9 @@
             "icon": "sparkle",
             "label": "BLONDE LIFT",
             "subtitle": "Anti-Yellow",
-            "highlighted": true
+            "highlighted": true,
+            "collection": "blonde-lift",
+            "link": "shopify://collections/all"
           }
         },
         "feature_pill_9hW9Ma": {
@@ -434,7 +433,9 @@
             "icon": "waves",
             "label": "FRIZZ CONTROL",
             "subtitle": "Smooth & Manageable",
-            "highlighted": false
+            "highlighted": false,
+            "collection": "frizz-control",
+            "link": "shopify://collections/all"
           }
         },
         "feature_pill_b8cGfP": {
@@ -443,7 +444,9 @@
             "icon": "person",
             "label": "GREY COVERAGE",
             "subtitle": "100% Coverage",
-            "highlighted": false
+            "highlighted": false,
+            "collection": "grey-coverage",
+            "link": "shopify://collections/all"
           }
         },
         "feature_pill_KMwVhx": {
@@ -452,7 +455,9 @@
             "icon": "drop",
             "label": "COLOR REVIVAL",
             "subtitle": "Vibrant & Long-Lasting",
-            "highlighted": false
+            "highlighted": false,
+            "collection": "color-revival",
+            "link": "shopify://collections/all"
           }
         },
         "pill_6": {
@@ -461,7 +466,9 @@
             "icon": "shield",
             "label": "DAMAGE REPAIR",
             "subtitle": "Stronger Hair",
-            "highlighted": false
+            "highlighted": false,
+            "collection": "damage-repair",
+            "link": "shopify://collections/all"
           }
         }
       },
@@ -893,6 +900,90 @@
       "settings": {
         "heading": "WE'RE ALSO AVAILABLE ON"
       }
+    },
+    "ossian_blog": {
+      "type": "ossian-blog",
+      "blocks": {
+        "post_1": {
+          "type": "post",
+          "settings": {
+            "tag": "Hair Care",
+            "date": "Oct 12, 2024",
+            "title": "5 Everyday Habits for Stronger, Healthier Hair",
+            "excerpt": "Small daily habits can make a big difference. Discover expert-backed tips to keep your hair stronger, smoother and healthier."
+          }
+        },
+        "post_2": {
+          "type": "post",
+          "settings": {
+            "tag": "Skin Care",
+            "date": "Oct 08, 2024",
+            "title": "How to Build a Simple Skincare Routine",
+            "excerpt": "A step-by-step guide to creating an effective skincare routine for cleaner, brighter and healthier skin — no complicated steps."
+          }
+        },
+        "post_3": {
+          "type": "post",
+          "settings": {
+            "tag": "Ingredients",
+            "date": "Sep 28, 2024",
+            "title": "Spotlight on Fiber Plex Technology",
+            "excerpt": "Discover how Fiber Plex works to protect, strengthen and maintain your hair while delivering visible results."
+          }
+        },
+        "post_4": {
+          "type": "post",
+          "settings": {
+            "tag": "Tips & Guides",
+            "date": "Sep 20, 2024",
+            "title": "How to Keep Your Hair Color Vibrant for Longer",
+            "excerpt": "Expert tips and care routines to maintain your salon-fresh hair color and prevent fading."
+          }
+        }
+      },
+      "block_order": [
+        "post_1",
+        "post_2",
+        "post_3",
+        "post_4"
+      ],
+      "settings": {
+        "source": "blog",
+        "blog": "news",
+        "limit": 8
+      }
+    },
+    "ossian_newsletter": {
+      "type": "ossian-newsletter",
+      "blocks": {
+        "benefit_offers": {
+          "type": "feature",
+          "settings": {
+            "icon": "gift",
+            "title": "Exclusive Offers"
+          }
+        },
+        "benefit_launches": {
+          "type": "feature",
+          "settings": {
+            "icon": "bell",
+            "title": "New Launches"
+          }
+        },
+        "benefit_tips": {
+          "type": "feature",
+          "settings": {
+            "icon": "document",
+            "title": "Expert Beauty Tips"
+          }
+        }
+      },
+      "block_order": [
+        "benefit_offers",
+        "benefit_launches",
+        "benefit_tips"
+      ],
+      "settings": {}
     }
   },
   "order": [
@@ -909,6 +1000,8 @@
     "ossian_trust_ticker",
     "ossian_product_showcase_LAeCxW",
     "ossian_shop_by_category",
-    "ossian_available_on"
+    "ossian_available_on",
+    "ossian_blog",
+    "ossian_newsletter"
   ]
 }
