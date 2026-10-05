@@ -1,0 +1,81 @@
+{%- doc -%}
+  Size badge for the product page ("4000 ml / Professional size"). Shows the selected variant's
+  first option value, so it follows variant changes on re-render. Hidden for products whose only
+  variant is "Default Title". Pinned to the top-right corner of the product details column.
+{%- enddoc -%}
+{%- liquid
+  assign product = closest.product
+  assign variant = product.selected_or_first_available_variant
+  assign size_value = variant.option1
+  if product.has_only_default_variant or size_value == blank
+    assign size_value = blank
+  endif
+  if request.visual_preview_mode and product == blank
+    assign size_value = '4000 ml'
+  endif
+-%}
+
+{%- if size_value != blank -%}
+  <div class="ossian-size-badge" {{ block.shopify_attributes }}>
+    <span class="ossian-size-badge__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 5-14 15-15-1 10-7 15-15 15Z"/><path d="M5 19 13 11"/></svg>
+    </span>
+    <span class="ossian-size-badge__text">
+      <span class="ossian-size-badge__value">{{ size_value | escape }}</span>
+      {%- if block.settings.label != blank -%}
+        <span class="ossian-size-badge__label">{{ block.settings.label | escape }}</span>
+      {%- endif -%}
+    </span>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .ossian-size-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: #eef4fd;
+    color: #1f5fd1;
+  }
+
+  .ossian-size-badge__icon svg {
+    width: 30px;
+    height: 30px;
+    display: block;
+  }
+
+  .ossian-size-badge__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+
+  .ossian-size-badge__value {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #13233f;
+    white-space: nowrap;
+  }
+
+  .ossian-size-badge__label {
+    margin-top: 2px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Size Badge",
+  "tag": null,
+  "settings": [
+    { "type": "paragraph", "content": "Shows the selected variant's size (its first option value) in the top-right corner of the product details." },
+    { "type": "text", "id": "label", "label": "Label", "default": "Professional size" }
+  ],
+  "presets": [{ "name": "PDP Size Badge" }]
+}
+{% endschema %}

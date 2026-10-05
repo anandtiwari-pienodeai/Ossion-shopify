@@ -36,11 +36,11 @@
             "slideshow_mobile_controls_style": "dots",
             "thumbnail_position": "left",
             "thumbnail_width": 72,
-            "thumbnail_radius": 4,
-            "aspect_ratio": "adapt",
+            "thumbnail_radius": 12,
+            "aspect_ratio": "1",
             "constrain_to_viewport": false,
-            "media_fit": "contain",
-            "media_radius": 8,
+            "media_fit": "cover",
+            "media_radius": 16,
             "extend_media": false,
             "zoom": true,
             "video_loop": true,
@@ -48,7 +48,14 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "show_media_badges": true,
+            "media_badge_1": "pH Balanced",
+            "media_badge_1_icon": "leaf",
+            "media_badge_2": "Scalp-Safe",
+            "media_badge_2_icon": "shield",
+            "media_badge_3": "Cuticle Care",
+            "media_badge_3_icon": "drop"
           },
           "blocks": {}
         },
@@ -96,9 +103,11 @@
               "type": "ossian-product-type",
               "settings": {
                 "padding-block-start": 0,
-                "padding-block-end": 4,
+                "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "source": "vendor",
+                "style": "eyebrow"
               },
               "blocks": {}
             },
@@ -192,9 +201,9 @@
             "ossian_pdp_features_block": {
               "type": "ossian-pdp-features",
               "settings": {
-                "features": "Anti-yellow Technology\nFibre Plex Protection\nUp to 9 Levels Lift\nNon-Damaging Formula\nEnriched with Marine actives",
-                "padding-block-start": 4,
-                "padding-block-end": 4,
+                "features": "Anti-yellow Technology | Keeps hair brighter & healthier | sparkle\nFibre Plex Protection | Protects hair structure | shield\nUp to 9 Levels Lift | Salon-grade performance | arrow-up\nNon-Damaging Formula | Gentle yet effective care | leaf\nEnriched with Marine actives | Nourishes & strengthens hair | coral",
+                "padding-block-start": 8,
+                "padding-block-end": 8,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
               },
@@ -245,18 +254,31 @@
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
               },
-              "blocks": {}
+              "blocks": {},
+              "disabled": true
+            },
+            "ossian_pdp_size_badge": {
+              "type": "ossian-pdp-size-badge",
+              "settings": {
+                "label": "Professional size"
+              }
+            },
+            "ossian_pdp_trust": {
+              "type": "ossian-pdp-trust",
+              "settings": {}
             }
           },
           "block_order": [
-            "review_nniWtf",
             "ossian_product_type_badge",
             "text_xrnftG",
             "text_subtitle",
+            "ossian_pdp_size_badge",
+            "review_nniWtf",
             "price_tVjtKg",
             "variant_picker_R3rGDr",
             "ossian_pdp_features_block",
             "buy_buttons_eYQEYi",
+            "ossian_pdp_trust",
             "ossian_pdp_wishlist_mW8kXp"
           ]
         }

@@ -279,6 +279,137 @@
     },
     {
       "type": "header",
+      "content": "Benefit strip on main image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_media_badges",
+      "label": "Show benefit strip",
+      "default": false,
+      "info": "Up to three benefits along the bottom of the main image. A product can override the text with a custom.media_badges metafield (one benefit per line or a list)."
+    },
+    {
+      "type": "text",
+      "id": "media_badge_1",
+      "label": "Benefit 1",
+      "default": "pH Balanced",
+      "visible_if": "{{ block.settings.show_media_badges }}"
+    },
+    {
+      "type": "select",
+      "id": "media_badge_1_icon",
+      "label": "Benefit 1 icon",
+      "default": "leaf",
+      "options": [
+        {
+          "value": "leaf",
+          "label": "Leaf"
+        },
+        {
+          "value": "shield",
+          "label": "Shield"
+        },
+        {
+          "value": "drop",
+          "label": "Drop"
+        },
+        {
+          "value": "sparkle",
+          "label": "Sparkle"
+        },
+        {
+          "value": "flask",
+          "label": "Flask"
+        },
+        {
+          "value": "check",
+          "label": "Check"
+        }
+      ],
+      "visible_if": "{{ block.settings.show_media_badges }}"
+    },
+    {
+      "type": "text",
+      "id": "media_badge_2",
+      "label": "Benefit 2",
+      "default": "Scalp-Safe",
+      "visible_if": "{{ block.settings.show_media_badges }}"
+    },
+    {
+      "type": "select",
+      "id": "media_badge_2_icon",
+      "label": "Benefit 2 icon",
+      "default": "shield",
+      "options": [
+        {
+          "value": "leaf",
+          "label": "Leaf"
+        },
+        {
+          "value": "shield",
+          "label": "Shield"
+        },
+        {
+          "value": "drop",
+          "label": "Drop"
+        },
+        {
+          "value": "sparkle",
+          "label": "Sparkle"
+        },
+        {
+          "value": "flask",
+          "label": "Flask"
+        },
+        {
+          "value": "check",
+          "label": "Check"
+        }
+      ],
+      "visible_if": "{{ block.settings.show_media_badges }}"
+    },
+    {
+      "type": "text",
+      "id": "media_badge_3",
+      "label": "Benefit 3",
+      "default": "Cuticle Care",
+      "visible_if": "{{ block.settings.show_media_badges }}"
+    },
+    {
+      "type": "select",
+      "id": "media_badge_3_icon",
+      "label": "Benefit 3 icon",
+      "default": "drop",
+      "options": [
+        {
+          "value": "leaf",
+          "label": "Leaf"
+        },
+        {
+          "value": "shield",
+          "label": "Shield"
+        },
+        {
+          "value": "drop",
+          "label": "Drop"
+        },
+        {
+          "value": "sparkle",
+          "label": "Sparkle"
+        },
+        {
+          "value": "flask",
+          "label": "Flask"
+        },
+        {
+          "value": "check",
+          "label": "Check"
+        }
+      ],
+      "visible_if": "{{ block.settings.show_media_badges }}"
+    },
+    {
+      "type": "header",
       "content": "t:content.padding"
     },
     {

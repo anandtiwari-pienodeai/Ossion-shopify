@@ -434,6 +434,45 @@
       {% endcapture %}
     {% endif %}
 
+    {%- if block_settings.show_media_badges -%}
+      {%- liquid
+        # Product-level override: custom.media_badges (list of text, or one benefit per line)
+        assign badge_field = selected_product.metafields.custom.media_badges
+        if badge_field != blank
+          if badge_field.type contains 'list'
+            assign media_badges = badge_field.value
+          else
+            assign media_badges = badge_field.value | newline_to_br | split: '<br />'
+          endif
+        else
+          assign media_badges = block_settings.media_badge_1 | append: '||' | append: block_settings.media_badge_2 | append: '||' | append: block_settings.media_badge_3 | split: '||'
+        endif
+      -%}
+      {%- capture media_badge_strip -%}
+        <ul class="ossian-media-badges" role="list">
+          {%- for badge in media_badges limit: 3 -%}
+            {%- assign badge_text = badge | strip -%}
+            {%- if badge_text == blank -%}{%- continue -%}{%- endif -%}
+            {%- assign icon_key = 'media_badge_' | append: forloop.index | append: '_icon' -%}
+            <li class="ossian-media-badges__item">
+              <svg class="ossian-media-badges__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                {%- case block_settings[icon_key] -%}
+                  {%- when 'shield' -%}<path d="M12 3 4.5 6v6c0 4.5 3.2 7.8 7.5 9 4.3-1.2 7.5-4.5 7.5-9V6L12 3Z"/><path d="m8.8 12 2.2 2.2 4.2-4.4"/>
+                  {%- when 'drop' -%}<path d="M12 3s6.5 7.2 6.5 11.5a6.5 6.5 0 0 1-13 0C5.5 10.2 12 3 12 3Z"/><path d="M9 14.5a3 3 0 0 0 3 3"/>
+                  {%- when 'sparkle' -%}<path d="M12 3c.5 4.7 2.8 7.5 7.5 9-4.7 1.5-7 4.3-7.5 9-.5-4.7-2.8-7.5-7.5-9 4.7-1.5 7-4.3 7.5-9Z"/>
+                  {%- when 'flask' -%}<path d="M9 3h6M10 3v6L4.5 18.5A1.7 1.7 0 0 0 6 21h12a1.7 1.7 0 0 0 1.5-2.5L14 9V3"/>
+                  {%- when 'check' -%}<circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16.5 9.5"/>
+                  {%- else -%}<path d="M5 19c0-8 5-14 15-15-1 10-7 15-15 15Z"/><path d="M5 19 13 11"/>
+                {%- endcase -%}
+              </svg>
+              <span>{{ badge_text | escape }}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endcapture -%}
+      {%- assign slideshow_arrows = slideshow_arrows | append: media_badge_strip -%}
+    {%- endif -%}
+
     {% render 'slideshow',
       ref: 'slideshow',
       class: slideshow_class,
@@ -444,10 +483,10 @@
       controls: controls
     %}
 
-    {%- if pagination_position == 'left' and sorted_media.size > 4 -%}
-      {%- assign ossian_overflow = sorted_media.size | minus: 4 -%}
+    {%- if pagination_position == 'left' and sorted_media.size > 6 -%}
+      {%- assign ossian_overflow = sorted_media.size | minus: 5 -%}
       <style>
-        .template-product slideshow-controls[thumbnails][pagination-position="left"] .slideshow-controls__thumbnails .slideshow-control:nth-child(4)::after {
+        .product-information slideshow-controls[thumbnails][pagination-position="left"] .slideshow-controls__thumbnails .slideshow-control:nth-child(6)::after {
           content: '+{{ ossian_overflow }}';
           position: absolute;
           inset: 0;

@@ -178,9 +178,12 @@
 %}
 
 {% stylesheet %}
-  /* ── PDP global page margin override ─────────── */
-  .template-product {
-    --page-margin: 20px;
+  @media screen and (max-width: 749px) {
+    /* base.css adds 20px padding inside every section on top of the 16px page margin;
+       on phones that leaves the product image at ~318px, so drop the extra side padding here */
+    .shopify-section:not(.header-section) .product-information.section {
+      padding-inline: 0;
+    }
   }
 
   /* ── Category badge (product type) ──────────── */
@@ -190,7 +193,7 @@
 
   /* ── Product title sizing on PDP ─────────────── */
   .product-information .product-details h1 {
-    font-size: clamp(1.55rem, 3vw, 2.1rem);
+    font-size: clamp(1.7rem, 2.6vw, 2.5rem);
     line-height: 1.2;
     font-weight: 800;
     color: #101828;
@@ -201,7 +204,7 @@
   /* ── Product subtitle (metafield) ────────────── */
   .product-information .text-block--text_subtitle p,
   .product-information .text-block--text_subtitle {
-    font-size: 0.925rem;
+    font-size: 1.05rem;
     color: #4b5563;
     font-weight: 500;
     margin: 0;
@@ -390,7 +393,7 @@
   /* ── Mobile ────────────────────────────────── */
   @media screen and (max-width: 749px) {
     .product-information .product-details h1 {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
     }
 
     .product-information .price__regular .price-item,
@@ -586,18 +589,18 @@
 
   /* ── PDP: vertical thumbnail strip on the left ── */
   @media screen and (min-width: 750px) {
-    .template-product slideshow-controls[thumbnails][pagination-position='left'] {
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] {
       width: calc(var(--thumbnail-width, 72px) + 16px);
       min-width: calc(var(--thumbnail-width, 72px) + 16px);
     }
 
-    .template-product slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails {
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails {
       flex-direction: column;
       gap: 8px;
       padding-inline: 4px;
     }
 
-    .template-product slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control {
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control {
       width: var(--thumbnail-width, 72px);
       height: var(--thumbnail-width, 72px);
       aspect-ratio: 1 / 1;
@@ -606,16 +609,217 @@
       overflow: hidden;
     }
 
-    .template-product slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control img {
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    .template-product slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control[aria-selected='true'] {
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control[aria-selected='true'] {
       outline: 2px solid #1e3a5f;
       outline-offset: 2px;
     }
+  }
+
+  /* ══ Ossion PDP layout (design refresh) ══════════════════════════ */
+
+  /* Main image: rounded frame, no arrows (thumbnails handle navigation) */
+  .product-information .product-media-container,
+  .product-information slideshow-container {
+    border-radius: 16px;
+  }
+
+  .product-information slideshow-container {
+    position: relative;
+    overflow: hidden;
+  }
+
+  @media screen and (min-width: 750px) {
+    .product-information slideshow-arrows {
+      display: none;
+    }
+  }
+
+  /* Benefit strip over the bottom of the main image */
+  .ossian-media-badges {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 34px 20px 18px;
+    list-style: none;
+    color: #fff;
+    background: linear-gradient(180deg, rgb(8 24 50 / 0) 0%, rgb(8 24 50 / 0.82) 55%);
+    pointer-events: none;
+  }
+
+  .ossian-media-badges__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding-inline: clamp(12px, 2vw, 28px);
+    font-size: clamp(0.8rem, 1.1vw, 1rem);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .ossian-media-badges__item + .ossian-media-badges__item {
+    border-inline-start: 1px solid rgb(255 255 255 / 0.4);
+  }
+
+  .ossian-media-badges__icon {
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+  }
+
+  /* Phones: compact strip, text lifted above the slideshow dots */
+  @media screen and (max-width: 749px) {
+    .ossian-media-badges {
+      padding: 28px 8px 34px;
+    }
+
+    .ossian-media-badges__item {
+      gap: 5px;
+      padding-inline: 8px;
+      font-size: 0.72rem;
+    }
+
+    .ossian-media-badges__icon {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  /* Thumbnails: rounded tiles, navy ring on the active one, max six */
+  @media screen and (min-width: 990px) {
+    /* Larger than the gallery setting's 72px maximum, to match the design */
+    /* Set on the strip itself: the gallery's inline --thumbnail-width would win on the gallery element */
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] {
+      --thumbnail-width: 96px;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control {
+      border-radius: 12px;
+      border: 1px solid #e3e8f1;
+      background: #f4f7fc;
+    }
+
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control[aria-selected='true'] {
+      outline: 2px solid #1e3a5f;
+      outline-offset: 0;
+      border-color: transparent;
+    }
+
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control:nth-child(n + 7) {
+      display: none;
+    }
+
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails {
+      gap: 12px;
+    }
+  }
+
+  /* Size badge pinned top-right of the details column */
+  .product-information .product-details {
+    position: relative;
+  }
+
+  @media screen and (min-width: 750px) {
+    .product-information .product-details .ossian-size-badge {
+      position: absolute;
+      top: 0;
+      inset-inline-end: 0;
+      z-index: 1;
+    }
+
+    /* Keep the eyebrow, title and subtitle clear of the badge */
+    .product-information .product-details:has(.ossian-size-badge) .ossian-product-type,
+    .product-information .product-details:has(.ossian-size-badge) .text-block {
+      padding-inline-end: 200px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    /* Breathing room between the gallery and the brand label */
+    .product-information .product-details {
+      padding-top: 18px;
+    }
+
+    .product-information .product-details .ossian-size-badge {
+      align-self: flex-start;
+      gap: 10px;
+      padding: 8px 12px;
+    }
+
+    .product-information .ossian-size-badge__icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .product-information .ossian-size-badge__value {
+      font-size: 1rem;
+    }
+
+    .product-information .ossian-size-badge__label {
+      font-size: 0.62rem;
+    }
+
+    .product-information .product-details h1 {
+      font-size: 1.6rem;
+    }
+  }
+
+  /* Buy buttons: quantity on its own row, full-width Add to cart and Buy it now */
+  .product-information .product-form-buttons {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .product-information .product-form-buttons > .quantity-selector-wrapper {
+    flex: 0 0 100%;
+  }
+
+  /* flex: none so the theme's flex-basis can't override the width */
+  .product-information .product-form-buttons .quantity-selector {
+    flex: 0 0 148px;
+    width: 148px;
+    min-height: 48px;
+    height: 48px;
+    border-radius: 10px;
+  }
+
+  .product-information .product-form-buttons > :not(.quantity-selector-wrapper, .quantity-rules, .quantity-label, .volume-pricing, .product-form-text__error) {
+    flex: 1 1 100%;
+  }
+
+  /* Sized to the design's proportions: 48px tall, 15px label */
+  .product-information .add-to-cart-button.button {
+    min-height: 48px;
+    height: 48px;
+    padding-block: 0;
+    font-size: 0.94rem;
+    letter-spacing: 0.08em;
+  }
+
+  .product-information .shopify-payment-button__button {
+    min-height: 48px !important;
+    border: 1.5px solid #1e3a5f !important;
+  }
+
+  .product-information .shopify-payment-button__button--unbranded {
+    font-size: 0.94rem !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  .product-information shopify-accelerated-checkout {
+    --shopify-accelerated-checkout-button-block-size: 48px;
+    --shopify-accelerated-checkout-button-border-radius: 10px;
   }
 {% endstylesheet %}
 
