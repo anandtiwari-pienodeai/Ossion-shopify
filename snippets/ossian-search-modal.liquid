@@ -30,6 +30,10 @@
   endif
 -%}
 
+{%- comment -%}
+  data-skip-subtree-update: the cart drawer re-renders the header section after every cart change; skipping
+  this subtree keeps the shopper's typed query and live results in place after a quick add from search.
+{%- endcomment -%}
 <dialog
   id="OssianSearch"
   class="ossian-search"
@@ -38,6 +42,7 @@
   data-search-url="{{ routes.search_url }}"
   data-cart-add-url="{{ routes.cart_add_url }}"
   data-cart-url="{{ routes.cart_url }}"
+  data-skip-subtree-update
 >
   <div class="ossian-search__panel">
     <div class="ossian-search__top">

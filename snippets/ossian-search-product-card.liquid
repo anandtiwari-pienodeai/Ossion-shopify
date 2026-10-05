@@ -14,8 +14,10 @@
   assign rating = rating_value.rating | default: rating_value
   assign rating_count = product.metafields.reviews.rating_count.value | default: 0
   assign rating_rounded = rating | times: 1.0 | round
+  # Quick add needs exactly one purchasable variant. Products with a single size variant ("300gm") count too:
+  # has_only_default_variant is only true when that variant is literally "Default Title".
   assign can_quick_add = false
-  if product.has_only_default_variant and variant.available
+  if product.variants.size == 1 and variant.available
     assign can_quick_add = true
   endif
 -%}

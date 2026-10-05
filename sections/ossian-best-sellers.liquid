@@ -110,15 +110,24 @@
 
             </a>
 
+            {%- assign obs_variant = product.selected_or_first_available_variant -%}
             <div class="obs__actions">
-              <button
-                class="obs__atc"
-                type="button"
-                data-variant-id="{{ product.variants.first.id }}"
-                data-product-title="{{ product.title | escape }}"
-              >
-                ADD TO CART
-              </button>
+              {%- if product.variants.size > 1 and product.available -%}
+                {%- comment -%} Several options: let the shopper choose on the product page {%- endcomment -%}
+                <a class="obs__atc" href="{{ product.url }}" aria-label="Choose options for {{ product.title | escape }}">CHOOSE OPTIONS</a>
+              {%- elsif obs_variant.available -%}
+                <button
+                  class="obs__atc"
+                  type="button"
+                  data-variant-id="{{ obs_variant.id }}"
+                  data-product-title="{{ product.title | escape }}"
+                  aria-label="Add {{ product.title | escape }} to cart"
+                >
+                  ADD TO CART
+                </button>
+              {%- else -%}
+                <button class="obs__atc" type="button" disabled aria-label="{{ product.title | escape }} is sold out">SOLD OUT</button>
+              {%- endif -%}
             </div>
           </div>
 
@@ -171,8 +180,13 @@
         body: JSON.stringify({ id: variantId, quantity: 1 })
       })
         .then(function (r) {
-          if (!r.ok) throw new Error('Add to cart failed');
-          return fetch('/cart.js', { headers: { Accept: 'application/json' } });
+          if (r.ok) return fetch('/cart.js', { headers: { Accept: 'application/json' } });
+          /* e.g. 422 when the item sold out or hit its inventory limit since the page loaded */
+          return r.json().catch(function () { return {}; }).then(function (data) {
+            var err = new Error(data.description || data.message || 'Could not add to cart');
+            err.userFacing = true;
+            throw err;
+          });
         })
         .then(function (r) { return r.json(); })
         .then(function (cart) {
@@ -189,7 +203,11 @@
         .then(function () {
           setTimeout(function () { btn.textContent = original; btn.disabled = false; }, 2000);
         })
-        .catch(function () { btn.textContent = original; btn.disabled = false; });
+        .catch(function (err) {
+          btn.textContent = 'UNAVAILABLE';
+          btn.title = err && err.userFacing ? err.message : '';
+          setTimeout(function () { btn.textContent = original; btn.disabled = false; btn.title = ''; }, 2500);
+        });
     });
   });
 
@@ -462,7 +480,16 @@
   transition: background 0.2s;
 }
 
+a.obs__atc {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+}
+
 .obs__atc:hover:not(:disabled) { background: #16304f; }
+.obs__atc:focus-visible { outline: 2px solid #2f6fd6; outline-offset: 2px; }
 .obs__atc:disabled { opacity: 0.5; cursor: default; }
 
 .obs__wishlist {
