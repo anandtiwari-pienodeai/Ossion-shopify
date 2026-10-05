@@ -13,7 +13,7 @@
 -%}
 
 <section
-  class="osol"
+  class="osol{% if s.background_link != blank %} oss-banner-host{% endif %}"
   id="osol-{{ section.id }}"
   style="
     --osol-eyebrow: {{ s.color_eyebrow }};
@@ -42,6 +42,9 @@
       <img src="{{ 'ossion-solutions-bg.jpg' | asset_url }}" alt="" width="1848" height="851" loading="lazy">
     {%- endif -%}
   </div>
+
+  {%- assign banner_label = s.heading_line1 | append: ' ' | append: s.heading_line2 | strip -%}
+  {%- render 'ossian-banner-link', url: s.background_link, label: banner_label -%}
 
   <div class="osol__inner">
     <div class="osol__copy">
@@ -120,10 +123,24 @@
           {%- liquid
             assign card_product = block.settings.product
             assign card_collection = block.settings.collection
-            assign card_url = card_product.url | default: card_collection.url | default: block.settings.link
+            assign card_page = block.settings.page
+            case block.settings.link_type
+              when 'collection'
+                assign card_url = card_collection.url
+              when 'page'
+                assign card_url = card_page.url
+              when 'custom'
+                assign card_url = block.settings.link
+              else
+                assign card_url = card_product.url
+            endcase
+            # The chosen target may be empty (or the card predates "Link to"): fall back to whatever is set
+            if card_url == blank
+              assign card_url = card_product.url | default: card_collection.url | default: card_page.url | default: block.settings.link
+            endif
             assign card_image = block.settings.image | default: card_product.featured_image | default: card_collection.image | default: card_collection.featured_image
             assign card_image_mobile = block.settings.image_mobile
-            assign card_alt = block.settings.alt | default: card_product.title | default: card_collection.title
+            assign card_alt = block.settings.alt | default: card_product.title | default: card_collection.title | default: card_page.title
             assign card_style = ''
             if card_image_mobile != blank
               assign card_style = '--card-ratio-mobile: ' | append: card_image_mobile.aspect_ratio | append: ';'
@@ -392,6 +409,10 @@
 
   .osol__track {
     display: flex;
+    /* Room above/below so the hover lift and shadow aren't clipped by the scroll container;
+       vertical only, because the nav script pages by the track's full width */
+    padding-block: 14px 44px;
+    margin-block: -14px -44px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
@@ -420,6 +441,26 @@
     overflow: hidden;
     background: rgb(255 255 255 / 0.5);
     box-shadow: 0 14px 34px rgb(18 40 75 / 0.14);
+    transition:
+      transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+      box-shadow 0.45s ease;
+  }
+
+  /* Light sweep + outline shown on hover / keyboard focus */
+  a.osol__card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow: inset 0 0 0 2px rgb(20 99 243 / 0);
+    background: linear-gradient(115deg, transparent 30%, rgb(255 255 255 / 0.28) 48%, transparent 66%) no-repeat;
+    background-size: 250% 100%;
+    background-position: 130% 0;
+    transition:
+      background-position 0.8s ease,
+      box-shadow 0.45s ease;
   }
 
   .osol__card--tall {
@@ -441,7 +482,9 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
+    transition:
+      transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+      filter 0.45s ease;
   }
 
   .osol__card-img--placeholder {
@@ -449,8 +492,35 @@
     fill: rgb(18 40 75 / 0.25);
   }
 
-  a.osol__card:hover .osol__card-img {
-    transform: scale(1.025);
+  @media (hover: hover) {
+    a.osol__card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 28px 56px rgb(20 70 160 / 0.28);
+    }
+
+    a.osol__card:hover .osol__card-img {
+      transform: scale(1.08);
+      filter: brightness(1.06) saturate(1.05);
+    }
+
+    a.osol__card:hover::after {
+      background-position: -30% 0;
+      box-shadow: inset 0 0 0 2px rgb(20 99 243 / 0.55);
+    }
+  }
+
+  a.osol__card:focus-visible {
+    outline: none;
+    transform: translateY(-8px);
+    box-shadow: 0 28px 56px rgb(20 70 160 / 0.28);
+  }
+
+  a.osol__card:focus-visible .osol__card-img {
+    transform: scale(1.08);
+  }
+
+  a.osol__card:focus-visible::after {
+    box-shadow: inset 0 0 0 3px rgb(20 99 243 / 0.9);
   }
 
   .osol__controls {
@@ -572,9 +642,23 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .osol__card,
     .osol__card-img,
+    a.osol__card::after,
     .osol__button {
       transition: none;
+    }
+
+    /* Keep the shadow and outline feedback, drop the movement */
+    a.osol__card:hover,
+    a.osol__card:focus-visible,
+    a.osol__card:hover .osol__card-img,
+    a.osol__card:focus-visible .osol__card-img {
+      transform: none;
+    }
+
+    a.osol__card:hover::after {
+      background-position: 130% 0;
     }
   }
 {% endstylesheet %}
@@ -600,6 +684,12 @@
       "id": "background_image_mobile",
       "label": "Background image (mobile)",
       "info": "Optional. Uses the desktop background when empty."
+    },
+    {
+      "type": "url",
+      "id": "background_link",
+      "label": "Banner link",
+      "info": "Makes the banner image clickable. Pick a page, collection or product."
     },
     {
       "type": "header",
@@ -708,12 +798,30 @@
       "id": "feature_1_icon",
       "label": "Feature 1 icon",
       "options": [
-        { "value": "drop", "label": "Drop" },
-        { "value": "shield", "label": "Shield" },
-        { "value": "sparkle", "label": "Sparkle" },
-        { "value": "leaf", "label": "Leaf" },
-        { "value": "flask", "label": "Flask" },
-        { "value": "star", "label": "Star" }
+        {
+          "value": "drop",
+          "label": "Drop"
+        },
+        {
+          "value": "shield",
+          "label": "Shield"
+        },
+        {
+          "value": "sparkle",
+          "label": "Sparkle"
+        },
+        {
+          "value": "leaf",
+          "label": "Leaf"
+        },
+        {
+          "value": "flask",
+          "label": "Flask"
+        },
+        {
+          "value": "star",
+          "label": "Star"
+        }
       ],
       "default": "drop"
     },
@@ -728,12 +836,30 @@
       "id": "feature_2_icon",
       "label": "Feature 2 icon",
       "options": [
-        { "value": "drop", "label": "Drop" },
-        { "value": "shield", "label": "Shield" },
-        { "value": "sparkle", "label": "Sparkle" },
-        { "value": "leaf", "label": "Leaf" },
-        { "value": "flask", "label": "Flask" },
-        { "value": "star", "label": "Star" }
+        {
+          "value": "drop",
+          "label": "Drop"
+        },
+        {
+          "value": "shield",
+          "label": "Shield"
+        },
+        {
+          "value": "sparkle",
+          "label": "Sparkle"
+        },
+        {
+          "value": "leaf",
+          "label": "Leaf"
+        },
+        {
+          "value": "flask",
+          "label": "Flask"
+        },
+        {
+          "value": "star",
+          "label": "Star"
+        }
       ],
       "default": "shield"
     },
@@ -748,12 +874,30 @@
       "id": "feature_3_icon",
       "label": "Feature 3 icon",
       "options": [
-        { "value": "drop", "label": "Drop" },
-        { "value": "shield", "label": "Shield" },
-        { "value": "sparkle", "label": "Sparkle" },
-        { "value": "leaf", "label": "Leaf" },
-        { "value": "flask", "label": "Flask" },
-        { "value": "star", "label": "Star" }
+        {
+          "value": "drop",
+          "label": "Drop"
+        },
+        {
+          "value": "shield",
+          "label": "Shield"
+        },
+        {
+          "value": "sparkle",
+          "label": "Sparkle"
+        },
+        {
+          "value": "leaf",
+          "label": "Leaf"
+        },
+        {
+          "value": "flask",
+          "label": "Flask"
+        },
+        {
+          "value": "star",
+          "label": "Star"
+        }
       ],
       "default": "sparkle"
     },
@@ -768,12 +912,30 @@
       "id": "feature_4_icon",
       "label": "Feature 4 icon",
       "options": [
-        { "value": "drop", "label": "Drop" },
-        { "value": "shield", "label": "Shield" },
-        { "value": "sparkle", "label": "Sparkle" },
-        { "value": "leaf", "label": "Leaf" },
-        { "value": "flask", "label": "Flask" },
-        { "value": "star", "label": "Star" }
+        {
+          "value": "drop",
+          "label": "Drop"
+        },
+        {
+          "value": "shield",
+          "label": "Shield"
+        },
+        {
+          "value": "sparkle",
+          "label": "Sparkle"
+        },
+        {
+          "value": "leaf",
+          "label": "Leaf"
+        },
+        {
+          "value": "flask",
+          "label": "Flask"
+        },
+        {
+          "value": "star",
+          "label": "Star"
+        }
       ],
       "default": "leaf"
     }
@@ -788,16 +950,53 @@
           "content": "Cards are shown in groups of three: the 1st, 4th, 7th… card is the tall one (desktop about 1110 × 1350); the others are wide (desktop about 1150 × 660). On mobile, cards stack full width."
         },
         {
+          "type": "select",
+          "id": "link_type",
+          "label": "Link to",
+          "default": "product",
+          "options": [
+            {
+              "value": "product",
+              "label": "Product"
+            },
+            {
+              "value": "collection",
+              "label": "Collection"
+            },
+            {
+              "value": "page",
+              "label": "Page"
+            },
+            {
+              "value": "custom",
+              "label": "Custom URL"
+            }
+          ],
+          "info": "Choose what the card opens, then pick it below."
+        },
+        {
           "type": "product",
           "id": "product",
           "label": "Product",
-          "info": "The card links to this product. Takes priority over the collection."
+          "info": "Used when \"Link to\" is Product."
         },
         {
           "type": "collection",
           "id": "collection",
           "label": "Collection",
-          "info": "Used when no product is selected."
+          "info": "Used when \"Link to\" is Collection."
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "Page",
+          "info": "Used when \"Link to\" is Page."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Custom URL",
+          "info": "Used when \"Link to\" is Custom URL. Any link, e.g. a blog post or an external site."
         },
         {
           "type": "image_picker",
@@ -816,12 +1015,6 @@
           "id": "alt",
           "label": "Image description (alt text)",
           "info": "Describe the text in the image for screen readers. Defaults to the product or collection title."
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Custom link",
-          "info": "Only used when no product or collection is selected."
         }
       ]
     }
@@ -830,9 +1023,15 @@
     {
       "name": "Ossion Solutions Showcase",
       "blocks": [
-        { "type": "image_card" },
-        { "type": "image_card" },
-        { "type": "image_card" }
+        {
+          "type": "image_card"
+        },
+        {
+          "type": "image_card"
+        },
+        {
+          "type": "image_card"
+        }
       ]
     }
   ]

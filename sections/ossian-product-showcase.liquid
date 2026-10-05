@@ -15,7 +15,8 @@
   <div class="pshowcase__main page-width">
 
     <!-- Left Panel -->
-    <div class="pshowcase__left">
+    <div class="pshowcase__left{% if section.settings.bg_link != blank %} oss-banner-host{% endif %}">
+      {%- render 'ossian-banner-link', url: section.settings.bg_link, label: section.settings.heading -%}
       <!-- Left panel background image -->
       {%- if section.settings.bg_image != blank -%}
         <div class="pshowcase__bg" aria-hidden="true">
@@ -67,7 +68,7 @@
 
     <!-- Center: Featured Card -->
     {%- for block in product_blocks limit: 1 -%}
-      {%- assign card_url = block.settings.collection.url | default: block.settings.link | default: '#' -%}
+      {%- assign card_url = block.settings.product.url | default: block.settings.collection.url | default: block.settings.link | default: '#' -%}
       {%- assign card_name = block.settings.product.title | default: block.settings.custom_name | default: 'View product' -%}
       {%- assign name_down = block.settings.custom_name | downcase -%}
       {%- if name_down contains 'wax' -%}
@@ -125,7 +126,7 @@
     {%- if product_blocks.size > 1 -%}
       <div class="pshowcase__stack">
         {%- for block in product_blocks limit: 2 offset: 1 -%}
-          {%- assign card_url = block.settings.collection.url | default: block.settings.link | default: '#' -%}
+          {%- assign card_url = block.settings.product.url | default: block.settings.collection.url | default: block.settings.link | default: '#' -%}
           {%- assign card_name = block.settings.product.title | default: block.settings.custom_name | default: 'View product' -%}
           {%- assign name_down = block.settings.custom_name | downcase -%}
           {%- if name_down contains 'wax' -%}
@@ -792,6 +793,7 @@
       "id": "bg_image",
       "label": "Section background image"
     },
+    {"type": "url", "id": "bg_link", "label": "Banner link", "info": "Makes the banner image clickable. Pick a page, collection or product."},
     {
       "type": "text",
       "id": "category_label",

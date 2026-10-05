@@ -1,7 +1,7 @@
 <div class="ossian-science-wrap">
 <div class="ossian-science-wrap__dots" aria-hidden="true"></div>
 <div
-  class="ossian-science"
+  class="ossian-science{% if section.settings.background_link != blank %} oss-banner-host{% endif %}"
   style="
     {%- if section.settings.background_image != blank -%}
       --science-bg: image-set(
@@ -14,6 +14,8 @@
     {%- endif -%}
   "
 >
+  {%- assign banner_label = section.settings.heading | append: ' ' | append: section.settings.heading_accent | strip -%}
+  {%- render 'ossian-banner-link', url: section.settings.background_link, label: banner_label -%}
   <div class="ossian-science__card page-width">
     {%- if section.settings.heading != blank or section.settings.heading_accent != blank -%}
       <h2 class="ossian-science__heading">
@@ -331,6 +333,7 @@
       "id": "background_image",
       "label": "Background image (ocean/texture)"
     },
+    {"type": "url", "id": "background_link", "label": "Banner link", "info": "Makes the banner image clickable. Pick a page, collection or product."},
     {
       "type": "text",
       "id": "heading",

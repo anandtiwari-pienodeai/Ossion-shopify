@@ -1,0 +1,47 @@
+{%- doc -%}
+  Makes a section's background banner clickable. Renders a full-cover link
+  over the banner image and owns the styles that keep the section's own text,
+  buttons and cards above it (and still clickable). Add the class
+  "oss-banner-host" to the element that holds the banner, and render this
+  snippet inside it. Renders nothing when url is blank.
+
+  @param {string} url - Destination (page, collection, product or any URL)
+  @param {string} [label] - Accessible name for the link, e.g. the section heading
+
+  @example
+  <div class="osol{% if s.background_link != blank %} oss-banner-host{% endif %}">
+    {% render 'ossian-banner-link', url: s.background_link, label: s.heading_line1 %}
+  </div>
+{%- enddoc -%}
+{%- if url != blank -%}
+  <a class="oss-banner-link" href="{{ url }}" aria-label="{{ label | default: shop.name | strip_html | escape }}"></a>
+{%- endif -%}
+
+{% stylesheet %}
+  .oss-banner-host {
+    isolation: isolate;
+  }
+
+  .oss-banner-link {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .oss-banner-link:focus-visible {
+    outline: 3px solid #2f6fd6;
+    outline-offset: -3px;
+  }
+
+  /* Section content sits above the banner link; clicks on plain text fall through to the banner,
+     while the section's own links, buttons and fields keep working. Decorative layers stay as they are. */
+  .oss-banner-host > :not(.oss-banner-link, [aria-hidden='true']) {
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .oss-banner-host > :not(.oss-banner-link, [aria-hidden='true']) :is(a, button, input, select, textarea, label, summary, [role='button'], [tabindex]) {
+    pointer-events: auto;
+  }
+{% endstylesheet %}

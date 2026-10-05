@@ -128,30 +128,33 @@
           "type": "image_card",
           "settings": {
             "product": "",
-            "collection": "",
+            "collection": "hair-care",
             "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.03.jpg",
             "alt": "Step 1 Straighten Cream — silk-smooth, frizz free finish",
-            "link": ""
+            "link": "",
+            "link_type": "collection"
           }
         },
         "image_card_2": {
           "type": "image_card",
           "settings": {
             "product": "",
-            "collection": "",
+            "collection": "hair-care",
             "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.17.jpg",
             "alt": "Step 2 Developer — precision color, zero damage",
-            "link": ""
+            "link": "",
+            "link_type": "collection"
           }
         },
         "image_card_3": {
           "type": "image_card",
           "settings": {
-            "product": "",
+            "product": "ossion-hair-intense-mask-silk-amino-acid",
             "collection": "",
             "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.31.jpg",
             "alt": "Step 3 Hair Mask — up to 10X repair for visibly healthier hair",
-            "link": ""
+            "link": "",
+            "link_type": "product"
           }
         }
       },
@@ -169,7 +172,7 @@
         "heading_line2": "Hair Needs",
         "text": "Advanced formulas for stronger, smoother and healthier hair.",
         "button_label": "Explore Collection",
-        "button_link": "",
+        "button_link": "shopify://collections/hair-care",
         "color_eyebrow": "#3d4e6b",
         "color_heading": "#12284b",
         "color_heading_accent": "#1463f3",
@@ -194,31 +197,34 @@
         "image_card_jf6CQz": {
           "type": "image_card",
           "settings": {
-            "product": "",
+            "product": "ossion-essentials-white-chocolate",
             "collection": "",
             "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.24.15.jpg",
-            "alt": "Step 1 Straighten Cream — silk-smooth, frizz free finish",
-            "link": ""
+            "alt": "Step 1 White Chocolate Liposoluble Wax — soft skin, zero fuss",
+            "link": "",
+            "link_type": "product"
           }
         },
         "image_card_CFMkPe": {
           "type": "image_card",
           "settings": {
-            "product": "",
+            "product": "ossion-hair-intense-mask-silk-amino-acid",
             "collection": "",
             "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.24.31.jpg",
-            "alt": "Step 2 Developer — precision color, zero damage",
-            "link": ""
+            "alt": "Step 2 Hair Intense Mask — up to 10X repair for visibly healthier hair",
+            "link": "",
+            "link_type": "product"
           }
         },
         "image_card_qnnXXE": {
           "type": "image_card",
           "settings": {
-            "product": "",
+            "product": "ossion-essentials-japanese",
             "collection": "",
             "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.24.45.jpg",
-            "alt": "Step 3 Hair Mask — up to 10X repair for visibly healthier hair",
-            "link": ""
+            "alt": "Step 3 Japanese Glow Facial Kit — brighten, nourish and glow",
+            "link": "",
+            "link_type": "product"
           }
         }
       },
@@ -236,7 +242,7 @@
         "heading_line2": "Hair Needs",
         "text": "Advanced formulas for stronger, smoother and healthier hair.",
         "button_label": "Explore Collection",
-        "button_link": "",
+        "button_link": "shopify://collections/all",
         "color_eyebrow": "#6b483d",
         "color_heading": "#4b3d12",
         "color_heading_accent": "#1463f3",
