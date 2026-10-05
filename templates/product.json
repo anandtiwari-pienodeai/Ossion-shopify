@@ -45,17 +45,17 @@
             "zoom": true,
             "video_loop": true,
             "hide_variants": false,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0,
             "show_media_badges": true,
             "media_badge_1": "pH Balanced",
             "media_badge_1_icon": "leaf",
             "media_badge_2": "Scalp-Safe",
             "media_badge_2_icon": "shield",
             "media_badge_3": "Cuticle Care",
-            "media_badge_3_icon": "drop"
+            "media_badge_3_icon": "drop",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
           },
           "blocks": {}
         },
@@ -86,28 +86,16 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "review_nniWtf": {
-              "type": "review",
-              "name": "t:names.product_review_stars",
-              "settings": {
-                "stars_style": "shaded",
-                "show_number": true,
-                "rating_color": "primary",
-                "type_preset": "paragraph",
-                "width": "100%",
-                "alignment": "left"
-              },
-              "blocks": {}
-            },
             "ossian_product_type_badge": {
               "type": "ossian-product-type",
               "settings": {
+                "source": "vendor",
+                "custom_text": "",
+                "style": "eyebrow",
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0,
-                "source": "vendor",
-                "style": "eyebrow"
+                "padding-inline-end": 0
               },
               "blocks": {}
             },
@@ -160,6 +148,26 @@
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "ossian_pdp_size_badge": {
+              "type": "ossian-pdp-size-badge",
+              "settings": {
+                "label": "Professional size"
+              },
+              "blocks": {}
+            },
+            "review_nniWtf": {
+              "type": "review",
+              "name": "t:names.product_review_stars",
+              "settings": {
+                "stars_style": "shaded",
+                "show_number": true,
+                "rating_color": "primary",
+                "type_preset": "paragraph",
+                "width": "100%",
+                "alignment": "left"
               },
               "blocks": {}
             },
@@ -244,8 +252,31 @@
               },
               "block_order": []
             },
+            "ossian_pdp_trust": {
+              "type": "ossian-pdp-trust",
+              "settings": {
+                "item_1_icon": "truck",
+                "item_1_title": "Free Shipping",
+                "item_1_text": "On orders over ₹999",
+                "item_2_icon": "shield",
+                "item_2_title": "Secure Payment",
+                "item_2_text": "100% safe & secure",
+                "item_3_icon": "box",
+                "item_3_title": "Easy Returns",
+                "item_3_text": "7 days return policy",
+                "item_4_icon": "headset",
+                "item_4_title": "Customer Support",
+                "item_4_text": "Mon - Sat, 10AM - 7PM",
+                "padding-block-start": 8,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
             "ossian_pdp_wishlist_mW8kXp": {
               "type": "ossian-pdp-wishlist",
+              "disabled": true,
               "settings": {
                 "show_share": false,
                 "show_compare": false,
@@ -254,18 +285,7 @@
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
               },
-              "blocks": {},
-              "disabled": true
-            },
-            "ossian_pdp_size_badge": {
-              "type": "ossian-pdp-size-badge",
-              "settings": {
-                "label": "Professional size"
-              }
-            },
-            "ossian_pdp_trust": {
-              "type": "ossian-pdp-trust",
-              "settings": {}
+              "blocks": {}
             }
           },
           "block_order": [
@@ -293,56 +313,6 @@
         "color_scheme": "",
         "padding-block-start": 32,
         "padding-block-end": 48
-      }
-    },
-    "ossian_trust_ticker_c6cjNm": {
-      "type": "ossian-trust-ticker",
-      "blocks": {
-        "badge_z9LYXa": {
-          "type": "badge",
-          "settings": {
-            "icon": "leaf",
-            "title": "Skin Loving Ingredients",
-            "description": "Enriched with natural extracts & nutrients."
-          }
-        },
-        "badge_GMzNML": {
-          "type": "badge",
-          "settings": {
-            "icon": "shield",
-            "title": "Dermatologically Tested",
-            "description": "Safe and gentle for everyday use."
-          }
-        },
-        "badge_qzNxtR": {
-          "type": "badge",
-          "settings": {
-            "icon": "droplet",
-            "title": "Professional Quality",
-            "description": "Salon trusted, expert recommended."
-          }
-        },
-        "badge_dMHwy6": {
-          "type": "badge",
-          "settings": {
-            "icon": "sparkle",
-            "title": "Visible Results",
-            "description": "Healthy, glowing skin you can feel."
-          }
-        }
-      },
-      "block_order": [
-        "badge_z9LYXa",
-        "badge_GMzNML",
-        "badge_qzNxtR",
-        "badge_dMHwy6"
-      ],
-      "name": "Trust Ticker",
-      "settings": {
-        "background_color": "#ffffff",
-        "scroll_speed": 28,
-        "padding_top": 20,
-        "padding_bottom": 20
       }
     },
     "ossian_pdp_tabs": {
@@ -424,7 +394,7 @@
             "layout": "comparison",
             "use_product_description": false,
             "content": "",
-            "features_list": "Anti-Yellow Technology for bright, clean results\nFiber Plex Protection for stronger hair\nUp to 9 levels of lift in one application\nNon-Damaging Formula with Marine Minerals\nAdvanced Plex & Sea Minerals complex",
+            "features_list": "",
             "metaobject_metafield": "custom.before_after",
             "metaobject_label_field": "label,caption",
             "metaobject_body_field": "caption",
@@ -486,6 +456,56 @@
         "three_star_pct": 2,
         "two_star_pct": 1,
         "one_star_pct": 2
+      }
+    },
+    "ossian_trust_ticker_c6cjNm": {
+      "type": "ossian-trust-ticker",
+      "blocks": {
+        "badge_z9LYXa": {
+          "type": "badge",
+          "settings": {
+            "icon": "leaf",
+            "title": "Skin Loving Ingredients",
+            "description": "Enriched with natural extracts & nutrients."
+          }
+        },
+        "badge_GMzNML": {
+          "type": "badge",
+          "settings": {
+            "icon": "shield",
+            "title": "Dermatologically Tested",
+            "description": "Safe and gentle for everyday use."
+          }
+        },
+        "badge_qzNxtR": {
+          "type": "badge",
+          "settings": {
+            "icon": "droplet",
+            "title": "Professional Quality",
+            "description": "Salon trusted, expert recommended."
+          }
+        },
+        "badge_dMHwy6": {
+          "type": "badge",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Visible Results",
+            "description": "Healthy, glowing skin you can feel."
+          }
+        }
+      },
+      "block_order": [
+        "badge_z9LYXa",
+        "badge_GMzNML",
+        "badge_qzNxtR",
+        "badge_dMHwy6"
+      ],
+      "name": "Trust Ticker",
+      "settings": {
+        "background_color": "#ffffff",
+        "scroll_speed": 28,
+        "padding_top": 20,
+        "padding_bottom": 20
       }
     },
     "ossian_pdp_reviews": {
@@ -956,15 +976,18 @@
     "ossian_explore_category_pdp": {
       "type": "ossian-explore-category",
       "settings": {
-        "heading": ""
+        "heading": "",
+        "max_cards": 4,
+        "hide_current": true,
+        "cta_label": "View all"
       }
     }
   },
   "order": [
     "ossian_pdp_breadcrumb",
     "main",
-    "ossian_trust_ticker_c6cjNm",
     "ossian_pdp_tabs",
+    "ossian_trust_ticker_c6cjNm",
     "ossian_pdp_reviews",
     "ossian_pdp_benefits",
     "ossian_instagram_VgRpe7",
