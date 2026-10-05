@@ -12,6 +12,16 @@
     "ossian_hero_slider": {
       "type": "ossian-hero-slider",
       "blocks": {
+        "slide_6MWmQQ": {
+          "type": "slide",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/Pure_Shea_Hair_Care_Banner.png",
+            "image_mobile": "shopify://shop_images/Pure_Shea_Hair_Care_Advertisement.png",
+            "link": "",
+            "link_label": ""
+          }
+        },
         "slide_6ehiiH": {
           "type": "slide",
           "settings": {
@@ -22,11 +32,21 @@
             "link_label": ""
           }
         },
+        "slide_LhFXGn": {
+          "type": "slide",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/Natural_Beauty_Rituals_Naturally_Radiant_skin.png",
+            "image_mobile": "shopify://shop_images/Natural_Care_Hair_Skin_Essentials.png",
+            "link": "",
+            "link_label": ""
+          }
+        },
         "slide_npPbYc": {
           "type": "slide",
           "settings": {
             "media_type": "image",
-            "image": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_40_46_PM.png",
+            "image": "shopify://shop_images/Japanese_Glow_Facial_Kit_Advertisement.png",
             "image_mobile": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_42_40_PM.png",
             "link": "",
             "link_label": ""
@@ -34,7 +54,9 @@
         }
       },
       "block_order": [
+        "slide_6MWmQQ",
         "slide_6ehiiH",
+        "slide_LhFXGn",
         "slide_npPbYc"
       ],
       "name": "Hero Carousel",
@@ -127,34 +149,37 @@
         "image_card_1": {
           "type": "image_card",
           "settings": {
+            "link_type": "collection",
             "product": "",
             "collection": "hair-care",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.03.jpg",
-            "alt": "Step 1 Straighten Cream — silk-smooth, frizz free finish",
+            "page": "",
             "link": "",
-            "link_type": "collection"
+            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.03.jpg",
+            "alt": "Step 1 Straighten Cream — silk-smooth, frizz free finish"
           }
         },
         "image_card_2": {
           "type": "image_card",
           "settings": {
+            "link_type": "collection",
             "product": "",
             "collection": "hair-care",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.17.jpg",
-            "alt": "Step 2 Developer — precision color, zero damage",
+            "page": "",
             "link": "",
-            "link_type": "collection"
+            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.17.jpg",
+            "alt": "Step 2 Developer — precision color, zero damage"
           }
         },
         "image_card_3": {
           "type": "image_card",
           "settings": {
+            "link_type": "product",
             "product": "ossion-hair-intense-mask-silk-amino-acid",
             "collection": "",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.31.jpg",
-            "alt": "Step 3 Hair Mask — up to 10X repair for visibly healthier hair",
+            "page": "",
             "link": "",
-            "link_type": "product"
+            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.08.31.jpg",
+            "alt": "Step 3 Hair Mask — up to 10X repair for visibly healthier hair"
           }
         }
       },
@@ -167,6 +192,7 @@
       "settings": {
         "background_image": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_56_32_PM.png",
         "background_image_mobile": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.12.22.jpg",
+        "background_link": "",
         "eyebrow": "Professional Hair Care",
         "heading_line1": "Only What Your",
         "heading_line2": "Hair Needs",
@@ -197,34 +223,37 @@
         "image_card_jf6CQz": {
           "type": "image_card",
           "settings": {
+            "link_type": "product",
             "product": "ossion-essentials-white-chocolate",
             "collection": "",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.24.15.jpg",
-            "alt": "Step 1 White Chocolate Liposoluble Wax — soft skin, zero fuss",
+            "page": "",
             "link": "",
-            "link_type": "product"
+            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.24.15.jpg",
+            "alt": "Step 1 White Chocolate Liposoluble Wax — soft skin, zero fuss"
           }
         },
         "image_card_CFMkPe": {
           "type": "image_card",
           "settings": {
+            "link_type": "product",
             "product": "ossion-hair-intense-mask-silk-amino-acid",
             "collection": "",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.24.31.jpg",
-            "alt": "Step 2 Hair Intense Mask — up to 10X repair for visibly healthier hair",
+            "page": "",
             "link": "",
-            "link_type": "product"
+            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.24.31.jpg",
+            "alt": "Step 2 Hair Intense Mask — up to 10X repair for visibly healthier hair"
           }
         },
         "image_card_qnnXXE": {
           "type": "image_card",
           "settings": {
+            "link_type": "product",
             "product": "ossion-essentials-japanese",
             "collection": "",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.24.45.jpg",
-            "alt": "Step 3 Japanese Glow Facial Kit — brighten, nourish and glow",
+            "page": "",
             "link": "",
-            "link_type": "product"
+            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.24.45.jpg",
+            "alt": "Step 3 Japanese Glow Facial Kit — brighten, nourish and glow"
           }
         }
       },
@@ -237,6 +266,7 @@
       "settings": {
         "background_image": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_10_25_12_PM.png",
         "background_image_mobile": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_10_39_06_PM.png",
+        "background_link": "",
         "eyebrow": "Professional Hair Care",
         "heading_line1": "Only What Your",
         "heading_line2": "Hair Needs",
@@ -347,6 +377,7 @@
       "settings": {
         "top_heading": "Only what your",
         "top_heading_accent": "Skin Needs",
+        "bg_link": "",
         "category_label": "Skin Care",
         "heading": "Reveal Your Natural Glow",
         "body_text": "Nourishing care for radiant, healthy & beautiful skin.",
@@ -404,6 +435,7 @@
       ],
       "name": "Ossion Science",
       "settings": {
+        "background_link": "",
         "heading": "The Ossion Difference",
         "heading_accent": "",
         "description": "The Ocean is the earth’s oldest living laboratory - a realm of extraordinary depth, perpetual renewal, and silent precision. For millennia, its tides have refined minerals, concentrated bioactive compounds, and cultivated ingredients of rare potency. <br>\n<br> \nThis is haircare and skincare stripped of excess and elevated in purpose. \nNo embellishment. No compromise.",
@@ -428,9 +460,10 @@
             "icon": "sparkle",
             "label": "BLONDE LIFT",
             "subtitle": "Anti-Yellow",
-            "highlighted": true,
             "collection": "blonde-lift",
-            "link": "shopify://collections/all"
+            "product": "",
+            "link": "shopify://collections/all",
+            "highlighted": true
           }
         },
         "feature_pill_9hW9Ma": {
@@ -439,9 +472,10 @@
             "icon": "waves",
             "label": "FRIZZ CONTROL",
             "subtitle": "Smooth & Manageable",
-            "highlighted": false,
             "collection": "frizz-control",
-            "link": "shopify://collections/all"
+            "product": "",
+            "link": "shopify://collections/all",
+            "highlighted": false
           }
         },
         "feature_pill_b8cGfP": {
@@ -450,9 +484,10 @@
             "icon": "person",
             "label": "GREY COVERAGE",
             "subtitle": "100% Coverage",
-            "highlighted": false,
             "collection": "grey-coverage",
-            "link": "shopify://collections/all"
+            "product": "",
+            "link": "shopify://collections/all",
+            "highlighted": false
           }
         },
         "feature_pill_KMwVhx": {
@@ -461,9 +496,10 @@
             "icon": "drop",
             "label": "COLOR REVIVAL",
             "subtitle": "Vibrant & Long-Lasting",
-            "highlighted": false,
             "collection": "color-revival",
-            "link": "shopify://collections/all"
+            "product": "",
+            "link": "shopify://collections/all",
+            "highlighted": false
           }
         },
         "pill_6": {
@@ -472,9 +508,10 @@
             "icon": "shield",
             "label": "DAMAGE REPAIR",
             "subtitle": "Stronger Hair",
-            "highlighted": false,
             "collection": "damage-repair",
-            "link": "shopify://collections/all"
+            "product": "",
+            "link": "shopify://collections/all",
+            "highlighted": false
           }
         }
       },
@@ -801,6 +838,7 @@
       "settings": {
         "top_heading": "Only what your",
         "top_heading_accent": "Hair Needs",
+        "bg_link": "",
         "category_label": "Hair Care",
         "heading": "Professional Hair Solutions",
         "body_text": "Advanced formulas for stronger, smoother & healthier hair.",
@@ -913,37 +951,45 @@
         "post_1": {
           "type": "post",
           "settings": {
+            "article": "",
             "tag": "Hair Care",
             "date": "Oct 12, 2024",
             "title": "5 Everyday Habits for Stronger, Healthier Hair",
-            "excerpt": "Small daily habits can make a big difference. Discover expert-backed tips to keep your hair stronger, smoother and healthier."
+            "excerpt": "Small daily habits can make a big difference. Discover expert-backed tips to keep your hair stronger, smoother and healthier.",
+            "link": ""
           }
         },
         "post_2": {
           "type": "post",
           "settings": {
+            "article": "",
             "tag": "Skin Care",
             "date": "Oct 08, 2024",
             "title": "How to Build a Simple Skincare Routine",
-            "excerpt": "A step-by-step guide to creating an effective skincare routine for cleaner, brighter and healthier skin — no complicated steps."
+            "excerpt": "A step-by-step guide to creating an effective skincare routine for cleaner, brighter and healthier skin — no complicated steps.",
+            "link": ""
           }
         },
         "post_3": {
           "type": "post",
           "settings": {
+            "article": "",
             "tag": "Ingredients",
             "date": "Sep 28, 2024",
             "title": "Spotlight on Fiber Plex Technology",
-            "excerpt": "Discover how Fiber Plex works to protect, strengthen and maintain your hair while delivering visible results."
+            "excerpt": "Discover how Fiber Plex works to protect, strengthen and maintain your hair while delivering visible results.",
+            "link": ""
           }
         },
         "post_4": {
           "type": "post",
           "settings": {
+            "article": "",
             "tag": "Tips & Guides",
             "date": "Sep 20, 2024",
             "title": "How to Keep Your Hair Color Vibrant for Longer",
-            "excerpt": "Expert tips and care routines to maintain your salon-fresh hair color and prevent fading."
+            "excerpt": "Expert tips and care routines to maintain your salon-fresh hair color and prevent fading.",
+            "link": ""
           }
         }
       },
@@ -954,6 +1000,12 @@
         "post_4"
       ],
       "settings": {
+        "eyebrow": "Blog & Articles",
+        "heading": "From Our [Blog]",
+        "text": "Expert tips, hair & skin care routines, ingredient insights and more — curated to help you look and feel your best.",
+        "view_all_label": "View All Articles",
+        "view_all_link": "",
+        "background": "#ffffff",
         "source": "blog",
         "blog": "news",
         "limit": 8
@@ -989,7 +1041,15 @@
         "benefit_launches",
         "benefit_tips"
       ],
-      "settings": {}
+      "settings": {
+        "show_sparkles": true,
+        "page_background": "#ffffff",
+        "eyebrow": "Stay Connected",
+        "heading": "Get Beauty Tips,|New Launches & [Exclusive Offers]",
+        "text": "Subscribe to our newsletter and be the first to know about new products, expert tips and special offers.",
+        "placeholder": "Enter your email address",
+        "button_label": "Subscribe"
+      }
     }
   },
   "order": [
