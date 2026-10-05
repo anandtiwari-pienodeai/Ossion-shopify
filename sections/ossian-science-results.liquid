@@ -1,0 +1,260 @@
+{% comment %}
+  Section contract.
+  "Visible Results" before/after cards: centred intro, then cards with a draggable
+  comparison slider (Before / After labels), a title and a short caption. The slider is
+  a native range input, so it works with mouse, touch and keyboard.
+  @example
+  <!-- templates/page.science.json → science_results -->
+{% endcomment %}
+
+{%- render 'ossian-about-styles' -%}
+
+<section class="oab osr" id="osr-{{ section.id }}" style="--osr-bg: {{ section.settings.background }};">
+  <div class="oab-wrap">
+    <div class="oab-intro">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="oab-eyebrow oab-eyebrow--rules">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- render 'ossian-about-heading', text: section.settings.heading, class: 'oab-heading--md' -%}
+      {%- if section.settings.text != blank -%}
+        <p class="oab-text">{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <ul class="osr__grid" role="list">
+        {%- for block in section.blocks -%}
+          <li class="osr-card" {{ block.shopify_attributes }}>
+            <div class="osr-compare" style="--pos: 50%;" data-osr-compare>
+              <div class="osr-compare__img osr-compare__img--before">
+                {%- if block.settings.before_image != blank -%}
+                  {{ block.settings.before_image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '400,600,800', sizes: '(min-width: 990px) 33vw, 90vw', alt: block.settings.before_label }}
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag: 'osr-compare__ph' }}
+                {%- endif -%}
+              </div>
+              <div class="osr-compare__img osr-compare__img--after">
+                {%- if block.settings.after_image != blank -%}
+                  {{ block.settings.after_image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '400,600,800', sizes: '(min-width: 990px) 33vw, 90vw', alt: block.settings.after_label }}
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag: 'osr-compare__ph osr-compare__ph--after' }}
+                {%- endif -%}
+              </div>
+              <span class="osr-compare__divider" aria-hidden="true">
+                <span class="osr-compare__handle">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6 3 12l6 6M15 6l6 6-6 6"/></svg>
+                </span>
+              </span>
+              {%- if block.settings.before_label != blank -%}<span class="osr-compare__tag osr-compare__tag--before">{{ block.settings.before_label | escape }}</span>{%- endif -%}
+              {%- if block.settings.after_label != blank -%}<span class="osr-compare__tag osr-compare__tag--after">{{ block.settings.after_label | escape }}</span>{%- endif -%}
+              <input
+                class="osr-compare__range"
+                type="range"
+                min="0"
+                max="100"
+                value="50"
+                aria-label="{{ 'content.ossian_science.compare_label' | t: title: block.settings.title }}"
+                data-osr-range
+              >
+            </div>
+            <div class="osr-card__body">
+              {%- if block.settings.title != blank -%}
+                <h3 class="osr-card__title">{{ block.settings.title | escape }}</h3>
+              {%- endif -%}
+              {%- if block.settings.text != blank -%}
+                <p class="osr-card__text">{{ block.settings.text | escape }}</p>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+  (function () {
+    var root = document.getElementById('osr-{{ section.id }}');
+    if (!root) return;
+    root.querySelectorAll('[data-osr-compare]').forEach(function (compare) {
+      var range = compare.querySelector('[data-osr-range]');
+      if (!range) return;
+      var update = function () { compare.style.setProperty('--pos', range.value + '%'); };
+      range.addEventListener('input', update);
+      update();
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  .osr {
+    background: var(--osr-bg, #fff);
+    padding-block: 56px 60px;
+  }
+
+  .osr__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 22px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .osr-card {
+    min-width: 0;
+    padding: 8px;
+    border: 1px solid #e3e8f1;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgb(20 40 74 / 0.06);
+  }
+
+  /* Comparison: "after" sits on top and is revealed from the right of the divider */
+  .osr-compare {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #e6eef9;
+    user-select: none;
+  }
+
+  .osr-compare__img {
+    position: absolute;
+    inset: 0;
+  }
+
+  .osr-compare__img img,
+  .osr-compare__ph {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .osr-compare__ph { fill: rgb(30 58 95 / 0.2); }
+  .osr-compare__ph--after { background: #d7e3f5; }
+
+  .osr-compare__img--after {
+    clip-path: inset(0 0 0 var(--pos));
+  }
+
+  .osr-compare__divider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    inset-inline-start: var(--pos);
+    width: 2px;
+    background: #fff;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  .osr-compare__handle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--oab-ink);
+    box-shadow: 0 4px 14px rgb(0 0 0 / 0.2);
+    transform: translate(-50%, -50%);
+  }
+
+  .osr-compare__handle svg { width: 18px; height: 18px; }
+
+  .osr-compare__tag {
+    position: absolute;
+    bottom: 10px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgb(15 23 42 / 0.6);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 600;
+    pointer-events: none;
+  }
+
+  .osr-compare__tag--before { inset-inline-start: 10px; }
+  .osr-compare__tag--after { inset-inline-end: 10px; }
+
+  /* Invisible range across the whole image captures drag, tap and arrow keys */
+  .osr-compare__range {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .osr-compare:has(.osr-compare__range:focus-visible) {
+    outline: 3px solid #2f6fd6;
+    outline-offset: 2px;
+  }
+
+  .osr-card__body {
+    padding: 14px 8px 8px;
+    text-align: center;
+  }
+
+  .osr-card__title {
+    margin: 0 0 4px;
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--oab-ink);
+  }
+
+  .osr-card__text {
+    margin: 0;
+    font-size: 0.84rem;
+    color: var(--oab-muted);
+  }
+
+  [dir='rtl'] .osr-compare__img--after {
+    clip-path: inset(0 var(--pos) 0 0);
+  }
+
+  @media (max-width: 749px) {
+    .osr { padding-block: 40px 44px; }
+    .osr__grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ossian Science Results",
+  "tag": "div",
+  "class": "section-ossian-science-results",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Real Transformations" },
+    { "type": "text", "id": "heading", "label": "Heading", "info": "Wrap words in [brackets] for the blue accent.", "default": "Visible Results. Healthier Hair." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Advanced science for stronger, smoother and more vibrant hair." },
+    { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" }
+  ],
+  "blocks": [
+    {
+      "type": "result",
+      "name": "Before / after",
+      "settings": [
+        { "type": "image_picker", "id": "before_image", "label": "Before image", "info": "About 800 × 600 (4:3). Use the same framing as the after image." },
+        { "type": "image_picker", "id": "after_image", "label": "After image" },
+        { "type": "text", "id": "before_label", "label": "Before label", "default": "Before" },
+        { "type": "text", "id": "after_label", "label": "After label", "default": "After" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Reduced Breakage" },
+        { "type": "text", "id": "text", "label": "Caption", "default": "Stronger, more resilient hair" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Ossian Science Results" }]
+}
+{% endschema %}

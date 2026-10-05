@@ -179,6 +179,9 @@
       "subscribed": "Thanks for subscribing!",
       "pagination": "Article pages"
     },
+    "ossian_science": {
+      "compare_label": "Drag to compare before and after: {{ title }}"
+    },
     "ossian_plp": {
       "sort_by": "Sort by:"
     },

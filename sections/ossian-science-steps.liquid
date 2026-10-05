@@ -1,0 +1,191 @@
+{% comment %}
+  Section contract.
+  "How Our Technology Works": centred intro, then numbered steps (image, number, title,
+  text) with arrows between them on desktop. Steps stack on mobile.
+  @example
+  <!-- templates/page.science.json → science_steps -->
+{% endcomment %}
+
+{%- render 'ossian-about-styles' -%}
+
+<section class="oab oss" id="oss-{{ section.id }}" style="--oss-bg: {{ section.settings.background }};">
+  <div class="oab-wrap">
+    <div class="oab-intro">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="oab-eyebrow oab-eyebrow--rules">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- render 'ossian-about-heading', text: section.settings.heading, class: 'oab-heading--md' -%}
+      {%- if section.settings.text != blank -%}
+        <p class="oab-text">{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <ol class="oss__steps" role="list">
+        {%- for block in section.blocks -%}
+          <li class="oss-step" {{ block.shopify_attributes }}>
+            <div class="oss-step__visual">
+            <div class="oss-step__media">
+              {%- if block.settings.image != blank -%}
+                {{
+                  block.settings.image
+                  | image_url: width: 700
+                  | image_tag: loading: 'lazy', widths: '300,500,700', sizes: '(min-width: 990px) 30vw, 90vw', alt: ''
+                }}
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'oss-step__ph' }}
+              {%- endif -%}
+            </div>
+            {%- unless forloop.last -%}
+              <span class="oss-step__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h17M14 6l6 6-6 6"/></svg>
+              </span>
+            {%- endunless -%}
+            </div>
+            <div class="oss-step__copy">
+              <span class="oss-step__num" aria-hidden="true">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+              <div>
+                {%- if block.settings.title != blank -%}
+                  <h3 class="oss-step__title">{{ block.settings.title | escape }}</h3>
+                {%- endif -%}
+                {%- if block.settings.text != blank -%}
+                  <p class="oss-step__text">{{ block.settings.text | escape }}</p>
+                {%- endif -%}
+              </div>
+            </div>
+          </li>
+        {%- endfor -%}
+      </ol>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .oss {
+    background: var(--oss-bg, #f4f8fe);
+    padding-block: 56px 60px;
+  }
+
+  .oss__steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 28px 56px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .oss-step {
+    position: relative;
+    min-width: 0;
+  }
+
+  .oss-step__media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    margin-bottom: 18px;
+    overflow: hidden;
+    border-radius: 14px;
+  }
+
+  .oss-step__media img,
+  .oss-step__ph {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .oss-step__ph { fill: rgb(30 58 95 / 0.2); background: #e6eef9; }
+
+  .oss-step__copy {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .oss-step__num {
+    flex-shrink: 0;
+    font-size: 1.6rem;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--oab-ink);
+  }
+
+  .oss-step__title {
+    margin: 2px 0 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--oab-ink);
+  }
+
+  .oss-step__text {
+    margin: 0;
+    font-size: 0.86rem;
+    line-height: 1.55;
+    color: var(--oab-muted);
+  }
+
+  /* Arrow in the gap between steps, centred on the image */
+  .oss-step__visual {
+    position: relative;
+    margin-bottom: 18px;
+  }
+
+  .oss-step__visual .oss-step__media {
+    margin-bottom: 0;
+  }
+
+  .oss-step__arrow {
+    position: absolute;
+    top: 50%;
+    inset-inline-end: -46px;
+    width: 36px;
+    height: 36px;
+    color: var(--oab-ink);
+    transform: translateY(-50%);
+  }
+
+  .oss-step__arrow svg { width: 100%; height: 100%; }
+  [dir='rtl'] .oss-step__arrow svg { transform: scaleX(-1); }
+
+  @media (max-width: 989px) {
+    .oss-step__arrow { display: none; }
+  }
+
+  @media (max-width: 749px) {
+    .oss { padding-block: 40px 44px; }
+    .oss__steps { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    .oss-step__media { aspect-ratio: 16 / 10; }
+    .oss-step__visual { margin-bottom: 14px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ossian Science Steps",
+  "tag": "div",
+  "class": "section-ossian-science-steps",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Science Behind The Results" },
+    { "type": "text", "id": "heading", "label": "Heading", "info": "Wrap words in [brackets] for the blue accent.", "default": "How Our Technology Works" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "From powerful actives to visibly healthier hair — a complete science-driven process." },
+    { "type": "color", "id": "background", "label": "Background", "default": "#f4f8fe" }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "limit": 4,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "About 700 × 525 (4:3). Transparent or light backgrounds work best." },
+        { "type": "text", "id": "title", "label": "Title", "default": "Active Ingredients" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Marine actives, silk amino acids and advanced complexes work together at a molecular level." }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Ossian Science Steps" }]
+}
+{% endschema %}

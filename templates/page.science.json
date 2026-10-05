@@ -1,0 +1,332 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "science_banner": {
+      "type": "ossian-hero-slider",
+      "blocks": {
+        "science_slide_1": {
+          "type": "slide",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/Pure_Shea_Hair_Care_Banner.png",
+            "image_mobile": "shopify://shop_images/Pure_Shea_Hair_Care_Advertisement.png",
+            "link": "",
+            "link_label": ""
+          }
+        },
+        "science_slide_2": {
+          "type": "slide",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_09_01_51_PM.png",
+            "image_mobile": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_39_19_PM.png",
+            "link": "",
+            "link_label": ""
+          }
+        },
+        "science_slide_3": {
+          "type": "slide",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/Natural_Beauty_Rituals_Naturally_Radiant_skin.png",
+            "image_mobile": "shopify://shop_images/Natural_Care_Hair_Skin_Essentials.png",
+            "link": "",
+            "link_label": ""
+          }
+        },
+        "science_slide_4": {
+          "type": "slide",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/Japanese_Glow_Facial_Kit_Advertisement.png",
+            "image_mobile": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_42_40_PM.png",
+            "link": "",
+            "link_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "science_slide_1",
+        "science_slide_2",
+        "science_slide_3",
+        "science_slide_4"
+      ],
+      "disabled": true,
+      "name": "Science Banner",
+      "settings": {
+        "autoplay": true,
+        "autoplay_speed": "3000",
+        "banner_height": 80,
+        "banner_height_mobile": 50,
+        "mobile_fit_image": true
+      }
+    },
+    "science_hero": {
+      "type": "ossian-about-banner",
+      "blocks": {
+        "hero_marine": {
+          "type": "feature",
+          "settings": {
+            "icon": "waves",
+            "title": "Marine-Based Actives"
+          }
+        },
+        "hero_formulas": {
+          "type": "feature",
+          "settings": {
+            "icon": "molecule",
+            "title": "Science-Backed Formulas"
+          }
+        },
+        "hero_salon": {
+          "type": "feature",
+          "settings": {
+            "icon": "flask",
+            "title": "Salon Professional"
+          }
+        }
+      },
+      "block_order": [
+        "hero_marine",
+        "hero_formulas",
+        "hero_salon"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/Hydration_Science_by_the_Sea.png",
+        "overlay": 55,
+        "min_height": 360,
+        "min_height_mobile": 360,
+        "color_theme": "light",
+        "card_style": "full",
+        "features_layout": "below",
+        "eyebrow": "Ossion Science",
+        "heading": "Where Science|Meets Hair|[Transformation]",
+        "heading_as_h1": true,
+        "text": "<p>Advanced marine-based technology, silk amino acids, Fibre Plex protection and anti-yellow innovation designed for stronger, healthier and visibly beautiful hair.</p>",
+        "button_label": "",
+        "button_link": "",
+        "button_style": "solid"
+      }
+    },
+    "science_tech": {
+      "type": "ossian-science-cards",
+      "blocks": {
+        "card_marine": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/image_208_1.png",
+            "icon": "waves",
+            "title": "Marine-Based Nourishing Technology",
+            "text": "Powered by ocean-derived actives to deeply nourish, hydrate and strengthen hair from within."
+          }
+        },
+        "card_plex": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/image_169_1.png",
+            "icon": "molecule",
+            "title": "Fibre Plex Complex",
+            "text": "Helps protect hair bonds, reduces breakage and maintains hair strength during chemical processes."
+          }
+        },
+        "card_silk": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_7_2026_12_28_04_AM.png",
+            "icon": "waves",
+            "title": "Silk Amino Acids",
+            "text": "Penetrates deep into the hair fiber to restore softness, smoothness and natural shine."
+          }
+        },
+        "card_yellow": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/3.jpg",
+            "icon": "sparkle",
+            "title": "Anti-Yellow Technology",
+            "text": "Helps neutralize unwanted yellow undertones for cleaner, brighter and longer-lasting color results."
+          }
+        }
+      },
+      "block_order": [
+        "card_marine",
+        "card_plex",
+        "card_silk",
+        "card_yellow"
+      ],
+      "settings": {
+        "eyebrow": "Our Technology",
+        "heading": "Advanced Hair Science",
+        "text": "A powerful blend of marine actives and high-performance ingredients, engineered for complete hair care.",
+        "background": "#ffffff"
+      }
+    },
+    "science_steps": {
+      "type": "ossian-science-steps",
+      "blocks": {
+        "step_actives": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/image_208_1.png",
+            "title": "Active Ingredients",
+            "text": "Marine actives, silk amino acids and advanced complexes work together at a molecular level."
+          }
+        },
+        "step_fiber": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/image_209_1.png",
+            "title": "Hair Fiber Protection",
+            "text": "Fibre Plex complex protects hair bonds, strengthens the hair structure and reduces damage."
+          }
+        },
+        "step_results": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Sep_7_2026_12_14_57_AM.png",
+            "title": "Visible Salon Results",
+            "text": "Healthier, smoother, shinier and stronger hair with long-lasting colour and texture improvement."
+          }
+        }
+      },
+      "block_order": [
+        "step_actives",
+        "step_fiber",
+        "step_results"
+      ],
+      "settings": {
+        "eyebrow": "The Science Behind The Results",
+        "heading": "How Our Technology Works",
+        "text": "From powerful actives to visibly healthier hair — a complete science-driven process.",
+        "background": "#f4f8fe"
+      }
+    },
+    "science_marine": {
+      "type": "ossian-about-banner",
+      "blocks": {
+        "marine_nourish": {
+          "type": "feature",
+          "settings": {
+            "icon": "drop",
+            "title": "Deep Nourishment"
+          }
+        },
+        "marine_scalp": {
+          "type": "feature",
+          "settings": {
+            "icon": "leaf",
+            "title": "Scalp Balance"
+          }
+        },
+        "marine_strong": {
+          "type": "feature",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Healthier Stronger Hair"
+          }
+        }
+      },
+      "block_order": [
+        "marine_nourish",
+        "marine_scalp",
+        "marine_strong"
+      ],
+      "settings": {
+        "overlay": 55,
+        "min_height": 440,
+        "min_height_mobile": 600,
+        "color_theme": "light",
+        "card_style": "full",
+        "features_layout": "below",
+        "eyebrow": "Nature Meets Innovation",
+        "heading": "The Power|of Marine Actives",
+        "heading_as_h1": false,
+        "text": "<p>Rich in essential minerals, antioxidants and nutrients, marine actives help nourish the scalp, strengthen hair and enhance overall hair vitality.</p>",
+        "button_label": "",
+        "button_link": "",
+        "button_style": "solid"
+      }
+    },
+    "science_results": {
+      "type": "ossian-science-results",
+      "blocks": {
+        "result_breakage": {
+          "type": "result",
+          "settings": {
+            "before_image": "shopify://shop_images/57cb6ecf-6647-4106-b8dc-0e3f59a47039.png",
+            "after_image": "shopify://shop_images/ChatGPT_Image_Sep_7_2026_12_14_57_AM.png",
+            "before_label": "Before",
+            "after_label": "After",
+            "title": "Reduced Breakage",
+            "text": "Stronger, more resilient hair"
+          }
+        },
+        "result_colour": {
+          "type": "result",
+          "settings": {
+            "before_label": "Before",
+            "after_label": "After",
+            "title": "Brighter Colour",
+            "text": "Neutralizes yellow undertones"
+          }
+        },
+        "result_smooth": {
+          "type": "result",
+          "settings": {
+            "before_label": "Before",
+            "after_label": "After",
+            "title": "Smoother & Shinier",
+            "text": "Visibly healthier, salon-like finish"
+          }
+        }
+      },
+      "block_order": [
+        "result_breakage",
+        "result_colour",
+        "result_smooth"
+      ],
+      "settings": {
+        "eyebrow": "Real Transformations",
+        "heading": "Visible Results. Healthier Hair.",
+        "text": "Advanced science for stronger, smoother and more vibrant hair.",
+        "background": "#ffffff"
+      }
+    },
+    "science_cta": {
+      "type": "ossian-about-banner",
+      "settings": {
+        "image": "shopify://shop_images/image_208_1.png",
+        "overlay": 55,
+        "min_height": 420,
+        "min_height_mobile": 560,
+        "color_theme": "dark",
+        "card_style": "card",
+        "features_layout": "side",
+        "eyebrow": "Ossion Science",
+        "heading": "Professional Science.|Visible Results.",
+        "heading_as_h1": false,
+        "text": "<p>Experience the power of marine-based technology and advanced hair care science with OSSION PROFESSIONAL.</p>",
+        "button_label": "Explore Products",
+        "button_link": "shopify://collections/all",
+        "button_style": "solid"
+      }
+    }
+  },
+  "order": [
+    "science_banner",
+    "science_hero",
+    "science_tech",
+    "science_steps",
+    "science_marine",
+    "science_results",
+    "science_cta"
+  ]
+}

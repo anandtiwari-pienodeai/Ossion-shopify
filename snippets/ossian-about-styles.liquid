@@ -54,6 +54,41 @@
 .oab-accent { color: var(--oab-accent-dark); }
 .oab--dark .oab-accent { color: var(--oab-accent-light); }
 
+/* Centred section intro: eyebrow with short rules either side, heading, text */
+.oab-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.oab-intro .oab-heading {
+  margin-bottom: 10px;
+}
+
+.oab-intro .oab-text {
+  margin-bottom: 0;
+  max-width: 60ch;
+}
+
+.oab-eyebrow--rules {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--oab-ink);
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+}
+
+.oab-eyebrow--rules::before,
+.oab-eyebrow--rules::after {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: #9aa3b2;
+}
+
 .oab-text {
   margin: 0 0 26px;
   max-width: 46ch;

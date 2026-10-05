@@ -1,7 +1,7 @@
 {%- doc -%}
   Renders a 24px line icon for the Ossian about-page sections.
 
-  @param {string} icon - diamond, flask, leaf, people, shield, headset, badge, sparkle, check, heart, drop, molecule, star
+  @param {string} icon - diamond, flask, leaf, people, shield, headset, badge, sparkle, check, heart, drop, molecule, star, waves, coral
 
   @example
   {% render 'ossian-about-icon', icon: 'flask' %}
@@ -30,6 +30,10 @@
       <path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.3a4.3 4.3 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20Z"/>
     {%- when 'drop' -%}
       <path d="M12 3s6.5 7.2 6.5 11.5a6.5 6.5 0 0 1-13 0C5.5 10.2 12 3 12 3Z"/>
+    {%- when 'waves' -%}
+      <path d="M3 8c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 6 0"/><path d="M3 13c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 6 0"/><path d="M3 18c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 6 0"/>
+    {%- when 'coral' -%}
+      <path d="M12 21v-6M12 15c0-3-3-4-3-7M12 15c0-3 3-4 3-7M9 8c0-1.5-1.5-2.5-3-3M9 8c.5-2 0-3.5-1-5M15 8c0-1.5 1.5-2.5 3-3M15 8c-.5-2 0-3.5 1-5M12 12V6"/>
     {%- when 'molecule' -%}
       <circle cx="12" cy="12" r="2.5"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6.6 7.3 10 10.4M17.4 7.3 14 10.4M12 14.5V18"/>
     {%- else -%}
