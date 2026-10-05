@@ -980,7 +980,9 @@
         "heading": "",
         "max_cards": 4,
         "hide_current": true,
-        "cta_label": "View all"
+        "cta_label": "View all",
+        "auto_collections": true,
+        "exclude_handles": "frontpage, test"
       }
     },
     "ossian_you_may_like": {

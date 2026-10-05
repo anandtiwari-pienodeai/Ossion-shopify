@@ -179,6 +179,9 @@
       "subscribed": "Thanks for subscribing!",
       "pagination": "Article pages"
     },
+    "ossian_plp": {
+      "sort_by": "Sort by:"
+    },
     "ossian_ymal": {
       "reviews": "reviews",
       "rating_label": "Rated {{ rating }} out of 5 from {{ count }} reviews"

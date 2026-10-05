@@ -6,8 +6,10 @@
        of collections. One card per collection, each illustrated by the first
        product in that collection (so the collection's own sort order decides
        which product appears).
-    2. The section's manually configured Category Card blocks, used when the
-       collection has no mapping and on non-collection templates.
+    2. Automatic: the store's other collections (skipping the current one, empty
+       ones and the excluded handles), each illustrated by its first in-stock product.
+    3. The section's manually configured Category Card blocks, used when automatic
+       collections are switched off.
 {%- endcomment -%}
 
 {%- liquid
@@ -26,9 +28,24 @@
       assign mapped_count = mapped_count | plus: 1
     endfor
   endif
+
+  # Automatic source: real collections, so the cards always show live products
+  assign auto_count = 0
+  assign excluded = section.settings.exclude_handles | downcase | remove: ' ' | split: ','
+  if mapped_count == 0 and section.settings.auto_collections
+    for cat in collections
+      if excluded contains cat.handle or cat.handle == 'all' or cat.products_count == 0
+        continue
+      endif
+      if section.settings.hide_current and collection != blank and cat.id == collection.id
+        continue
+      endif
+      assign auto_count = auto_count | plus: 1
+    endfor
+  endif
 -%}
 
-{%- if mapped_count > 0 or section.blocks.size > 0 -%}
+{%- if mapped_count > 0 or auto_count > 0 or section.blocks.size > 0 -%}
   <section class="explore-cat" id="explore-cat-{{ section.id }}">
     <div class="explore-cat__inner page-width">
       {%- if section.settings.heading != blank -%}
@@ -45,6 +62,34 @@
             {%- if section.settings.hide_current and cat.id == collection.id -%}{%- continue -%}{%- endif -%}
 
             {%- assign cat_product = cat.products.first -%}
+            {%- render 'explore-category-card',
+              ec_collection: cat,
+              ec_product: cat_product,
+              ec_label: cat.title,
+              ec_cta: section.settings.cta_label
+            -%}
+            {%- assign shown = shown | plus: 1 -%}
+          {%- endfor -%}
+
+        {%- elsif auto_count > 0 -%}
+
+          {%- assign shown = 0 -%}
+          {%- for cat in collections -%}
+            {%- if shown >= max_cards -%}{%- break -%}{%- endif -%}
+            {%- if excluded contains cat.handle or cat.handle == 'all' or cat.products_count == 0 -%}{%- continue -%}{%- endif -%}
+            {%- if section.settings.hide_current and collection != blank and cat.id == collection.id -%}{%- continue -%}{%- endif -%}
+            {%- liquid
+              assign cat_product = blank
+              for candidate in cat.products
+                if candidate.available
+                  assign cat_product = candidate
+                  break
+                endif
+              endfor
+              if cat_product == blank
+                assign cat_product = cat.products.first
+              endif
+            -%}
             {%- render 'explore-category-card',
               ec_collection: cat,
               ec_product: cat_product,
@@ -356,6 +401,20 @@
       "id": "cta_label",
       "label": "Button label",
       "default": "View all"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_collections",
+      "label": "Show store collections automatically",
+      "default": true,
+      "info": "Builds the cards from your collections, each showing its first in-stock product. Used when the collection has no custom.explore_categories mapping. Turn off to use the Category Card blocks instead."
+    },
+    {
+      "type": "text",
+      "id": "exclude_handles",
+      "label": "Collections to skip",
+      "default": "frontpage, test",
+      "info": "Comma-separated collection handles, e.g. frontpage, test."
     }
   ],
   "blocks": [

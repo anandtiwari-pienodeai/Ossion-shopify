@@ -70,6 +70,51 @@
           </option>
         {%- endfor -%}
       </select>
+
+      {%- comment -%}
+        Styled sort menu. ossian-plp.js reveals it and hides the native select (kept as the no-JS fallback);
+        choosing an option sets the select's value, which submits the filter form as before.
+      {%- endcomment -%}
+      {%- assign current_sort_name = '' -%}
+      {%- for option in collection.sort_options -%}
+        {%- if option.value == sort_by -%}{%- assign current_sort_name = option.name -%}{%- endif -%}
+      {%- endfor -%}
+      <div class="ossian-plp__sort-menu" data-ossian-sort-menu hidden>
+        <button
+          type="button"
+          class="ossian-plp__sort-trigger"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-controls="OssianPlpSortList-{{ section.id }}"
+          data-ossian-sort-trigger
+        >
+          <span class="ossian-plp__sort-label">{{ 'content.ossian_plp.sort_by' | t }}</span>
+          <span class="ossian-plp__sort-value" data-ossian-sort-current>{{ current_sort_name | default: collection.sort_options.first.name }}</span>
+          <svg class="ossian-plp__sort-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <ul
+          id="OssianPlpSortList-{{ section.id }}"
+          class="ossian-plp__sort-list"
+          role="listbox"
+          tabindex="-1"
+          aria-label="{{ 'content.ossian_plp.sort_by' | t }}"
+          data-ossian-sort-list
+          hidden
+        >
+          {%- for option in collection.sort_options -%}
+            <li
+              id="OssianPlpSortOption-{{ section.id }}-{{ forloop.index }}"
+              class="ossian-plp__sort-option"
+              role="option"
+              data-value="{{ option.value }}"
+              aria-selected="{% if option.value == sort_by %}true{% else %}false{% endif %}"
+            >
+              <svg class="ossian-plp__sort-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+              <span>{{ option.name }}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -96,8 +141,25 @@
         {%- endif -%}
 
         {%- for filter in collection.filters -%}
-          <div class="ossian-plp__filter-group">
-            <h3 class="ossian-plp__filter-title">{{ filter.label }}</h3>
+          {%- liquid
+            # Groups start collapsed; a group opens when it already has an active selection
+            assign filter_active = false
+            if filter.type == 'price_range'
+              if filter.min_value.value != blank or filter.max_value.value != blank
+                assign filter_active = true
+              endif
+            elsif filter.active_values.size > 0
+              assign filter_active = true
+            endif
+          -%}
+          <details class="ossian-plp__filter-group"{% if filter_active %} open{% endif %}>
+            <summary class="ossian-plp__filter-title">
+              <span>{{ filter.label }}</span>
+              {%- if filter_active and filter.type != 'price_range' -%}
+                <span class="ossian-plp__filter-active-count">{{ filter.active_values.size }}</span>
+              {%- endif -%}
+              <svg class="ossian-plp__filter-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </summary>
 
             {%- case filter.type -%}
               {%- when 'list' -%}
@@ -170,7 +232,7 @@
                   {{ 'content.price_filter_html' | t: price: formatted_range_max }}
                 </p>
             {%- endcase -%}
-          </div>
+          </details>
         {%- endfor -%}
 
         <div class="ossian-plp__filters-actions">
@@ -281,6 +343,134 @@
     cursor: pointer;
   }
 
+  /* ── Styled sort menu (enhanced by ossian-plp.js) ── */
+  .ossian-plp__sort {
+    position: relative;
+  }
+
+  .ossian-plp__sort.is-enhanced .ossian-plp__sort-select {
+    display: none;
+  }
+
+  .ossian-plp__sort-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 42px;
+    padding: 0 14px 0 16px;
+    border: 1.5px solid #d6dde8;
+    border-radius: 10px;
+    background: #fff;
+    color: #1e3a5f;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .ossian-plp__sort-trigger:hover,
+  .ossian-plp__sort-trigger[aria-expanded='true'] {
+    border-color: #1e3a5f;
+  }
+
+  .ossian-plp__sort-trigger:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(47 111 214 / 0.3);
+    border-color: #1e3a5f;
+  }
+
+  .ossian-plp__sort-label {
+    color: #6b7587;
+  }
+
+  .ossian-plp__sort-value {
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .ossian-plp__sort-chevron {
+    width: 16px;
+    height: 16px;
+    margin-inline-start: 4px;
+    transition: transform 0.2s ease;
+  }
+
+  .ossian-plp__sort-trigger[aria-expanded='true'] .ossian-plp__sort-chevron {
+    transform: rotate(180deg);
+  }
+
+  .ossian-plp__sort-list {
+    position: absolute;
+    top: calc(100% + 8px);
+    inset-inline-end: 0;
+    z-index: 30;
+    min-width: 240px;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    border: 1px solid #e3e8f1;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 18px 40px rgb(20 40 74 / 0.16);
+    outline: none;
+    animation: ossian-sort-in 0.16s ease-out;
+  }
+
+  @keyframes ossian-sort-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .ossian-plp__sort-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #13233f;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .ossian-plp__sort-option:hover,
+  .ossian-plp__sort-option.is-active {
+    background: #eef3fb;
+  }
+
+  .ossian-plp__sort-option[aria-selected='true'] {
+    font-weight: 700;
+    color: #1e3a5f;
+  }
+
+  .ossian-plp__sort-check {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    visibility: hidden;
+    color: #2f6fd6;
+  }
+
+  .ossian-plp__sort-option[aria-selected='true'] .ossian-plp__sort-check {
+    visibility: visible;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ossian-plp__sort-label {
+      display: none;
+    }
+
+    .ossian-plp__sort-list {
+      min-width: min(260px, calc(100vw - 32px));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ossian-plp__sort-list { animation: none; }
+    .ossian-plp__sort-trigger,
+    .ossian-plp__sort-chevron { transition: none; }
+  }
+
   /* ── Body: filters + grid, flexbox (no CSS grid) ── */
   .ossian-plp__body {
     display: flex;
@@ -353,11 +543,61 @@
   }
 
   .ossian-plp__filter-title {
-    margin: 0 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding-block: 4px;
     font-size: 15px;
     font-weight: 700;
     color: #1e3a5f;
     letter-spacing: -0.01em;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .ossian-plp__filter-title::-webkit-details-marker {
+    display: none;
+  }
+
+  .ossian-plp__filter-title:focus-visible {
+    outline: 2px solid #2f6fd6;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .ossian-plp__filter-active-count {
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: #1e3a5f;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .ossian-plp__filter-chevron {
+    width: 18px;
+    height: 18px;
+    margin-inline-start: auto;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .ossian-plp__filter-group[open] > .ossian-plp__filter-title {
+    margin-bottom: 10px;
+  }
+
+  .ossian-plp__filter-group[open] .ossian-plp__filter-chevron {
+    transform: rotate(180deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ossian-plp__filter-chevron { transition: none; }
   }
 
   .ossian-plp__filter-options {

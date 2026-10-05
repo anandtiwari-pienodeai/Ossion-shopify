@@ -207,7 +207,9 @@
         "cat_4"
       ],
       "settings": {
-        "heading": "EXPLORE MORE CATEGORY"
+        "heading": "EXPLORE MORE CATEGORY",
+        "auto_collections": true,
+        "exclude_handles": "frontpage, test"
       }
     }
   },
