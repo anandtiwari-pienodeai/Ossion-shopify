@@ -1,0 +1,142 @@
+/* Styles for sections/ossian-science-results.liquid. Loaded by that section so pages without it don't download them. */
+  .osr {
+    background: var(--osr-bg, #fff);
+    padding-block: 56px 60px;
+  }
+
+  .osr__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 22px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .osr-card {
+    min-width: 0;
+    padding: 8px;
+    border: 1px solid #e3e8f1;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgb(20 40 74 / 0.06);
+  }
+
+  /* Comparison: "after" sits on top and is revealed from the right of the divider */
+  .osr-compare {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #e6eef9;
+    user-select: none;
+  }
+
+  .osr-compare__img {
+    position: absolute;
+    inset: 0;
+  }
+
+  .osr-compare__img img,
+  .osr-compare__ph {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .osr-compare__ph { fill: rgb(30 58 95 / 0.2); }
+  .osr-compare__ph--after { background: #d7e3f5; }
+
+  .osr-compare__img--after {
+    clip-path: inset(0 0 0 var(--pos));
+  }
+
+  .osr-compare__divider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    inset-inline-start: var(--pos);
+    width: 2px;
+    background: #fff;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  .osr-compare__handle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--oab-ink);
+    box-shadow: 0 4px 14px rgb(0 0 0 / 0.2);
+    transform: translate(-50%, -50%);
+  }
+
+  .osr-compare__handle svg { width: 18px; height: 18px; }
+
+  .osr-compare__tag {
+    position: absolute;
+    bottom: 10px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgb(15 23 42 / 0.6);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 600;
+    pointer-events: none;
+  }
+
+  .osr-compare__tag--before { inset-inline-start: 10px; }
+  .osr-compare__tag--after { inset-inline-end: 10px; }
+
+  /* Invisible range across the whole image captures drag, tap and arrow keys */
+  .osr-compare__range {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .osr-compare:has(.osr-compare__range:focus-visible) {
+    outline: 3px solid #2f6fd6;
+    outline-offset: 2px;
+  }
+
+  .osr-card__body {
+    padding: 14px 8px 8px;
+    text-align: center;
+  }
+
+  .osr-card__title {
+    margin: 0 0 4px;
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--oab-ink);
+  }
+
+  .osr-card__text {
+    margin: 0;
+    font-size: 0.84rem;
+    color: var(--oab-muted);
+  }
+
+  [dir='rtl'] .osr-compare__img--after {
+    clip-path: inset(0 var(--pos) 0 0);
+  }
+
+  @media (max-width: 749px) {
+    .osr { padding-block: 40px 44px; }
+    .osr__grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  }

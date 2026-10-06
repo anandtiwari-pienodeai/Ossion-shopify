@@ -70,13 +70,20 @@
               assign img_fetchpriority = 'low'
             endif
           -%}
+          {%- comment -%}
+            Only the first slide's image loads with the page (it is the LCP image). Later slides
+            carry their sources in data-* attributes and the script below swaps them in after the
+            page has loaded, or just before the slide is shown, so they don't compete with slide 1.
+          {%- endcomment -%}
+          {%- capture slide_picture -%}
           <picture>
             {%- if mobile_image != blank and mobile_image != desktop_image -%}
               <source
                 media="(max-width: 768px)"
                 srcset="
                   {{- mobile_image | image_url: width: 400 }} 400w,
-                  {{ mobile_image | image_url: width: 700 }} 700w,
+                  {{ mobile_image | image_url: width: 600 }} 600w,
+                  {{ mobile_image | image_url: width: 750 }} 750w,
                   {{ mobile_image | image_url: width: 900 }} 900w,
                   {{ mobile_image | image_url: width: 1200 }} 1200w
                 "
@@ -96,6 +103,12 @@
                 sizes: '100vw'
             }}
           </picture>
+          {%- endcapture -%}
+          {%- if forloop.first -%}
+            {{ slide_picture }}
+          {%- else -%}
+            {{ slide_picture | replace: ' srcset=', ' data-srcset=' | replace: ' src=', ' data-src=' }}
+          {%- endif -%}
         {%- else -%}
           <div class="hero-carousel__placeholder">{{ 'lifestyle-1' | placeholder_svg_tag: 'hero-carousel__media hero-carousel__placeholder-svg' }}</div>
         {%- endif -%}
@@ -133,6 +146,23 @@
   var speed = parseInt(el.dataset.speed) || 3000;
   var timer;
 
+  /* Swap deferred (data-*) image sources in for a slide; see the markup comment above */
+  function loadSlide(slide) {
+    if (!slide) return;
+    slide.querySelectorAll('[data-srcset]').forEach(function (node) {
+      node.setAttribute('srcset', node.getAttribute('data-srcset'));
+      node.removeAttribute('data-srcset');
+    });
+    slide.querySelectorAll('[data-src]').forEach(function (node) {
+      node.setAttribute('src', node.getAttribute('data-src'));
+      node.removeAttribute('data-src');
+    });
+  }
+
+  function loadAllSlides() { slides.forEach(loadSlide); }
+  if (document.readyState === 'complete') loadAllSlides();
+  else window.addEventListener('load', loadAllSlides, { once: true });
+
   function goTo(n) {
     var outgoing = slides[current];
     var v = outgoing.querySelector('video');
@@ -143,6 +173,8 @@
     current = (n + slides.length) % slides.length;
 
     var incoming = slides[current];
+    loadSlide(incoming);
+    loadSlide(slides[(current + 1) % slides.length]);
     incoming.classList.add('is-active');
     if (dots[current]) dots[current].classList.add('is-active');
     var nv = incoming.querySelector('video');

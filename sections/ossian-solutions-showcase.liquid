@@ -32,7 +32,7 @@
         {%- if s.background_image_mobile != blank -%}
           <source
             media="(max-width: 989px)"
-            srcset="{{ s.background_image_mobile | image_url: width: 800 }} 800w, {{ s.background_image_mobile | image_url: width: 1200 }} 1200w"
+            srcset="{{ s.background_image_mobile | image_url: width: 600 }} 600w, {{ s.background_image_mobile | image_url: width: 700 }} 700w, {{ s.background_image_mobile | image_url: width: 800 }} 800w, {{ s.background_image_mobile | image_url: width: 1000 }} 1000w, {{ s.background_image_mobile | image_url: width: 1200 }} 1200w"
             sizes="100vw"
           >
         {%- endif -%}
@@ -172,7 +172,9 @@
                     media="(max-width: 989px)"
                     srcset="
                       {{- card_image_mobile | image_url: width: 400 }} 400w,
+                      {{ card_image_mobile | image_url: width: 500 }} 500w,
                       {{ card_image_mobile | image_url: width: 600 }} 600w,
+                      {{ card_image_mobile | image_url: width: 700 }} 700w,
                       {{ card_image_mobile | image_url: width: 800 }} 800w,
                       {{ card_image_mobile | image_url: width: 1100 }} 1100w
                     "

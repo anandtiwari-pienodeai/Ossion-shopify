@@ -1,3 +1,4 @@
+{{ 'section-ossian-collection-hero.css' | asset_url | stylesheet_tag }}
 {%- comment -%}
   Ossian Collection Hero — per-collection, per-device banner.
 
@@ -86,62 +87,6 @@
   </section>
 {%- endif -%}
 
-{% stylesheet %}
-.collection-hero {
-  width: 100%;
-  display: block;
-}
-
-.collection-hero__banner {
-  width: 100%;
-  display: block;
-  line-height: 0;
-  padding: 0 10px;
-}
-
-@media screen and (max-width: 749px) {
-  .collection-hero__banner {
-    padding: 0 8px;
-  }
-}
-
-.collection-hero__picture {
-  display: block;
-  width: 100%;
-}
-
-.collection-hero__img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-  object-position: center;
-}
-
-/* Fixed-height mode crops the art to the heights set in the editor.
-   Natural mode (default) lets each image keep its own aspect ratio,
-   which is usually what you want when desktop and mobile art differ. */
-.collection-hero--fixed .collection-hero__img {
-  height: var(--collection-hero-height, 480px);
-}
-
-@media screen and (max-width: 749px) {
-  .collection-hero--fixed .collection-hero__img {
-    height: var(--collection-hero-height-mobile, 220px);
-  }
-}
-
-.collection-hero__link {
-  display: block;
-  width: 100%;
-}
-
-.collection-hero__placeholder {
-  width: 100%;
-  height: var(--collection-hero-height, 480px);
-  background: linear-gradient(135deg, #0b1e35 0%, #1e3a5f 100%);
-}
-{% endstylesheet %}
 
 {% schema %}
 {

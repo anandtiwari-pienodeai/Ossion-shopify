@@ -1,0 +1,230 @@
+/* Styles for sections/ossian-about-banner.liquid. Loaded by that section so pages without it don't download them. */
+.oabn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: var(--oabn-min-h, 460px);
+  background: radial-gradient(110% 140% at 85% 40%, #1f4c8f 0%, #0b1f3d 55%, #061328 100%);
+  color: #fff;
+}
+
+.oabn__media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+/* Left-to-right scrim keeps copy legible over any merchant image */
+.oabn__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgb(8 24 50 / calc(var(--oabn-overlay) + 0.15)) 0%,
+    rgb(8 24 50 / var(--oabn-overlay)) 35%,
+    rgb(8 24 50 / 0) 65%
+  );
+}
+
+.oabn:not(.oabn--has-image) .oabn__scrim { display: none; }
+
+.oabn__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding-block: 64px;
+}
+
+.oabn__copy {
+  max-width: 560px;
+  min-width: 0;
+}
+
+.oabn__copy .oab-text:last-child { margin-bottom: 0; }
+
+.oabn__features {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  min-width: 0;
+  max-width: 280px;
+}
+
+.oabn__feature {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.oabn__feature-icon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  color: #fff;
+}
+
+.oabn__feature-icon svg { width: 20px; height: 20px; }
+
+.oabn__feature-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #fff;
+}
+
+@media (max-width: 989px) {
+  .oabn__inner { flex-direction: column; align-items: flex-start; }
+  .oabn__features {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 20px;
+    max-width: none;
+    width: 100%;
+  }
+}
+
+/* Mobile: copy sits at the top, the mobile image shows through underneath */
+@media (max-width: 749px) {
+  .oabn {
+    align-items: flex-start;
+    min-height: var(--oabn-min-h-mobile, 560px);
+  }
+
+  .oabn__scrim {
+    background: linear-gradient(
+      180deg,
+      rgb(8 24 50 / calc(var(--oabn-overlay) + 0.2)) 0%,
+      rgb(8 24 50 / var(--oabn-overlay)) 40%,
+      rgb(8 24 50 / 0) 70%
+    );
+  }
+
+  /* Features push the copy further down, so keep the shade under them */
+  .oabn--has-features .oabn__scrim {
+    background: linear-gradient(
+      180deg,
+      rgb(8 24 50 / calc(var(--oabn-overlay) + 0.2)) 0%,
+      rgb(8 24 50 / var(--oabn-overlay)) 65%,
+      rgb(8 24 50 / 0) 88%
+    );
+  }
+
+  .oabn__inner { padding-block: 36px 32px; gap: 24px; }
+  .oabn__feature { gap: 10px; }
+  .oabn__feature-icon { width: 38px; height: 38px; }
+  .oabn__feature-icon svg { width: 18px; height: 18px; }
+  .oabn__feature-title { font-size: 0.8rem; }
+}
+
+/* ── Light theme: dark copy on a pale image, shade fades in from the left in white ── */
+.oabn--light {
+  background: linear-gradient(120deg, #f4f8fe 0%, #e6effb 100%);
+  color: var(--oab-ink);
+}
+
+.oabn--light .oabn__scrim {
+  background: linear-gradient(
+    90deg,
+    rgb(244 248 254 / calc(var(--oabn-overlay) + 0.25)) 0%,
+    rgb(244 248 254 / var(--oabn-overlay)) 38%,
+    rgb(244 248 254 / 0) 66%
+  );
+}
+
+.oabn--light .oabn__feature-icon {
+  border-color: rgb(19 35 63 / 0.25);
+  color: var(--oab-accent-dark);
+}
+
+.oabn--light .oabn__feature-title {
+  color: var(--oab-ink);
+}
+
+.oabn--light .oab-btn--solid {
+  background: var(--oab-navy-deep);
+  border-color: var(--oab-navy-deep);
+  color: #fff;
+}
+
+.oabn--light .oab-btn--solid:hover {
+  background: var(--oab-navy);
+  border-color: var(--oab-navy);
+  color: #fff;
+}
+
+/* ── Features under the copy: icon above a short uppercase label ── */
+.oabn__features--below {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 18px 34px;
+  max-width: none;
+  margin-top: 26px;
+}
+
+.oabn__features--below .oabn__feature {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.oabn__features--below .oabn__feature-icon {
+  width: auto;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+}
+
+.oabn__features--below .oabn__feature-icon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.oabn__features--below .oabn__feature-title {
+  max-width: 12ch;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+/* ── Rounded card instead of full width ── */
+.oabn--card {
+  width: min(1240px, calc(100% - 32px));
+  margin: 24px auto;
+  border-radius: 22px;
+}
+
+@media (max-width: 749px) {
+  .oabn--light .oabn__scrim {
+    background: linear-gradient(
+      180deg,
+      rgb(244 248 254 / calc(var(--oabn-overlay) + 0.3)) 0%,
+      rgb(244 248 254 / var(--oabn-overlay)) 45%,
+      rgb(244 248 254 / 0) 72%
+    );
+  }
+
+  .oabn__features--below {
+    gap: 16px 22px;
+    margin-top: 20px;
+  }
+
+  .oabn--card {
+    width: calc(100% - 24px);
+    margin: 16px auto;
+    border-radius: 16px;
+  }
+}

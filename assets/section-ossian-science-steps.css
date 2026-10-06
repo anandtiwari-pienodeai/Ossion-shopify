@@ -1,0 +1,101 @@
+/* Styles for sections/ossian-science-steps.liquid. Loaded by that section so pages without it don't download them. */
+  .oss {
+    background: var(--oss-bg, #f4f8fe);
+    padding-block: 56px 60px;
+  }
+
+  .oss__steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 28px 56px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .oss-step {
+    position: relative;
+    min-width: 0;
+  }
+
+  .oss-step__media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    margin-bottom: 18px;
+    overflow: hidden;
+    border-radius: 14px;
+  }
+
+  .oss-step__media img,
+  .oss-step__ph {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .oss-step__ph { fill: rgb(30 58 95 / 0.2); background: #e6eef9; }
+
+  .oss-step__copy {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .oss-step__num {
+    flex-shrink: 0;
+    font-size: 1.6rem;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--oab-ink);
+  }
+
+  .oss-step__title {
+    margin: 2px 0 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--oab-ink);
+  }
+
+  .oss-step__text {
+    margin: 0;
+    font-size: 0.86rem;
+    line-height: 1.55;
+    color: var(--oab-muted);
+  }
+
+  /* Arrow in the gap between steps, centred on the image */
+  .oss-step__visual {
+    position: relative;
+    margin-bottom: 18px;
+  }
+
+  .oss-step__visual .oss-step__media {
+    margin-bottom: 0;
+  }
+
+  .oss-step__arrow {
+    position: absolute;
+    top: 50%;
+    inset-inline-end: -46px;
+    width: 36px;
+    height: 36px;
+    color: var(--oab-ink);
+    transform: translateY(-50%);
+  }
+
+  .oss-step__arrow svg { width: 100%; height: 100%; }
+  [dir='rtl'] .oss-step__arrow svg { transform: scaleX(-1); }
+
+  @media (max-width: 989px) {
+    .oss-step__arrow { display: none; }
+  }
+
+  @media (max-width: 749px) {
+    .oss { padding-block: 40px 44px; }
+    .oss__steps { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    .oss-step__media { aspect-ratio: 16 / 10; }
+    .oss-step__visual { margin-bottom: 14px; }
+  }
