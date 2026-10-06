@@ -717,7 +717,8 @@
     z-index: 60;
     display: grid;
     grid-template-columns: minmax(230px, 0.85fr) minmax(0, 1.6fr) minmax(0, 1.35fr);
-    min-height: clamp(360px, 28vw, 420px);
+    /* Fixed height: the bestsellers list scrolls instead of growing the panel */
+    height: clamp(360px, 28vw, 420px);
     background: linear-gradient(100deg, #fdfeff 0%, #f4f7fc 40%, #e4edf8 68%);
     border-radius: 18px;
     box-shadow: 0 24px 60px rgba(10, 23, 48, 0.18);
@@ -894,8 +895,20 @@
   }
 
   .ossian-mega__side {
+    --mega-thumb: clamp(84px, 7vw, 116px);
+    --mega-product-gap: clamp(14px, 1.4vw, 22px);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
     padding: clamp(26px, 2.6vw, 40px) clamp(22px, 2.6vw, 44px);
     background: #fbfcfe;
+  }
+
+  .ossian-mega__side-panel {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
   }
 
   .ossian-mega__side-panel[hidden] {
@@ -955,13 +968,30 @@
     color: #1f5fa8;
   }
 
+  /* About 2.5 products visible; the half-visible card signals that the list scrolls */
   .ossian-mega__products {
     display: flex;
     flex-direction: column;
-    gap: clamp(14px, 1.4vw, 22px);
+    flex: 0 1 auto;
+    gap: var(--mega-product-gap);
+    min-height: 0;
+    max-height: calc(var(--mega-thumb) * 108 / 116 * 2.5 + var(--mega-product-gap) * 2);
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0 6px 0 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(30 58 95 / 0.25) transparent;
+  }
+
+  .ossian-mega__products::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .ossian-mega__products::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background: rgb(30 58 95 / 0.25);
   }
 
   .ossian-mega__product {
@@ -974,7 +1004,7 @@
 
   .ossian-mega__product-media {
     flex-shrink: 0;
-    width: clamp(84px, 7vw, 116px);
+    width: var(--mega-thumb);
     aspect-ratio: 116 / 108;
     border-radius: 12px;
     background: #f0f4f9;
@@ -2133,11 +2163,12 @@
         {
           "type": "range",
           "id": "products_limit",
-          "label": "Products shown",
+          "label": "Products loaded",
+          "info": "About 2.5 are visible; the rest scroll.",
           "min": 1,
-          "max": 5,
+          "max": 12,
           "step": 1,
-          "default": 3
+          "default": 8
         }
       ]
     },
