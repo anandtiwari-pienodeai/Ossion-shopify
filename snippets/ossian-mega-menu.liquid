@@ -36,6 +36,12 @@
   endif
   assign promo_url = promo.settings.button_link | default: link.url
   assign promo_image = promo.settings.image | default: parent_collection.image | default: parent_collection.featured_image
+  # Cover (default): the promo or collection image is a finished banner; it fills the panel on its own
+  # and the whole image links to the promo URL. A promo block can switch to "beside" (copy + small image).
+  assign promo_cover = false
+  if promo_image != blank and promo.settings.image_layout != 'beside'
+    assign promo_cover = true
+  endif
   assign bestsellers_heading = promo.settings.bestsellers_heading | default: 'Bestsellers'
   assign products_limit = promo.settings.products_limit | default: 3
 -%}
@@ -61,28 +67,49 @@
     {%- endfor -%}
   </ul>
 
-  <div class="ossian-mega__promo" {{ promo.shopify_attributes }}>
-    <div class="ossian-mega__promo-copy">
-      {%- if promo_eyebrow != blank -%}
-        <p class="ossian-mega__eyebrow">{{ promo_eyebrow }}</p>
-      {%- endif -%}
-      <p class="ossian-mega__heading">{{ promo_heading }}</p>
-      {%- if promo_text != blank -%}
-        <p class="ossian-mega__text">{{ promo_text }}</p>
-      {%- endif -%}
-      {%- if promo_url != blank and promo_url != '#' -%}
-        <a href="{{ promo_url }}" class="ossian-mega__button">
-          {{ promo_button }}
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
+  {%- if promo_cover -%}
+    {%- comment -%} Image only: the banner carries its own copy, so the whole image is the link {%- endcomment -%}
+    <a
+      href="{{ promo_url }}"
+      class="ossian-mega__promo ossian-mega__promo--cover"
+      {{ promo.shopify_attributes }}
+    >
+      {{
+        promo_image
+        | image_url: width: 1200
+        | image_tag:
+          loading: 'lazy',
+          alt: '',
+          widths: '400, 600, 800, 1000, 1200',
+          sizes: '(min-width: 1400px) 560px, 40vw',
+          class: 'ossian-mega__promo-bg'
+      }}
+      <span class="visually-hidden">{{ promo_heading }}: {{ promo_button }}</span>
+    </a>
+  {%- else -%}
+    <div class="ossian-mega__promo" {{ promo.shopify_attributes }}>
+      <div class="ossian-mega__promo-copy">
+        {%- if promo_eyebrow != blank -%}
+          <p class="ossian-mega__eyebrow">{{ promo_eyebrow }}</p>
+        {%- endif -%}
+        <p class="ossian-mega__heading">{{ promo_heading }}</p>
+        {%- if promo_text != blank -%}
+          <p class="ossian-mega__text">{{ promo_text }}</p>
+        {%- endif -%}
+        {%- if promo_url != blank and promo_url != '#' -%}
+          <a href="{{ promo_url }}" class="ossian-mega__button">
+            {{ promo_button }}
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        {%- endif -%}
+      </div>
+      {%- if promo_image != blank -%}
+        <div class="ossian-mega__promo-media">
+          {{ promo_image | image_url: width: 700 | image_tag: loading: 'lazy', alt: promo_heading, widths: '300, 500, 700', sizes: '320px' }}
+        </div>
       {%- endif -%}
     </div>
-    {%- if promo_image != blank -%}
-      <div class="ossian-mega__promo-media">
-        {{ promo_image | image_url: width: 700 | image_tag: loading: 'lazy', alt: promo_heading, widths: '300, 500, 700', sizes: '320px' }}
-      </div>
-    {%- endif -%}
-  </div>
+  {%- endif -%}
 
   <div class="ossian-mega__side">
     {%- for child in link.links -%}

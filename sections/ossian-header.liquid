@@ -162,13 +162,34 @@
               from the "Mega menu promo" block whose menu item matches the link title.
             {%- endcomment -%}
             {%- for link in fallback_links -%}
-              {%- assign menu_id = 'link-' | append: forloop.index0 -%}
+              {%- liquid
+                assign menu_id = 'link-' | append: forloop.index0
+
+                # Highlight the tab for the page you're on. Links to the home page don't count
+                # (menu placeholders often point at "/"), otherwise their parent lights up on the home page.
+                assign link_is_active = false
+                if link.active and link.url != routes.root_url
+                  assign link_is_active = true
+                endif
+                for child in link.links
+                  if child.url == routes.root_url
+                    continue
+                  endif
+                  if child.active or child.child_active
+                    assign link_is_active = true
+                    break
+                  endif
+                endfor
+                if link.url == routes.root_url and request.page_type == 'index'
+                  assign link_is_active = true
+                endif
+              -%}
               <li class="ossian-navbar__menu-item{% if link.links.size > 0 %} ossian-navbar__menu-item--mega{% endif %}">
                 {%- if link.links.size > 0 -%}
 
                   <button
                     type="button"
-                    class="ossian-navbar__menu-link ossian-navbar__menu-trigger{% if link.active or link.child_active %} is-active{% endif %}"
+                    class="ossian-navbar__menu-link ossian-navbar__menu-trigger{% if link_is_active %} is-active{% endif %}"
                     aria-expanded="false"
                     aria-haspopup="true"
                     data-mega-menu-trigger="{{ menu_id }}"
@@ -196,7 +217,7 @@
                 {%- else -%}
                   <a
                     href="{{ link.url }}"
-                    class="ossian-navbar__menu-link{% if link.active %} is-active{% endif %}"
+                    class="ossian-navbar__menu-link{% if link_is_active %} is-active{% endif %}"
                     {% if link.current %}aria-current="page"{% endif %}
                   >
                     {{ link.title }}
@@ -767,6 +788,39 @@
     align-items: center;
     padding: clamp(28px, 2.6vw, 44px) clamp(24px, 2.4vw, 40px) clamp(28px, 2.6vw, 44px) clamp(26px, 2.6vw, 44px);
     overflow: hidden;
+  }
+
+  /* Image only: the banner fills the panel and the whole panel is the link */
+  .ossian-mega__promo--cover {
+    display: block;
+    padding: 0;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .ossian-mega__promo-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.4s ease;
+  }
+
+  .ossian-mega__promo--cover:hover .ossian-mega__promo-bg {
+    transform: scale(1.02);
+  }
+
+  .ossian-mega__promo--cover:focus-visible {
+    outline: 2px solid #1f63d6;
+    outline-offset: -4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ossian-mega__promo-bg {
+      transition: none;
+    }
   }
 
   .ossian-mega__promo-copy {
@@ -2028,7 +2082,17 @@
           "type": "image_picker",
           "id": "image",
           "label": "Promo image",
-          "info": "Transparent PNG product shots work best."
+          "info": "Image only: a finished banner with its own text, 1200 x 1070 px. Beside the text: a transparent PNG product shot."
+        },
+        {
+          "type": "select",
+          "id": "image_layout",
+          "label": "Promo image layout",
+          "options": [
+            { "value": "cover", "label": "Image only (whole image is the link)" },
+            { "value": "beside", "label": "Beside the text" }
+          ],
+          "default": "cover"
         },
         {
           "type": "text",
