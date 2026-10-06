@@ -211,6 +211,7 @@
     "work_quickly_to_ship": "<p>We will work quickly to ship your order as soon as possible. Once your order has shipped, you will receive an email with further information. Delivery times vary depending on your location.</p>"
   },
   "info": {
+    "color_option_style": "Applies to options named Color, Colour or Shade. Captions read \"Col no: 01\", \"Col no: 02\"…",
     "cart_badge_tag": "Products with this tag show it as a badge in the cart drawer, e.g. Bestseller. Leave empty for no badge.",
     "cart_delivery_compare": "Optional. Shown crossed out next to the delivery text.",
     "actions_display_style": "Icons are always used on mobile",
@@ -439,6 +440,8 @@
     "comparison_slider": "Comparison slider"
   },
   "options": {
+    "numbered_swatches": "Numbered swatches",
+    "same_as_other_options": "Same as other options",
     "above_carousel": "Above carousel",
     "accent": "Accent",
     "all": "All",
@@ -751,6 +754,7 @@
     "below_media": "Below media"
   },
   "settings": {
+    "color_option_style": "Color option style",
     "accordion": "Accordion",
     "account": "Account",
     "actions_display_style": "Menu style",

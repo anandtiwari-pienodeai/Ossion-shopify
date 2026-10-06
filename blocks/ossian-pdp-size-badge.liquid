@@ -1,35 +1,60 @@
 {%- doc -%}
-  Size badge for the product page ("4000 ml / Professional size"). Shows the selected variant's
-  first option value, so it follows variant changes on re-render. Hidden for products whose only
-  variant is "Default Title". Pinned to the top-right corner of the product details column.
+  Size badge for the product page ("4000 ml / Professional size"). Shows the selected variant's value
+  for the first option whose name matches the "Size option names" setting (Size, Volume…), falling back
+  to the product's `custom.size` metafield. Renders nothing for colour-only or single-variant products
+  without that metafield. <ossian-size-badge> swaps in the server-rendered badge on variant changes.
+  Pinned to the top-right corner of the product details column by sections/product-information.liquid.
 {%- enddoc -%}
 {%- liquid
   assign product = closest.product
-  assign variant = product.selected_or_first_available_variant
-  assign size_value = variant.option1
-  if product.has_only_default_variant or size_value == blank
-    assign size_value = blank
+  assign size_value = blank
+
+  assign size_names = block.settings.option_names | downcase | split: ','
+  for option in product.options_with_values
+    assign option_name = option.name | downcase | strip
+    for size_name in size_names
+      assign size_name = size_name | strip
+      if size_name != blank and option_name == size_name
+        assign size_value = option.selected_value
+        break
+      endif
+    endfor
+    if size_value != blank
+      break
+    endif
+  endfor
+
+  if size_value == blank
+    assign size_value = product.metafields.custom.size.value
   endif
+
   if request.visual_preview_mode and product == blank
     assign size_value = '4000 ml'
   endif
 -%}
 
-{%- if size_value != blank -%}
-  <div class="ossian-size-badge" {{ block.shopify_attributes }}>
-    <span class="ossian-size-badge__icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 5-14 15-15-1 10-7 15-15 15Z"/><path d="M5 19 13 11"/></svg>
-    </span>
-    <span class="ossian-size-badge__text">
-      <span class="ossian-size-badge__value">{{ size_value | escape }}</span>
-      {%- if block.settings.label != blank -%}
-        <span class="ossian-size-badge__label">{{ block.settings.label | escape }}</span>
-      {%- endif -%}
-    </span>
-  </div>
-{%- endif -%}
+<script type="module" src="{{ 'ossian-size-badge.js' | asset_url }}"></script>
+<ossian-size-badge data-block-id="{{ block.id }}" {{ block.shopify_attributes }}>
+  {%- if size_value != blank -%}
+    <div class="ossian-size-badge">
+      <span class="ossian-size-badge__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 5-14 15-15-1 10-7 15-15 15Z"/><path d="M5 19 13 11"/></svg>
+      </span>
+      <span class="ossian-size-badge__text">
+        <span class="ossian-size-badge__value">{{ size_value | escape }}</span>
+        {%- if block.settings.label != blank -%}
+          <span class="ossian-size-badge__label">{{ block.settings.label | escape }}</span>
+        {%- endif -%}
+      </span>
+    </div>
+  {%- endif -%}
+</ossian-size-badge>
 
 {% stylesheet %}
+  ossian-size-badge {
+    display: contents;
+  }
+
   .ossian-size-badge {
     display: inline-flex;
     align-items: center;
@@ -73,7 +98,8 @@
   "name": "PDP Size Badge",
   "tag": null,
   "settings": [
-    { "type": "paragraph", "content": "Shows the selected variant's size (its first option value) in the top-right corner of the product details." },
+    { "type": "paragraph", "content": "Shows the selected variant's size in the top-right corner of the product details. Falls back to the product metafield custom.size." },
+    { "type": "text", "id": "option_names", "label": "Size option names", "default": "Size, Volume, Weight, Pack size", "info": "Comma separated. The first product option with one of these names supplies the size." },
     { "type": "text", "id": "label", "label": "Label", "default": "Professional size" }
   ],
   "presets": [{ "name": "PDP Size Badge" }]

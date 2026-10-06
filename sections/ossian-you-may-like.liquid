@@ -263,7 +263,10 @@
     position: relative;
   }
 
+  /* position: relative makes the track the containing block, so absolutely positioned card
+     content (e.g. visually-hidden labels) is clipped by its scroller instead of widening the page */
   .oyml__track {
+    position: relative;
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: calc((100% - (var(--oyml-per-view) - 1) * var(--oyml-gap)) / var(--oyml-per-view));

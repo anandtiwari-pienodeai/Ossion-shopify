@@ -48,6 +48,14 @@
             endif
           endif
 
+          # Ossion: color options can render as square swatches captioned "Col no: 01"
+          assign option_name_lc = product_option.name | downcase | strip
+          if block_settings.color_option_style == 'numbered_swatches' and product_option.values.size > 1
+            if option_name_lc == 'color' or option_name_lc == 'colour' or option_name_lc == 'shade'
+              assign variant_style = 'numbered'
+            endif
+          endif
+
           if variant_style == 'buttons' and settings.variant_button_width == 'equal-width-buttons'
             assign fieldset_id = section.id | append: '-' | append: product_resource.id | append: '-' | append: product_option.name | handleize
             assign option_id_attribute = 'data-option-id="' | append: fieldset_id | append: '"'
@@ -68,17 +76,17 @@
               {{- product_option.selected_value -}}
             </span>
           </div>
-        {%- elsif variant_style == 'swatch' or block_settings.variant_style == 'buttons' -%}
+        {%- elsif variant_style == 'swatch' or variant_style == 'numbered' or block_settings.variant_style == 'buttons' -%}
           {%- assign fieldset_index = forloop.index0 -%}
           <fieldset
-            class="variant-option variant-option--buttons{% if variant_style == 'swatch' %} variant-option--swatches{% else %} variant-option--{{ settings.variant_button_width }}{% endif %}"
+            class="variant-option {% if variant_style == 'numbered' %}variant-option--numbered{% else %}variant-option--buttons{% if variant_style == 'swatch' %} variant-option--swatches{% else %} variant-option--{{ settings.variant_button_width }}{% endif %}{% endif %}"
             data-fieldset-index="{{ fieldset_index }}"
             ref="fieldsets[]"
             {{ option_id_attribute }}
           >
             <legend>
               {{ product_option.name | escape -}}
-              {%- if variant_style == 'swatch' -%}
+              {%- if variant_style == 'swatch' or variant_style == 'numbered' -%}
                 <span class="variant-option__swatch-value">{{ product_option.selected_value }}</span>
               {%- endif %}
             </legend>
@@ -87,7 +95,7 @@
                 {% assign longest_value = product_option_value.size %}
               {% endif %}
               <label
-                class="variant-option__button-label{% if variant_style == 'swatch' %} variant-option__button-label--has-swatch{% endif %}"
+                class="{% if variant_style == 'numbered' %}variant-option__numbered{% else %}variant-option__button-label{% if variant_style == 'swatch' %} variant-option__button-label--has-swatch{% endif %}{% endif %}"
               >
                 <input
                   type="radio"
@@ -130,6 +138,26 @@
                     variant_image: featured_media,
                     mode: 'unscaled'
                   %}
+                {% elsif variant_style == 'numbered' %}
+                  {%- liquid
+                    assign swatch_number = forloop.index
+                    if swatch_number < 10
+                      assign swatch_number = '0' | append: swatch_number
+                    endif
+                    assign swatch_image = product_option_value.swatch.image
+                  -%}
+                  <span
+                    class="variant-option__numbered-swatch"
+                    style="--numbered-swatch-color: {{ product_option_value.swatch.color | default: 'var(--color-variant-background)' }};"
+                    aria-hidden="true"
+                  >
+                    {%- if swatch_image -%}
+                      {{ swatch_image | image_url: width: 112 | image_tag: loading: 'lazy', width: 56, height: 56, alt: '', class: 'variant-option__numbered-image' }}
+                    {%- endif -%}
+                  </span>
+                  <span class="variant-option__numbered-caption" aria-hidden="true">
+                    {{- 'products.product.color_number' | t: number: swatch_number -}}
+                  </span>
                 {% else %}
                   {% if product_option_value.available == true %}
                     <span
@@ -144,7 +172,9 @@
                     {{- product_option_value | escape -}}
                   </span>
                 {% endif %}
-                {% render 'strikethrough-variant', product_option: product_option_value %}
+                {% unless variant_style == 'numbered' %}
+                  {% render 'strikethrough-variant', product_option: product_option_value %}
+                {% endunless %}
               </label>
             {%- endfor -%}
             {% if option_id_attribute %}
@@ -308,5 +338,109 @@
   .variant-picker--right .variant-option {
     text-align: right;
     justify-content: right;
+  }
+
+  /* Numbered colour swatches ("Col no: 01"), enabled by the variant picker's colour option style */
+  .variant-option--numbered {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  .variant-option--numbered legend {
+    padding: 0;
+    margin-block-end: var(--margin-xs);
+  }
+
+  .variant-option__numbered {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 56px;
+    cursor: pointer;
+  }
+
+  .variant-option__numbered input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .variant-option__numbered-swatch {
+    display: block;
+    width: 48px;
+    height: 48px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    background: var(--numbered-swatch-color);
+    outline: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-15));
+    outline-offset: 2px;
+    transition: border-color var(--animation-speed) var(--animation-easing),
+      transform var(--animation-speed) var(--animation-easing);
+  }
+
+  .variant-option__numbered-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .variant-option__numbered-caption {
+    font-size: var(--font-size--xs);
+    font-weight: 500;
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-70));
+    white-space: nowrap;
+  }
+
+  .variant-option__numbered:hover .variant-option__numbered-swatch {
+    border-color: rgb(var(--color-foreground-rgb) / var(--opacity-40));
+  }
+
+  .variant-option__numbered:has(:checked) .variant-option__numbered-swatch {
+    border-color: var(--color-foreground);
+    outline-color: var(--color-foreground);
+    transform: scale(1.05);
+  }
+
+  .variant-option__numbered:has(:checked) .variant-option__numbered-caption {
+    color: var(--color-foreground);
+    font-weight: 600;
+  }
+
+  .variant-option__numbered:has(:focus-visible) .variant-option__numbered-swatch {
+    outline: var(--focus-outline-width, 2px) solid var(--color-foreground);
+    outline-offset: var(--focus-outline-offset, 3px);
+  }
+
+  /* Sold out: still selectable (shows the sold-out state), dimmed with a diagonal strike */
+  .variant-option__numbered:has([data-option-available='false']) .variant-option__numbered-swatch {
+    opacity: 0.45;
+    background-image: linear-gradient(
+      to top right,
+      transparent calc(50% - 1px),
+      rgb(var(--color-foreground-rgb) / var(--opacity-60)) calc(50% - 1px) calc(50% + 1px),
+      transparent calc(50% + 1px)
+    );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .variant-option__numbered-swatch {
+      transition: none;
+    }
+
+    .variant-option__numbered:has(:checked) .variant-option__numbered-swatch {
+      transform: none;
+    }
   }
 {% endstylesheet %}

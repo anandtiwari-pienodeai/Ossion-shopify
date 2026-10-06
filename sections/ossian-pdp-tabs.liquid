@@ -1,10 +1,43 @@
+{%- liquid
+  # Pre-pass: a tab is shown only when it has something to say for this product,
+  # so products without the tab metafields don't get empty panels.
+  assign tabs_with_content = ''
+  for block in section.blocks
+    if block.type != 'tab' or block.settings.label == blank
+      continue
+    endif
+
+    assign tab_value = blank
+    assign tab_field = block.settings.metaobject_metafield | strip | remove_first: 'product.metafields.'
+    assign tab_parts = tab_field | split: '.'
+    if tab_parts[0] != blank and tab_parts[1] != blank
+      assign tab_value = product.metafields[tab_parts[0]][tab_parts[1]].value
+    endif
+
+    assign tab_has_content = false
+    if tab_value != blank or block.settings.content != blank or block.settings.features_list != blank or block.settings.featured_image != blank
+      assign tab_has_content = true
+    elsif product.description != blank
+      if block.settings.use_product_description or block.settings.description_fallback
+        assign tab_has_content = true
+      endif
+    endif
+
+    if tab_has_content
+      assign tabs_with_content = tabs_with_content | append: '|' | append: block.id | append: '|'
+    endif
+  endfor
+-%}
+
+{%- if tabs_with_content != blank -%}
 <section class="pdp-tabs" id="pdp-tabs-{{ section.id }}">
   <div class="page-width pdp-tabs__inner">
 
     <div class="pdp-tabs__nav" role="tablist" aria-label="Product information">
       {%- assign nav_index = 0 -%}
       {%- for block in section.blocks -%}
-        {%- if block.type == 'tab' and block.settings.label != blank -%}
+        {%- assign tab_key = '|' | append: block.id | append: '|' -%}
+        {%- if block.type == 'tab' and block.settings.label != blank and tabs_with_content contains tab_key -%}
           {%- assign nav_index = nav_index | plus: 1 -%}
           <button
             class="pdp-tabs__nav-btn{% if nav_index == 1 %} pdp-tabs__nav-btn--active{% endif %}"
@@ -29,7 +62,8 @@
 
     {%- assign panel_index = 0 -%}
     {%- for block in section.blocks -%}
-      {%- if block.type == 'tab' and block.settings.label != blank -%}
+      {%- assign tab_key = '|' | append: block.id | append: '|' -%}
+      {%- if block.type == 'tab' and block.settings.label != blank and tabs_with_content contains tab_key -%}
         {%- assign panel_index = panel_index | plus: 1 -%}
         {%- liquid
           # ---- Resolve the product metafield this tab points at ----
@@ -81,8 +115,13 @@
             assign show_split = true
           endif
 
+          assign use_description = block.settings.use_product_description
+          if block.settings.description_fallback and mo_kind == nil and block.settings.content == blank and block.settings.features_list == blank
+            assign use_description = true
+          endif
+
           assign has_text = false
-          if block.settings.use_product_description and product.description != blank
+          if use_description and product.description != blank
             assign has_text = true
           endif
           if block.settings.content != blank
@@ -104,7 +143,7 @@
         >
           {%- if has_text -%}
             <div class="pdp-tabs__panel-text">
-              {%- if block.settings.use_product_description -%}
+              {%- if use_description and product.description != blank -%}
                 <div class="pdp-tabs__rte rte">{{ product.description }}</div>
               {%- elsif block.settings.content != blank -%}
                 <div class="pdp-tabs__rte rte">{{ block.settings.content }}</div>
@@ -221,6 +260,7 @@
     {%- endfor -%}
   </div>
 </section>
+{%- endif -%}
 
 {%- if section.settings.show_reviews -%}
   {%- assign p5 = section.settings.five_star_pct | default: 90 -%}
@@ -361,7 +401,16 @@
 }
 
 .pdp-tabs__inner {
+  max-width: 1320px;
+  margin-inline: auto;
   padding-block-start: 0;
+  padding-inline: 24px;
+}
+
+@media (max-width: 749px) {
+  .pdp-tabs__inner {
+    padding-inline: 16px;
+  }
 }
 .ossian-pdp-tabs-section {
   padding: 0;
@@ -1117,6 +1166,13 @@
           "label": "Use product description",
           "default": false,
           "info": "Pulls content from the product description in Shopify admin"
+        },
+        {
+          "type": "checkbox",
+          "id": "description_fallback",
+          "label": "Use product description when empty",
+          "default": false,
+          "info": "Shows the product description when this tab's metafield and content are empty"
         },
         {
           "type": "richtext",

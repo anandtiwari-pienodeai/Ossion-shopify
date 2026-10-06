@@ -18,7 +18,6 @@
     id: 'product-details',
     closest.product: closest.product
   %}
-  {%- render 'ossian-variant-image-picker', product: product -%}
 {% endcapture %}
 
 {% capture additional_blocks %}
@@ -376,18 +375,18 @@
     overflow: hidden;
   }
 
-  /* ── Variant image picker ───────────────────── */
-  .ossian-vip { margin-top: 12px; }
+  /* ── Variant option headings ("COLOR  1 Black") ── */
+  .product-information .variant-picker .variant-option legend {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+  }
 
-  /* ── Hide native variant picker UI when custom strip active ── */
-  .product-information .variant-picker__form {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    white-space: nowrap;
+  .product-information .variant-picker .variant-option legend .variant-option__swatch-value {
+    font-weight: 500;
+    text-transform: none;
   }
 
   /* ── Mobile ────────────────────────────────── */
@@ -401,7 +400,6 @@
       font-size: 1.45rem;
     }
 
-    .ossian-vip { margin-top: 10px; }
   }
 
   .sticky-add-to-cart__bar {
@@ -647,9 +645,11 @@
     bottom: 0;
     z-index: 2;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
+    row-gap: 6px;
     margin: 0;
-    padding: 34px 20px 18px;
+    padding: 34px 12px 16px;
     list-style: none;
     color: #fff;
     background: linear-gradient(180deg, rgb(8 24 50 / 0) 0%, rgb(8 24 50 / 0.82) 55%);
@@ -659,9 +659,9 @@
   .ossian-media-badges__item {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    padding-inline: clamp(12px, 2vw, 28px);
-    font-size: clamp(0.8rem, 1.1vw, 1rem);
+    gap: 8px;
+    padding-inline: clamp(8px, 1.2vw, 20px);
+    font-size: clamp(0.78rem, 0.95vw, 0.95rem);
     font-weight: 500;
     white-space: nowrap;
   }
@@ -671,15 +671,56 @@
   }
 
   .ossian-media-badges__icon {
-    width: 26px;
-    height: 26px;
+    width: 22px;
+    height: 22px;
     flex-shrink: 0;
   }
 
-  /* Phones: compact strip, text lifted above the slideshow dots */
+  /* Desktop: keep the gallery in view while the longer details column scrolls */
+  @media screen and (min-width: 750px) {
+    .product-information .product-information__media {
+      position: sticky;
+      top: calc(var(--header-height, 0px) + 16px);
+    }
+  }
+
+  /* Phones: compact strip; thumbnails sit below the image */
   @media screen and (max-width: 749px) {
     .ossian-media-badges {
-      padding: 28px 8px 34px;
+      padding: 28px 8px 14px;
+    }
+
+    .product-information slideshow-controls[thumbnails] {
+      margin-block-start: 10px;
+      padding-inline: 0;
+    }
+
+    .product-information slideshow-controls[thumbnails] .slideshow-controls__thumbnails {
+      justify-content: flex-start;
+      gap: 8px;
+      padding: 3px;
+    }
+
+    .product-information slideshow-controls[thumbnails] .slideshow-control {
+      flex: 0 0 60px;
+      width: 60px;
+      height: 60px;
+      overflow: hidden;
+      border: 1px solid #e3e8f1;
+      border-radius: 10px;
+      background: #f4f7fc;
+    }
+
+    .product-information slideshow-controls[thumbnails] .slideshow-control img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-information slideshow-controls[thumbnails] .slideshow-control[aria-selected='true'] {
+      outline: 2px solid #1e3a5f;
+      outline-offset: 0;
+      border-color: transparent;
     }
 
     .ossian-media-badges__item {
@@ -1043,7 +1084,7 @@
   /* Phones: full screen, image on top, thumbnails in a row underneath */
   @media screen and (max-width: 749px) {
     .product-information .dialog-zoomed-gallery__dialog[open] {
-      width: 100vw;
+      width: 100%;
       height: 100dvh;
       padding: 12px;
       border-radius: 0;
