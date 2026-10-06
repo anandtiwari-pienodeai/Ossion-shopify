@@ -1663,31 +1663,34 @@
     if (nextBtn) nextBtn.addEventListener('click', function() { goTo(currentActive + 1); });
 
 
-    /* All reel videos autoplay and keep playing regardless of which card is active,
-       but only once the section is actually scrolled near the viewport — loading
-       every card's video eagerly on page load was costing ~27MB on every pageview. */
-    function playAllVideos() {
-      cards.forEach(function(c) {
-        const vid = c.querySelector('.ossian-reels__card-video');
-        if (!vid || vid.src) return;
+    /* Every visible reel autoplays. Each card's video is fetched only when that card
+       itself comes into view (including cards scrolled in sideways within the carousel)
+       and pauses when it leaves, so off-screen reels (6–12MB each) aren't downloaded. */
+    function startVideo(vid) {
+      if (!vid.src) {
         vid.src = vid.dataset.src;
         vid.load();
-        vid.play().catch(function() { /* autoplay blocked until user interacts with the page */ });
-      });
+      }
+      vid.play().catch(function() { /* autoplay blocked until user interacts with the page */ });
     }
 
+    const cardVideos = cards
+      .map(function(c) { return c.querySelector('.ossian-reels__card-video'); })
+      .filter(function(v) { return v && v.dataset.src; });
+
     if ('IntersectionObserver' in window) {
-      const lazyObserver = new IntersectionObserver(function(entries) {
+      const videoObserver = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
           if (entry.isIntersecting) {
-            playAllVideos();
-            lazyObserver.disconnect();
+            startVideo(entry.target);
+          } else if (entry.target.src) {
+            entry.target.pause();
           }
         });
-      }, { rootMargin: '300px 0px' });
-      lazyObserver.observe(track);
+      }, { rootMargin: '200px' });
+      cardVideos.forEach(function(v) { videoObserver.observe(v); });
     } else {
-      playAllVideos();
+      cardVideos.forEach(startVideo);
     }
 
     function findCenterCard() {

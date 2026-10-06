@@ -44,15 +44,21 @@
         }}
       {%- else -%}
         {%- comment -%} Defaults bundled with the theme, used until images are picked {%- endcomment -%}
+        {%- comment -%} The CDN resizes theme assets via ?width=, so phones don't download the 2000px files {%- endcomment -%}
+        {%- assign otb_mobile = 'ossion-salon-choice-mobile.jpg' | asset_url -%}
+        {%- assign otb_desktop = 'ossion-salon-choice-desktop.jpg' | asset_url -%}
         <source
           media="(max-width: 749px)"
-          srcset="{{ 'ossion-salon-choice-mobile.jpg' | asset_url }}"
+          srcset="{{ otb_mobile }}&width=500 500w, {{ otb_mobile }}&width=750 750w, {{ otb_mobile }}&width=1100 1100w, {{ otb_mobile }}&width=1500 1500w, {{ otb_mobile }} 1774w"
+          sizes="100vw"
           width="1774"
           height="887"
         >
         <img
           class="otb-image__img"
-          src="{{ 'ossion-salon-choice-desktop.jpg' | asset_url }}"
+          src="{{ otb_desktop }}&width=1500"
+          srcset="{{ otb_desktop }}&width=750 750w, {{ otb_desktop }}&width=1100 1100w, {{ otb_desktop }}&width=1500 1500w, {{ otb_desktop }} 2000w"
+          sizes="100vw"
           alt="{{ s.alt | escape }}"
           width="2000"
           height="668"

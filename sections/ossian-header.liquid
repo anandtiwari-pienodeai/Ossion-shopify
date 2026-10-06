@@ -554,6 +554,101 @@
 </script>
 
 {% stylesheet %}
+  /* ---------- Shared header rules ----------
+     Carried over from the removed stock Horizon header section (sections/header.liquid).
+     Its stylesheet shipped on every page and these rules also styled this header's
+     header-actions (cart/account icons), the cart drawer and #header-component.
+     Only the rules that match rendered markup were kept. */
+  body { --header-height: 60px; --header-group-height: var(--header-height); --transparent-header-offset-boolean: 0; }
+
+  .header {
+    --header-padding: var(--padding-sm); --font-paragraph--line-height: 1; --header-content-transition-timing: 0s; display: block; contain: layout style; background: transparent;
+    & a, & .button, & .button-secondary, & .header-actions__action { transition: color var(--header-content-transition-timing), border-color var(--header-content-transition-timing); }
+  }
+
+  #header-component :is(.header-menu, .dropdown-localization) { display: none; }
+
+  @media screen and (min-width: 750px) {
+    #header-component[data-menu-style="menu"] :is(.header-menu, .dropdown-localization) { display: flex; }
+  }
+
+  #header-component { --submenu-height: 0px; --full-open-header-height: 0px; }
+
+  #header-group:has(#header-component[sticky]) { display: contents; }
+
+  header-menu, .header-actions__action, .header__icon--menu { transition: opacity var(--animation-speed) var(--animation-easing); }
+
+  .header-actions__action {
+    --button-color: var(--color-foreground); color: var(--button-color); cursor: pointer; display: flex; justify-content: center;
+    &:hover { --button-color: var(--color-foreground); }
+  }
+
+  .header-actions__action:not(.account-button) .svg-wrapper { height: var(--button-size); width: var(--button-size); }
+
+  .header-actions__action:not(.account-button) svg { width: var(--icon-size-md); height: var(--icon-size-md); }
+
+  .header:has(#Details-menu-drawer-container[open]) { contain: style; }
+
+  main > .shopify-section:first-child .section:not(.disable-section-top-offset) {
+    &.spacing-style, & .spacing-style {
+    --section-top-offset: calc(var(--header-height) * var(--transparent-header-offset-boolean));
+    & :is(.spacing-style, .inherit-spacing) { --section-top-offset: 0px; }
+  }
+    & .sticky-content { margin-top: calc(var(--header-height) * var(--transparent-header-offset-boolean) * -1); }
+  }
+
+  @media screen and (min-width: 768px) {
+    #header-component .search-action { min-width: 240px; height: 42px; border: 1.5px solid rgb(209, 213, 219); border-radius: 100px; background: rgb(255, 255, 255); overflow: hidden; flex-shrink: 0; transition: border-color 0.2s; }
+    #header-component .search-action:hover { border-color: rgb(30, 58, 95); }
+    #header-component .header__column--right .search-action, #header-component .header__column--left .search-action { margin-inline: 0px; }
+    #header-component .search-action .header-actions__action { width: 100%; height: 100%; color: rgb(156, 163, 175); display: flex !important; align-items: center !important; padding: 0px 18px 0px 14px !important; gap: 10px !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; border-image: initial !important; border-radius: 0px !important; box-shadow: none !important; background: transparent !important; }
+    #header-component .search-action .header-actions__action::after { content: "Search"; font-size: 14px; color: rgb(156, 163, 175); font-weight: 400; flex: 1 1 0%; text-align: left; white-space: nowrap; }
+    #header-component .search-action .svg-wrapper { align-items: center; justify-content: center; flex-shrink: 0; display: flex !important; }
+    #header-component .search-action .svg-wrapper svg { width: 20px; height: 20px; color: rgb(30, 58, 95); }
+    #header-component .header__column--right header-actions { gap: 8px; margin-inline-start: 0px; align-items: center; }
+    #header-component .cart-drawer { margin-inline-end: 0px; }
+    #header-component header-actions .header-actions__action { flex-shrink: 0; transition: border-color 0.2s; width: 42px !important; height: 42px !important; border: 1.5px solid rgb(209, 213, 219) !important; border-radius: 10px !important; padding: 0px !important; display: flex !important; align-items: center !important; justify-content: center !important; color: rgb(30, 58, 95) !important; background: transparent !important; box-shadow: none !important; }
+    #header-component header-actions .header-actions__action:hover { border-color: rgb(30, 58, 95) !important; background: transparent !important; }
+    #header-component .account-button.header-actions__action { overflow: hidden; width: 42px !important; height: 42px !important; border: 1.5px solid rgb(209, 213, 219) !important; border-radius: 10px !important; }
+    #header-component .account-button.header-actions__action:hover { border-color: rgb(30, 58, 95) !important; }
+    #header-component .ossian-wishlist-btn { width: 42px; height: 42px; border: 1.5px solid rgb(209, 213, 219); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: rgb(30, 58, 95); text-decoration: none; flex-shrink: 0; transition: border-color 0.2s; }
+    #header-component .ossian-wishlist-btn:hover { border-color: rgb(30, 58, 95); }
+    #header-component .ossian-wishlist-btn svg { width: 20px; height: 20px; color: rgb(30, 58, 95); }
+    #header-component header-actions svg, #header-component .account-button svg, #header-component shopify-account svg { width: 20px; height: 20px; color: rgb(30, 58, 95); }
+  }
+
+  @media screen and (max-width: 767px) {
+    #header-component .header__navigation-bar-row { display: none !important; }
+    #header-component .header__row--top { height: 50px !important; min-height: 50px !important; max-height: 50px !important; overflow: hidden !important; }
+    #header-component .header__columns, #header-component[data-menu-style="drawer"] .header__columns { display: flex !important; flex-wrap: nowrap !important; align-items: center !important; height: 56px !important; max-height: 56px !important; overflow: hidden !important; padding: 0px !important; gap: 0px !important; }
+    #header-component .header__columns header-menu { order: 1 !important; flex-shrink: 0 !important; }
+    #header-component .header__columns .header-logo { order: 2 !important; flex: 1 1 0% !important; min-width: 0px !important; }
+    #header-component .header__columns .search-action { order: 3 !important; flex-shrink: 0 !important; }
+    #header-component .header__columns header-actions { order: 4 !important; flex-shrink: 0 !important; }
+    #header-component .search-action--hidden-on-drawer { display: none !important; }
+    #header-component .header__columns header-menu { display: flex !important; align-items: center !important; justify-content: center !important; width: 48px !important; height: 56px !important; overflow: hidden !important; }
+    #header-component .header__columns header-menu > details, #header-component .header__columns header-menu > nav, #header-component .header__columns header-menu > div { height: 56px !important; overflow: hidden !important; display: flex !important; align-items: center !important; }
+    #header-component .header__icon--menu { width: 48px !important; height: 56px !important; display: flex !important; align-items: center !important; justify-content: center !important; color: rgb(30, 58, 95) !important; background: transparent !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; border-image: initial !important; padding: 0px !important; flex-shrink: 0 !important; }
+    #header-component .header__icon--menu svg, #header-component header-menu svg { width: 28px !important; height: 28px !important; color: rgb(30, 58, 95) !important; }
+    #header-component .header__columns .header-logo { display: flex !important; align-items: center !important; justify-content: flex-start !important; padding-left: 4px !important; height: 56px !important; overflow: hidden !important; }
+    #header-component .search-action { min-width: unset !important; width: 40px !important; height: 56px !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; border-image: initial !important; border-radius: 0px !important; background: transparent !important; overflow: hidden !important; }
+    #header-component .search-action .header-actions__action::after { display: none !important; }
+    #header-component .search-action .header-actions__action { width: 40px !important; height: 56px !important; padding: 0px !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; border-image: initial !important; background: transparent !important; box-shadow: none !important; display: flex !important; align-items: center !important; justify-content: center !important; color: rgb(30, 58, 95) !important; }
+    #header-component .search-action .svg-wrapper { display: flex !important; }
+    #header-component .search-action svg { width: 20px !important; height: 20px !important; color: rgb(30, 58, 95) !important; }
+    #header-component header-actions { display: flex !important; align-items: center !important; gap: 0px !important; height: 56px !important; overflow: hidden !important; }
+    #header-component .ossian-wishlist-btn { text-decoration: none; flex-shrink: 0; width: 38px !important; height: 56px !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; border-image: initial !important; border-radius: 0px !important; background: transparent !important; color: rgb(30, 58, 95) !important; display: flex !important; align-items: center !important; justify-content: center !important; }
+    #header-component .ossian-wishlist-btn svg { width: 20px !important; height: 20px !important; }
+    #header-component header-actions .header-actions__action, #header-component header-actions .account-button.header-actions__action { width: 40px !important; height: 56px !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; border-image: initial !important; border-radius: 0px !important; padding: 0px !important; background: transparent !important; box-shadow: none !important; color: rgb(30, 58, 95) !important; display: flex !important; align-items: center !important; justify-content: center !important; overflow: visible !important; }
+    #header-component .account-button { display: flex !important; align-items: center !important; justify-content: center !important; width: 40px !important; height: 56px !important; background: transparent !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; border-image: initial !important; border-radius: 0px !important; overflow: visible !important; }
+    #header-component shopify-account { display: flex !important; align-items: center !important; justify-content: center !important; min-width: unset !important; width: 40px !important; height: 56px !important; color: rgb(30, 58, 95) !important; background: transparent !important; }
+    #header-component .account-button__icon, #header-component .account-button__fallback { display: flex !important; align-items: center !important; justify-content: center !important; color: rgb(30, 58, 95) !important; }
+    #header-component .account-button__icon svg { width: 20px !important; height: 20px !important; color: rgb(30, 58, 95) !important; }
+    #header-component header-actions svg { width: 20px !important; height: 20px !important; }
+    #header-component header-actions { padding-right: 4px; }
+    #header-component .cart-count-bubble { min-width: 16px; height: 16px; font-size: 10px; }
+  }
+
   /* Sticky header: pins the whole header group (announcement bar + navbar) */
   #header-group:has(.ossian-navbar[data-ossian-sticky]) {
     position: sticky;

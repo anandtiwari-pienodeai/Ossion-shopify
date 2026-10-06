@@ -39,7 +39,16 @@
         {{ s.background_image | image_url: width: 2400 | image_tag: loading: 'lazy', alt: '', widths: '900, 1400, 1900, 2400', sizes: '100vw' }}
       </picture>
     {%- else -%}
-      <img src="{{ 'ossion-solutions-bg.jpg' | asset_url }}" alt="" width="1848" height="851" loading="lazy">
+      {%- assign osol_bg = 'ossion-solutions-bg.jpg' | asset_url -%}
+      <img
+        src="{{ osol_bg }}&width=1400"
+        srcset="{{ osol_bg }}&width=750 750w, {{ osol_bg }}&width=1100 1100w, {{ osol_bg }}&width=1400 1400w, {{ osol_bg }} 1848w"
+        sizes="100vw"
+        alt=""
+        width="1848"
+        height="851"
+        loading="lazy"
+      >
     {%- endif -%}
   </div>
 
