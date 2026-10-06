@@ -3,8 +3,25 @@
   columns. Each line of the setting is "Title | Description | icon"; the description and icon are
   optional (lines with only a title still work). Icons: sparkle, shield, arrow-up, leaf, coral,
   drop, flask, check, star. Without an icon, a sensible default is picked by position.
+
+  Source: the product metafield custom.pdp_features (multi-line text, same line format, or a list of
+  single-line text). The block's "Features" setting is only used when the product has none and
+  "Use default features" is on.
 {%- enddoc -%}
-{%- if block.settings.features != blank -%}
+{%- liquid
+  assign feature_lines = blank
+  assign feature_field = closest.product.metafields.custom.pdp_features
+  if feature_field != blank
+    if feature_field.type contains 'list.'
+      assign feature_lines = feature_field.value
+    else
+      assign feature_lines = feature_field.value | newline_to_br | split: '<br />'
+    endif
+  elsif block.settings.use_default_features and block.settings.features != blank
+    assign feature_lines = block.settings.features | newline_to_br | split: '<br />'
+  endif
+-%}
+{%- if feature_lines != blank -%}
   {%- assign default_icons = 'sparkle,shield,arrow-up,leaf,coral,drop' | split: ',' -%}
   <ul
     class="ossian-pdp-features spacing-style"
@@ -12,9 +29,8 @@
     role="list"
     {{ block.shopify_attributes }}
   >
-    {%- assign lines = block.settings.features | newline_to_br | split: '<br />' -%}
     {%- assign shown = 0 -%}
-    {%- for line in lines -%}
+    {%- for line in feature_lines -%}
       {%- assign trimmed = line | strip -%}
       {%- if trimmed == blank -%}{%- continue -%}{%- endif -%}
       {%- liquid
@@ -141,9 +157,21 @@
   "tag": null,
   "settings": [
     {
+      "type": "paragraph",
+      "content": "Each product's features come from its metafield custom.pdp_features (multi-line text, one feature per line: Title | Description | icon)."
+    },
+    {
+      "type": "checkbox",
+      "id": "use_default_features",
+      "label": "Use default features",
+      "info": "Shows the features below on products whose metafield is empty",
+      "default": false
+    },
+    {
       "type": "textarea",
       "id": "features",
-      "label": "Features (one per line)",
+      "label": "Default features (one per line)",
+      "visible_if": "{{ block.settings.use_default_features }}",
       "info": "Format: Title | Description | icon. Description and icon are optional. Icons: sparkle, shield, arrow-up, leaf, coral, drop, flask, check, star.",
       "default": "Anti-yellow Technology\nFibre Plex Protection\nUp to 9 Levels Lift\nNon-Damaging Formula\nEnriched with Marine actives"
     },
