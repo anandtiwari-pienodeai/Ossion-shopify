@@ -1,0 +1,568 @@
+{{ 'section-ossian-quiz.css' | asset_url | stylesheet_tag }}
+{% comment %}
+  Section contract.
+  Ossion product recommendation quiz: a hair/skin landing screen, one question
+  per screen with conditional follow-ups, and a result screen built from the
+  merchant's "Recommendation set" blocks. Questions render here as native radio
+  groups; assets/ossian-quiz.js drives navigation and assets/ossian-quiz-rules.js
+  scores the products. Copy for questions lives in locales under ossian_quiz.
+  @example
+  <!-- templates/page.quiz.json, reached from /pages/ossionquiz (?type=hair|skin) -->
+{% endcomment %}
+
+{%- liquid
+  assign sid = section.id
+  assign hair_fallback_image = blank
+  assign skin_fallback_image = blank
+  for block in section.blocks
+    assign journey = block.settings.concern | split: '-' | first
+    for product in block.settings.products
+      if product.featured_image != blank
+        if journey == 'hair' and hair_fallback_image == blank
+          assign hair_fallback_image = product.featured_image
+        elsif journey == 'skin' and skin_fallback_image == blank
+          assign skin_fallback_image = product.featured_image
+        endif
+      endif
+    endfor
+  endfor
+  assign hair_image = section.settings.hair_image | default: hair_fallback_image
+  assign skin_image = section.settings.skin_image | default: skin_fallback_image
+
+  # journey|question|shown when|advance mode|layout|answers|icons
+  capture step_spec
+    echo 'hair|hair_pattern||auto|tiles|straight,wavy,curly,coily|pattern-straight,pattern-wavy,pattern-curly,pattern-coily~'
+    echo 'hair|strand_thickness||auto|list|fine,medium,coarse|strand-fine,strand-medium,strand-coarse~'
+    echo 'hair|scalp_condition||auto|list|oily,normal,dry,sensitive|drop-oil,balance,flake,sensitive~'
+    echo 'hair|primary_concern||continue|grid|colour,blonde,smoothing,hydration,scalp|palette,sparkle,smooth,drop,refresh~'
+    echo 'hair|colour_goal|primary_concern:colour|continue|list|vibrancy,grey_coverage,shine,longevity|palette,circle,sparkle,refresh~'
+    echo 'hair|blonde_need|primary_concern:blonde|continue|list|brassiness,brightness,strengthen,hydrate,protect|sparkle,sun,repair,drop,sensitive~'
+    echo 'hair|smooth_result|primary_concern:smoothing|continue|list|frizz,lasting,sleek,manageability,humidity|smooth,refresh,pattern-straight,balance,drop~'
+    echo 'hair|hair_condition|primary_concern:hydration|continue|list|dry,very_dry,chemical,heat,brittle|flake,drop,sparkle,flame,repair~'
+    echo 'hair|scalp_need|primary_concern:scalp|continue|list|buildup,oil,refresh,soothe,deep_cleanse|refresh,drop-oil,leaf,sensitive,drop~'
+    echo 'hair|heat_frequency||optional|list|daily,often,weekly,rarely,never|flame,flame,flame,circle,flame-off~'
+    echo 'skin|skin_feel||auto|list|oily,dry,sensitive,normal|drop-oil,flake,sensitive,balance~'
+    echo 'skin|skin_goal||continue|list|pigmentation,waxing,glow|sun,leaf,sparkle~'
+    echo 'skin|pigment_concern|skin_goal:pigmentation|continue|list|sun_tan,dark_spots,acne_marks,dull|sun,circle,sensitive,refresh~'
+    echo 'skin|wax_need|skin_goal:waxing|continue|list|very_sensitive,normal,first_time|sensitive,balance,leaf~'
+    echo 'skin|glow_type|skin_goal:glow|continue|list|hydration,brightening,calming,antioxidant|drop,sun,leaf,sparkle~'
+    echo 'skin|skin_finish||auto|list|fresh,hydrated,calm,bright|sparkle,drop,balance,sun'
+  endcapture
+  assign steps = step_spec | split: '~'
+  assign hint_questions = 'strand_thickness,scalp_condition,skin_feel' | split: ','
+  assign reason_questions = 'primary_concern,skin_goal' | split: ','
+
+  assign step_of_template = 'ossian_quiz.step_of' | t: current: '[current]', total: '[total]'
+  assign browse_url = section.settings.browse_url | default: routes.all_products_collection_url
+-%}
+
+<ossian-quiz
+  class="ossion-quiz"
+  data-section-id="{{ sid }}"
+  data-step-template="{{ step_of_template | escape }}"
+  data-result-ready="{{ 'ossian_quiz.result_ready' | t | escape }}"
+  data-include-sold-out="{{ section.settings.include_sold_out }}"
+>
+  {%- comment -%} Landing: choose a journey. Links keep the quiz shareable and work before JS loads. {%- endcomment -%}
+  <div class="ossion-quiz__screen ossion-quiz__landing" ref="landing" data-screen="landing">
+    <div class="ossion-quiz__landing-intro ossion-quiz__container">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="ossion-quiz__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h1 class="ossion-quiz__title ossion-quiz__title--xl">{{ section.settings.heading | escape }}</h1>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <p class="ossion-quiz__lede">{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <ul class="ossion-quiz__journeys ossion-quiz__container" role="list">
+      {%- for journey in (1..2) -%}
+        {%- liquid
+          if forloop.first
+            assign j = 'hair'
+            assign j_image = hair_image
+          else
+            assign j = 'skin'
+            assign j_image = skin_image
+          endif
+          assign key = j | append: '_title'
+          assign j_title = section.settings[key]
+          assign key = j | append: '_brand'
+          assign j_brand = section.settings[key]
+          assign key = j | append: '_text'
+          assign j_text = section.settings[key]
+          assign key = j | append: '_cta'
+          assign j_cta = section.settings[key]
+        -%}
+        <li class="ossion-quiz__journey">
+          <a
+            class="ossion-quiz__journey-link"
+            href="?type={{ j }}"
+            data-journey="{{ j }}"
+            on:click="/handleJourneyClick"
+          >
+            <span class="ossion-quiz__journey-media">
+              {%- if j_image != blank -%}
+                {{
+                  j_image
+                  | image_url: width: 1400
+                  | image_tag:
+                    class: 'ossion-quiz__journey-img',
+                    widths: '400,600,800,1000,1400',
+                    sizes: '(min-width: 990px) 50vw, 100vw',
+                    loading: 'eager',
+                    fetchpriority: 'high',
+                    alt: ''
+                }}
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'ossion-quiz__journey-img ossion-quiz__journey-img--placeholder' }}
+              {%- endif -%}
+            </span>
+            <span class="ossion-quiz__journey-body">
+              <span class="ossion-quiz__journey-title">{{ j_title | escape }}</span>
+              {%- if j_brand != blank -%}
+                <span class="ossion-quiz__journey-brand">{{ j_brand | escape }}</span>
+              {%- endif -%}
+              {%- if j_text != blank -%}
+                <span class="ossion-quiz__journey-text">{{ j_text | escape }}</span>
+              {%- endif -%}
+              <span class="ossion-quiz__journey-cta">
+                <span class="ossion-quiz__journey-cta-label">{{ j_cta | escape }}</span>
+                <span class="ossion-quiz__round-arrow" aria-hidden="true">{% render 'ossian-quiz-icon', name: 'arrow-right' %}</span>
+              </span>
+            </span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    <noscript>
+      <p class="ossion-quiz__noscript ossion-quiz__container">
+        {{ 'ossian_quiz.noscript' | t }}
+        <a href="{{ browse_url }}">{{ 'ossian_quiz.browse_all' | t }}</a>
+      </p>
+    </noscript>
+  </div>
+
+  {%- comment -%} Questions: one fieldset per step, shown one at a time by the component. {%- endcomment -%}
+  <div class="ossion-quiz__screen ossion-quiz__flow" ref="flow" data-screen="flow" hidden>
+    <div class="ossion-quiz__flow-inner ossion-quiz__container">
+      <div class="ossion-quiz__aside" aria-hidden="true">
+        {%- if hair_image != blank -%}
+          <span class="ossion-quiz__aside-frame" data-journey-image="hair">
+          {{
+            hair_image
+            | image_url: width: 1100
+            | image_tag:
+              class: 'ossion-quiz__aside-img',
+              widths: '500,700,900,1100',
+              sizes: '(min-width: 990px) 40vw, 1px',
+              loading: 'lazy',
+              alt: ''
+          }}
+          </span>
+        {%- endif -%}
+        {%- if skin_image != blank -%}
+          <span class="ossion-quiz__aside-frame" data-journey-image="skin">
+          {{
+            skin_image
+            | image_url: width: 1100
+            | image_tag:
+              class: 'ossion-quiz__aside-img',
+              widths: '500,700,900,1100',
+              sizes: '(min-width: 990px) 40vw, 1px',
+              loading: 'lazy',
+              alt: ''
+          }}
+          </span>
+        {%- endif -%}
+      </div>
+
+      <div class="ossion-quiz__main">
+        <div class="ossion-quiz__topbar">
+          <button type="button" class="ossion-quiz__back" on:click="/goBack">
+            {%- render 'ossian-quiz-icon', name: 'arrow-left' -%}
+            <span>{{ 'ossian_quiz.back' | t }}</span>
+          </button>
+          <div class="ossion-quiz__progress">
+            <div
+              class="ossion-quiz__progress-track"
+              role="progressbar"
+              aria-label="{{ 'ossian_quiz.progress_label' | t | escape }}"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="0"
+              ref="progress"
+            >
+              <span class="ossion-quiz__progress-fill" ref="progressFill"></span>
+            </div>
+            <span class="ossion-quiz__progress-count" ref="progressCount" aria-hidden="true"></span>
+          </div>
+        </div>
+
+        <form class="ossion-quiz__form" ref="form" on:change="/handleAnswer" on:submit="/handleSubmit" novalidate>
+          {%- for step in steps -%}
+            {%- liquid
+              assign parts = step | strip | split: '|'
+              assign s_journey = parts[0]
+              assign s_id = parts[1]
+              assign s_when = parts[2]
+              assign s_mode = parts[3]
+              assign s_layout = parts[4]
+              assign s_values = parts[5] | split: ','
+              assign s_icons = parts[6] | split: ','
+              assign q_key = 'ossian_quiz.questions.' | append: s_id
+              assign title_key = q_key | append: '.title'
+              assign desc_key = q_key | append: '.description'
+              assign legend_id = 'OssionQuizLegend-' | append: sid | append: '-' | append: s_id
+            -%}
+            <fieldset
+              class="ossion-quiz__question"
+              data-question="{{ s_id }}"
+              data-journey="{{ s_journey }}"
+              data-mode="{{ s_mode }}"
+              {% if s_when != blank %}
+                data-when="{{ s_when }}"
+              {% endif %}
+              aria-labelledby="{{ legend_id }}"
+              hidden
+            >
+              <p class="ossion-quiz__step-label" data-step-label></p>
+              <h2 class="ossion-quiz__title" id="{{ legend_id }}" tabindex="-1">{{ title_key | t }}</h2>
+              <p class="ossion-quiz__description">{{ desc_key | t }}</p>
+
+              <div class="ossion-quiz__answers ossion-quiz__answers--{{ s_layout }}">
+                {%- for value in s_values -%}
+                  {%- liquid
+                    assign opt_key = q_key | append: '.options.' | append: value
+                    assign label = opt_key | append: '.label' | t
+                    assign hint = blank
+                    if hint_questions contains s_id
+                      assign hint = opt_key | append: '.hint' | t
+                    endif
+                    assign reason = blank
+                    if reason_questions contains s_id
+                      assign reason_key = 'ossian_quiz.reasons.' | append: value
+                      assign reason = reason_key | t
+                    endif
+                    assign answer_image = blank
+                    if s_id == 'hair_pattern'
+                      assign key = 'pattern_image_' | append: value
+                      assign answer_image = section.settings[key]
+                    endif
+                    assign icon = s_icons[forloop.index0]
+                  -%}
+                  {%- render 'ossian-quiz-answer',
+                    question: s_id,
+                    value: value,
+                    label: label,
+                    hint: hint,
+                    icon: icon,
+                    image: answer_image,
+                    reason: reason,
+                    id_prefix: sid
+                  -%}
+                {%- endfor -%}
+              </div>
+            </fieldset>
+          {%- endfor -%}
+
+          <div class="ossion-quiz__actions">
+            <button type="button" class="ossion-quiz__skip" ref="skip" on:click="/skipQuestion" hidden>
+              {{- 'ossian_quiz.skip' | t -}}
+            </button>
+            <button type="submit" class="ossion-quiz__button ossion-quiz__button--primary" ref="continue">
+              <span>{{ 'ossian_quiz.continue' | t }}</span>
+              {%- render 'ossian-quiz-icon', name: 'arrow-right' -%}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Result: filled by the component from the product data below. {%- endcomment -%}
+  <div class="ossion-quiz__screen ossion-quiz__result" ref="result" data-screen="result" hidden>
+    <div class="ossion-quiz__result-inner ossion-quiz__container">
+      <div class="ossion-quiz__result-intro">
+        <h2 class="ossion-quiz__title ossion-quiz__title--xl" ref="resultHeading" tabindex="-1">
+          {{- section.settings.result_heading | escape -}}
+        </h2>
+        {%- if section.settings.result_text != blank -%}
+          <p class="ossion-quiz__lede">{{ section.settings.result_text | escape }}</p>
+        {%- endif -%}
+      </div>
+
+      <div class="ossion-quiz__result-grid" ref="resultContent">
+        <div class="ossion-quiz__result-hero" ref="heroSlot"></div>
+        <div class="ossion-quiz__result-side">
+          <div class="ossion-quiz__routine" ref="routine" hidden>
+            <h3 class="ossion-quiz__subtitle">{{ 'ossian_quiz.complete_routine' | t }}</h3>
+            <ul class="ossion-quiz__routine-list" role="list" ref="routineList"></ul>
+          </div>
+          {%- if section.settings.why_heading != blank or section.settings.why_text != blank -%}
+            <div class="ossion-quiz__why">
+              <span class="ossion-quiz__why-icon" aria-hidden="true">{% render 'ossian-quiz-icon', name: 'info' %}</span>
+              <div>
+                {%- if section.settings.why_heading != blank -%}
+                  <h3 class="ossion-quiz__why-title">{{ section.settings.why_heading | escape }}</h3>
+                {%- endif -%}
+                {%- if section.settings.why_text != blank -%}
+                  <p class="ossion-quiz__why-text">{{ section.settings.why_text | escape }}</p>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="ossion-quiz__error" ref="error" hidden>
+        <p class="ossion-quiz__error-text">{{ 'ossian_quiz.error_heading' | t }}</p>
+        <button type="button" class="ossion-quiz__button ossion-quiz__button--primary" on:click="/retake">
+          {{- 'ossian_quiz.try_again' | t -}}
+        </button>
+      </div>
+
+      <p class="ossion-quiz__retake">
+        {{ 'ossian_quiz.not_right' | t }}
+        <button type="button" class="ossion-quiz__text-link" on:click="/retake">{{ 'ossian_quiz.retake' | t }}</button>
+      </p>
+    </div>
+  </div>
+
+  <p class="visually-hidden" role="status" aria-live="polite" ref="status"></p>
+
+  <template ref="heroTemplate">
+    <article class="ossion-quiz__hero-card">
+      <a class="ossion-quiz__hero-media" data-slot="link-media" tabindex="-1" aria-hidden="true">
+        <span data-slot="image"></span>
+      </a>
+      <div class="ossion-quiz__hero-body">
+        <p class="ossion-quiz__pill">{{ 'ossian_quiz.recommended_for_you' | t }}</p>
+        <p class="ossion-quiz__hero-type" data-slot="type"></p>
+        <h3 class="ossion-quiz__hero-title" data-slot="title"></h3>
+        <p class="ossion-quiz__hero-price" data-slot="price"></p>
+        <p class="ossion-quiz__hero-reason">
+          <strong>{{ 'ossian_quiz.why_label' | t }}</strong>
+          <span data-slot="reason"></span>
+        </p>
+        <a class="ossion-quiz__button ossion-quiz__button--primary ossion-quiz__hero-cta" data-slot="link" on:click="/trackProductClick">
+          <span>{{ 'ossian_quiz.explore_cta' | t }}</span>
+          {%- render 'ossian-quiz-icon', name: 'arrow-right' -%}
+        </a>
+      </div>
+    </article>
+  </template>
+
+  <template ref="cardTemplate">
+    <li class="ossion-quiz__mini-card">
+      <a class="ossion-quiz__mini-link" data-slot="link" on:click="/trackProductClick">
+        <span class="ossion-quiz__mini-media" data-slot="image"></span>
+        <span class="ossion-quiz__mini-body">
+          <span class="ossion-quiz__mini-title" data-slot="title"></span>
+          <span class="ossion-quiz__mini-text" data-slot="excerpt"></span>
+          <span class="ossion-quiz__mini-price" data-slot="price"></span>
+        </span>
+        <span class="ossion-quiz__mini-arrow" aria-hidden="true">{% render 'ossian-quiz-icon', name: 'arrow-right' %}</span>
+      </a>
+    </li>
+  </template>
+
+  {%- comment -%} Recommendation sets and the products they reference. Images are only requested once a result renders. {%- endcomment -%}
+  <script type="application/json" ref="data">
+    {
+      "sets": [
+        {%- for block in section.blocks -%}
+          {
+            "concern": {{ block.settings.concern | json }},
+            "refine": {{ block.settings.refine | json }},
+            "reason": {{ block.settings.reason | json }},
+            "products": [{%- for product in block.settings.products -%}{{ product.handle | json }}{% unless forloop.last %},{% endunless %}{%- endfor -%}]
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ],
+      "products": [
+        {%- capture product_entries -%}
+          {%- for block in section.blocks -%}
+            {%- for product in block.settings.products -%}
+              {%- liquid
+                assign img = product.featured_image
+                assign excerpt = product.description | strip_html | strip_newlines | truncatewords: 12
+                assign srcset = ''
+                if img != blank
+                  for w in (1..4)
+                    case w
+                      when 1
+                        assign px = 300
+                      when 2
+                        assign px = 500
+                      when 3
+                        assign px = 800
+                      else
+                        assign px = 1200
+                    endcase
+                    assign src_w = img | image_url: width: px
+                    assign srcset = srcset | append: src_w | append: ' ' | append: px | append: 'w'
+                    unless forloop.last
+                      assign srcset = srcset | append: ', '
+                    endunless
+                  endfor
+                endif
+              -%}
+              {
+                "handle": {{ product.handle | json }},
+                "title": {{ product.title | json }},
+                "url": {{ product.url | json }},
+                "type": {{ product.type | json }},
+                "tags": {{ product.tags | json }},
+                "available": {{ product.available | json }},
+                "price": {{ product.price | money | json }},
+                "compareAtPrice": {% if product.compare_at_price > product.price %}{{ product.compare_at_price | money | json }}{% else %}null{% endif %},
+                "excerpt": {{ excerpt | json }},
+                "image": {% if img != blank -%}
+                  {
+                    "src": {{ img | image_url: width: 800 | json }},
+                    "srcset": {{ srcset | json }},
+                    "width": {{ img.width | json }},
+                    "height": {{ img.height | json }},
+                    "alt": {{ img.alt | default: product.title | json }}
+                  }
+                {%- else -%}null{%- endif %}
+              },
+            {%- endfor -%}
+          {%- endfor -%}
+        {%- endcapture -%}
+        {{ product_entries | strip | remove_last: ',' }}
+      ]
+    }
+  </script>
+</ossian-quiz>
+
+<script src="{{ 'ossian-quiz.js' | asset_url }}" type="module"></script>
+
+{% schema %}
+{
+  "name": "Ossion Quiz",
+  "tag": "section",
+  "class": "ossian-quiz-section",
+  "settings": [
+    { "type": "header", "content": "Landing" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Personalised routine" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Choose your Ossion." },
+    { "type": "text", "id": "text", "label": "Text", "default": "A personalised routine, backed by salon expertise." },
+    { "type": "header", "content": "Hair journey" },
+    { "type": "image_picker", "id": "hair_image", "label": "Hair image", "info": "Used on the landing card and beside hair questions. Falls back to the first hair product image." },
+    { "type": "text", "id": "hair_title", "label": "Title", "default": "Hair" },
+    { "type": "text", "id": "hair_brand", "label": "Range name", "default": "Ossion Professional" },
+    { "type": "text", "id": "hair_text", "label": "Text", "default": "Salon-grade haircare for real results." },
+    { "type": "text", "id": "hair_cta", "label": "Button label", "default": "Explore Hair" },
+    { "type": "header", "content": "Skin journey" },
+    { "type": "image_picker", "id": "skin_image", "label": "Skin image", "info": "Used on the landing card and beside skin questions. Falls back to the first skin product image." },
+    { "type": "text", "id": "skin_title", "label": "Title", "default": "Skin" },
+    { "type": "text", "id": "skin_brand", "label": "Range name", "default": "Ossion Essentials" },
+    { "type": "text", "id": "skin_text", "label": "Text", "default": "Advanced skincare for healthy, radiant skin." },
+    { "type": "text", "id": "skin_cta", "label": "Button label", "default": "Explore Skin" },
+    { "type": "header", "content": "Hair pattern images", "info": "Optional photos for the hair pattern question. Icons are shown when empty." },
+    { "type": "image_picker", "id": "pattern_image_straight", "label": "Straight" },
+    { "type": "image_picker", "id": "pattern_image_wavy", "label": "Wavy" },
+    { "type": "image_picker", "id": "pattern_image_curly", "label": "Curly" },
+    { "type": "image_picker", "id": "pattern_image_coily", "label": "Coily" },
+    { "type": "header", "content": "Result" },
+    { "type": "text", "id": "result_heading", "label": "Heading", "default": "Your Ossion Recommendation." },
+    { "type": "textarea", "id": "result_text", "label": "Text", "default": "Based on your answers, we've selected the Ossion products that best match your needs." },
+    { "type": "text", "id": "why_heading", "label": "Info heading", "default": "Why these products?" },
+    { "type": "textarea", "id": "why_text", "label": "Info text", "default": "Your recommendations are based on the concerns, results and routine preferences you shared with us." },
+    { "type": "checkbox", "id": "include_sold_out", "label": "Recommend sold-out products", "info": "When off, sold-out products are skipped and the next match is shown.", "default": false },
+    { "type": "url", "id": "browse_url", "label": "Fallback shop link", "info": "Shown when JavaScript is unavailable. Defaults to all products." }
+  ],
+  "blocks": [
+    {
+      "type": "recommendation",
+      "name": "Recommendation set",
+      "settings": [
+        {
+          "type": "select",
+          "id": "concern",
+          "label": "Primary concern",
+          "options": [
+            { "value": "hair-colour", "label": "Hair – Colour protection / grey coverage" },
+            { "value": "hair-blonde", "label": "Hair – Lightening / blonde" },
+            { "value": "hair-smoothing", "label": "Hair – Frizz / smoothing" },
+            { "value": "hair-hydration", "label": "Hair – Hydration / damage repair" },
+            { "value": "hair-scalp", "label": "Hair – Scalp reset" },
+            { "value": "skin-pigmentation", "label": "Skin – Tan / pigmentation" },
+            { "value": "skin-waxing", "label": "Skin – Waxing" },
+            { "value": "skin-glow", "label": "Skin – Glow treatment" }
+          ],
+          "default": "hair-colour"
+        },
+        {
+          "type": "select",
+          "id": "refine",
+          "label": "Follow-up answer",
+          "info": "Choose \"Any\" for the default set, or a follow-up answer to boost these products when the shopper picks it.",
+          "options": [
+            { "value": "any", "label": "Any" },
+            { "value": "colour_goal:vibrancy", "label": "Colour – Maintain vibrancy" },
+            { "value": "colour_goal:grey_coverage", "label": "Colour – Grey coverage" },
+            { "value": "colour_goal:shine", "label": "Colour – Shine and richness" },
+            { "value": "colour_goal:longevity", "label": "Colour – Fresh for longer" },
+            { "value": "blonde_need:brassiness", "label": "Blonde – Tone brassiness" },
+            { "value": "blonde_need:brightness", "label": "Blonde – Maintain brightness" },
+            { "value": "blonde_need:strengthen", "label": "Blonde – Strengthen" },
+            { "value": "blonde_need:hydrate", "label": "Blonde – Hydrate and repair" },
+            { "value": "blonde_need:protect", "label": "Blonde – Protect colour" },
+            { "value": "smooth_result:frizz", "label": "Smoothing – Reduce frizz" },
+            { "value": "smooth_result:lasting", "label": "Smoothing – Longer-lasting" },
+            { "value": "smooth_result:sleek", "label": "Smoothing – Sleek finish" },
+            { "value": "smooth_result:manageability", "label": "Smoothing – Manageability" },
+            { "value": "smooth_result:humidity", "label": "Smoothing – Humidity protection" },
+            { "value": "hair_condition:dry", "label": "Repair – Dry" },
+            { "value": "hair_condition:very_dry", "label": "Repair – Very dry" },
+            { "value": "hair_condition:chemical", "label": "Repair – Chemically damaged" },
+            { "value": "hair_condition:heat", "label": "Repair – Heat damaged" },
+            { "value": "hair_condition:brittle", "label": "Repair – Brittle / breaking" },
+            { "value": "scalp_need:buildup", "label": "Scalp – Remove buildup" },
+            { "value": "scalp_need:oil", "label": "Scalp – Reduce oil" },
+            { "value": "scalp_need:refresh", "label": "Scalp – Refresh" },
+            { "value": "scalp_need:soothe", "label": "Scalp – Soothe" },
+            { "value": "scalp_need:deep_cleanse", "label": "Scalp – Deep cleanse" },
+            { "value": "pigment_concern:sun_tan", "label": "Pigmentation – Sun tan" },
+            { "value": "pigment_concern:dark_spots", "label": "Pigmentation – Dark spots" },
+            { "value": "pigment_concern:acne_marks", "label": "Pigmentation – Acne marks" },
+            { "value": "pigment_concern:dull", "label": "Pigmentation – Dull skin" },
+            { "value": "wax_need:very_sensitive", "label": "Waxing – Very sensitive skin" },
+            { "value": "wax_need:normal", "label": "Waxing – Normal skin" },
+            { "value": "wax_need:first_time", "label": "Waxing – First time" },
+            { "value": "glow_type:hydration", "label": "Glow – Deep hydration" },
+            { "value": "glow_type:brightening", "label": "Glow – Brightening" },
+            { "value": "glow_type:calming", "label": "Glow – Calming" },
+            { "value": "glow_type:antioxidant", "label": "Glow – Antioxidant radiance" }
+          ],
+          "default": "any"
+        },
+        {
+          "type": "product_list",
+          "id": "products",
+          "label": "Products",
+          "info": "The first product is the main recommendation; the next ones complete the routine.",
+          "limit": 4
+        },
+        {
+          "type": "textarea",
+          "id": "reason",
+          "label": "Why it's recommended",
+          "info": "Optional. Replaces the default reason for this concern."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ossion Quiz"
+    }
+  ]
+}
+{% endschema %}

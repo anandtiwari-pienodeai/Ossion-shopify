@@ -8,6 +8,348 @@
  * ------------------------------------------------------------
  */
 {
+  "ossian_quiz": {
+    "eyebrow": "Personalised routine",
+    "back": "Back",
+    "continue": "Continue",
+    "skip": "Skip",
+    "step_of": "Step {{ current }} of {{ total }}",
+    "progress_label": "Quiz progress",
+    "selected": "Selected",
+    "start_journey": "Start the {{ journey }} quiz",
+    "recommended_for_you": "Recommended for you",
+    "why_label": "Why it's recommended:",
+    "explore_cta": "Explore your recommendation",
+    "view_product": "View {{ title }}",
+    "complete_routine": "Complete your routine",
+    "not_right": "Not quite right?",
+    "retake": "Retake the quiz",
+    "error_heading": "We're having trouble finding your recommendation.",
+    "try_again": "Try again",
+    "noscript": "Please enable JavaScript to take the quiz, or browse all products.",
+    "browse_all": "Browse all products",
+    "result_ready": "Your recommendation is ready.",
+    "questions": {
+      "hair_pattern": {
+        "title": "What's your hair pattern?",
+        "description": "This helps us understand your hair's natural behaviour.",
+        "options": {
+          "straight": {
+            "label": "Straight"
+          },
+          "wavy": {
+            "label": "Wavy"
+          },
+          "curly": {
+            "label": "Curly"
+          },
+          "coily": {
+            "label": "Coily"
+          }
+        }
+      },
+      "strand_thickness": {
+        "title": "What is your strand thickness?",
+        "description": "This helps us choose the right formulas and care level.",
+        "options": {
+          "fine": {
+            "label": "Fine",
+            "hint": "Soft and delicate"
+          },
+          "medium": {
+            "label": "Medium",
+            "hint": "Most common"
+          },
+          "coarse": {
+            "label": "Coarse – Thick",
+            "hint": "Strong and dense"
+          }
+        }
+      },
+      "scalp_condition": {
+        "title": "How does your scalp feel 24h after washing?",
+        "description": "This helps us find the right balance for your scalp health.",
+        "options": {
+          "oily": {
+            "label": "Oily – Heavy",
+            "hint": "Oil builds up quickly"
+          },
+          "normal": {
+            "label": "Normal – Balanced",
+            "hint": "Not too oily, not too dry"
+          },
+          "dry": {
+            "label": "Dry – Itchy",
+            "hint": "Feels tight or flaky"
+          },
+          "sensitive": {
+            "label": "Sensitive – Reactive",
+            "hint": "Easily irritated"
+          }
+        }
+      },
+      "primary_concern": {
+        "title": "What is your primary concern?",
+        "description": "Choose the one that matters most to you right now.",
+        "options": {
+          "colour": {
+            "label": "Colour protection or grey coverage"
+          },
+          "blonde": {
+            "label": "Lightening or blonde maintenance"
+          },
+          "smoothing": {
+            "label": "Frizz control, sleekness and smoothing"
+          },
+          "hydration": {
+            "label": "Deep hydration and damage repair"
+          },
+          "scalp": {
+            "label": "Scalp reset and buildup removal"
+          }
+        }
+      },
+      "colour_goal": {
+        "title": "What are your colour service goals?",
+        "description": "Choose the result you're looking for.",
+        "options": {
+          "vibrancy": {
+            "label": "Maintain vibrancy and prevent fading"
+          },
+          "grey_coverage": {
+            "label": "Better grey coverage"
+          },
+          "shine": {
+            "label": "Enhance shine and richness"
+          },
+          "longevity": {
+            "label": "Keep colour looking fresh for longer"
+          }
+        }
+      },
+      "blonde_need": {
+        "title": "What does your blonde need most?",
+        "description": "Choose the result you're looking for.",
+        "options": {
+          "brassiness": {
+            "label": "Tone unwanted brassiness"
+          },
+          "brightness": {
+            "label": "Maintain brightness"
+          },
+          "strengthen": {
+            "label": "Strengthen lightened hair"
+          },
+          "hydrate": {
+            "label": "Hydrate and repair"
+          },
+          "protect": {
+            "label": "Protect colour"
+          }
+        }
+      },
+      "smooth_result": {
+        "title": "What result are you looking for?",
+        "description": "Choose the result you're looking for.",
+        "options": {
+          "frizz": {
+            "label": "Reduce frizz and flyaways"
+          },
+          "lasting": {
+            "label": "Longer-lasting smoothness"
+          },
+          "sleek": {
+            "label": "Sleek, straight finish"
+          },
+          "manageability": {
+            "label": "Better manageability"
+          },
+          "humidity": {
+            "label": "Humidity protection"
+          }
+        }
+      },
+      "hair_condition": {
+        "title": "How would you describe your hair's condition?",
+        "description": "Choose the one that sounds most like your hair.",
+        "options": {
+          "dry": {
+            "label": "Dry"
+          },
+          "very_dry": {
+            "label": "Very dry"
+          },
+          "chemical": {
+            "label": "Chemically damaged"
+          },
+          "heat": {
+            "label": "Heat damaged"
+          },
+          "brittle": {
+            "label": "Brittle / breaking"
+          }
+        }
+      },
+      "scalp_need": {
+        "title": "What does your scalp need?",
+        "description": "Choose the one that matters most to you.",
+        "options": {
+          "buildup": {
+            "label": "Remove buildup"
+          },
+          "oil": {
+            "label": "Reduce excess oil"
+          },
+          "refresh": {
+            "label": "Refresh the scalp"
+          },
+          "soothe": {
+            "label": "Soothe irritation"
+          },
+          "deep_cleanse": {
+            "label": "Deep cleanse"
+          }
+        }
+      },
+      "heat_frequency": {
+        "title": "How often do you use heat tools?",
+        "description": "This helps us recommend the right level of protection.",
+        "options": {
+          "daily": {
+            "label": "Every day"
+          },
+          "often": {
+            "label": "3–5 times a week"
+          },
+          "weekly": {
+            "label": "1–2 times a week"
+          },
+          "rarely": {
+            "label": "Rarely"
+          },
+          "never": {
+            "label": "I don't use heat tools"
+          }
+        }
+      },
+      "skin_feel": {
+        "title": "How does your skin feel through the day?",
+        "description": "This helps us understand your skin's natural balance.",
+        "options": {
+          "oily": {
+            "label": "Oily",
+            "hint": "Shiny by midday"
+          },
+          "dry": {
+            "label": "Dry",
+            "hint": "Feels tight or rough"
+          },
+          "sensitive": {
+            "label": "Sensitive",
+            "hint": "Easily irritated or red"
+          },
+          "normal": {
+            "label": "Normal",
+            "hint": "Comfortable and balanced"
+          }
+        }
+      },
+      "skin_goal": {
+        "title": "What brings you to Ossion?",
+        "description": "Choose the treatment you're most interested in.",
+        "options": {
+          "pigmentation": {
+            "label": "Tan removal & pigmentation"
+          },
+          "waxing": {
+            "label": "Waxing & hair removal"
+          },
+          "glow": {
+            "label": "A glow treatment"
+          }
+        }
+      },
+      "pigment_concern": {
+        "title": "What best describes your concern?",
+        "description": "Choose the one that matters most to you.",
+        "options": {
+          "sun_tan": {
+            "label": "Sun tan and uneven skin tone"
+          },
+          "dark_spots": {
+            "label": "Pigmentation and dark spots"
+          },
+          "acne_marks": {
+            "label": "Acne marks and post-blemish discolouration"
+          },
+          "dull": {
+            "label": "Dull and tired-looking skin"
+          }
+        }
+      },
+      "wax_need": {
+        "title": "What best describes your waxing needs?",
+        "description": "Choose the one that sounds most like you.",
+        "options": {
+          "very_sensitive": {
+            "label": "Very sensitive skin"
+          },
+          "normal": {
+            "label": "Normal skin"
+          },
+          "first_time": {
+            "label": "First-time waxing"
+          }
+        }
+      },
+      "glow_type": {
+        "title": "What kind of glow are you looking for?",
+        "description": "Choose the result you're looking for.",
+        "options": {
+          "hydration": {
+            "label": "Deep hydration"
+          },
+          "brightening": {
+            "label": "Brightening"
+          },
+          "calming": {
+            "label": "Calming"
+          },
+          "antioxidant": {
+            "label": "Antioxidant radiance"
+          }
+        }
+      },
+      "skin_finish": {
+        "title": "What finish do you prefer?",
+        "description": "Choose how you'd like your skin to look and feel.",
+        "options": {
+          "fresh": {
+            "label": "Fresh and illuminated"
+          },
+          "hydrated": {
+            "label": "Deeply hydrated and soft"
+          },
+          "calm": {
+            "label": "Calm and balanced"
+          },
+          "bright": {
+            "label": "Brightened and radiant"
+          }
+        }
+      }
+    },
+    "reasons": {
+      "colour": "Helps maintain colour vibrancy, prevent fading and keep hair soft and shiny.",
+      "blonde": "Supports clean, bright lightening while protecting the strength of the hair fibre.",
+      "smoothing": "Smooths the cuticle to control frizz and leave hair sleek and manageable.",
+      "hydration": "Deeply nourishes and repairs dry, damaged hair for softness and strength.",
+      "scalp": "Gently clears buildup and excess oil for a fresh, balanced scalp.",
+      "pigmentation": "Helps lift tan and even out skin tone for a brighter complexion.",
+      "waxing": "Grips hair cleanly while caring for the skin before and after waxing.",
+      "glow": "Delivers a salon-style facial glow with targeted, skin-loving actives."
+    }
+  },
   "accessibility": {
     "account": "Account",
     "active_filters": "Active filters:",

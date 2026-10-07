@@ -1,0 +1,284 @@
+{
+  "sections": {
+    "main": {
+      "type": "ossian-quiz",
+      "blocks": {
+        "set_hair_colour_default": {
+          "type": "recommendation",
+          "settings": {
+            "concern": "hair-colour",
+            "refine": "any",
+            "products": [
+              "caviar-shampoo",
+              "caviar-mask",
+              "ossion-backwash-conditioner"
+            ],
+            "reason": ""
+          }
+        },
+        "set_hair_colour_grey_coverage": {
+          "type": "recommendation",
+          "settings": {
+            "concern": "hair-colour",
+            "refine": "colour_goal:grey_coverage",
+            "products": [
+              "chromatic-dream-permanent-hair-color-creme",
+              "caviar-shampoo",
+              "caviar-mask"
+            ],
+            "reason": ""
+          }
+        },
+        "set_hair_blonde_default": {
+          "type": "recommendation",
+          "settings": {
+            "concern": "hair-blonde",
+            "refine": "any",
+            "products": [
+              "blonder-fiber-plex-500-gm",
+              "ossion-hair-intense-mask-silk-amino-acid",
+              "ossion-shampoo-silk-amino-acid"
+            ],
+            "reason": ""
+          }
+        },
+        "set_hair_blonde_hydrate": {
+          "type": "recommendation",
+          "settings": {
+            "concern": "hair-blonde",
+            "refine": "blonde_need:hydrate",
+            "products": [
+              "ossion-hair-intense-mask-silk-amino-acid",
+              "hair-repair-spa-silk-amino-acid",
+              "ossion-shampoo-silk-amino-acid"
+            ],
+            "reason": ""
+          }
+        },
+        "set_hair_smoothing_default": {
+          "type": "recommendation",
+          "settings": {
+            "concern": "hair-smoothing",
+            "refine": "any",
+            "products": [
+              "nano-silk-protein-classic",
+              "ossion-shampoo-silk-amino-acid",
+              "hair-repair-spa-silk-amino-acid"
+            ],
+            "reason": ""
+          }
+        },
+        "set_hair_smoothing_manageability": {
+          "type": "recommendation",
+          "settings": {
+            "concern": "hair-smoothing",
+            "refine": "smooth_result:manageability",
+            "products": [
+              "ossion-shampoo-silk-amino-acid",
+              "hair-repair-spa-silk-amino-acid",
+              "ossion-backwash-conditioner"
+            ],
+            "reason": ""
+          }
+        },
+        "set_hair_hydration_default": {
+          "type": "recommendation",
+          "settings": {
+            "concern": "hair-hydration",
+            "refine": "any",
+            "products": [
+              "ossion-shampoo-pure-shea-butter",
+              "hair-repair-mask-pure-shea-butter",
+              "ossion-hair-repair-mask-pure-shea-butter"
+            ],
+            "reason": ""
+          }
+        },
+        "set_hair_hydration_chemical": {
+          "type": "recommendation",
+          "settings": {
+            "concern": "hair-hydration",
+            "refine": "hair_condition:chemical",
+            "products": [
+              "hair-repair-spa-silk-amino-acid",
+              "ossion-hair-intense-mask-silk-amino-acid",
+              "ossion-shampoo-silk-amino-acid"
+            ],
+            "reason": ""
+          }
+        },
+        "set_hair_scalp_default": {
+          "type": "recommendation",
+          "settings": {
+            "concern": "hair-scalp",
+            "refine": "any",
+            "products": [
+              "backwash-shampoo",
+              "ossion-backwash-conditioner",
+              "ossion-shampoo-pure-shea-butter"
+            ],
+            "reason": ""
+          }
+        },
+        "set_skin_pigmentation_default": {
+          "type": "recommendation",
+          "settings": {
+            "concern": "skin-pigmentation",
+            "refine": "any",
+            "products": [
+              "de-tan-illuminate-500-g",
+              "de-tan-pouch-6-pack",
+              "algae-peel-off-mask-collagen-complex-copy"
+            ],
+            "reason": ""
+          }
+        },
+        "set_skin_pigmentation_acne_marks": {
+          "type": "recommendation",
+          "settings": {
+            "concern": "skin-pigmentation",
+            "refine": "pigment_concern:acne_marks",
+            "products": [
+              "algae-peel-off-mask-hyaluronic-hydration-copy",
+              "de-tan-illuminate-500-g",
+              "algae-peel-off-mask-collagen-complex-copy"
+            ],
+            "reason": ""
+          }
+        },
+        "set_skin_waxing_default": {
+          "type": "recommendation",
+          "settings": {
+            "concern": "skin-waxing",
+            "refine": "any",
+            "products": [
+              "white-chocolate-liposoluble-wax",
+              "pre-wax-lavender-prep-gel",
+              "after-wax-calming-lavender-oil"
+            ],
+            "reason": ""
+          }
+        },
+        "set_skin_waxing_very_sensitive": {
+          "type": "recommendation",
+          "settings": {
+            "concern": "skin-waxing",
+            "refine": "wax_need:very_sensitive",
+            "products": [
+              "aloe-vera-liposoluble-wax",
+              "pre-wax-lavender-prep-gel",
+              "after-wax-calming-lavender-oil"
+            ],
+            "reason": ""
+          }
+        },
+        "set_skin_waxing_first_time": {
+          "type": "recommendation",
+          "settings": {
+            "concern": "skin-waxing",
+            "refine": "wax_need:first_time",
+            "products": [
+              "aloe-vera-liposoluble-wax",
+              "pre-wax-lavender-prep-gel",
+              "after-wax-calming-lavender-oil"
+            ],
+            "reason": ""
+          }
+        },
+        "set_skin_glow_default": {
+          "type": "recommendation",
+          "settings": {
+            "concern": "skin-glow",
+            "refine": "any",
+            "products": [
+              "hydra-glow-facial-kits",
+              "algae-peel-off-mask-rose-infusion-copy",
+              "lumi-glow-facial-kits"
+            ],
+            "reason": ""
+          }
+        },
+        "set_skin_glow_brightening": {
+          "type": "recommendation",
+          "settings": {
+            "concern": "skin-glow",
+            "refine": "glow_type:brightening",
+            "products": [
+              "lumi-glow-facial-kits",
+              "algae-peel-off-mask-collagen-complex-copy",
+              "de-tan-illuminate-500-g"
+            ],
+            "reason": ""
+          }
+        },
+        "set_skin_glow_calming": {
+          "type": "recommendation",
+          "settings": {
+            "concern": "skin-glow",
+            "refine": "glow_type:calming",
+            "products": [
+              "japanese-glow-facial-kits",
+              "algae-peel-off-mask-rose-infusion",
+              "after-wax-calming-lavender-oil"
+            ],
+            "reason": ""
+          }
+        },
+        "set_skin_glow_antioxidant": {
+          "type": "recommendation",
+          "settings": {
+            "concern": "skin-glow",
+            "refine": "glow_type:antioxidant",
+            "products": [
+              "korean-glow-facial-kits",
+              "algae-peel-off-mask-kiwi-infusion",
+              "algae-peel-off-mask-collagen-complex"
+            ],
+            "reason": ""
+          }
+        }
+      },
+      "block_order": [
+        "set_hair_colour_default",
+        "set_hair_colour_grey_coverage",
+        "set_hair_blonde_default",
+        "set_hair_blonde_hydrate",
+        "set_hair_smoothing_default",
+        "set_hair_smoothing_manageability",
+        "set_hair_hydration_default",
+        "set_hair_hydration_chemical",
+        "set_hair_scalp_default",
+        "set_skin_pigmentation_default",
+        "set_skin_pigmentation_acne_marks",
+        "set_skin_waxing_default",
+        "set_skin_waxing_very_sensitive",
+        "set_skin_waxing_first_time",
+        "set_skin_glow_default",
+        "set_skin_glow_brightening",
+        "set_skin_glow_calming",
+        "set_skin_glow_antioxidant"
+      ],
+      "settings": {
+        "eyebrow": "Personalised routine",
+        "heading": "Choose your Ossion.",
+        "text": "A personalised routine, backed by salon expertise.",
+        "hair_title": "Hair",
+        "hair_brand": "Ossion Professional",
+        "hair_text": "Salon-grade haircare for real results.",
+        "hair_cta": "Explore Hair",
+        "skin_title": "Skin",
+        "skin_brand": "Ossion Essentials",
+        "skin_text": "Advanced skincare for healthy, radiant skin.",
+        "skin_cta": "Explore Skin",
+        "result_heading": "Your Ossion Recommendation.",
+        "result_text": "Based on your answers, we've selected the Ossion products that best match your needs.",
+        "why_heading": "Why these products?",
+        "why_text": "Your recommendations are based on the concerns, results and routine preferences you shared with us.",
+        "browse_url": ""
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
