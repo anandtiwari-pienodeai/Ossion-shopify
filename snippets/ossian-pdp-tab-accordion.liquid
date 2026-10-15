@@ -1,0 +1,210 @@
+{%- comment -%}
+  Renders a numbered accordion (e.g. "Key active ingredients") inside a PDP info tab.
+
+  Each row shows a number badge, a title and a short summary. Rows that also
+  have details or a benefits list expand: the summary moves under the title,
+  and the details plus a "Key benefits" checklist take its place on the right.
+  Rows with neither stay static.
+
+  Field keys are resolved from comma separated candidate lists, the key set in
+  the theme editor first, then conventional names.
+
+  Accepts:
+    items           - {Array<Metaobject>} the rows to render
+    heading         - {String} optional heading above the list
+    title_keys      - {String} comma separated candidate keys for the row title
+    summary_keys    - {String} comma separated candidate keys for the short summary
+    details_keys    - {String} comma separated candidate keys for the expanded copy
+    benefits_keys   - {String} comma separated candidate keys for the benefits list
+    benefits_label  - {String} label above the benefits list
+    open_first      - {Boolean} expand the first expandable row on load
+    style           - {String} 'cards' (number inside each card) or 'timeline'
+                      (numbers on a connected rail; benefits become numbered sub-steps)
+    id_prefix       - {String} unique prefix for generated ids
+
+  Usage:
+    {% render 'ossian-pdp-tab-accordion', items: entry.items.value, heading: 'Key active ingredients', title_keys: 'name', summary_keys: 'summary', details_keys: 'description', benefits_keys: 'benefits', benefits_label: 'Key benefits', open_first: true, style: 'cards', id_prefix: 'pdp-acc-123' %}
+{%- endcomment -%}
+
+{%- liquid
+  assign title_candidates = title_keys | split: ','
+  assign summary_candidates = summary_keys | split: ','
+  assign details_candidates = details_keys | split: ','
+  assign benefits_candidates = benefits_keys | split: ','
+  assign first_open_done = false
+  assign is_timeline = false
+  if style == 'timeline'
+    assign is_timeline = true
+  endif
+-%}
+
+<div class="pdp-accordion{% if is_timeline %} pdp-accordion--timeline{% endif %}" data-pdp-accordion>
+  {%- if heading != blank -%}
+    <h3 class="pdp-tabs__meta-label pdp-accordion__heading">{{ heading }}</h3>
+  {%- endif -%}
+
+  <ul class="pdp-accordion__list" role="list">
+    {%- for item in items -%}
+      {%- liquid
+        assign row_title = nil
+        for candidate in title_candidates
+          assign candidate = candidate | strip
+          if candidate != blank and item[candidate].value != blank
+            assign row_title = item[candidate].value
+            break
+          endif
+        endfor
+
+        assign row_summary = nil
+        for candidate in summary_candidates
+          assign candidate = candidate | strip
+          if candidate != blank and item[candidate].value != blank
+            assign row_summary = item[candidate]
+            break
+          endif
+        endfor
+
+        assign row_details = nil
+        for candidate in details_candidates
+          assign candidate = candidate | strip
+          if candidate != blank and item[candidate].value != blank
+            assign row_details = item[candidate]
+            break
+          endif
+        endfor
+
+        assign row_benefits = nil
+        for candidate in benefits_candidates
+          assign candidate = candidate | strip
+          if candidate != blank and item[candidate].value != blank and item[candidate].type contains 'list.'
+            assign row_benefits = item[candidate].value
+            break
+          endif
+        endfor
+
+        if row_title == blank
+          continue
+        endif
+
+        assign row_expandable = false
+        if row_details != blank or row_benefits != blank
+          assign row_expandable = true
+        endif
+
+        assign row_number = forloop.index | prepend: '0' | slice: -2, 2
+        assign row_id = id_prefix | append: '-' | append: forloop.index
+
+        assign row_open = false
+        if row_expandable and open_first and first_open_done == false
+          assign row_open = true
+          assign first_open_done = true
+        endif
+      -%}
+      {%- capture row_summary_html -%}
+        {%- if row_summary.type == 'rich_text_field' -%}
+          {{ row_summary | metafield_tag }}
+        {%- elsif row_summary.type == 'multi_line_text_field' -%}
+          <p>{{ row_summary.value | escape | newline_to_br }}</p>
+        {%- elsif row_summary != blank -%}
+          <p>{{ row_summary.value | escape }}</p>
+        {%- endif -%}
+      {%- endcapture -%}
+
+      <li class="pdp-accordion__item{% if row_expandable %} pdp-accordion__item--expandable{% endif %}{% if row_open %} is-open{% endif %}">
+        <span class="pdp-accordion__number" aria-hidden="true">{{ row_number }}</span>
+
+        <div class="pdp-accordion__main">
+          <h4 class="pdp-accordion__title">
+            {%- if row_expandable -%}
+              <button
+                type="button"
+                class="pdp-accordion__toggle"
+                id="{{ row_id }}-toggle"
+                aria-expanded="{{ row_open }}"
+                aria-controls="{{ row_id }}-panel"
+              >
+                {{- row_title | escape -}}
+              </button>
+            {%- else -%}
+              {{- row_title | escape -}}
+            {%- endif -%}
+          </h4>
+          {%- if row_expandable and row_summary != blank -%}
+            <div class="pdp-accordion__summary pdp-accordion__summary--open">{{ row_summary_html }}</div>
+          {%- endif -%}
+        </div>
+
+        <span class="pdp-accordion__divider" aria-hidden="true"></span>
+
+        <div class="pdp-accordion__aside">
+          {%- if row_summary != blank -%}
+            <div class="pdp-accordion__summary pdp-accordion__summary--closed">{{ row_summary_html }}</div>
+          {%- endif -%}
+          {%- if row_expandable -%}
+            <div
+              class="pdp-accordion__panel{% if row_details != blank and row_benefits != blank %} pdp-accordion__panel--split{% endif %}"
+              id="{{ row_id }}-panel"
+              role="region"
+              aria-labelledby="{{ row_id }}-toggle"
+              {% unless row_open %}hidden{% endunless %}
+            >
+              {%- if row_details != blank -%}
+                <div class="pdp-accordion__details">
+                  {%- if row_details.type == 'rich_text_field' -%}
+                    {{ row_details | metafield_tag }}
+                  {%- elsif row_details.type == 'multi_line_text_field' -%}
+                    <p>{{ row_details.value | escape | newline_to_br }}</p>
+                  {%- else -%}
+                    <p>{{ row_details.value | escape }}</p>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+              {%- if row_benefits != blank -%}
+                <div class="pdp-accordion__benefits">
+                  {%- if is_timeline -%}
+                    <ol class="pdp-accordion__benefits-list pdp-accordion__benefits-list--steps" role="list">
+                      {%- assign sub_index = 0 -%}
+                      {%- for benefit in row_benefits -%}
+                        {%- assign benefit_text = benefit | strip -%}
+                        {%- if benefit_text != blank -%}
+                          {%- assign sub_index = sub_index | plus: 1 -%}
+                          <li class="pdp-accordion__benefit">
+                            <span class="pdp-accordion__benefit-check pdp-accordion__benefit-check--number" aria-hidden="true">{{ sub_index }}</span>
+                            {{ benefit_text | escape }}
+                          </li>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </ol>
+                  {%- else -%}
+                  {%- if benefits_label != blank -%}
+                    <p class="pdp-accordion__benefits-label" id="{{ row_id }}-benefits">{{ benefits_label | escape }}</p>
+                  {%- endif -%}
+                  <ul class="pdp-accordion__benefits-list" role="list"{% if benefits_label != blank %} aria-labelledby="{{ row_id }}-benefits"{% endif %}>
+                    {%- for benefit in row_benefits -%}
+                      {%- assign benefit_text = benefit | strip -%}
+                      {%- if benefit_text != blank -%}
+                        <li class="pdp-accordion__benefit">
+                          <span class="pdp-accordion__benefit-check" aria-hidden="true">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                          </span>
+                          {{ benefit_text | escape }}
+                        </li>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </ul>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- if row_expandable -%}
+          <span class="pdp-accordion__icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>

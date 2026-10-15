@@ -393,6 +393,390 @@
   box-shadow: 0 0 0 3px #1e3a5f, 0 2px 14px rgba(0, 0, 0, 0.22);
 }
 
+/* ===== Numbered accordion (e.g. key active ingredients) ===== */
+.pdp-accordion {
+  text-align: start;
+}
+
+.pdp-tabs__panel-text + .pdp-accordion {
+  margin-block-start: 40px;
+}
+
+.pdp-accordion__heading {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #0f2550;
+  margin-block-end: 28px;
+}
+
+/* Short accent rule under the heading */
+.pdp-accordion__heading::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  margin: 14px auto 0;
+  border-radius: 2px;
+  background: #5b84c4;
+}
+
+.pdp-accordion__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pdp-accordion__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) 1px minmax(0, 2.6fr) 24px;
+  align-items: center;
+  column-gap: 32px;
+  box-sizing: border-box;
+  min-height: 40px;
+  padding: 3px 24px;
+  border: 1px solid #e1e6ee;
+  border-radius: 14px;
+  background: #fff;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.pdp-accordion__item--expandable:hover {
+  border-color: #c5d4ea;
+}
+
+.pdp-accordion__item.is-open {
+  align-items: start;
+  padding-block: 18px;
+  background: #eef4fd;
+  border-color: #cddcf2;
+}
+
+.pdp-accordion__number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #dfe8f8;
+  color: #0f2550;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-heading--family, sans-serif);
+}
+
+.pdp-accordion__main {
+  min-width: 0;
+}
+
+.pdp-accordion__item.is-open .pdp-accordion__main {
+  padding-block-start: 6px;
+}
+
+.pdp-accordion__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #0f2550;
+  overflow-wrap: anywhere;
+  font-family: var(--font-heading--family, sans-serif);
+}
+
+.pdp-accordion__toggle {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+/* Whole row is the click target; focus ring follows the row */
+.pdp-accordion__toggle::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.pdp-accordion__item:has(.pdp-accordion__toggle:focus-visible) {
+  outline: 2px solid #1e3a5f;
+  outline-offset: 2px;
+}
+
+.pdp-accordion__toggle:focus-visible {
+  outline: none;
+}
+
+.pdp-accordion__divider {
+  align-self: stretch;
+  width: 1px;
+  background: #d9e0ea;
+}
+
+.pdp-accordion__aside {
+  min-width: 0;
+}
+
+.pdp-accordion__item.is-open .pdp-accordion__aside {
+  padding-block-start: 6px;
+}
+
+.pdp-accordion__summary,
+.pdp-accordion__details {
+  font-size: 15px;
+  line-height: 1.75;
+  color: #4a5568;
+  overflow-wrap: anywhere;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.pdp-accordion__summary--open {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.pdp-accordion__summary--closed {
+  line-height: 1.4;
+}
+
+.pdp-accordion__summary p,
+.pdp-accordion__details p {
+  margin: 0;
+}
+
+.pdp-accordion__summary p + p,
+.pdp-accordion__details p + p {
+  margin-block-start: 0.6em;
+}
+
+.pdp-accordion__summary--open {
+  display: none;
+  margin-block-start: 6px;
+}
+
+.pdp-accordion__item.is-open .pdp-accordion__summary--open {
+  display: block;
+}
+
+.pdp-accordion__item.is-open .pdp-accordion__summary--closed {
+  display: none;
+}
+
+/* Expanded content: details copy, then the benefits checklist in its own column */
+.pdp-accordion__panel--split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+}
+
+.pdp-accordion__panel[hidden] {
+  display: none;
+}
+
+.pdp-accordion__panel--split .pdp-accordion__details {
+  padding-inline-end: 28px;
+}
+
+.pdp-accordion__panel--split .pdp-accordion__benefits {
+  padding-inline-start: 24px;
+  border-inline-start: 1px solid #d9e0ea;
+}
+
+.pdp-accordion__benefits-label {
+  margin: 0 0 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #3d4a5f;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.pdp-accordion__benefits-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pdp-accordion__benefit {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #4a5568;
+  overflow-wrap: anywhere;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.pdp-accordion__benefit-check {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #d6e2f6;
+  color: #1e3a8a;
+}
+
+.pdp-accordion__icon {
+  display: flex;
+  color: #0f2550;
+  transition: transform 0.25s ease;
+}
+
+.pdp-accordion__item.is-open .pdp-accordion__icon {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 1099px) {
+  .pdp-accordion__item {
+    grid-template-columns: 32px minmax(0, 1fr) 1px minmax(0, 1.8fr) 24px;
+    column-gap: 24px;
+  }
+
+  .pdp-accordion__title { font-size: 17px; }
+
+  /* Benefits drop under the details once the row gets tight */
+  .pdp-accordion__panel--split {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 20px;
+  }
+
+  .pdp-accordion__panel--split .pdp-accordion__details {
+    padding-inline-end: 0;
+  }
+
+  .pdp-accordion__panel--split .pdp-accordion__benefits {
+    padding-inline-start: 0;
+    padding-block-start: 18px;
+    border-inline-start: 0;
+    border-block-start: 1px solid #d9e0ea;
+  }
+}
+
+/* ----- Step timeline style: numbers on a rail outside the cards ----- */
+.pdp-accordion--timeline {
+  --pdp-rail-size: 36px;
+  --pdp-rail-gap: 28px;
+  --pdp-card-offset: calc(var(--pdp-rail-size) + var(--pdp-rail-gap));
+}
+
+.pdp-accordion--timeline .pdp-accordion__item {
+  grid-template-columns: minmax(0, 1fr) 1px minmax(0, 2.4fr) 24px;
+  padding-inline-start: calc(var(--pdp-card-offset) + 32px);
+  border: 0;
+  background: none;
+  isolation: isolate;
+}
+
+.pdp-accordion--timeline .pdp-accordion__item.is-open {
+  background: none;
+}
+
+/* The card surface sits beside the rail */
+.pdp-accordion--timeline .pdp-accordion__item::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline: var(--pdp-card-offset) 0;
+  z-index: -1;
+  border: 1px solid #e1e6ee;
+  border-radius: 14px;
+  background: #fff;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.pdp-accordion--timeline .pdp-accordion__item--expandable:hover::before {
+  border-color: #c5d4ea;
+}
+
+.pdp-accordion--timeline .pdp-accordion__item.is-open::before {
+  background: #eef4fd;
+  border-color: #cddcf2;
+}
+
+/* Rail line joining the numbers; it runs through the gap to the next row */
+.pdp-accordion--timeline .pdp-accordion__item::after {
+  content: '';
+  position: absolute;
+  inset-block: 0 -12px;
+  inset-inline-start: calc(var(--pdp-rail-size) / 2 - 1px);
+  z-index: -1;
+  width: 2px;
+  background: #d6e2f6;
+}
+
+.pdp-accordion--timeline .pdp-accordion__item:first-child::after {
+  inset-block-start: 50%;
+}
+
+.pdp-accordion--timeline .pdp-accordion__item:first-child.is-open::after {
+  inset-block-start: 36px;
+}
+
+.pdp-accordion--timeline .pdp-accordion__item:last-child::after {
+  inset-block-end: 50%;
+}
+
+.pdp-accordion--timeline .pdp-accordion__item:only-child::after {
+  display: none;
+}
+
+.pdp-accordion--timeline .pdp-accordion__number {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 0;
+  z-index: 1;
+  width: var(--pdp-rail-size);
+  height: var(--pdp-rail-size);
+  transform: translateY(-50%);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.pdp-accordion--timeline .pdp-accordion__item.is-open .pdp-accordion__number {
+  inset-block-start: 18px;
+  transform: none;
+  background: #1e3a8a;
+  color: #fff;
+  box-shadow: 0 4px 12px rgb(30 58 138 / 0.25);
+}
+
+/* Numbered sub-steps */
+.pdp-accordion__benefits-list--steps {
+  gap: 10px;
+}
+
+.pdp-accordion__benefit-check--number {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f2550;
+  font-family: var(--font-heading--family, sans-serif);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pdp-accordion__item,
+  .pdp-accordion__item::before,
+  .pdp-accordion__number,
+  .pdp-accordion__icon {
+    transition: none;
+  }
+}
+
 /* ===== Reviews section ===== */
 .pdp-reviews {
   background: #fff;
@@ -611,6 +995,80 @@
 
   .pdp-compare {
     aspect-ratio: 1 / 1;
+  }
+
+  /* Accordion: badge, title and chevron on one line, copy full width below */
+  .pdp-accordion__heading {
+    font-size: 18px;
+    margin-block-end: 20px;
+  }
+
+  .pdp-accordion__item,
+  .pdp-accordion__item.is-open {
+    grid-template-columns: 32px minmax(0, 1fr) 20px;
+    grid-template-areas:
+      'num main icon'
+      'aside aside aside';
+    align-items: center;
+    column-gap: 12px;
+    row-gap: 4px;
+    padding: 6px 16px;
+  }
+
+  .pdp-accordion__number {
+    grid-area: num;
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+  }
+
+  .pdp-accordion__main { grid-area: main; }
+  .pdp-accordion__aside { grid-area: aside; }
+  .pdp-accordion__icon { grid-area: icon; }
+  .pdp-accordion__divider { display: none; }
+
+  .pdp-accordion__title { font-size: 17px; }
+
+  .pdp-accordion__heading::after { margin-block-start: 10px; }
+
+  .pdp-accordion__item.is-open { padding-block: 16px; }
+  .pdp-accordion__item.is-open .pdp-accordion__main,
+  .pdp-accordion__item.is-open .pdp-accordion__aside { padding-block-start: 0; }
+
+  .pdp-accordion__summary,
+  .pdp-accordion__details,
+  .pdp-accordion__benefit {
+    font-size: 14px;
+  }
+
+  /* The summary stays above the details instead of moving under the title */
+  .pdp-accordion__item.is-open .pdp-accordion__summary--open { display: none; }
+  .pdp-accordion__item.is-open .pdp-accordion__summary--closed {
+    display: block;
+    margin-block-end: 8px;
+    color: #14294a;
+  }
+
+  .pdp-accordion--timeline {
+    --pdp-rail-size: 32px;
+    --pdp-rail-gap: 12px;
+  }
+
+  .pdp-accordion--timeline .pdp-accordion__item,
+  .pdp-accordion--timeline .pdp-accordion__item.is-open {
+    grid-template-columns: minmax(0, 1fr) 20px;
+    grid-template-areas:
+      'main icon'
+      'aside aside';
+    padding-inline-start: calc(var(--pdp-card-offset) + 14px);
+  }
+
+  .pdp-accordion--timeline .pdp-accordion__item:first-child.is-open::after {
+    inset-block-start: 30px;
+  }
+
+  .pdp-accordion--timeline .pdp-accordion__item.is-open .pdp-accordion__number {
+    inset-block-start: 10px;
   }
 
   .pdp-compare__tag {

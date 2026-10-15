@@ -71,6 +71,19 @@
     "ossian_brand_pillars": {
       "type": "ossian-brand-pillars",
       "blocks": {
+        "pillar_3JHATK": {
+          "type": "pillar",
+          "settings": {
+            "label": "",
+            "heading_line1": "",
+            "heading_line2": "",
+            "accent_line2": true,
+            "body_text": "",
+            "overlay_opacity": 70,
+            "button_label": "",
+            "button_link": ""
+          }
+        },
         "pillar_science": {
           "type": "pillar",
           "settings": {
@@ -129,6 +142,7 @@
         }
       },
       "block_order": [
+        "pillar_3JHATK",
         "pillar_science",
         "pillar_haircare",
         "pillar_promise",
@@ -267,23 +281,23 @@
         "background_image": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_10_25_12_PM.png",
         "background_image_mobile": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_10_39_06_PM.png",
         "background_link": "",
-        "eyebrow": "Professional Hair Care",
+        "eyebrow": "Professional Skin Care",
         "heading_line1": "Only What Your",
-        "heading_line2": "Hair Needs",
-        "text": "Advanced formulas for stronger, smoother and healthier hair.",
+        "heading_line2": "Skin Needs",
+        "text": "Advanced formulas for smoother and healthier skin.",
         "button_label": "Explore Collection",
         "button_link": "shopify://collections/all",
-        "color_eyebrow": "#6b483d",
+        "color_eyebrow": "#6b3d41",
         "color_heading": "#4b3d12",
-        "color_heading_accent": "#1463f3",
+        "color_heading_accent": "#f3141f",
         "color_text": "#5a6981",
         "color_button_bg": "#f3147c",
         "color_button_text": "#ffffff",
-        "color_feature_icon": "#f31457",
+        "color_feature_icon": "#14b0f3",
         "color_feature_text": "#12284b",
         "feature_1": "Deep\nNourishment",
         "feature_1_icon": "drop",
-        "feature_2": "Suitable\nfor All Hair Types",
+        "feature_2": "Suitable\nfor All Skin Types",
         "feature_2_icon": "shield",
         "feature_3": "Visible\nResults",
         "feature_3_icon": "sparkle",
@@ -447,7 +461,7 @@
     "ossian_transformation_banner": {
       "type": "ossian-transformation-banner",
       "settings": {
-        "alt": "Salon Choice — Real Transformations. Professional care, real results, loved by thousands.",
+        "alt": "Salon Choice — Real Transformations. Professional care, real results.",
         "link": ""
       }
     },
@@ -455,6 +469,18 @@
       "type": "ossian-salon-choice",
       "blocks": {
         "feature_pill_YpdVXj": {
+          "type": "feature_pill",
+          "settings": {
+            "icon": "sparkle",
+            "label": "BLONDE LIFT",
+            "subtitle": "Anti-Yellow",
+            "collection": "blonde-lift",
+            "product": "",
+            "link": "shopify://collections/all",
+            "highlighted": true
+          }
+        },
+        "feature_pill_ymAHji": {
           "type": "feature_pill",
           "settings": {
             "icon": "sparkle",
@@ -517,6 +543,7 @@
       },
       "block_order": [
         "feature_pill_YpdVXj",
+        "feature_pill_ymAHji",
         "feature_pill_9hW9Ma",
         "feature_pill_b8cGfP",
         "feature_pill_KMwVhx",
@@ -529,7 +556,7 @@
         "ba_label": "REAL CLIENT RESULT",
         "before_image": "shopify://shop_images/57cb6ecf-6647-4106-b8dc-0e3f59a47039.png",
         "after_image": "shopify://shop_images/ChatGPT_Image_Sep_7_2026_12_14_57_AM.png",
-        "feat_product": "ossion-hair-intense-mask-silk-amino-acid",
+        "feat_product": "blonder-fiber-plex-500-gm",
         "feat_collection": "",
         "feat_link": "",
         "feat_image": "shopify://shop_images/image_169_1.png",
@@ -699,7 +726,7 @@
         "heading": "OSSION",
         "heading_accent": "gram",
         "subheading": "Real people. Real results. Real stories",
-        "instagram_handle": "ossion.care"
+        "instagram_handle": "ossionbeauty"
       }
     },
     "ossian_trust_ticker": {
@@ -733,7 +760,7 @@
           "type": "badge",
           "settings": {
             "icon": "sparkle",
-            "title": "Visible Results",
+            "title": "Visible Resultsq11111",
             "description": "Healthy, glowing skin you can feel."
           }
         }

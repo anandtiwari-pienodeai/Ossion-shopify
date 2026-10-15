@@ -134,6 +134,34 @@
 
           assign before_label = block.settings.before_label | default: 'Before'
           assign after_label = block.settings.after_label | default: 'After'
+
+          # ---- Accordion layout: rows come from a list of metaobjects, either the
+          # tab metafield itself or a list field on the single entry it points at.
+          assign acc_items = nil
+          assign acc_heading = block.settings.accordion_heading
+          if block.settings.layout == 'accordion'
+            if mo_kind == 'entry_list'
+              assign acc_items = mo_value
+            elsif mo_kind == 'entry'
+              assign acc_item_keys = block.settings.accordion_items_field | append: ',items,ingredients,ingredient_list,key_ingredients,rows' | split: ','
+              for acc_key in acc_item_keys
+                assign acc_key = acc_key | strip
+                if acc_key != blank and mo_value[acc_key].type == 'list.metaobject_reference' and mo_value[acc_key].value != blank
+                  assign acc_items = mo_value[acc_key].value
+                  break
+                endif
+              endfor
+
+              assign acc_heading_keys = heading_keys | split: ','
+              for acc_key in acc_heading_keys
+                assign acc_key = acc_key | strip
+                if acc_key != blank and mo_value[acc_key].type == 'single_line_text_field' and mo_value[acc_key].value != blank
+                  assign acc_heading = mo_value[acc_key].value
+                  break
+                endif
+              endfor
+            endif
+          endif
         -%}
         <div
           class="pdp-tabs__panel{% if panel_index == 1 %} pdp-tabs__panel--active{% endif %}{% if show_split %} pdp-tabs__panel--split{% endif %}"
@@ -161,6 +189,30 @@
                 </ul>
               {%- endif -%}
             </div>
+          {%- endif -%}
+
+          {%- if acc_items != blank -%}
+            {%- assign acc_title_keys = block.settings.accordion_title_field | append: ',name,title,label,heading' -%}
+            {%- assign acc_summary_keys = block.settings.accordion_summary_field | append: ',summary,short_description,subtitle,tagline' -%}
+            {%- assign acc_details_keys = block.settings.accordion_details_field | append: ',description,details,body,content' -%}
+            {%- assign acc_benefits_keys = block.settings.accordion_benefits_field | append: ',benefits,key_benefits,highlights' -%}
+            {%- assign acc_id_prefix = 'pdp-acc-' | append: block.id -%}
+            {%- unless block.settings.accordion_show_heading -%}
+              {%- assign acc_heading = blank -%}
+            {%- endunless -%}
+            {%- render 'ossian-pdp-tab-accordion',
+              items: acc_items,
+              heading: acc_heading,
+              title_keys: acc_title_keys,
+              summary_keys: acc_summary_keys,
+              details_keys: acc_details_keys,
+              benefits_keys: acc_benefits_keys,
+              benefits_label: block.settings.accordion_benefits_label,
+              open_first: block.settings.accordion_open_first,
+              style: block.settings.accordion_style,
+              id_prefix: acc_id_prefix
+            -%}
+            {%- assign mo_kind = nil -%}
           {%- endif -%}
 
           {%- case mo_kind -%}
@@ -389,6 +441,22 @@
     range.addEventListener('input', sync);
     sync();
   });
+
+  var toggles = document.querySelectorAll('[data-pdp-accordion] .pdp-accordion__toggle');
+  toggles.forEach(function(toggle) {
+    // The editor re-runs this script on section reloads; bind each toggle once.
+    if (toggle.dataset.bound) return;
+    toggle.dataset.bound = 'true';
+    toggle.addEventListener('click', function() {
+      var item = toggle.closest('.pdp-accordion__item');
+      var panel = document.getElementById(toggle.getAttribute('aria-controls'));
+      if (!item || !panel) return;
+      var open = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      item.classList.toggle('is-open', open);
+      panel.hidden = !open;
+    });
+  });
 })();
 </script>
 
@@ -492,9 +560,102 @@
             {
               "value": "comparison",
               "label": "Before / after comparison"
+            },
+            {
+              "value": "accordion",
+              "label": "Numbered accordion (ingredients)"
             }
           ],
           "default": "text"
+        },
+        {
+          "type": "header",
+          "content": "Numbered accordion",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "paragraph",
+          "content": "Rows come from a list of metaobjects: either the product metafield below is a list of entries, or it points at one entry with a list field holding the rows.",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "select",
+          "id": "accordion_style",
+          "label": "Style",
+          "options": [
+            { "value": "cards", "label": "Numbered cards" },
+            { "value": "timeline", "label": "Step timeline" }
+          ],
+          "default": "cards",
+          "info": "Step timeline shows the numbers on a connected rail and the benefits list as numbered sub-steps",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "checkbox",
+          "id": "accordion_show_heading",
+          "label": "Show heading",
+          "default": false,
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "text",
+          "id": "accordion_heading",
+          "label": "Heading",
+          "info": "Used when the metaobject has no heading field, e.g. Key Active Ingredients",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "text",
+          "id": "accordion_items_field",
+          "label": "Rows list field key",
+          "default": "items",
+          "info": "List of metaobjects field on the entry, e.g. items",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "text",
+          "id": "accordion_title_field",
+          "label": "Row title field key",
+          "default": "name",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "text",
+          "id": "accordion_summary_field",
+          "label": "Row summary field key",
+          "default": "summary",
+          "info": "Short line shown on every row",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "text",
+          "id": "accordion_details_field",
+          "label": "Row details field key",
+          "default": "description",
+          "info": "Longer copy shown when a row is expanded",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "text",
+          "id": "accordion_benefits_field",
+          "label": "Row benefits field key",
+          "default": "benefits",
+          "info": "List of text values shown as a checklist when a row is expanded",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "text",
+          "id": "accordion_benefits_label",
+          "label": "Benefits label",
+          "default": "Key benefits",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "checkbox",
+          "id": "accordion_open_first",
+          "label": "Expand first row",
+          "default": true,
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
         },
         {
           "type": "checkbox",
@@ -686,7 +847,7 @@
           "type": "tab",
           "settings": {
             "label": "Description",
-            "layout": "text",
+            "layout": "accordion",
             "use_product_description": false,
             "metaobject_metafield": "custom.description",
             "metaobject_label_field": "label",
@@ -699,7 +860,8 @@
           "type": "tab",
           "settings": {
             "label": "Ingredients",
-            "layout": "text",
+            "layout": "accordion",
+            "accordion_heading": "Key Active Ingredients",
             "metaobject_metafield": "custom.ingredients",
             "metaobject_label_field": "label",
             "metaobject_images_field": "image",
@@ -710,7 +872,7 @@
           "type": "tab",
           "settings": {
             "label": "How To Use",
-            "layout": "text",
+            "layout": "accordion",
             "metaobject_metafield": "custom.how_to_use",
             "metaobject_label_field": "label",
             "metaobject_images_field": "image",
@@ -721,26 +883,11 @@
           "type": "tab",
           "settings": {
             "label": "Marine Technology",
-            "layout": "text",
+            "layout": "accordion",
             "metaobject_metafield": "custom.marine_technology",
             "metaobject_label_field": "label",
             "metaobject_images_field": "images",
             "metaobject_images_per_row": 3
-          }
-        },
-        {
-          "type": "tab",
-          "settings": {
-            "label": "Before & After",
-            "layout": "comparison",
-            "metaobject_metafield": "custom.before_after",
-            "metaobject_label_field": "label,caption",
-            "metaobject_body_field": "caption",
-            "metaobject_images_field": "images",
-            "comparison_before_field": "before_image",
-            "comparison_after_field": "after_image",
-            "before_label": "Before",
-            "after_label": "After"
           }
         },
         {

@@ -154,6 +154,7 @@
             "ossian_pdp_size_badge": {
               "type": "ossian-pdp-size-badge",
               "settings": {
+                "option_names": "Size, Volume, Weight, Pack size",
                 "label": "Professional size"
               },
               "blocks": {}
@@ -210,6 +211,7 @@
             "ossian_pdp_features_block": {
               "type": "ossian-pdp-features",
               "settings": {
+                "use_default_features": false,
                 "features": "Anti-yellow Technology | Keeps hair brighter & healthier | sparkle\nFibre Plex Protection | Protects hair structure | shield\nUp to 9 Levels Lift | Salon-grade performance | arrow-up\nNon-Damaging Formula | Gentle yet effective care | leaf\nEnriched with Marine actives | Nourishes & strengthens hair | coral",
                 "padding-block-start": 8,
                 "padding-block-end": 8,
@@ -323,8 +325,12 @@
           "type": "tab",
           "settings": {
             "label": "Ingredients",
-            "layout": "text",
+            "accordion_show_heading": false,
+            "accordion_style": "timeline",
+            "layout": "accordion",
+            "accordion_heading": "Key Active Ingredients",
             "use_product_description": false,
+            "description_fallback": false,
             "content": "",
             "features_list": "",
             "metaobject_metafield": "custom.ingredients",
@@ -346,8 +352,11 @@
           "type": "tab",
           "settings": {
             "label": "Marine Technology",
-            "layout": "text",
+            "accordion_show_heading": false,
+            "accordion_style": "timeline",
+            "layout": "accordion",
             "use_product_description": false,
+            "description_fallback": false,
             "content": "",
             "features_list": "",
             "metaobject_metafield": "custom.marine_technology",
@@ -369,7 +378,10 @@
           "type": "tab",
           "settings": {
             "label": "Description",
-            "layout": "text",
+            "accordion_show_heading": false,
+            "accordion_style": "timeline",
+            "layout": "accordion",
+            "accordion_heading": "Product Description",
             "use_product_description": false,
             "description_fallback": true,
             "content": "",
@@ -389,35 +401,15 @@
             "image_cta_url": ""
           }
         },
-        "tab_benefits": {
-          "type": "tab",
-          "settings": {
-            "label": "Before & After",
-            "layout": "comparison",
-            "use_product_description": false,
-            "content": "",
-            "features_list": "",
-            "metaobject_metafield": "custom.before_after",
-            "metaobject_label_field": "label,caption",
-            "metaobject_body_field": "caption",
-            "metaobject_list_field": "",
-            "metaobject_images_field": "images",
-            "metaobject_images_per_row": 3,
-            "comparison_before_field": "before_image",
-            "comparison_after_field": "after_image",
-            "before_label": "Before",
-            "after_label": "After",
-            "image_heading": "ENRICHED WITH MARINE SCIENCE",
-            "image_cta_text": "Explore Our Science",
-            "image_cta_url": ""
-          }
-        },
         "tab_how": {
           "type": "tab",
           "settings": {
             "label": "How To Use",
-            "layout": "text",
+            "accordion_show_heading": false,
+            "accordion_style": "timeline",
+            "layout": "accordion",
             "use_product_description": false,
+            "description_fallback": false,
             "content": "",
             "features_list": "",
             "metaobject_metafield": "custom.how_to_use",
@@ -440,7 +432,6 @@
         "tab_8wgcGU",
         "tab_DCcUq6",
         "tab_desc",
-        "tab_benefits",
         "tab_how"
       ],
       "custom_css": [
@@ -821,6 +812,17 @@
         "cta_url": ""
       }
     },
+    "ossian_you_may_like": {
+      "type": "ossian-you-may-like",
+      "settings": {
+        "eyebrow": "Complete Your Hair Care Routine",
+        "heading": "You May Also Like",
+        "products": [],
+        "collection": "",
+        "max_products": 8,
+        "hide_sold_out": true
+      }
+    },
     "product_recommendations_qggXJq": {
       "type": "product-recommendations",
       "blocks": {
@@ -955,6 +957,7 @@
       "block_order": [
         "text_cbcgyb"
       ],
+      "disabled": true,
       "name": "t:names.product_recommendations",
       "settings": {
         "product": "{{ closest.product }}",
@@ -973,8 +976,7 @@
         "color_scheme": "scheme-1",
         "padding-block-start": 80,
         "padding-block-end": 48
-      },
-      "disabled": true
+      }
     },
     "ossian_explore_category_pdp": {
       "type": "ossian-explore-category",
@@ -986,14 +988,6 @@
         "cta_label": "View all",
         "auto_collections": true,
         "exclude_handles": "frontpage, test"
-      }
-    },
-    "ossian_you_may_like": {
-      "type": "ossian-you-may-like",
-      "settings": {
-        "eyebrow": "Complete Your Hair Care Routine",
-        "heading": "You May Also Like",
-        "max_products": 8
       }
     }
   },
@@ -1011,4 +1005,3 @@
     "ossian_explore_category_pdp"
   ]
 }
-
