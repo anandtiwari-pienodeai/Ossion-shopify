@@ -289,6 +289,34 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "ossian_pdp_info_accordion": {
+              "type": "ossian-pdp-info-accordion",
+              "settings": {
+                "open_first": false,
+                "heading_1": "Description",
+                "content_1": "{{ closest.product.description }}",
+                "heading_2": "Shade Description",
+                "content_2": "{{ closest.product.metafields.custom.shade_description | metafield_tag }}",
+                "heading_3": "How To Use",
+                "content_3": "{{ closest.product.metafields.custom.how_to_use_text | metafield_tag }}",
+                "heading_4": "Ingredients",
+                "content_4": "{{ closest.product.metafields.custom.ingredients_text | metafield_tag }}",
+                "heading_5": "Formula Is Free From",
+                "content_5": "{{ closest.product.metafields.custom.free_from | metafield_tag }}",
+                "heading_6": "Weight",
+                "content_6": "<p>{{ closest.product.metafields.custom.weight_text.value }}</p>",
+                "padding-block-start": 8,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0,
+                "detail_label_1": "Manufactured By:",
+                "detail_value_1": "{{ closest.product.metafields.custom.manufactured_by.value }}",
+                "detail_label_2": "Country of Origin:",
+                "detail_value_2": "{{ closest.product.metafields.custom.country_of_origin.value }}",
+                "detail_label_3": "Use Before:",
+                "detail_value_3": "{{ closest.product.metafields.custom.use_before.value }}"
+              }
             }
           },
           "block_order": [
@@ -302,6 +330,7 @@
             "ossian_pdp_features_block",
             "buy_buttons_eYQEYi",
             "ossian_pdp_trust",
+            "ossian_pdp_info_accordion",
             "ossian_pdp_wishlist_mW8kXp"
           ]
         }
