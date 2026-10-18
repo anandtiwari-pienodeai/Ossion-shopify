@@ -16,7 +16,7 @@
           "type": "slide",
           "settings": {
             "media_type": "image",
-            "image": "shopify://shop_images/website_banner_-_Nano_Silk_JPG.jpg",
+            "image": "shopify://shop_images/12.svg",
             "image_mobile": "shopify://shop_images/Pure_Shea_Hair_Care_Advertisement.png",
             "link": "",
             "link_label": ""
@@ -26,7 +26,7 @@
           "type": "slide",
           "settings": {
             "media_type": "image",
-            "image": "shopify://shop_images/website_banner_-_Nano_Silk_JPG.jpg",
+            "image": "shopify://shop_images/7.svg",
             "image_mobile": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_39_19_PM.png",
             "link": "",
             "link_label": ""
@@ -36,7 +36,7 @@
           "type": "slide",
           "settings": {
             "media_type": "image",
-            "image": "shopify://shop_images/Coastal_Salon_Hair_Coloring_Session_1.png",
+            "image": "shopify://shop_images/14.svg",
             "image_mobile": "shopify://shop_images/Natural_Care_Hair_Skin_Essentials.png",
             "link": "",
             "link_label": ""
@@ -46,7 +46,7 @@
           "type": "slide",
           "settings": {
             "media_type": "image",
-            "image": "shopify://shop_images/Professional_Blonde_Fibre_Treatment.png",
+            "image": "shopify://shop_images/24.svg",
             "image_mobile": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_42_40_PM.png",
             "link": "",
             "link_label": ""
@@ -71,23 +71,10 @@
     "ossian_brand_pillars": {
       "type": "ossian-brand-pillars",
       "blocks": {
-        "pillar_3JHATK": {
-          "type": "pillar",
-          "settings": {
-            "label": "",
-            "heading_line1": "",
-            "heading_line2": "",
-            "accent_line2": true,
-            "body_text": "",
-            "overlay_opacity": 70,
-            "button_label": "",
-            "button_link": ""
-          }
-        },
         "pillar_science": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/image_208_1.png",
+            "image": "shopify://shop_images/Untitled_design_36.jpg",
             "label": "Our Science",
             "heading_line1": "From the Depths of",
             "heading_line2": "Marine Science",
@@ -101,7 +88,7 @@
         "pillar_haircare": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/image_211.png",
+            "image": "shopify://shop_images/Untitled_design_39.jpg",
             "label": "Hair Care",
             "heading_line1": "Complete Care for",
             "heading_line2": "Every Strand",
@@ -115,7 +102,7 @@
         "pillar_promise": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/image_209_1.png",
+            "image": "shopify://shop_images/24.svg",
             "label": "Styling",
             "heading_line1": "Style with",
             "heading_line2": "Confidence",
@@ -129,7 +116,7 @@
         "pillar_sustainability": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/image_210_1.png",
+            "image": "shopify://shop_images/3.svg",
             "label": "Real Results",
             "heading_line1": "Trusted by",
             "heading_line2": "Professionals",
@@ -142,7 +129,6 @@
         }
       },
       "block_order": [
-        "pillar_3JHATK",
         "pillar_science",
         "pillar_haircare",
         "pillar_promise",
@@ -151,7 +137,7 @@
       "name": "Brand Pillars",
       "settings": {
         "section_height": 680,
-        "hero_image": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_25_52_PM.png",
+        "hero_image": "shopify://shop_images/Untitled_design_5.jpg",
         "hero_image_mobile": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_36_28_PM.png",
         "hero_alt": "OSSION Professional — Salon science at its best",
         "hero_link": ""
