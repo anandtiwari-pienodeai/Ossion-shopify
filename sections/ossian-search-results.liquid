@@ -1,0 +1,27 @@
+{%- comment -%}
+  Live results for the Ossion search pop-up. Not placed on any template: assets/ossian-search.js
+  fetches it through the Section Rendering API, e.g.
+  /search?q=shampoo&type=product&options[prefix]=last&section_id=ossian-search-results
+{%- endcomment -%}
+
+{%- paginate search.results by 8 -%}
+  <div
+    class="ossian-search-results"
+    data-results-count="{{ search.results_count }}"
+    data-terms="{{ search.terms | escape }}"
+  >
+    {%- for item in search.results -%}
+      {%- if item.object_type == 'product' -%}
+        {%- render 'ossian-search-product-card', product: item -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Ossion search results",
+  "tag": "div",
+  "class": "ossian-search-results-section"
+}
+{% endschema %}

@@ -1727,6 +1727,36 @@
         "visible_if": "{{ settings.cart_type == 'drawer' }}"
       },
       {
+        "type": "text",
+        "id": "cart_badge_tag",
+        "label": "t:settings.cart_badge_tag",
+        "info": "t:info.cart_badge_tag",
+        "default": "Bestseller",
+        "visible_if": "{{ settings.cart_type == 'drawer' }}"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cart_delivery",
+        "label": "t:settings.show_cart_delivery",
+        "default": true,
+        "visible_if": "{{ settings.cart_type == 'drawer' }}"
+      },
+      {
+        "type": "text",
+        "id": "cart_delivery_text",
+        "label": "t:settings.cart_delivery_text",
+        "default": "FREE",
+        "visible_if": "{{ settings.cart_type == 'drawer' and settings.show_cart_delivery }}"
+      },
+      {
+        "type": "text",
+        "id": "cart_delivery_compare",
+        "label": "t:settings.cart_delivery_compare",
+        "info": "t:info.cart_delivery_compare",
+        "default": "Rs. 100",
+        "visible_if": "{{ settings.cart_type == 'drawer' and settings.show_cart_delivery }}"
+      },
+      {
         "type": "header",
         "content": "t:content.cart_features"
       },

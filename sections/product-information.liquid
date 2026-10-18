@@ -18,7 +18,6 @@
     id: 'product-details',
     closest.product: closest.product
   %}
-  {%- render 'ossian-variant-image-picker', product: product -%}
 {% endcapture %}
 
 {% capture additional_blocks %}
@@ -178,9 +177,12 @@
 %}
 
 {% stylesheet %}
-  /* ── PDP global page margin override ─────────── */
-  .template-product {
-    --page-margin: 20px;
+  @media screen and (max-width: 749px) {
+    /* base.css adds 20px padding inside every section on top of the 16px page margin;
+       on phones that leaves the product image at ~318px, so drop the extra side padding here */
+    .shopify-section:not(.header-section) .product-information.section {
+      padding-inline: 0;
+    }
   }
 
   /* ── Category badge (product type) ──────────── */
@@ -190,7 +192,7 @@
 
   /* ── Product title sizing on PDP ─────────────── */
   .product-information .product-details h1 {
-    font-size: clamp(1.55rem, 3vw, 2.1rem);
+    font-size: clamp(1.7rem, 2.6vw, 2.5rem);
     line-height: 1.2;
     font-weight: 800;
     color: #101828;
@@ -201,7 +203,7 @@
   /* ── Product subtitle (metafield) ────────────── */
   .product-information .text-block--text_subtitle p,
   .product-information .text-block--text_subtitle {
-    font-size: 0.925rem;
+    font-size: 1.05rem;
     color: #4b5563;
     font-weight: 500;
     margin: 0;
@@ -373,24 +375,24 @@
     overflow: hidden;
   }
 
-  /* ── Variant image picker ───────────────────── */
-  .ossian-vip { margin-top: 12px; }
+  /* ── Variant option headings ("COLOR  1 Black") ── */
+  .product-information .variant-picker .variant-option legend {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+  }
 
-  /* ── Hide native variant picker UI when custom strip active ── */
-  .product-information .variant-picker__form {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    white-space: nowrap;
+  .product-information .variant-picker .variant-option legend .variant-option__swatch-value {
+    font-weight: 500;
+    text-transform: none;
   }
 
   /* ── Mobile ────────────────────────────────── */
   @media screen and (max-width: 749px) {
     .product-information .product-details h1 {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
     }
 
     .product-information .price__regular .price-item,
@@ -398,7 +400,6 @@
       font-size: 1.45rem;
     }
 
-    .ossian-vip { margin-top: 10px; }
   }
 
   .sticky-add-to-cart__bar {
@@ -586,18 +587,18 @@
 
   /* ── PDP: vertical thumbnail strip on the left ── */
   @media screen and (min-width: 750px) {
-    .template-product slideshow-controls[thumbnails][pagination-position='left'] {
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] {
       width: calc(var(--thumbnail-width, 72px) + 16px);
       min-width: calc(var(--thumbnail-width, 72px) + 16px);
     }
 
-    .template-product slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails {
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails {
       flex-direction: column;
       gap: 8px;
       padding-inline: 4px;
     }
 
-    .template-product slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control {
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control {
       width: var(--thumbnail-width, 72px);
       height: var(--thumbnail-width, 72px);
       aspect-ratio: 1 / 1;
@@ -606,15 +607,544 @@
       overflow: hidden;
     }
 
-    .template-product slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control img {
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    .template-product slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control[aria-selected='true'] {
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control[aria-selected='true'] {
       outline: 2px solid #1e3a5f;
       outline-offset: 2px;
+    }
+  }
+
+  /* ══ Ossion PDP layout (design refresh) ══════════════════════════ */
+
+  /* Main image: rounded frame, no arrows (thumbnails handle navigation) */
+  .product-information .product-media-container,
+  .product-information slideshow-container {
+    border-radius: 16px;
+  }
+
+  .product-information slideshow-container {
+    position: relative;
+    overflow: hidden;
+  }
+
+  @media screen and (min-width: 750px) {
+    .product-information slideshow-arrows {
+      display: none;
+    }
+  }
+
+  /* Benefit strip over the bottom of the main image */
+  .ossian-media-badges {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 6px;
+    margin: 0;
+    padding: 34px 12px 16px;
+    list-style: none;
+    color: #fff;
+    background: linear-gradient(180deg, rgb(8 24 50 / 0) 0%, rgb(8 24 50 / 0.82) 55%);
+    pointer-events: none;
+  }
+
+  .ossian-media-badges__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding-inline: clamp(8px, 1.2vw, 20px);
+    font-size: clamp(0.78rem, 0.95vw, 0.95rem);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .ossian-media-badges__item + .ossian-media-badges__item {
+    border-inline-start: 1px solid rgb(255 255 255 / 0.4);
+  }
+
+  .ossian-media-badges__icon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+
+  /* Desktop: keep the gallery in view while the longer details column scrolls */
+  @media screen and (min-width: 750px) {
+    .product-information .product-information__media {
+      position: sticky;
+      top: calc(var(--header-height, 0px) + 16px);
+    }
+  }
+
+  /* Phones: compact strip; thumbnails sit below the image */
+  @media screen and (max-width: 749px) {
+    .ossian-media-badges {
+      padding: 28px 8px 14px;
+    }
+
+    .product-information slideshow-controls[thumbnails] {
+      margin-block-start: 10px;
+      padding-inline: 0;
+    }
+
+    .product-information slideshow-controls[thumbnails] .slideshow-controls__thumbnails {
+      justify-content: flex-start;
+      gap: 8px;
+      padding: 3px;
+    }
+
+    .product-information slideshow-controls[thumbnails] .slideshow-control {
+      flex: 0 0 60px;
+      width: 60px;
+      height: 60px;
+      overflow: hidden;
+      border: 1px solid #e3e8f1;
+      border-radius: 10px;
+      background: #f4f7fc;
+    }
+
+    .product-information slideshow-controls[thumbnails] .slideshow-control img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-information slideshow-controls[thumbnails] .slideshow-control[aria-selected='true'] {
+      outline: 2px solid #1e3a5f;
+      outline-offset: 0;
+      border-color: transparent;
+    }
+
+    .ossian-media-badges__item {
+      gap: 5px;
+      padding-inline: 8px;
+      font-size: 0.72rem;
+    }
+
+    .ossian-media-badges__icon {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  /* Thumbnails: rounded tiles, navy ring on the active one, max six */
+  @media screen and (min-width: 990px) {
+    /* Larger than the gallery setting's 72px maximum, to match the design */
+    /* Set on the strip itself: the gallery's inline --thumbnail-width would win on the gallery element */
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] {
+      --thumbnail-width: 96px;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control {
+      border-radius: 12px;
+      border: 1px solid #e3e8f1;
+      background: #f4f7fc;
+    }
+
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control[aria-selected='true'] {
+      outline: 2px solid #1e3a5f;
+      outline-offset: 0;
+      border-color: transparent;
+    }
+
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails .slideshow-control:nth-child(n + 7) {
+      display: none;
+    }
+
+    .product-information slideshow-controls[thumbnails][pagination-position='left'] .slideshow-controls__thumbnails {
+      gap: 12px;
+    }
+  }
+
+  /* Size badge pinned top-right of the details column */
+  .product-information .product-details {
+    position: relative;
+  }
+
+  @media screen and (min-width: 750px) {
+    .product-information .product-details .ossian-size-badge {
+      position: absolute;
+      top: 0;
+      inset-inline-end: 0;
+      z-index: 1;
+    }
+
+    /* Keep the eyebrow, title and subtitle clear of the badge */
+    .product-information .product-details:has(.ossian-size-badge) .ossian-product-type,
+    .product-information .product-details:has(.ossian-size-badge) .text-block {
+      padding-inline-end: 200px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    /* Breathing room between the gallery and the brand label */
+    .product-information .product-details {
+      padding-top: 18px;
+    }
+
+    .product-information .product-details .ossian-size-badge {
+      align-self: flex-start;
+      gap: 10px;
+      padding: 8px 12px;
+    }
+
+    .product-information .ossian-size-badge__icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .product-information .ossian-size-badge__value {
+      font-size: 1rem;
+    }
+
+    .product-information .ossian-size-badge__label {
+      font-size: 0.62rem;
+    }
+
+    .product-information .product-details h1 {
+      font-size: 1.6rem;
+    }
+  }
+
+  /* Buy buttons: quantity on its own row, full-width Add to cart and Buy it now */
+  .product-information .product-form-buttons {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .product-information .product-form-buttons > .quantity-selector-wrapper {
+    flex: 0 0 100%;
+  }
+
+  /* flex: none so the theme's flex-basis can't override the width */
+  .product-information .product-form-buttons .quantity-selector {
+    flex: 0 0 148px;
+    width: 148px;
+    min-height: 48px;
+    height: 48px;
+    border-radius: 10px;
+  }
+
+  .product-information .product-form-buttons > :not(.quantity-selector-wrapper, .quantity-rules, .quantity-label, .volume-pricing, .product-form-text__error) {
+    flex: 1 1 100%;
+  }
+
+  /* Sized to the design's proportions: 48px tall, 15px label */
+  .product-information .add-to-cart-button.button {
+    min-height: 48px;
+    height: 48px;
+    padding-block: 0;
+    font-size: 0.94rem;
+    letter-spacing: 0.08em;
+  }
+
+  .product-information .shopify-payment-button__button {
+    min-height: 48px !important;
+    border: 1.5px solid #1e3a5f !important;
+  }
+
+  .product-information .shopify-payment-button__button--unbranded {
+    font-size: 0.94rem !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  .product-information shopify-accelerated-checkout {
+    --shopify-accelerated-checkout-button-block-size: 48px;
+    --shopify-accelerated-checkout-button-border-radius: 10px;
+  }
+
+  /* ══ Image zoom popup (opens when a product image is clicked) ══════ */
+  .product-information .dialog-zoomed-gallery__dialog[open] {
+    position: fixed;
+    inset: 0;
+    width: min(1200px, calc(100vw - 48px));
+    height: min(820px, calc(100dvh - 48px));
+    max-width: none;
+    max-height: none;
+    margin: auto;
+    padding: 18px;
+    border: 0;
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 30px 80px rgb(0 0 0 / 0.35);
+    display: grid;
+    grid-template-columns: 132px minmax(0, 1fr);
+    gap: 18px;
+    overflow: hidden;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog::backdrop {
+    background: rgb(15 23 42 / 0.72);
+    backdrop-filter: blur(4px);
+  }
+
+  /* Thumbnail column */
+  .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list-container {
+    position: static;
+    grid-column: 1;
+    grid-row: 1;
+    width: auto;
+    min-height: 0;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list {
+    position: static;
+    inset: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-height: 100%;
+    margin: 0;
+    padding: 4px;
+    overflow-y: auto;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list::after {
+    display: none;
+  }
+
+  /* The theme's slide-in ends at translateY(-50%) for its floating strip; use a plain fade here */
+  .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list,
+  .product-information .dialog-zoomed-gallery__dialog.dialog--closed .dialog-thumbnails-list {
+    transform: none;
+    animation: ossian-zoom-thumbs-in 0.25s ease forwards;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog.dialog--closed .dialog-thumbnails-list {
+    animation-name: ossian-zoom-thumbs-out;
+  }
+
+  @keyframes ossian-zoom-thumbs-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes ossian-zoom-thumbs-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  /* Every thumbnail stays visible: tiles shrink to share the panel height instead of scrolling */
+  .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list {
+    height: 100%;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list__thumbnail {
+    width: 100%;
+    height: auto;
+    flex: 0 1 124px;
+    min-height: 56px;
+    border-radius: 14px;
+    background: #f2f5fa;
+
+    img {
+      width: 100%;
+      height: 100%;
+      aspect-ratio: auto;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    &[aria-selected='true'] {
+      outline: 3px solid #2f6fd6;
+      outline-offset: 2px;
+      border: 0;
+    }
+  }
+
+  /* Main image: one at a time, snapping */
+  .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    height: 100%;
+    min-width: 0;
+    margin: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior: contain;
+    border: 1px solid #e3e8f1;
+    border-radius: 16px;
+    background: #fff;
+    cursor: default;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery::-webkit-scrollbar {
+    display: none;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery > .product-media-container {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    scroll-snap-align: start;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery .product-media,
+  .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery drag-zoom-wrapper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Close button */
+  .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery__close-button.close-button {
+    position: absolute;
+    top: 34px;
+    inset-inline-end: 34px;
+    z-index: 3;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #fff;
+    color: #13233f;
+    box-shadow: 0 6px 20px rgb(0 0 0 / 0.18);
+    --button-color: #13233f;
+    --button-background-color: #fff;
+    /* the theme's close button uses mix-blend-mode: difference, which turns white dark on a white panel */
+    mix-blend-mode: normal;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery__close-button.close-button:hover {
+    background: #f2f5fa;
+  }
+
+  .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery__close-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Prev / next arrows over the main image */
+  .product-information .dialog-zoomed-gallery__nav {
+    position: absolute;
+    top: 50%;
+    z-index: 3;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgb(15 23 42 / 0.75);
+    color: #fff;
+    transform: translateY(-50%);
+    transition: background 0.2s ease;
+  }
+
+  .product-information .dialog-zoomed-gallery__nav:hover {
+    background: rgb(15 23 42 / 0.92);
+  }
+
+  .product-information .dialog-zoomed-gallery__nav svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .product-information .dialog-zoomed-gallery__nav--prev {
+    /* panel padding + thumbnail column + gap + inset */
+    inset-inline-start: calc(18px + 132px + 18px + 20px);
+  }
+
+  .product-information .dialog-zoomed-gallery__nav--next {
+    inset-inline-end: 38px;
+  }
+
+  .product-information .dialog-zoomed-gallery__close-button:focus-visible,
+  .product-information .dialog-zoomed-gallery__nav:focus-visible,
+  .product-information .dialog-thumbnails-list__thumbnail:focus-visible {
+    outline: 3px solid #2f6fd6;
+    outline-offset: 2px;
+  }
+
+  [dir='rtl'] .product-information .dialog-zoomed-gallery__nav svg {
+    transform: scaleX(-1);
+  }
+
+  /* Phones: full screen, image on top, thumbnails in a row underneath */
+  @media screen and (max-width: 749px) {
+    .product-information .dialog-zoomed-gallery__dialog[open] {
+      width: 100%;
+      height: 100dvh;
+      padding: 12px;
+      border-radius: 0;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1fr) auto;
+      gap: 12px;
+    }
+
+    .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list-container {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list {
+      flex-direction: row;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list {
+      height: auto;
+    }
+
+    .product-information .dialog-zoomed-gallery__dialog .dialog-thumbnails-list__thumbnail {
+      flex: 0 0 68px;
+      width: 68px;
+      height: 68px;
+    }
+
+    .product-information .dialog-zoomed-gallery__dialog .dialog-zoomed-gallery__close-button.close-button {
+      top: 24px;
+      inset-inline-end: 24px;
+      width: 44px;
+      height: 44px;
+    }
+
+    .product-information .dialog-zoomed-gallery__nav {
+      width: 42px;
+      height: 42px;
+      /* centre on the image, not the whole screen (thumbnail row is ~96px) */
+      top: calc(50% - 48px);
+    }
+
+    .product-information .dialog-zoomed-gallery__nav--prev {
+      inset-inline-start: 22px;
+    }
+
+    .product-information .dialog-zoomed-gallery__nav--next {
+      inset-inline-end: 22px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .product-information .dialog-zoomed-gallery__nav {
+      transition: none;
     }
   }
 {% endstylesheet %}

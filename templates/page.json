@@ -137,7 +137,7 @@
       "name": "t:names.hero",
       "settings": {
         "media_type_1": "image",
-        "image_1": "shopify://shop_images/ossion_professional_banner.png",
+        "image_1": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_01_14_49_AM.png",
         "media_type_2": "image",
         "stack_media_on_mobile": false,
         "custom_mobile_media": false,
@@ -166,7 +166,7 @@
         "padding-block-start": 40,
         "padding-block-end": 40
       }
-    },
+    }
   },
   "order": [
     "main",

@@ -1,4 +1,7 @@
-<div class="trust-ticker">
+<div
+  class="trust-ticker"
+  style="padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px; background: {{ section.settings.background_color }};"
+>
   <div class="trust-ticker__track-outer">
     <div class="trust-ticker__track" aria-hidden="false">
       {%- assign all_items = section.blocks -%}
@@ -95,10 +98,6 @@
 </div>
 
 {% stylesheet %}
-.trust-ticker {
-  padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
-  background: {{ section.settings.background_color }};
-}
 .trust-ticker-section{
   margin:20px 20px;
 }

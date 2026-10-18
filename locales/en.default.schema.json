@@ -151,6 +151,7 @@
     "width": "Width",
     "width_is_automatically_optimized": "Width is automatically optimized for mobile.",
     "app_required_for_ratings": "An app is required for product ratings. [Learn more](https://help.shopify.com/manual/apps)",
+    "editor_test_rating_info": "Shows a 4.5–4.8 test rating on products without reviews, only in the theme editor. Shoppers never see it.",
     "navigation": "Navigation"
   },
   "html_defaults": {
@@ -211,6 +212,9 @@
     "work_quickly_to_ship": "<p>We will work quickly to ship your order as soon as possible. Once your order has shipped, you will receive an email with further information. Delivery times vary depending on your location.</p>"
   },
   "info": {
+    "color_option_style": "Applies to options named Color, Colour or Shade. Captions read \"Col no: 01\", \"Col no: 02\"…",
+    "cart_badge_tag": "Products with this tag show it as a badge in the cart drawer, e.g. Bestseller. Leave empty for no badge.",
+    "cart_delivery_compare": "Optional. Shown crossed out next to the delivery text.",
     "actions_display_style": "Icons are always used on mobile",
     "applies_on_image_only": "Applies to images only",
     "aspect_ratio_adjusted": "Adjusted in some layouts",
@@ -437,6 +441,8 @@
     "comparison_slider": "Comparison slider"
   },
   "options": {
+    "numbered_swatches": "Numbered swatches",
+    "same_as_other_options": "Same as other options",
     "above_carousel": "Above carousel",
     "accent": "Accent",
     "all": "All",
@@ -749,6 +755,7 @@
     "below_media": "Below media"
   },
   "settings": {
+    "color_option_style": "Color option style",
     "accordion": "Accordion",
     "account": "Account",
     "actions_display_style": "Menu style",
@@ -807,6 +814,10 @@
     // Setting label for cart display format (page vs drawer)
     "cart_type": "Type",
     "auto_open_cart_drawer": "\"Add to cart\" auto-opens drawer",
+    "cart_badge_tag": "Cart badge tag",
+    "show_cart_delivery": "Show delivery charges line",
+    "cart_delivery_text": "Delivery charges text",
+    "cart_delivery_compare": "Delivery charges struck-through amount",
     // Text case setting for typography (uppercase/lowercase)
     "case": "Case",
     "checkout_buttons": "Accelerated checkout buttons",
@@ -1054,6 +1065,7 @@
     // Font weight option (400 weight, not bold or light)
     "regular": "Regular",
     "review_count": "Review count",
+    "editor_test_rating": "Show test rating in editor",
     "right": "Right",
     "right_padding": "Right padding",
     "row": "Row",

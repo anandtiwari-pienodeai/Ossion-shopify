@@ -1,0 +1,129 @@
+{%- doc -%}
+  Row of four trust items under the product page buy buttons (shipping, payment, returns,
+  support). Each item has an icon, a title and a short line of text.
+{%- enddoc -%}
+<ul class="ossian-pdp-trust spacing-style" style="{% render 'spacing-style', settings: block.settings %}" role="list" {{ block.shopify_attributes }}>
+  {%- for i in (1..4) -%}
+    {%- liquid
+      assign title_key = 'item_' | append: i | append: '_title'
+      assign text_key = 'item_' | append: i | append: '_text'
+      assign icon_key = 'item_' | append: i | append: '_icon'
+      assign item_title = block.settings[title_key]
+      assign item_text = block.settings[text_key]
+      assign item_icon = block.settings[icon_key]
+    -%}
+    {%- if item_title != blank or item_text != blank -%}
+      <li class="ossian-pdp-trust__item">
+        <span class="ossian-pdp-trust__icon" aria-hidden="true">
+          {%- case item_icon -%}
+            {%- when 'truck' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h12v10H2zM14 9h4.5L22 12.5V16h-8"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>
+            {%- when 'shield' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 6v6c0 4.5 3.2 7.8 7.5 9 4.3-1.2 7.5-4.5 7.5-9V6L12 3Z"/><path d="m8.8 12 2.2 2.2 4.2-4.4"/></svg>
+            {%- when 'box' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 8.5 4.5v9L12 21l-8.5-4.5v-9L12 3Z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9M8 5.3l8.5 4.5"/></svg>
+            {%- when 'headset' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/></svg>
+            {%- when 'leaf' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 5-14 15-15-1 10-7 15-15 15Z"/><path d="M5 19 13 11"/></svg>
+            {%- else -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16.5 9.5"/></svg>
+          {%- endcase -%}
+        </span>
+        <span class="ossian-pdp-trust__text">
+          {%- if item_title != blank -%}<span class="ossian-pdp-trust__title">{{ item_title | escape }}</span>{%- endif -%}
+          {%- if item_text != blank -%}<span class="ossian-pdp-trust__sub">{{ item_text | escape }}</span>{%- endif -%}
+        </span>
+      </li>
+    {%- endif -%}
+  {%- endfor -%}
+</ul>
+
+{% stylesheet %}
+  .ossian-pdp-trust {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px 10px;
+    margin: 0;
+    padding: 18px 0 0;
+    list-style: none;
+    border-top: 1px solid #e3e8f1;
+  }
+
+  .ossian-pdp-trust__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .ossian-pdp-trust__icon {
+    flex-shrink: 0;
+    color: #13233f;
+  }
+
+  .ossian-pdp-trust__icon svg {
+    width: 26px;
+    height: 26px;
+    display: block;
+  }
+
+  .ossian-pdp-trust__text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  .ossian-pdp-trust__title {
+    font-size: 0.74rem;
+    white-space: nowrap;
+    font-weight: 700;
+    color: #13233f;
+    line-height: 1.25;
+  }
+
+  .ossian-pdp-trust__sub {
+    font-size: 0.68rem;
+    color: #5b6577;
+    line-height: 1.3;
+  }
+
+  /* Four across only when the details column is wide enough */
+  @media screen and (max-width: 1279px) {
+    .ossian-pdp-trust { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px; }
+    .ossian-pdp-trust__title { font-size: 0.8rem; }
+    .ossian-pdp-trust__sub { font-size: 0.74rem; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Trust Row",
+  "tag": null,
+  "settings": [
+    { "type": "header", "content": "Item 1" },
+    { "type": "select", "id": "item_1_icon", "label": "Icon", "default": "truck", "options": [ { "value": "truck", "label": "Truck" }, { "value": "shield", "label": "Shield" }, { "value": "box", "label": "Box" }, { "value": "headset", "label": "Headset" }, { "value": "leaf", "label": "Leaf" }, { "value": "check", "label": "Check" } ] },
+    { "type": "text", "id": "item_1_title", "label": "Title", "default": "Free Shipping" },
+    { "type": "text", "id": "item_1_text", "label": "Text", "default": "On orders over ₹999" },
+    { "type": "header", "content": "Item 2" },
+    { "type": "select", "id": "item_2_icon", "label": "Icon", "default": "shield", "options": [ { "value": "truck", "label": "Truck" }, { "value": "shield", "label": "Shield" }, { "value": "box", "label": "Box" }, { "value": "headset", "label": "Headset" }, { "value": "leaf", "label": "Leaf" }, { "value": "check", "label": "Check" } ] },
+    { "type": "text", "id": "item_2_title", "label": "Title", "default": "Secure Payment" },
+    { "type": "text", "id": "item_2_text", "label": "Text", "default": "100% safe & secure" },
+    { "type": "header", "content": "Item 3" },
+    { "type": "select", "id": "item_3_icon", "label": "Icon", "default": "box", "options": [ { "value": "truck", "label": "Truck" }, { "value": "shield", "label": "Shield" }, { "value": "box", "label": "Box" }, { "value": "headset", "label": "Headset" }, { "value": "leaf", "label": "Leaf" }, { "value": "check", "label": "Check" } ] },
+    { "type": "text", "id": "item_3_title", "label": "Title", "default": "Easy Returns" },
+    { "type": "text", "id": "item_3_text", "label": "Text", "default": "7 days return policy" },
+    { "type": "header", "content": "Item 4" },
+    { "type": "select", "id": "item_4_icon", "label": "Icon", "default": "headset", "options": [ { "value": "truck", "label": "Truck" }, { "value": "shield", "label": "Shield" }, { "value": "box", "label": "Box" }, { "value": "headset", "label": "Headset" }, { "value": "leaf", "label": "Leaf" }, { "value": "check", "label": "Check" } ] },
+    { "type": "text", "id": "item_4_title", "label": "Title", "default": "Customer Support" },
+    { "type": "text", "id": "item_4_text", "label": "Text", "default": "Mon - Sat, 10AM - 7PM" },
+    { "type": "header", "content": "Padding" },
+    { "type": "range", "id": "padding-block-start", "label": "Top", "min": 0, "max": 40, "step": 1, "unit": "px", "default": 8 },
+    { "type": "range", "id": "padding-block-end", "label": "Bottom", "min": 0, "max": 40, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding-inline-start", "label": "Left", "min": 0, "max": 40, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding-inline-end", "label": "Right", "min": 0, "max": 40, "step": 1, "unit": "px", "default": 0 }
+  ],
+  "presets": [{ "name": "PDP Trust Row" }]
+}
+{% endschema %}

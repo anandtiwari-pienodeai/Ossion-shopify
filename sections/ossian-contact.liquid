@@ -1,0 +1,407 @@
+{{ 'section-ossian-contact.css' | asset_url | stylesheet_tag }}
+{% comment %}
+  Section contract.
+  Ossian contact page: navy hero with trust features, contact form beside
+  "other ways to reach us", then a map beside a "visit us" location card.
+  Feature and contact-method rows are blocks so merchants control them.
+  @example
+  <!-- Added to templates/page.contact.json; reached at /pages/contact-us -->
+{% endcomment %}
+
+{%- liquid
+  assign feature_blocks = section.blocks | where: 'type', 'feature'
+  assign method_blocks = section.blocks | where: 'type', 'method'
+  assign form_id = 'ContactForm-' | append: section.id
+  assign map_query = section.settings.map_query | default: section.settings.location_heading
+  assign directions_url = section.settings.directions_url
+  if directions_url == blank and map_query != blank
+    assign map_query_encoded = map_query | url_encode
+    assign directions_url = 'https://www.google.com/maps/dir/?api=1&destination=' | append: map_query_encoded
+  endif
+-%}
+
+<section class="ctc" id="ctc-{{ section.id }}">
+  {%- comment -%}── Hero ─────────────────────────────────────────{%- endcomment -%}
+  <div class="ctc__hero">
+    {%- if section.settings.hero_image != blank or section.settings.hero_image_mobile != blank -%}
+      <div class="ctc__hero-media">
+        {%- assign hero_desktop = section.settings.hero_image | default: section.settings.hero_image_mobile -%}
+        {%- assign hero_mobile = section.settings.hero_image_mobile | default: section.settings.hero_image -%}
+        <picture>
+          <source
+            media="(max-width: 749px)"
+            srcset="
+              {{ hero_mobile | image_url: width: 750 }} 750w,
+              {{ hero_mobile | image_url: width: 1100 }} 1100w
+            "
+            sizes="100vw"
+            width="{{ hero_mobile.width }}"
+            height="{{ hero_mobile.height }}"
+          >
+          {{
+            hero_desktop
+            | image_url: width: 2000
+            | image_tag:
+              class: 'ctc__hero-img',
+              loading: 'eager',
+              fetchpriority: 'high',
+              widths: '900,1200,1600,2000',
+              sizes: '(min-width: 750px) 60vw, 100vw',
+              alt: ''
+          }}
+        </picture>
+      </div>
+    {%- endif -%}
+
+    <div class="ctc__hero-inner ctc__wrap">
+      <div class="ctc__hero-copy">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="ctc__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank or section.settings.heading_accent != blank -%}
+          <h1 class="ctc__heading">
+            {%- if section.settings.heading != blank -%}<span>{{ section.settings.heading | escape }}</span>{%- endif -%}
+            {%- if section.settings.heading_accent != blank -%}<span class="ctc__heading-accent">{{ section.settings.heading_accent | escape }}</span>{%- endif -%}
+          </h1>
+        {%- endif -%}
+        {%- if section.settings.body != blank -%}
+          <p class="ctc__lead">{{ section.settings.body | escape }}</p>
+        {%- endif -%}
+
+        {%- if feature_blocks.size > 0 -%}
+          <ul class="ctc__features" role="list">
+            {%- for block in feature_blocks -%}
+              <li class="ctc__feature" {{ block.shopify_attributes }}>
+                <span class="ctc__feature-icon" aria-hidden="true">
+                  {%- render 'ossian-contact-icon', icon: block.settings.icon -%}
+                </span>
+                <span class="ctc__feature-text">
+                  {%- if block.settings.title != blank -%}
+                    <span class="ctc__feature-title">{{ block.settings.title | escape }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.text != blank -%}
+                    <span class="ctc__feature-sub">{{ block.settings.text | escape }}</span>
+                  {%- endif -%}
+                </span>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%}── Body grid ────────────────────────────────────{%- endcomment -%}
+  <div class="ctc__body ctc__wrap">
+    {%- comment -%} Form card {%- endcomment -%}
+    <div class="ctc__card ctc__form-card">
+      {%- if section.settings.form_heading != blank -%}
+        <h2 class="ctc__card-title">{{ section.settings.form_heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.form_text != blank -%}
+        <p class="ctc__card-sub">{{ section.settings.form_text | escape }}</p>
+      {%- endif -%}
+
+      {%- form 'contact', id: form_id, class: 'ctc__form' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="ctc__alert ctc__alert--success" role="status" tabindex="-1" autofocus>
+            {{ 'blocks.contact_form.post_success' | t }}
+          </p>
+        {%- elsif form.errors -%}
+          <div class="ctc__alert ctc__alert--error" role="alert" tabindex="-1" autofocus>
+            <p>{{ 'blocks.contact_form.error_heading' | t }}</p>
+            <ul>
+              {%- for field in form.errors -%}
+                <li>
+                  {%- if field == 'form' -%}
+                    {{ form.errors.messages[field] }}
+                  {%- else -%}
+                    {{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        <div class="ctc__row ctc__row--split">
+          <div class="ctc__field">
+            <label class="visually-hidden" for="{{ form_id }}-name">{{ 'content.ossian_contact.full_name' | t }}</label>
+            <input
+              class="ctc__input"
+              type="text"
+              id="{{ form_id }}-name"
+              name="contact[name]"
+              autocomplete="name"
+              placeholder="{{ 'content.ossian_contact.full_name' | t }} *"
+              value="{{ form.name }}"
+              required
+            >
+          </div>
+          <div class="ctc__field">
+            <label class="visually-hidden" for="{{ form_id }}-email">{{ 'content.ossian_contact.email' | t }}</label>
+            <input
+              class="ctc__input"
+              type="email"
+              id="{{ form_id }}-email"
+              name="contact[email]"
+              autocomplete="email"
+              autocapitalize="off"
+              spellcheck="false"
+              placeholder="{{ 'content.ossian_contact.email' | t }} *"
+              value="{% if form.email != blank %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+              {% if form.errors contains 'email' %}aria-invalid="true"{% endif %}
+              required
+            >
+          </div>
+        </div>
+
+        <div class="ctc__field">
+          <label class="visually-hidden" for="{{ form_id }}-phone">{{ 'content.ossian_contact.phone' | t }}</label>
+          <input
+            class="ctc__input"
+            type="tel"
+            id="{{ form_id }}-phone"
+            name="contact[phone]"
+            autocomplete="tel"
+            pattern="[0-9\-\+\s\(\)]*"
+            placeholder="{{ 'content.ossian_contact.phone' | t }}"
+            value="{{ form.phone }}"
+          >
+        </div>
+
+        {%- assign subjects = section.settings.subjects | newline_to_br | split: '<br />' -%}
+        <div class="ctc__field ctc__field--select">
+          <label class="visually-hidden" for="{{ form_id }}-subject">{{ 'content.ossian_contact.subject' | t }}</label>
+          <select class="ctc__input ctc__select" id="{{ form_id }}-subject" name="contact[subject]" required>
+            <option value="" disabled selected>{{ 'content.ossian_contact.subject' | t }} *</option>
+            {%- for subject in subjects -%}
+              {%- assign subject_clean = subject | strip -%}
+              {%- if subject_clean != blank -%}
+                <option value="{{ subject_clean | escape }}">{{ subject_clean | escape }}</option>
+              {%- endif -%}
+            {%- endfor -%}
+          </select>
+          <svg class="ctc__select-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+
+        <div class="ctc__field ctc__field--textarea">
+          <label class="visually-hidden" for="{{ form_id }}-body">{{ 'content.ossian_contact.message' | t }}</label>
+          <textarea
+            class="ctc__input ctc__textarea"
+            id="{{ form_id }}-body"
+            name="contact[body]"
+            rows="4"
+            maxlength="500"
+            placeholder="{{ 'content.ossian_contact.message' | t }} *"
+            aria-describedby="{{ form_id }}-count"
+            data-ctc-message
+            required
+          >{{ form.body }}</textarea>
+          <span class="ctc__count" id="{{ form_id }}-count" data-ctc-count>{{ form.body | size }}/500</span>
+        </div>
+
+        <button type="submit" class="ctc__submit">
+          {{ 'content.ossian_contact.send' | t }}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      {%- endform -%}
+    </div>
+
+    {%- comment -%} Other ways card {%- endcomment -%}
+    <div class="ctc__card ctc__ways">
+      {%- if section.settings.ways_heading != blank -%}
+        <h2 class="ctc__card-title">{{ section.settings.ways_heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.ways_text != blank -%}
+        <p class="ctc__card-sub">{{ section.settings.ways_text | escape }}</p>
+      {%- endif -%}
+
+      {%- if method_blocks.size > 0 -%}
+        <ul class="ctc__methods" role="list">
+          {%- for block in method_blocks -%}
+            <li class="ctc__method" {{ block.shopify_attributes }}>
+              <span class="ctc__method-icon" aria-hidden="true">
+                {%- render 'ossian-contact-icon', icon: block.settings.icon, filled: true -%}
+              </span>
+              <div class="ctc__method-text">
+                {%- if block.settings.title != blank -%}
+                  <p class="ctc__method-title">{{ block.settings.title | escape }}</p>
+                {%- endif -%}
+                {%- if block.settings.value != blank -%}
+                  {%- if block.settings.link != blank -%}
+                    <a class="ctc__method-value" href="{{ block.settings.link }}">{{ block.settings.value }}</a>
+                  {%- else -%}
+                    <div class="ctc__method-value">{{ block.settings.value }}</div>
+                  {%- endif -%}
+                {%- endif -%}
+                {%- if block.settings.note != blank -%}
+                  <p class="ctc__method-note">{{ block.settings.note | escape }}</p>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Map {%- endcomment -%}
+    <div class="ctc__map">
+      {%- if section.settings.map_image != blank -%}
+        {{
+          section.settings.map_image
+          | image_url: width: 1400
+          | image_tag:
+            class: 'ctc__map-img',
+            loading: 'lazy',
+            widths: '600,900,1200,1400',
+            sizes: '(min-width: 990px) 50vw, 100vw',
+            alt: section.settings.map_image.alt | default: map_query
+          }}
+      {%- elsif map_query != blank -%}
+        <iframe
+          class="ctc__map-frame"
+          src="https://maps.google.com/maps?q={{ map_query | url_encode }}&z={{ section.settings.map_zoom }}&output=embed"
+          title="{{ map_query | escape }}"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      {%- else -%}
+        <div class="ctc__map-ph">{{ 'image' | placeholder_svg_tag }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Location card {%- endcomment -%}
+    <div class="ctc__location">
+      {%- if section.settings.location_eyebrow != blank -%}
+        <p class="ctc__location-eyebrow">{{ section.settings.location_eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.location_heading != blank -%}
+        <h2 class="ctc__location-title">{{ section.settings.location_heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.location_text != blank -%}
+        <p class="ctc__location-text">{{ section.settings.location_text | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.location_button != blank and directions_url != blank -%}
+        <a class="ctc__location-btn" href="{{ directions_url }}" target="_blank" rel="noopener">
+          {{ section.settings.location_button | escape }}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var root = document.getElementById('ctc-{{ section.id }}');
+    if (!root) return;
+    var field = root.querySelector('[data-ctc-message]');
+    var count = root.querySelector('[data-ctc-count]');
+    if (!field || !count) return;
+    var max = field.maxLength > 0 ? field.maxLength : 500;
+    function update() { count.textContent = field.value.length + '/' + max; }
+    field.addEventListener('input', update);
+    update();
+  })();
+</script>
+
+
+{% schema %}
+{
+  "name": "Ossian Contact",
+  "tag": "div",
+  "class": "section-ossian-contact",
+  "settings": [
+    { "type": "header", "content": "Hero" },
+    { "type": "image_picker", "id": "hero_image", "label": "Hero image (desktop)", "info": "Shown on the right side. Product shots on a dark background work best." },
+    { "type": "image_picker", "id": "hero_image_mobile", "label": "Hero image (mobile)", "info": "Shown below the text on mobile. Falls back to the desktop image." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Get in touch" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "We’re here" },
+    { "type": "text", "id": "heading_accent", "label": "Heading accent line", "default": "to help" },
+    { "type": "textarea", "id": "body", "label": "Intro text", "default": "Have a question about our products, your order, or anything else? Our team is always happy to assist you." },
+
+    { "type": "header", "content": "Contact form" },
+    { "type": "text", "id": "form_heading", "label": "Heading", "default": "Send us a message" },
+    { "type": "text", "id": "form_text", "label": "Text", "default": "Fill in the details below and we’ll get back to you as soon as possible." },
+    { "type": "textarea", "id": "subjects", "label": "Subject options", "info": "One option per line.", "default": "Product enquiry\nOrder & delivery\nReturns & refunds\nSalon partnership\nOther" },
+
+    { "type": "header", "content": "Other ways to reach us" },
+    { "type": "text", "id": "ways_heading", "label": "Heading", "default": "Other ways to reach us" },
+    { "type": "text", "id": "ways_text", "label": "Text", "default": "Prefer a different way? Connect with us here." },
+
+    { "type": "header", "content": "Map & location" },
+    { "type": "text", "id": "map_query", "label": "Map address", "info": "Address or place name shown on the embedded Google map.", "default": "Sector 44, Gurugram, Haryana 122003" },
+    { "type": "range", "id": "map_zoom", "label": "Map zoom", "min": 10, "max": 18, "step": 1, "default": 14 },
+    { "type": "image_picker", "id": "map_image", "label": "Map image (optional)", "info": "Replaces the embedded map with a static image." },
+    { "type": "url", "id": "directions_url", "label": "Directions link", "info": "Leave empty to open Google Maps directions to the map address." },
+    { "type": "text", "id": "location_eyebrow", "label": "Eyebrow", "default": "Visit us" },
+    { "type": "text", "id": "location_heading", "label": "Heading", "default": "Our Location" },
+    { "type": "textarea", "id": "location_text", "label": "Text", "default": "We’d love to hear from you or meet you in person. Drop by our office during business hours." },
+    { "type": "text", "id": "location_button", "label": "Button label", "default": "Get Directions" }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Hero feature",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "shield",
+          "options": [
+            { "value": "shield", "label": "Shield" },
+            { "value": "headset", "label": "Headset" },
+            { "value": "chat", "label": "Chat bubble" },
+            { "value": "mail", "label": "Mail" },
+            { "value": "phone", "label": "Phone" },
+            { "value": "pin", "label": "Location pin" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Genuine Support" },
+        { "type": "text", "id": "text", "label": "Text", "default": "From product experts" }
+      ]
+    },
+    {
+      "type": "method",
+      "name": "Contact method",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "mail",
+          "options": [
+            { "value": "mail", "label": "Mail" },
+            { "value": "phone", "label": "Phone" },
+            { "value": "pin", "label": "Location pin" },
+            { "value": "chat", "label": "Chat bubble" },
+            { "value": "headset", "label": "Headset" },
+            { "value": "shield", "label": "Shield" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Email" },
+        { "type": "richtext", "id": "value", "label": "Details", "default": "<p>support@ossion.com</p>" },
+        { "type": "url", "id": "link", "label": "Link", "info": "Use mailto: or tel: links for email and phone." },
+        { "type": "text", "id": "note", "label": "Note", "default": "We typically reply within 24 hours." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ossian Contact",
+      "blocks": [
+        { "type": "feature", "settings": { "icon": "shield", "title": "Genuine Support", "text": "From product experts" } },
+        { "type": "feature", "settings": { "icon": "headset", "title": "Quick Response", "text": "Within 24 hours" } },
+        { "type": "feature", "settings": { "icon": "chat", "title": "Here for You", "text": "Before & after purchase" } },
+        { "type": "method", "settings": { "icon": "mail", "title": "Email", "value": "<p>support@ossion.com</p>", "link": "mailto:support@ossion.com", "note": "We typically reply within 24 hours." } },
+        { "type": "method", "settings": { "icon": "phone", "title": "Call Us", "value": "<p>+91 98765 43210</p>", "link": "tel:+919876543210", "note": "Mon – Sat, 10:00 AM – 6:00 PM (IST)" } },
+        { "type": "method", "settings": { "icon": "pin", "title": "Our Office", "value": "<p>Plot No. 123, Sector 44<br>Gurugram, Haryana 122003<br>India</p>", "note": "" } },
+        { "type": "method", "settings": { "icon": "chat", "title": "Live Chat", "value": "<p>Chat with us on our website</p>", "note": "Mon – Sat, 10:00 AM – 6:00 PM (IST)" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

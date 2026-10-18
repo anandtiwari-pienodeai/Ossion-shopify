@@ -1,0 +1,63 @@
+/* Styles for sections/ossian-pdp-breadcrumb.liquid. Loaded by that section so pages without it don't download them. */
+.pdp-breadcrumb {
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 12px 0;
+}
+
+.pdp-breadcrumb__inner {
+  display: flex;
+  align-items: center;
+}
+
+.pdp-breadcrumb__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.pdp-breadcrumb__item {
+  font-size: 13px;
+  color: #666;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.pdp-breadcrumb__item--current {
+  font-weight: 600;
+  color: #1e3a5f;
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pdp-breadcrumb__sep {
+  color: #bbb;
+  font-size: 12px;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.pdp-breadcrumb__link {
+  color: #666;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.pdp-breadcrumb__link:hover {
+  color: #1e3a5f;
+  text-decoration: underline;
+}
+
+@media (max-width: 749px) {
+  .pdp-breadcrumb {
+    padding: 10px 0;
+  }
+
+  .pdp-breadcrumb__item--current {
+    max-width: 180px;
+  }
+}

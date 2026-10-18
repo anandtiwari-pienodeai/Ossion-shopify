@@ -1,30 +1,56 @@
 {%- comment -%}
-  A single, fixed-layout navbar used at every viewport width — logo, nav menu,
-  search bar, and wishlist/account/cart icons all in one row always. No mobile
-  drawer/hamburger variant; elements shrink to fit narrow screens instead of
-  being hidden or collapsed into a menu.
+  Ossion navbar. With "Sticky header" on, the whole header group (announcement bar
+  + navbar) stays pinned to the top while scrolling.
+
+  Desktop (>= 990px): logo, inline nav menu, search, and account/cart icons in one row.
+  Menu source is either the "Nav Item" blocks, or — when no blocks are added — the
+  linklist chosen in the "Menu (fallback)" setting. The fallback path renders nested
+  child links (and grandchildren) as dropdowns.
+
+  Mobile (<= 989px): the inline nav collapses into a hamburger button that opens a
+  left side drawer: logo, icon rows for each nav link (nested menus expand into a
+  panel with an optional image), highlight links and a promo card.
 {%- endcomment -%}
+
+{%- liquid
+  assign nav_items = section.blocks | where: 'type', 'nav_item'
+  assign sidebar_items = section.blocks | where: 'type', 'sidebar_category'
+  assign promo_blocks = section.blocks | where: 'type', 'mega_menu_promo'
+  assign fallback_links = section.settings.menu.links
+  assign has_nav = false
+  if nav_items.size > 0 or fallback_links.size > 0
+    assign has_nav = true
+  endif
+-%}
 
 <header-component
   id="header-component"
   class="header ossian-navbar"
   data-skip-node-update
+  {% if section.settings.sticky_header %}data-ossian-sticky{% endif %}
+  style="--ossian-logo-height: {{ section.settings.logo_height }}px; --ossian-logo-height-mobile: {{ section.settings.logo_height_mobile }}px;"
 >
   <div class="ossian-navbar__inner page-width">
-    <a href="{{ routes.root_url }}" class="ossian-navbar__logo">
-      {%- if settings.logo != blank -%}
-        {{ settings.logo | image_url: width: 300 | image_tag: alt: shop.name, loading: 'eager', fetchpriority: 'high' }}
-      {%- else -%}
-        <span class="ossian-navbar__logo-text">{{ shop.name | default: 'OSSION' }}</span>
-        <span class="ossian-navbar__logo-sub">PROFESSIONAL</span>
-      {%- endif -%}
-    </a>
+    {%- if has_nav -%}
+      <button
+        type="button"
+        class="ossian-navbar__hamburger"
+        data-nav-drawer-open
+        aria-label="{{ 'accessibility.menu' | t | default: 'Menu' }}"
+        aria-expanded="false"
+        aria-controls="OssianNavDrawer"
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    {%- endif -%}
 
-    {%- liquid
-      assign nav_items = section.blocks | where: 'type', 'nav_item'
-      assign sidebar_items = section.blocks | where: 'type', 'sidebar_category'
-    -%}
-    {%- if nav_items.size > 0 or section.settings.menu != blank -%}
+    {%- render 'ossian-logo', image: section.settings.logo_image, loading: 'eager' -%}
+
+    {%- if has_nav -%}
       <nav class="ossian-navbar__menu" aria-label="{{ 'accessibility.header_navigation_label' | t }}">
         <ul class="ossian-navbar__menu-list">
           {%- if nav_items.size > 0 -%}
@@ -36,12 +62,12 @@
                     class="ossian-navbar__menu-link ossian-navbar__menu-trigger"
                     aria-expanded="false"
                     aria-haspopup="true"
-                    data-mega-menu-trigger="{{ forloop.index0 }}"
+                    data-mega-menu-trigger="block-{{ forloop.index0 }}"
                   >
                     {{ block.settings.label }}
                     <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg>
                   </button>
-                  <div class="ossian-mega-menu" data-mega-menu="{{ forloop.index0 }}" hidden>
+                  <div class="ossian-mega-menu" data-mega-menu="block-{{ forloop.index0 }}" hidden>
                     <div class="ossian-mega-menu__inner page-width">
                       {%- if sidebar_items.size > 0 -%}
                         <div class="ossian-mega-menu__sidebar-col">
@@ -128,16 +154,75 @@
                 {%- endif -%}
               </li>
             {%- endfor -%}
+
           {%- else -%}
-            {%- for link in section.settings.menu.links -%}
-              <li class="ossian-navbar__menu-item">
-                <a
-                  href="{{ link.url }}"
-                  class="ossian-navbar__menu-link"
-                  {% if link.current %}aria-current="page"{% endif %}
-                >
-                  {{ link.title }}
-                </a>
+            {%- comment -%}
+              Fallback: render the chosen linklist. A top-level link with children opens
+              the mega menu (snippets/ossian-mega-menu.liquid); its promo panel is taken
+              from the "Mega menu promo" block whose menu item matches the link title.
+            {%- endcomment -%}
+            {%- for link in fallback_links -%}
+              {%- liquid
+                assign menu_id = 'link-' | append: forloop.index0
+
+                # Highlight the tab for the page you're on. Links to the home page don't count
+                # (menu placeholders often point at "/"), otherwise their parent lights up on the home page.
+                assign link_is_active = false
+                if link.active and link.url != routes.root_url
+                  assign link_is_active = true
+                endif
+                for child in link.links
+                  if child.url == routes.root_url
+                    continue
+                  endif
+                  if child.active or child.child_active
+                    assign link_is_active = true
+                    break
+                  endif
+                endfor
+                if link.url == routes.root_url and request.page_type == 'index'
+                  assign link_is_active = true
+                endif
+              -%}
+              <li class="ossian-navbar__menu-item{% if link.links.size > 0 %} ossian-navbar__menu-item--mega{% endif %}">
+                {%- if link.links.size > 0 -%}
+
+                  <button
+                    type="button"
+                    class="ossian-navbar__menu-link ossian-navbar__menu-trigger{% if link_is_active %} is-active{% endif %}"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    data-mega-menu-trigger="{{ menu_id }}"
+                  >
+                    {{ link.title }}
+                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg>
+                  </button>
+
+                  {%- liquid
+                    assign link_title = link.title | downcase | strip
+                    assign mega_promo = null
+                    for promo_block in promo_blocks
+                      assign promo_match = promo_block.settings.menu_item | downcase | strip
+                      if promo_match == link_title
+                        assign mega_promo = promo_block
+                        break
+                      endif
+                    endfor
+                  -%}
+                  {%- render 'ossian-mega-menu',
+                    link: link,
+                    menu_id: menu_id,
+                    promo: mega_promo
+                  -%}
+                {%- else -%}
+                  <a
+                    href="{{ link.url }}"
+                    class="ossian-navbar__menu-link{% if link_is_active %} is-active{% endif %}"
+                    {% if link.current %}aria-current="page"{% endif %}
+                  >
+                    {{ link.title }}
+                  </a>
+                {%- endif -%}
               </li>
             {%- endfor -%}
           {%- endif -%}
@@ -149,7 +234,8 @@
       <button
         type="button"
         class="ossian-navbar__search"
-        on:click="#search-modal/showDialog"
+        data-ossian-search-open
+        aria-controls="OssianSearch"
         aria-label="{{ 'content.search_input_label' | t }}"
         aria-haspopup="dialog"
       >
@@ -157,7 +243,7 @@
           <circle cx="11" cy="11" r="7"/>
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        <span>{{ 'content.search_input_placeholder' | t }}</span>
+        <span>{{ section.settings.search_placeholder | default: 'Search products, collections...' }}</span>
       </button>
 
       {% render 'header-actions', section: section, display_style: 'icon', show_wishlist: false %}
@@ -165,8 +251,147 @@
   </div>
 </header-component>
 
+{%- if has_nav -%}
+  <div class="ossian-nav-drawer__backdrop" data-nav-drawer-backdrop data-nav-drawer-close></div>
+
+  <nav
+    id="OssianNavDrawer"
+    class="ossian-nav-drawer"
+    data-nav-drawer
+    aria-label="{{ 'accessibility.header_navigation_label' | t }}"
+  >
+    <div class="ossian-nav-drawer__head">
+      {%- render 'ossian-logo', image: section.settings.logo_image, class: 'ossian-nav-drawer__logo' -%}
+      <button
+        type="button"
+        class="ossian-nav-drawer__close"
+        data-nav-drawer-close
+        aria-label="{{ 'actions.close' | t }}"
+      >
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <line x1="5" y1="5" x2="19" y2="19"/>
+          <line x1="19" y1="5" x2="5" y2="19"/>
+        </svg>
+      </button>
+    </div>
+
+    <ul class="ossian-nav-drawer__list">
+      {%- if nav_items.size > 0 -%}
+        {%- for block in nav_items -%}
+          {%- liquid
+            assign drawer_children = null
+            if block.settings.enable_dropdown
+              assign drawer_children = block.settings.submenu.links
+            endif
+            assign drawer_image = block.settings.drawer_image | default: block.settings.promo_image
+          -%}
+          {%- render 'ossian-nav-drawer-item',
+            title: block.settings.label,
+            url: block.settings.link,
+            children: drawer_children,
+            image: drawer_image,
+            attrs: block.shopify_attributes
+          -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for link in fallback_links -%}
+          {%- liquid
+            assign drawer_image = null
+            if link.type == 'collection_link'
+              assign drawer_image = link.object.featured_image | default: link.object.products.first.featured_image
+            elsif link.type == 'product_link'
+              assign drawer_image = link.object.featured_image
+            endif
+          -%}
+          {%- render 'ossian-nav-drawer-item',
+            title: link.title,
+            url: link.url,
+            children: link.links,
+            image: drawer_image,
+            current: link.current
+          -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </ul>
+
+    {%- liquid
+      assign highlight_1 = section.settings.drawer_highlight_1
+      assign highlight_2 = section.settings.drawer_highlight_2
+      assign highlight_3 = section.settings.drawer_highlight_3
+    -%}
+    {%- if highlight_1 != blank or highlight_2 != blank or highlight_3 != blank -%}
+      <ul class="ossian-nav-drawer__highlights">
+        {%- for i in (1..3) -%}
+          {%- liquid
+            case i
+              when 1
+                assign highlight_text = highlight_1
+                assign highlight_link = section.settings.drawer_highlight_1_link
+              when 2
+                assign highlight_text = highlight_2
+                assign highlight_link = section.settings.drawer_highlight_2_link
+              else
+                assign highlight_text = highlight_3
+                assign highlight_link = section.settings.drawer_highlight_3_link
+            endcase
+          -%}
+          {%- if highlight_text != blank -%}
+            <li>
+              {%- if highlight_link != blank -%}
+                {%- assign highlight_tag = 'a' -%}
+              {%- else -%}
+                {%- assign highlight_tag = 'div' -%}
+              {%- endif -%}
+              <{{ highlight_tag }}{% if highlight_link != blank %} href="{{ highlight_link }}"{% endif %} class="ossian-nav-drawer__highlight">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  {%- case i -%}
+                    {%- when 1 -%}
+                      <path d="M2 6h11v10H2z"/><path d="M13 9h4l3 3.5V16h-7"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="16.5" cy="17.5" r="1.8"/>
+                    {%- when 2 -%}
+                      <path d="M12 3l7.5 3v5.5c0 4.6-3.2 8.3-7.5 9.5-4.3-1.2-7.5-4.9-7.5-9.5V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>
+                    {%- else -%}
+                      <path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/>
+                  {%- endcase -%}
+                </svg>
+                <span>{{ highlight_text }}</span>
+                {%- if highlight_link != blank -%}
+                  <svg class="ossian-nav-drawer__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+                {%- endif -%}
+              </{{ highlight_tag }}>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- if section.settings.drawer_promo_heading != blank -%}
+      <a
+        href="{{ section.settings.drawer_promo_link | default: routes.all_products_collection_url }}"
+        class="ossian-nav-drawer__promo"
+      >
+        {%- if section.settings.drawer_promo_image != blank -%}
+          {{ section.settings.drawer_promo_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: '', class: 'ossian-nav-drawer__promo-image', sizes: '360px' }}
+        {%- endif -%}
+        <span class="ossian-nav-drawer__promo-content">
+          <span class="ossian-nav-drawer__promo-heading">{{ section.settings.drawer_promo_heading }}</span>
+          {%- if section.settings.drawer_promo_cta != blank -%}
+            <span class="ossian-nav-drawer__promo-cta">
+              {{ section.settings.drawer_promo_cta }}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          {%- endif -%}
+        </span>
+      </a>
+    {%- endif -%}
+  </nav>
+{%- endif -%}
+
+{% render 'ossian-search-modal', section: section %}
+<script src="{{ 'ossian-search.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
 <script>
 (function () {
+  /* ---------- Desktop dropdowns / mega menus ---------- */
   var triggers = document.querySelectorAll('[data-mega-menu-trigger]');
   var menus = document.querySelectorAll('[data-mega-menu]');
 
@@ -183,7 +408,7 @@
     trigger.addEventListener('click', function (event) {
       event.stopPropagation();
       var id = trigger.dataset.megaMenuTrigger;
-      var menu = document.querySelector('[data-mega-menu="' + id + '"]');
+      var menu = document.querySelector('[data-mega-menu=\"' + id + '\"]');
       var wasOpen = trigger.getAttribute('aria-expanded') === 'true';
       closeAll();
       if (!wasOpen && menu) {
@@ -197,15 +422,259 @@
     if (!event.target.closest('.ossian-navbar__menu-item')) closeAll();
   });
 
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape') closeAll();
+  /* ---------- Mega menu: hover to open, hover a sub-link to switch its products ---------- */
+  var hoverMedia = window.matchMedia('(hover: hover) and (min-width: 990px)');
+
+  function positionMega(item, mega) {
+    var header = item.closest('.ossian-navbar');
+    var nav = item.closest('.ossian-navbar__menu');
+    var inner = item.closest('.ossian-navbar__inner');
+    if (!header || !nav || !inner) return;
+    var headerRect = header.getBoundingClientRect();
+    var innerRect = inner.getBoundingClientRect();
+    mega.style.left = Math.max(20, nav.getBoundingClientRect().left - headerRect.left - 14) + 'px';
+    mega.style.right = Math.max(20, headerRect.right - innerRect.right + 20) + 'px';
+  }
+
+  document.querySelectorAll('.ossian-navbar__menu-item--mega').forEach(function (item) {
+    var trigger = item.querySelector('[data-mega-menu-trigger]');
+    var mega = item.querySelector('.ossian-mega');
+    if (!trigger || !mega) return;
+    var closeTimer;
+
+    trigger.addEventListener('click', function () {
+      positionMega(item, mega);
+    });
+
+    function open() {
+      clearTimeout(closeTimer);
+      positionMega(item, mega);
+      if (trigger.getAttribute('aria-expanded') === 'true') return;
+      closeAll();
+      trigger.setAttribute('aria-expanded', 'true');
+      mega.hidden = false;
+    }
+
+    item.addEventListener('mouseenter', function () {
+      if (hoverMedia.matches) open();
+    });
+    item.addEventListener('mouseleave', function () {
+      if (!hoverMedia.matches) return;
+      closeTimer = setTimeout(function () {
+        trigger.setAttribute('aria-expanded', 'false');
+        mega.hidden = true;
+      }, 180);
+    });
+
+    function activate(childLink) {
+      var index = childLink.dataset.megaChild;
+      mega.querySelectorAll('[data-mega-child]').forEach(function (el) {
+        el.classList.toggle('is-active', el === childLink);
+      });
+      mega.querySelectorAll('[data-mega-panel]').forEach(function (panel) {
+        panel.hidden = panel.dataset.megaPanel !== index;
+      });
+    }
+
+    mega.querySelectorAll('[data-mega-child]').forEach(function (childLink) {
+      childLink.addEventListener('mouseenter', function () { activate(childLink); });
+      childLink.addEventListener('focus', function () { activate(childLink); });
+    });
   });
+
+  /* ---------- Mobile drawer ---------- */
+  var drawer = document.querySelector('[data-nav-drawer]');
+  var backdrop = document.querySelector('[data-nav-drawer-backdrop]');
+  var openBtn = document.querySelector('[data-nav-drawer-open]');
+  var closeEls = document.querySelectorAll('[data-nav-drawer-close]');
+
+  function openDrawer() {
+    if (!drawer) return;
+    drawer.classList.add('is-open');
+    if (backdrop) backdrop.classList.add('is-open');
+    if (openBtn) openBtn.setAttribute('aria-expanded', 'true');
+    document.documentElement.classList.add('ossian-nav-scroll-lock');
+    var firstLink = drawer.querySelector('a, button');
+    if (firstLink) firstLink.focus({ preventScroll: true });
+  }
+
+  function closeDrawer() {
+    if (!drawer) return;
+    drawer.classList.remove('is-open');
+    if (backdrop) backdrop.classList.remove('is-open');
+    if (openBtn) {
+      openBtn.setAttribute('aria-expanded', 'false');
+      openBtn.focus({ preventScroll: true });
+    }
+    document.documentElement.classList.remove('ossian-nav-scroll-lock');
+  }
+
+  if (openBtn) openBtn.addEventListener('click', openDrawer);
+  closeEls.forEach(function (el) {
+    el.addEventListener('click', closeDrawer);
+  });
+
+  /* Accordions inside the drawer */
+  document.querySelectorAll('[data-nav-accordion]').forEach(function (toggle) {
+    toggle.addEventListener('click', function () {
+      var panel = toggle.nextElementSibling;
+      var isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      if (panel) panel.hidden = isOpen;
+      var item = toggle.closest('.ossian-nav-drawer__item');
+      if (item) item.classList.toggle('is-open', !isOpen);
+    });
+  });
+
+  /* Close the drawer when a link inside it is followed */
+  if (drawer) {
+    drawer.addEventListener('click', function (event) {
+      if (event.target.closest('a')) closeDrawer();
+    });
+  }
+
+  /* Escape closes whichever is open */
+  document.addEventListener('keydown', function (event) {
+    if (event.key !== 'Escape') return;
+    closeAll();
+    if (drawer && drawer.classList.contains('is-open')) closeDrawer();
+  });
+
+  /* Leaving mobile width resets the drawer so it can't stay stuck open */
+  var mq = window.matchMedia('(min-width: 990px)');
+  var onChange = function (event) {
+    if (event.matches) closeDrawer();
+  };
+  if (mq.addEventListener) {
+    mq.addEventListener('change', onChange);
+  } else if (mq.addListener) {
+    mq.addListener(onChange);
+  }
 })();
 </script>
 
 {% stylesheet %}
+  /* ---------- Shared header rules ----------
+     Carried over from the removed stock Horizon header section (sections/header.liquid).
+     Its stylesheet shipped on every page and these rules also styled this header's
+     header-actions (cart/account icons), the cart drawer and #header-component.
+     Only the rules that match rendered markup were kept. */
+  body { --header-height: 60px; --header-group-height: var(--header-height); --transparent-header-offset-boolean: 0; }
+
+  .header {
+    --header-padding: var(--padding-sm); --font-paragraph--line-height: 1; --header-content-transition-timing: 0s; display: block; contain: layout style; background: transparent;
+    & a, & .button, & .button-secondary, & .header-actions__action { transition: color var(--header-content-transition-timing), border-color var(--header-content-transition-timing); }
+  }
+
+  #header-component :is(.header-menu, .dropdown-localization) { display: none; }
+
+  @media screen and (min-width: 750px) {
+    #header-component[data-menu-style="menu"] :is(.header-menu, .dropdown-localization) { display: flex; }
+  }
+
+  #header-component { --submenu-height: 0px; --full-open-header-height: 0px; }
+
+  #header-group:has(#header-component[sticky]) { display: contents; }
+
+  header-menu, .header-actions__action, .header__icon--menu { transition: opacity var(--animation-speed) var(--animation-easing); }
+
+  .header-actions__action {
+    --button-color: var(--color-foreground); color: var(--button-color); cursor: pointer; display: flex; justify-content: center;
+    &:hover { --button-color: var(--color-foreground); }
+  }
+
+  .header-actions__action:not(.account-button) .svg-wrapper { height: var(--button-size); width: var(--button-size); }
+
+  .header-actions__action:not(.account-button) svg { width: var(--icon-size-md); height: var(--icon-size-md); }
+
+  .header:has(#Details-menu-drawer-container[open]) { contain: style; }
+
+  main > .shopify-section:first-child .section:not(.disable-section-top-offset) {
+    &.spacing-style, & .spacing-style {
+    --section-top-offset: calc(var(--header-height) * var(--transparent-header-offset-boolean));
+    & :is(.spacing-style, .inherit-spacing) { --section-top-offset: 0px; }
+  }
+    & .sticky-content { margin-top: calc(var(--header-height) * var(--transparent-header-offset-boolean) * -1); }
+  }
+
+  @media screen and (min-width: 768px) {
+    #header-component .search-action { min-width: 240px; height: 42px; border: 1.5px solid rgb(209, 213, 219); border-radius: 100px; background: rgb(255, 255, 255); overflow: hidden; flex-shrink: 0; transition: border-color 0.2s; }
+    #header-component .search-action:hover { border-color: rgb(30, 58, 95); }
+    #header-component .header__column--right .search-action, #header-component .header__column--left .search-action { margin-inline: 0px; }
+    #header-component .search-action .header-actions__action { width: 100%; height: 100%; color: rgb(156, 163, 175); display: flex !important; align-items: center !important; padding: 0px 18px 0px 14px !important; gap: 10px !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; border-image: initial !important; border-radius: 0px !important; box-shadow: none !important; background: transparent !important; }
+    #header-component .search-action .header-actions__action::after { content: "Search"; font-size: 14px; color: rgb(156, 163, 175); font-weight: 400; flex: 1 1 0%; text-align: left; white-space: nowrap; }
+    #header-component .search-action .svg-wrapper { align-items: center; justify-content: center; flex-shrink: 0; display: flex !important; }
+    #header-component .search-action .svg-wrapper svg { width: 20px; height: 20px; color: rgb(30, 58, 95); }
+    #header-component .header__column--right header-actions { gap: 8px; margin-inline-start: 0px; align-items: center; }
+    #header-component .cart-drawer { margin-inline-end: 0px; }
+    #header-component header-actions .header-actions__action { flex-shrink: 0; transition: border-color 0.2s; width: 42px !important; height: 42px !important; border: 1.5px solid rgb(209, 213, 219) !important; border-radius: 10px !important; padding: 0px !important; display: flex !important; align-items: center !important; justify-content: center !important; color: rgb(30, 58, 95) !important; background: transparent !important; box-shadow: none !important; }
+    #header-component header-actions .header-actions__action:hover { border-color: rgb(30, 58, 95) !important; background: transparent !important; }
+    #header-component .account-button.header-actions__action { overflow: hidden; width: 42px !important; height: 42px !important; border: 1.5px solid rgb(209, 213, 219) !important; border-radius: 10px !important; }
+    #header-component .account-button.header-actions__action:hover { border-color: rgb(30, 58, 95) !important; }
+    #header-component .ossian-wishlist-btn { width: 42px; height: 42px; border: 1.5px solid rgb(209, 213, 219); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: rgb(30, 58, 95); text-decoration: none; flex-shrink: 0; transition: border-color 0.2s; }
+    #header-component .ossian-wishlist-btn:hover { border-color: rgb(30, 58, 95); }
+    #header-component .ossian-wishlist-btn svg { width: 20px; height: 20px; color: rgb(30, 58, 95); }
+    #header-component header-actions svg, #header-component .account-button svg, #header-component shopify-account svg { width: 20px; height: 20px; color: rgb(30, 58, 95); }
+  }
+
+  @media screen and (max-width: 767px) {
+    #header-component .header__navigation-bar-row { display: none !important; }
+    #header-component .header__row--top { height: 50px !important; min-height: 50px !important; max-height: 50px !important; overflow: hidden !important; }
+    #header-component .header__columns, #header-component[data-menu-style="drawer"] .header__columns { display: flex !important; flex-wrap: nowrap !important; align-items: center !important; height: 56px !important; max-height: 56px !important; overflow: hidden !important; padding: 0px !important; gap: 0px !important; }
+    #header-component .header__columns header-menu { order: 1 !important; flex-shrink: 0 !important; }
+    #header-component .header__columns .header-logo { order: 2 !important; flex: 1 1 0% !important; min-width: 0px !important; }
+    #header-component .header__columns .search-action { order: 3 !important; flex-shrink: 0 !important; }
+    #header-component .header__columns header-actions { order: 4 !important; flex-shrink: 0 !important; }
+    #header-component .search-action--hidden-on-drawer { display: none !important; }
+    #header-component .header__columns header-menu { display: flex !important; align-items: center !important; justify-content: center !important; width: 48px !important; height: 56px !important; overflow: hidden !important; }
+    #header-component .header__columns header-menu > details, #header-component .header__columns header-menu > nav, #header-component .header__columns header-menu > div { height: 56px !important; overflow: hidden !important; display: flex !important; align-items: center !important; }
+    #header-component .header__icon--menu { width: 48px !important; height: 56px !important; display: flex !important; align-items: center !important; justify-content: center !important; color: rgb(30, 58, 95) !important; background: transparent !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; border-image: initial !important; padding: 0px !important; flex-shrink: 0 !important; }
+    #header-component .header__icon--menu svg, #header-component header-menu svg { width: 28px !important; height: 28px !important; color: rgb(30, 58, 95) !important; }
+    #header-component .header__columns .header-logo { display: flex !important; align-items: center !important; justify-content: flex-start !important; padding-left: 4px !important; height: 56px !important; overflow: hidden !important; }
+    #header-component .search-action { min-width: unset !important; width: 40px !important; height: 56px !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; border-image: initial !important; border-radius: 0px !important; background: transparent !important; overflow: hidden !important; }
+    #header-component .search-action .header-actions__action::after { display: none !important; }
+    #header-component .search-action .header-actions__action { width: 40px !important; height: 56px !important; padding: 0px !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; border-image: initial !important; background: transparent !important; box-shadow: none !important; display: flex !important; align-items: center !important; justify-content: center !important; color: rgb(30, 58, 95) !important; }
+    #header-component .search-action .svg-wrapper { display: flex !important; }
+    #header-component .search-action svg { width: 20px !important; height: 20px !important; color: rgb(30, 58, 95) !important; }
+    #header-component header-actions { display: flex !important; align-items: center !important; gap: 0px !important; height: 56px !important; overflow: hidden !important; }
+    #header-component .ossian-wishlist-btn { text-decoration: none; flex-shrink: 0; width: 38px !important; height: 56px !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; border-image: initial !important; border-radius: 0px !important; background: transparent !important; color: rgb(30, 58, 95) !important; display: flex !important; align-items: center !important; justify-content: center !important; }
+    #header-component .ossian-wishlist-btn svg { width: 20px !important; height: 20px !important; }
+    #header-component header-actions .header-actions__action, #header-component header-actions .account-button.header-actions__action { width: 40px !important; height: 56px !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; border-image: initial !important; border-radius: 0px !important; padding: 0px !important; background: transparent !important; box-shadow: none !important; color: rgb(30, 58, 95) !important; display: flex !important; align-items: center !important; justify-content: center !important; overflow: visible !important; }
+    #header-component .account-button { display: flex !important; align-items: center !important; justify-content: center !important; width: 40px !important; height: 56px !important; background: transparent !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; border-image: initial !important; border-radius: 0px !important; overflow: visible !important; }
+    #header-component shopify-account { display: flex !important; align-items: center !important; justify-content: center !important; min-width: unset !important; width: 40px !important; height: 56px !important; color: rgb(30, 58, 95) !important; background: transparent !important; }
+    #header-component .account-button__icon, #header-component .account-button__fallback { display: flex !important; align-items: center !important; justify-content: center !important; color: rgb(30, 58, 95) !important; }
+    #header-component .account-button__icon svg { width: 20px !important; height: 20px !important; color: rgb(30, 58, 95) !important; }
+    #header-component header-actions svg { width: 20px !important; height: 20px !important; }
+    #header-component header-actions { padding-right: 4px; }
+    #header-component .cart-count-bubble { min-width: 16px; height: 16px; font-size: 10px; }
+  }
+
+  /* Sticky header: pins the whole header group (announcement bar + navbar) */
+  #header-group:has(.ossian-navbar[data-ossian-sticky]) {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  /* sections/header.liquid sets ".header { background: transparent }" and this navbar
+     also carries the .header class, so pin the background with a more specific selector
+     (stylesheet bundle order differs between the dev server and the live store). */
+  /* <header-component> is a custom element, so it is display: inline unless a stylesheet
+     says otherwise. Locally sections/header.liquid's ".header { display: block }" happened to
+     apply; on the live theme that stylesheet isn't loaded, the element stayed inline and its
+     white background only painted behind the text (the banner showed through). */
+  #header-component.ossian-navbar {
+    display: block;
+    background: #fff;
+  }
+
+  /* Belt and braces: the section wrapper is white too. */
+  .ossian-header-section {
+    background: #fff;
+  }
+
   .ossian-navbar {
-    background: var(--color-background, #fff);
+    background: #fff;
     border-bottom: 1px solid rgb(var(--color-foreground-rgb, 20 24 32) / 0.08);
     position: relative;
   }
@@ -216,6 +685,22 @@
     flex-wrap: nowrap;
     gap: clamp(6px, 2vw, 32px);
     padding: 10px 20px;
+  }
+
+  /* ---------- Hamburger (mobile only) ---------- */
+  .ossian-navbar__hamburger {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-inline-start: -8px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: #1e3a5f;
+    cursor: pointer;
+    flex-shrink: 0;
   }
 
   .ossian-navbar__logo {
@@ -229,25 +714,9 @@
 
   .ossian-navbar__logo img {
     display: block;
-    height: clamp(26px, 5vw, 40px);
+    height: var(--ossian-logo-height, 48px);
     width: auto;
-  }
-
-  .ossian-navbar__logo-text {
-    font-size: clamp(0.85rem, 3vw, 1.5rem);
-    font-weight: 800;
-    color: #1e3a5f;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-  }
-
-  .ossian-navbar__logo-sub {
-    font-size: clamp(0.45rem, 1.1vw, 0.65rem);
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    color: #1e3a5f;
-    opacity: 0.75;
-    white-space: nowrap;
+    max-width: none;
   }
 
   .ossian-navbar__menu {
@@ -269,19 +738,39 @@
   }
 
   .ossian-navbar__menu-link {
+    position: relative;
     display: block;
-    font-size: clamp(0.62rem, 1.5vw, 0.9rem);
+    padding-block: 10px;
+    font-size: clamp(0.78rem, 1.3vw, 1rem);
     font-weight: 600;
     color: #1e3a5f;
     text-decoration: none;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transition: opacity 0.2s;
+    transition: color 0.2s;
   }
 
-  .ossian-navbar__menu-link:hover {
-    opacity: 0.65;
+  .ossian-navbar__menu-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transform: scaleX(0);
+    transition: transform 0.2s ease;
+  }
+
+  .ossian-navbar__menu-link:hover,
+  .ossian-navbar__menu-link.is-active,
+  .ossian-navbar__menu-trigger[aria-expanded='true'] {
+    color: #1f5fa8;
+  }
+
+  .ossian-navbar__menu-link.is-active::after,
+  .ossian-navbar__menu-trigger[aria-expanded='true']::after {
+    transform: scaleX(1);
   }
 
   .ossian-navbar__menu-item {
@@ -295,8 +784,8 @@
     gap: 5px;
     background: none;
     border: none;
-    padding: 0;
-    font: inherit;
+    padding: 10px 0;
+    font-family: inherit;
     cursor: pointer;
   }
 
@@ -307,6 +796,375 @@
 
   .ossian-navbar__menu-trigger[aria-expanded='true'] svg {
     transform: rotate(180deg);
+  }
+
+  /* ---------- Mega menu (fallback linklist children) ---------- */
+  .ossian-navbar__menu-item--mega {
+    position: static;
+  }
+
+  .ossian-mega {
+    position: absolute;
+    top: calc(100% - 4px);
+    /* left/right are set from JS so the panel lines up with the nav links */
+    left: 20px;
+    right: 20px;
+    z-index: 60;
+    display: grid;
+    grid-template-columns: minmax(230px, 0.85fr) minmax(0, 1.6fr) minmax(0, 1.35fr);
+    /* Fixed height: the bestsellers list scrolls instead of growing the panel */
+    height: clamp(360px, 28vw, 420px);
+    background: linear-gradient(100deg, #fdfeff 0%, #f4f7fc 40%, #e4edf8 68%);
+    border-radius: 18px;
+    box-shadow: 0 24px 60px rgba(10, 23, 48, 0.18);
+    overflow: hidden;
+    color: #1e3a5f;
+  }
+
+  .ossian-mega[hidden] {
+    display: none;
+  }
+
+  /* Invisible bridge so moving the pointer from the link to the panel keeps it open */
+  .ossian-mega::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: 14px;
+  }
+
+  .ossian-mega__nav {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    list-style: none;
+    margin: 0;
+    padding: clamp(20px, 1.8vw, 28px) clamp(18px, 1.8vw, 34px) clamp(20px, 1.8vw, 28px) clamp(18px, 1.9vw, 36px);
+  }
+
+  /* Short inset divider between the menu and the promo */
+  .ossian-mega__nav::after {
+    content: '';
+    position: absolute;
+    top: 34px;
+    bottom: 34px;
+    right: 0;
+    width: 1px;
+    background: rgb(30 58 95 / 0.1);
+  }
+
+  .ossian-mega__nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: clamp(11px, 0.95vw, 15px) clamp(14px, 1.4vw, 24px);
+    border-radius: 10px;
+    color: #1e3a5f;
+    font-size: clamp(0.92rem, 0.95vw, 1.05rem);
+    white-space: nowrap;
+    font-weight: 500;
+    line-height: 1.3;
+    text-decoration: none;
+    transition: background-color 0.15s, color 0.15s;
+  }
+
+  .ossian-mega__nav-link.is-active,
+  .ossian-mega__nav-link:focus-visible {
+    background: #e6eefa;
+    color: #1f63d6;
+  }
+
+  .ossian-mega__promo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: clamp(28px, 2.6vw, 44px) clamp(24px, 2.4vw, 40px) clamp(28px, 2.6vw, 44px) clamp(26px, 2.6vw, 44px);
+    overflow: hidden;
+  }
+
+  /* Image only: the banner fills the panel and the whole panel is the link */
+  .ossian-mega__promo--cover {
+    display: block;
+    padding: 0;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .ossian-mega__promo-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.4s ease;
+  }
+
+  .ossian-mega__promo--cover:hover .ossian-mega__promo-bg {
+    transform: scale(1.02);
+  }
+
+  .ossian-mega__promo--cover:focus-visible {
+    outline: 2px solid #1f63d6;
+    outline-offset: -4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ossian-mega__promo-bg {
+      transition: none;
+    }
+  }
+
+  .ossian-mega__promo-copy {
+    position: relative;
+    z-index: 1;
+    max-width: 60%;
+  }
+
+  .ossian-mega__eyebrow {
+    margin: 0 0 16px;
+    font-size: clamp(0.66rem, 0.72vw, 0.78rem);
+    white-space: nowrap;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgb(30 58 95 / 0.75);
+  }
+
+  .ossian-mega__heading {
+    margin: 0 0 16px;
+    font-size: clamp(1.5rem, 2.05vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1.18;
+    letter-spacing: -0.01em;
+    color: #1e3a5f;
+  }
+
+  .ossian-mega__text {
+    margin: 0 0 clamp(20px, 2vw, 30px);
+    font-size: clamp(0.95rem, 1vw, 1.12rem);
+    line-height: 1.75;
+    color: rgb(30 58 95 / 0.62);
+  }
+
+  .ossian-mega__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: clamp(13px, 1.1vw, 17px) clamp(26px, 2.6vw, 42px);
+    border-radius: 999px;
+    background: #1d5fe6;
+    box-shadow: 0 8px 18px rgb(29 95 230 / 0.25);
+    color: #fff;
+    font-size: clamp(0.95rem, 1vw, 1.08rem);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+  }
+
+  .ossian-mega__button:hover {
+    background: #0a4fc4;
+  }
+
+  .ossian-mega__promo-media {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 48%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .ossian-mega__promo-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: bottom center;
+  }
+
+  .ossian-mega__side {
+    --mega-thumb: clamp(84px, 7vw, 116px);
+    --mega-product-gap: clamp(14px, 1.4vw, 22px);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: clamp(26px, 2.6vw, 40px) clamp(22px, 2.6vw, 44px);
+    background: #fbfcfe;
+  }
+
+  .ossian-mega__side-panel {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .ossian-mega__side-panel[hidden] {
+    display: none;
+  }
+
+  .ossian-mega__side-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .ossian-mega__side-title {
+    margin: 0;
+    font-size: clamp(1.25rem, 1.4vw, 1.5rem);
+    font-weight: 700;
+    color: #1e3a5f;
+  }
+
+  .ossian-mega__side-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgb(30 58 95 / 0.8);
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .ossian-mega__side-all:hover {
+    color: #1f5fa8;
+  }
+
+  .ossian-mega__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    margin: 0 0 16px;
+    padding: 0;
+  }
+
+  .ossian-mega__chips a {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid rgb(30 58 95 / 0.12);
+    color: #1e3a5f;
+    font-size: 0.82rem;
+    text-decoration: none;
+  }
+
+  .ossian-mega__chips a:hover {
+    border-color: #1f5fa8;
+    color: #1f5fa8;
+  }
+
+  /* About 2.5 products visible; the half-visible card signals that the list scrolls */
+  .ossian-mega__products {
+    display: flex;
+    flex-direction: column;
+    flex: 0 1 auto;
+    gap: var(--mega-product-gap);
+    min-height: 0;
+    max-height: calc(var(--mega-thumb) * 108 / 116 * 2.5 + var(--mega-product-gap) * 2);
+    list-style: none;
+    margin: 0;
+    padding: 0 6px 0 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(30 58 95 / 0.25) transparent;
+  }
+
+  .ossian-mega__products::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .ossian-mega__products::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background: rgb(30 58 95 / 0.25);
+  }
+
+  .ossian-mega__product {
+    display: flex;
+    align-items: center;
+    gap: clamp(14px, 1.6vw, 26px);
+    color: #1e3a5f;
+    text-decoration: none;
+  }
+
+  .ossian-mega__product-media {
+    flex-shrink: 0;
+    width: var(--mega-thumb);
+    aspect-ratio: 116 / 108;
+    border-radius: 12px;
+    background: #f0f4f9;
+    overflow: hidden;
+  }
+
+  .ossian-mega__product-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+  }
+
+  .ossian-mega__product-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ossian-mega__product-title {
+    font-size: clamp(0.95rem, 1vw, 1.12rem);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .ossian-mega__product-sub {
+    font-size: clamp(0.85rem, 0.9vw, 1rem);
+    color: rgb(30 58 95 / 0.6);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ossian-mega__product-arrow {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(40px, 3.4vw, 52px);
+    height: clamp(40px, 3.4vw, 52px);
+    border-radius: 50%;
+    background: #eef2f8;
+    color: #1e3a5f;
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  .ossian-mega__product:hover .ossian-mega__product-arrow {
+    background: #0b5ce6;
+    color: #fff;
+  }
+
+  .ossian-mega__product:hover .ossian-mega__product-title {
+    color: #1f5fa8;
+  }
+
+  .ossian-mega__empty {
+    margin: 0;
+    color: rgb(30 58 95 / 0.62);
+    font-size: 0.9rem;
   }
 
   .ossian-mega-menu {
@@ -462,42 +1320,341 @@
     border-radius: 8px;
   }
 
+  /* ---------- Mobile side drawer ---------- */
+  .ossian-nav-drawer {
+    --drawer-navy: #1e3a5f;
+    --drawer-tint: #eef4fb;
+    --drawer-line: rgb(30 58 95 / 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+    width: min(88vw, 400px);
+    height: 100dvh;
+    background: #fff;
+    color: var(--drawer-navy);
+    box-shadow: 4px 0 28px rgba(0, 0, 0, 0.18);
+    transform: translateX(-100%);
+    transition: transform 0.28s ease;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .ossian-nav-drawer.is-open {
+    transform: translateX(0);
+  }
+
+  .ossian-nav-drawer__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    display: none;
+    background: rgba(8, 20, 40, 0.55);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .ossian-nav-drawer__backdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .ossian-nav-drawer__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 18px 14px 24px;
+  }
+
+  .ossian-nav-drawer .ossian-nav-drawer__logo img {
+    height: 46px;
+    width: auto;
+  }
+
+
+
+  .ossian-nav-drawer__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--drawer-navy);
+    cursor: pointer;
+  }
+
+  /* Nav rows */
+  .ossian-nav-drawer__list {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 8px;
+  }
+
+  .ossian-nav-drawer__item {
+    position: relative;
+  }
+
+  .ossian-nav-drawer__item + .ossian-nav-drawer__item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 76px;
+    right: 0;
+    border-top: 1px solid var(--drawer-line);
+  }
+
+  .ossian-nav-drawer__item.is-open::before,
+  .ossian-nav-drawer__item.is-open + .ossian-nav-drawer__item::before {
+    display: none;
+  }
+
+  .ossian-nav-drawer__row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    padding: 12px 22px 12px 18px;
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--drawer-navy);
+    text-align: start;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .ossian-nav-drawer__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--drawer-tint);
+    color: var(--drawer-navy);
+  }
+
+  .ossian-nav-drawer__label {
+    flex: 1;
+  }
+
+  .ossian-nav-drawer__chevron {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .ossian-nav-drawer__row[aria-expanded='true'] .ossian-nav-drawer__chevron--down {
+    transform: rotate(180deg);
+  }
+
+  /* Expanded parent: tinted rounded panel */
+  .ossian-nav-drawer__item--parent.is-open {
+    background: var(--drawer-tint);
+    border-radius: 0 18px 18px 0;
+  }
+
+  .ossian-nav-drawer__item--parent.is-open .ossian-nav-drawer__icon {
+    background: #fff;
+  }
+
+  .ossian-nav-drawer__panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto 1fr;
+    column-gap: 10px;
+    padding: 0 14px 22px 40px;
+  }
+
+  .ossian-nav-drawer__panel > :not(.ossian-nav-drawer__panel-image) {
+    grid-column: 1;
+  }
+
+  .ossian-nav-drawer__panel[hidden] {
+    display: none;
+  }
+
+  .ossian-nav-drawer__sublist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ossian-nav-drawer__sublist > li > a {
+    display: block;
+    margin: 6px 0;
+    padding: 6px 0 6px 18px;
+    border-left: 1px solid rgb(30 58 95 / 0.25);
+    color: var(--drawer-navy);
+    font-size: 0.95rem;
+    text-decoration: none;
+  }
+
+  .ossian-nav-drawer__subsublist {
+    list-style: none;
+    margin: 0 0 4px;
+    padding: 0 0 0 18px;
+  }
+
+  .ossian-nav-drawer__subsublist > li > a {
+    display: block;
+    padding: 5px 0 5px 12px;
+    color: rgb(30 58 95 / 0.72);
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+
+  .ossian-nav-drawer__panel > .ossian-nav-drawer__view-all {
+    grid-column: 1 / -1;
+  }
+
+  .ossian-nav-drawer__view-all {
+    justify-self: start;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    color: #1f5fa8;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .ossian-nav-drawer__panel-image {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    width: clamp(96px, 32vw, 140px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: hidden;
+    background: radial-gradient(circle, #fff 0%, #e3ebf4 100%);
+  }
+
+  .ossian-nav-drawer__panel-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mix-blend-mode: multiply;
+  }
+
+  /* Highlights */
+  .ossian-nav-drawer__highlights {
+    list-style: none;
+    margin: 8px 18px 0;
+    padding: 10px 0;
+    border-top: 1px solid rgb(30 58 95 / 0.15);
+  }
+
+  .ossian-nav-drawer__highlight {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding: 10px 4px 10px 6px;
+    color: rgb(30 58 95 / 0.85);
+    font-size: 0.88rem;
+    text-decoration: none;
+  }
+
+  .ossian-nav-drawer__highlight span {
+    flex: 1;
+  }
+
+  .ossian-nav-drawer__highlight svg:first-child {
+    flex-shrink: 0;
+    color: var(--drawer-navy);
+  }
+
+  /* Promo card */
+  .ossian-nav-drawer__promo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    min-height: 190px;
+    margin: 12px 18px 26px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: linear-gradient(120deg, #dfe9f5 0%, #b9cfe6 100%);
+    color: var(--drawer-navy);
+    text-decoration: none;
+  }
+
+  .ossian-nav-drawer__promo-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ossian-nav-drawer__promo-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 62%;
+    padding: 24px 22px;
+  }
+
+  .ossian-nav-drawer__promo-heading {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.55rem;
+    line-height: 1.15;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgb(30 58 95 / 0.35);
+  }
+
+  .ossian-nav-drawer__promo-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  html.ossian-nav-scroll-lock {
+    overflow: hidden;
+  }
+
   @media (max-width: 989px) {
-    .ossian-mega-menu__inner {
-      grid-template-columns: 1fr 1fr;
-      grid-template-areas:
-        'sidebar sidebar'
-        'col1 col2'
-        'promo promo';
+    .ossian-navbar__hamburger {
+      display: flex;
     }
 
-    .ossian-mega-menu__sidebar-col {
-      grid-area: sidebar;
-      border-right: none;
-      border-bottom: 1px solid rgb(var(--color-foreground-rgb, 20 24 32) / 0.08);
-      padding-right: 0;
-      padding-bottom: 16px;
+    .ossian-navbar__menu {
+      display: none;
     }
 
-    .ossian-mega-menu__promo {
-      grid-area: promo;
+    .ossian-nav-drawer,
+    .ossian-nav-drawer__backdrop {
+      display: flex;
+    }
+
+    .ossian-nav-drawer__backdrop {
+      display: block;
+    }
+
+    .ossian-navbar__logo {
+      margin-inline-end: auto;
     }
   }
 
-  @media (max-width: 640px) {
-    .ossian-mega-menu {
-      max-height: calc(100dvh - var(--header-height, 70px));
-      overflow-y: auto;
-    }
-
-    .ossian-mega-menu__inner {
-      grid-template-columns: 1fr;
-      grid-template-areas:
-        'sidebar'
-        'col1'
-        'col2'
-        'promo';
-      gap: 20px;
+  @media (prefers-reduced-motion: reduce) {
+    .ossian-nav-drawer,
+    .ossian-nav-drawer__backdrop {
+      transition: none;
     }
   }
 
@@ -512,16 +1669,17 @@
   .ossian-navbar__search {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 12px;
     min-width: 0;
-    width: clamp(56px, 16vw, 240px);
-    border: 1px solid rgb(var(--color-foreground-rgb, 20 24 32) / 0.16);
+    width: clamp(160px, 22vw, 400px);
+    height: 46px;
+    border: 1px solid rgb(30 58 95 / 0.16);
     border-radius: 999px;
-    padding: clamp(5px, 0.9vw, 9px) clamp(8px, 1.3vw, 16px);
-    background: var(--color-background, #fff);
-    color: rgb(var(--color-foreground-rgb, 20 24 32) / 0.55);
+    padding: 0 20px;
+    background: #fff;
+    color: rgb(30 58 95 / 0.6);
     cursor: pointer;
-    font-size: clamp(0.62rem, 1.3vw, 0.85rem);
+    font-size: clamp(0.78rem, 1.1vw, 0.95rem);
     font-family: inherit;
   }
 
@@ -535,6 +1693,61 @@
     white-space: nowrap;
   }
 
+  @media (max-width: 749px) {
+    .ossian-navbar__actions .ossian-navbar__search {
+      width: 40px;
+      height: 40px;
+      justify-content: center;
+      padding: 0;
+      border: none;
+      background: transparent;
+      color: #1e3a5f;
+    }
+
+    .ossian-navbar__actions .ossian-navbar__search svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    /* Larger tap targets, icons and logo on phones */
+    .ossian-navbar__hamburger {
+      width: 46px;
+      height: 46px;
+    }
+
+    .ossian-navbar__hamburger svg {
+      width: 30px;
+      height: 30px;
+    }
+
+    .ossian-navbar__logo img {
+      height: var(--ossian-logo-height-mobile, 38px);
+    }
+
+    .ossian-navbar__actions .ossian-navbar__search,
+    #header-component.ossian-navbar header-actions .header-actions__action,
+    #header-component.ossian-navbar .account-button.header-actions__action {
+      width: 44px !important;
+      height: 44px !important;
+    }
+
+    .ossian-navbar__actions .ossian-navbar__search svg,
+    .ossian-navbar__actions .header-actions__cart-icon svg,
+    .ossian-navbar__actions .account-button__icon {
+      width: 27px;
+      height: 27px;
+    }
+
+    /* On phones the action icons sit bare, without the tinted circles */
+    .ossian-navbar__actions .header-actions__action {
+      background: transparent;
+    }
+
+    .ossian-navbar__actions .ossian-navbar__search span {
+      display: none;
+    }
+  }
+
   .ossian-navbar__actions header-actions {
     display: flex;
     align-items: center;
@@ -542,13 +1755,14 @@
   }
 
   .ossian-navbar__actions .header-actions__action {
-    width: clamp(28px, 5vw, 40px);
-    height: clamp(28px, 5vw, 40px);
+    width: 46px;
+    height: 46px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgb(var(--color-foreground-rgb, 20 24 32) / 0.16);
+    border: none;
     border-radius: 50%;
+    background: transparent;
     color: #1e3a5f;
     flex-shrink: 0;
     padding: 0;
@@ -566,8 +1780,112 @@
 
   .ossian-navbar__actions .header-actions__cart-icon svg,
   .ossian-navbar__actions .account-button__icon {
-    width: clamp(14px, 2.6vw, 20px);
-    height: clamp(14px, 2.6vw, 20px);
+    width: 22px;
+    height: 22px;
+  }
+
+  /* Cart count badge: always visible (shows 0 for an empty cart) */
+  .ossian-navbar__actions .header-actions__cart-icon {
+    --cart-bubble-size: 22px;
+    --cart-bubble-top: -4px;
+    --cart-bubble-right: -4px;
+  }
+
+  .ossian-navbar__actions .cart-bubble.visually-hidden {
+    position: absolute !important;
+    width: var(--cart-bubble-size);
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+  }
+
+  .ossian-navbar__actions .cart-bubble__background {
+    background-color: #2f6fe0;
+  }
+
+  .ossian-navbar__actions .cart-bubble__text {
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 600;
+  }
+
+  .ossian-navbar__actions .cart-bubble__text-count.hidden {
+    display: inline !important;
+  }
+
+  /* sections/header.liquid styles every #header-component action as a bordered
+     square with !important; this navbar reuses that id, so override them here. */
+  #header-component.ossian-navbar header-actions .header-actions__action,
+  #header-component.ossian-navbar .account-button.header-actions__action {
+    width: 46px !important;
+    height: 46px !important;
+    border: none !important;
+    border-radius: 50% !important;
+    background: transparent !important;
+    overflow: visible;
+  }
+
+  #header-component.ossian-navbar header-actions .header-actions__action:hover {
+    background: rgb(30 58 95 / 0.06) !important;
+  }
+
+  /* header.liquid also pins every header icon to 20px with !important */
+  #header-component.ossian-navbar .header-actions__action svg.account-button__icon,
+  #header-component.ossian-navbar .account-button__icon svg,
+  #header-component.ossian-navbar .header-actions__cart-icon > .svg-wrapper svg {
+    width: var(--ossian-action-icon, 22px) !important;
+    height: var(--ossian-action-icon, 22px) !important;
+  }
+
+  @media (max-width: 749px) {
+    #header-component.ossian-navbar header-actions .header-actions__action,
+    #header-component.ossian-navbar .account-button.header-actions__action,
+    #header-component.ossian-navbar header-actions .header-actions__action:hover {
+      width: 44px !important;
+      height: 44px !important;
+      background: transparent !important;
+    }
+
+    #header-component.ossian-navbar {
+      --ossian-action-icon: 27px;
+    }
+  }
+
+  /* Small phones: tighten spacing so logo and all four icons still fit */
+  @media (max-width: 399px) {
+    .ossian-navbar__inner {
+      gap: 6px;
+      padding: 8px 12px;
+    }
+
+    .ossian-navbar__logo img {
+      height: calc(var(--ossian-logo-height-mobile, 38px) * 0.85);
+    }
+
+    .ossian-navbar__actions,
+    .ossian-navbar__actions header-actions {
+      gap: 0;
+    }
+
+    #header-component.ossian-navbar {
+      --ossian-action-icon: 25px;
+    }
+
+    .ossian-navbar__actions .ossian-navbar__search,
+    #header-component.ossian-navbar header-actions .header-actions__action,
+    #header-component.ossian-navbar .account-button.header-actions__action,
+    #header-component.ossian-navbar header-actions .header-actions__action:hover {
+      width: 40px !important;
+      height: 40px !important;
+    }
+
+    .ossian-navbar__actions .ossian-navbar__search svg,
+    .ossian-navbar__actions .header-actions__cart-icon svg,
+    .ossian-navbar__actions .account-button__icon {
+      width: 25px;
+      height: 25px;
+    }
   }
 {% endstylesheet %}
 
@@ -578,11 +1896,215 @@
   "class": "ossian-header-section",
   "settings": [
     {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo image",
+      "info": "Used in the navbar and the mobile drawer. Leave empty to use the default OSSION Professional logo."
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "label": "Logo height (desktop)",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "logo_height_mobile",
+      "label": "Logo height (mobile)",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 38
+    },
+    {
+      "type": "header",
+      "content": "Menu"
+    },
+    {
       "type": "link_list",
       "id": "menu",
       "label": "Menu (fallback)",
       "default": "main-menu",
-      "info": "Only used if no Nav Item blocks below are added."
+      "info": "Used when no Nav Item blocks are added. Nested sub-menus in this linklist render as dropdowns on desktop and accordions in the mobile drawer."
+    },
+    {
+      "type": "header",
+      "content": "Search pop-up"
+    },
+    {
+      "type": "text",
+      "id": "search_modal_placeholder",
+      "label": "Search input placeholder",
+      "default": "Search for products, categories or solutions..."
+    },
+    {
+      "type": "text",
+      "id": "search_trending_heading",
+      "label": "Trending heading",
+      "default": "Trending Searches"
+    },
+    {
+      "type": "textarea",
+      "id": "search_trending",
+      "label": "Trending searches",
+      "info": "One search term per line.",
+      "default": "Shampoo\nHair Serum\nHair Mask\nKeratin Treatment\nHair Colour\nAnti Dandruff Shampoo\nHair Wax"
+    },
+    {
+      "type": "text",
+      "id": "search_categories_heading",
+      "label": "Categories heading",
+      "default": "Popular Categories",
+      "info": "Add categories with \"Search category\" blocks."
+    },
+    {
+      "type": "image_picker",
+      "id": "search_promo_image",
+      "label": "Promo banner image",
+      "info": "Wide image (about 2100 × 640). Keep the left side light, the text sits there."
+    },
+    {
+      "type": "text",
+      "id": "search_promo_eyebrow",
+      "label": "Promo eyebrow",
+      "default": "Professional Hair Care"
+    },
+    {
+      "type": "text",
+      "id": "search_promo_heading",
+      "label": "Promo heading",
+      "default": "Find Your"
+    },
+    {
+      "type": "text",
+      "id": "search_promo_heading_accent",
+      "label": "Promo heading (blue line)",
+      "default": "Perfect Hair Solution"
+    },
+    {
+      "type": "text",
+      "id": "search_promo_text",
+      "label": "Promo text",
+      "default": "Explore professional hair care products for stronger, smoother and healthier hair."
+    },
+    {
+      "type": "text",
+      "id": "search_promo_button",
+      "label": "Promo button label",
+      "default": "Shop Hair Care"
+    },
+    {
+      "type": "url",
+      "id": "search_promo_link",
+      "label": "Promo link"
+    },
+    {
+      "type": "text",
+      "id": "search_products_heading",
+      "label": "Products heading",
+      "default": "Products"
+    },
+    {
+      "type": "collection",
+      "id": "search_products_collection",
+      "label": "Products to show before typing",
+      "info": "First 4 products of this collection. Defaults to all products."
+    },
+    {
+      "type": "text",
+      "id": "search_recent_heading",
+      "label": "Recent searches heading",
+      "default": "Recent Searches"
+    },
+    {
+      "type": "header",
+      "content": "Behaviour"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "label": "Sticky header",
+      "info": "Keeps the announcement bar and navbar fixed at the top while scrolling.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search bar placeholder",
+      "default": "Search products, collections..."
+    },
+    {
+      "type": "header",
+      "content": "Mobile drawer"
+    },
+    {
+      "type": "paragraph",
+      "content": "Row icons are picked from each link's title (hair, skin, wax, facial, about, science, contact). An expanded menu shows the linked collection's image."
+    },
+    {
+      "type": "text",
+      "id": "drawer_highlight_1",
+      "label": "Highlight 1 (truck icon)",
+      "default": "Free delivery above Rs. 999"
+    },
+    {
+      "type": "url",
+      "id": "drawer_highlight_1_link",
+      "label": "Highlight 1 link"
+    },
+    {
+      "type": "text",
+      "id": "drawer_highlight_2",
+      "label": "Highlight 2 (shield icon)",
+      "default": "Trusted by Salon Professionals"
+    },
+    {
+      "type": "url",
+      "id": "drawer_highlight_2_link",
+      "label": "Highlight 2 link"
+    },
+    {
+      "type": "text",
+      "id": "drawer_highlight_3",
+      "label": "Highlight 3 (star icon)",
+      "default": "Professional Salon Solutions"
+    },
+    {
+      "type": "url",
+      "id": "drawer_highlight_3_link",
+      "label": "Highlight 3 link"
+    },
+    {
+      "type": "image_picker",
+      "id": "drawer_promo_image",
+      "label": "Promo card image",
+      "info": "Keep the left side of the image light — the heading sits on top of it."
+    },
+    {
+      "type": "text",
+      "id": "drawer_promo_heading",
+      "label": "Promo card heading",
+      "default": "Professional Care for Every You"
+    },
+    {
+      "type": "text",
+      "id": "drawer_promo_cta",
+      "label": "Promo card button label",
+      "default": "Explore Ossion"
+    },
+    {
+      "type": "url",
+      "id": "drawer_promo_link",
+      "label": "Promo card link"
     }
   ],
   "blocks": [
@@ -630,6 +2152,12 @@
           "default": "Products"
         },
         {
+          "type": "image_picker",
+          "id": "drawer_image",
+          "label": "Mobile drawer image",
+          "info": "Shown when this item is expanded in the mobile drawer. Falls back to the promo card image."
+        },
+        {
           "type": "header",
           "content": "Promo card (if enabled)"
         },
@@ -657,6 +2185,118 @@
           "type": "url",
           "id": "promo_button_url",
           "label": "Button link"
+        }
+      ]
+    },
+    {
+      "type": "mega_menu_promo",
+      "name": "Mega menu promo",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Customises the desktop mega menu of a main-menu item that has sub-menus. Without this block the menu uses the linked collection's image and description."
+        },
+        {
+          "type": "text",
+          "id": "menu_item",
+          "label": "Menu item title",
+          "info": "Must match the menu link's title, e.g. Hair Care",
+          "default": "Hair Care"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Promo image",
+          "info": "Image only: a finished banner with its own text, 1200 x 1070 px. Beside the text: a transparent PNG product shot."
+        },
+        {
+          "type": "select",
+          "id": "image_layout",
+          "label": "Promo image layout",
+          "options": [
+            { "value": "cover", "label": "Image only (whole image is the link)" },
+            { "value": "beside", "label": "Beside the text" }
+          ],
+          "default": "cover"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow",
+          "default": "Professional Hair Care"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Healthy, Stronger Hair Every Day"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Advanced formulas for salon-like care at home."
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "View All Hair Care"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link",
+          "info": "Defaults to the menu item's link"
+        },
+        {
+          "type": "text",
+          "id": "bestsellers_heading",
+          "label": "Products heading",
+          "default": "Bestsellers"
+        },
+        {
+          "type": "range",
+          "id": "products_limit",
+          "label": "Products loaded",
+          "info": "About 2.5 are visible; the rest scroll.",
+          "min": 1,
+          "max": 12,
+          "step": 1,
+          "default": 8
+        }
+      ]
+    },
+    {
+      "type": "search_category",
+      "name": "Search category",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Shown under \"Popular Categories\" in the search pop-up."
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "info": "Defaults to the collection title"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Thumbnail",
+          "info": "Defaults to the collection image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Defaults to the collection"
         }
       ]
     },

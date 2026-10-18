@@ -1,0 +1,232 @@
+{% comment %}
+  Section contract.
+  Centred intro above a row of category cards. Each card links to a
+  collection (or custom link) and shows its own image, falling back to the
+  collection image. Cards scroll sideways on mobile.
+  @example
+  <!-- templates/page.about.json → about_expertise -->
+{% endcomment %}
+
+{%- render 'ossian-about-styles' -%}
+
+<section class="oab oabe" id="oabe-{{ section.id }}" style="--oabe-bg: {{ section.settings.background }};">
+  <div class="oab-wrap">
+    <div class="oabe__intro">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="oab-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- render 'ossian-about-heading', text: section.settings.heading, class: 'oab-heading--md' -%}
+      {%- if section.settings.text != blank -%}
+        <div class="oab-text oabe__text">{{ section.settings.text }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="oab-wrap oabe__track-wrap">
+      <ul class="oabe__track" role="list">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign card_collection = block.settings.collection
+            assign card_url = block.settings.link
+            if card_url == blank and card_collection != blank
+              assign card_url = card_collection.url
+            endif
+            assign card_image = block.settings.image
+            if card_image == blank and card_collection != blank
+              assign card_image = card_collection.featured_image
+            endif
+            assign card_title = block.settings.title
+            if card_title == blank and card_collection != blank
+              assign card_title = card_collection.title
+            endif
+          -%}
+          <li class="oabe__item" {{ block.shopify_attributes }}>
+            <a class="oabe__card" {% if card_url != blank %}href="{{ card_url }}"{% endif %}>
+              <span class="oabe__media">
+                {%- if card_image != blank -%}
+                  {{
+                    card_image
+                    | image_url: width: 800
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '300,450,600,800',
+                      sizes: '(min-width: 990px) 280px, 70vw',
+                      alt: ''
+                  }}
+                {%- else -%}
+                  {{ 'collection-1' | placeholder_svg_tag: 'oabe__ph' }}
+                {%- endif -%}
+              </span>
+              <span class="oabe__bar">
+                <span class="oabe__title">{{ card_title | escape }}</span>
+                <span class="oabe__arrow" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </span>
+              </span>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+</section>
+
+{% stylesheet %}
+.oabe {
+  background: var(--oabe-bg, #f2f6fc);
+  padding-block: 48px 52px;
+}
+
+.oabe__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.oabe__intro .oab-heading { margin-bottom: 10px; }
+.oabe__text { margin-bottom: 0; max-width: 60ch; }
+
+.oabe__track {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.oabe__item { min-width: 0; }
+
+.oabe__card {
+  position: relative;
+  display: block;
+  aspect-ratio: 5 / 4;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #dfe6f1;
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 8px 22px rgba(20, 40, 74, 0.12);
+}
+
+.oabe__media,
+.oabe__media img,
+.oabe__ph {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.oabe__ph { fill: rgba(30, 58, 95, 0.25); }
+
+.oabe__media img { transition: transform 0.5s ease; }
+.oabe__card:hover .oabe__media img { transform: scale(1.05); }
+
+.oabe__bar {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 28px 14px 14px;
+  background: linear-gradient(180deg, rgba(8, 24, 50, 0) 0%, rgba(8, 24, 50, 0.72) 100%);
+}
+
+.oabe__title {
+  min-width: 0;
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #fff;
+}
+
+.oabe__arrow {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--oab-ink);
+  transition: transform 0.2s ease;
+}
+
+.oabe__arrow svg { width: 15px; height: 15px; }
+.oabe__card:hover .oabe__arrow { transform: translateX(3px); }
+.oabe__card:focus-visible { outline: 2px solid var(--oab-accent-dark); outline-offset: 3px; }
+[dir='rtl'] .oabe__arrow svg { transform: scaleX(-1); }
+
+@media (max-width: 749px) {
+  .oabe { padding-block: 36px 40px; }
+  .oabe__intro { margin-bottom: 20px; }
+
+  .oabe__track-wrap { padding-inline: 0; }
+
+  .oabe__track {
+    display: flex;
+    gap: 12px;
+    padding-inline: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 20px;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+
+  .oabe__track::-webkit-scrollbar { display: none; }
+  .oabe__item { flex: 0 0 62%; scroll-snap-align: start; }
+  .oabe__title { font-size: 0.9rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oabe__media img,
+  .oabe__arrow { transition: none; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ossian About Expertise",
+  "tag": "div",
+  "class": "section-ossian-about-expertise",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Our Expertise" },
+    { "type": "text", "id": "heading", "label": "Heading", "info": "Wrap words in [brackets] for the blue accent.", "default": "Complete Care for Hair & Skin" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>From hair color to daily care, our range is designed to help you look and feel your best.</p>" },
+    { "type": "color", "id": "background", "label": "Background", "default": "#f2f6fc" }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Category card",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "Falls back to the collection image." },
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "text", "id": "title", "label": "Title", "info": "Falls back to the collection title.", "default": "Hair Care" },
+        { "type": "url", "id": "link", "label": "Custom link", "info": "Overrides the collection link." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ossian About Expertise",
+      "blocks": [
+        { "type": "card", "settings": { "title": "Hair Care" } },
+        { "type": "card", "settings": { "title": "Skin Care" } },
+        { "type": "card", "settings": { "title": "Hair Color & Treatment" } },
+        { "type": "card", "settings": { "title": "Professional Solutions" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

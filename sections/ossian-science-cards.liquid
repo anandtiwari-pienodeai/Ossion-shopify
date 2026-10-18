@@ -1,0 +1,85 @@
+{{ 'section-ossian-science-cards.css' | asset_url | stylesheet_tag }}
+{% comment %}
+  Section contract.
+  "Advanced Hair Science" technology cards: centred intro, then cards with an image,
+  a round icon badge overlapping the image edge, a title and a short description.
+  @example
+  <!-- templates/page.science.json → science_tech -->
+{% endcomment %}
+
+{%- render 'ossian-about-styles' -%}
+
+<section class="oab osc" id="osc-{{ section.id }}" style="--osc-bg: {{ section.settings.background }};">
+  <div class="oab-wrap">
+    <div class="oab-intro">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="oab-eyebrow oab-eyebrow--rules">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- render 'ossian-about-heading', text: section.settings.heading, class: 'oab-heading--md' -%}
+      {%- if section.settings.text != blank -%}
+        <p class="oab-text">{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <ul class="osc__grid" role="list">
+        {%- for block in section.blocks -%}
+          <li class="osc-card" {{ block.shopify_attributes }}>
+            <div class="osc-card__media">
+              {%- if block.settings.image != blank -%}
+                {{
+                  block.settings.image
+                  | image_url: width: 800
+                  | image_tag: loading: 'lazy', widths: '300,450,600,800', sizes: '(min-width: 990px) 280px, (min-width: 750px) 45vw, 90vw', alt: ''
+                }}
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'osc-card__ph' }}
+              {%- endif -%}
+              <span class="osc-card__badge" aria-hidden="true">{%- render 'ossian-about-icon', icon: block.settings.icon -%}</span>
+            </div>
+            <div class="osc-card__body">
+              {%- if block.settings.title != blank -%}
+                <h3 class="osc-card__title">{{ block.settings.title | escape }}</h3>
+              {%- endif -%}
+              {%- if block.settings.text != blank -%}
+                <p class="osc-card__text">{{ block.settings.text | escape }}</p>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Ossian Science Cards",
+  "tag": "div",
+  "class": "section-ossian-science-cards",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Our Technology" },
+    { "type": "text", "id": "heading", "label": "Heading", "info": "Wrap words in [brackets] for the blue accent.", "default": "Advanced Hair Science" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "A powerful blend of marine actives and high-performance ingredients, engineered for complete hair care." },
+    { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Technology card",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "Landscape, about 800 × 600." },
+        { "type": "select", "id": "icon", "label": "Icon", "default": "waves", "options": [
+          { "value": "waves", "label": "Waves" }, { "value": "molecule", "label": "Molecule" }, { "value": "drop", "label": "Drop" },
+          { "value": "sparkle", "label": "Sparkle" }, { "value": "flask", "label": "Flask" }, { "value": "leaf", "label": "Leaf" },
+          { "value": "shield", "label": "Shield" }, { "value": "coral", "label": "Coral" }, { "value": "badge", "label": "Badge" }
+        ] },
+        { "type": "text", "id": "title", "label": "Title", "default": "Marine-Based Nourishing Technology" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Powered by ocean-derived actives to deeply nourish, hydrate and strengthen hair from within." }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Ossian Science Cards" }]
+}
+{% endschema %}

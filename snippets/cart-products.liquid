@@ -167,6 +167,23 @@
                   headers="productInformation"
                 >
                   <div class="cart-items__product-info">
+                    {%- liquid
+                      assign badge_tag = settings.cart_badge_tag | strip
+                      assign badge_handle = badge_tag | handleize
+                      assign show_badge = false
+                      if badge_tag != blank
+                        for product_tag in item.product.tags
+                          assign product_tag_handle = product_tag | handleize
+                          if product_tag_handle == badge_handle
+                            assign show_badge = true
+                            break
+                          endif
+                        endfor
+                      endif
+                    -%}
+                    {%- if show_badge -%}
+                      <span class="cart-items__badge">{{ badge_tag | escape }}</span>
+                    {%- endif -%}
                     <p>
                       <a
                         href="{{ item.url }}"

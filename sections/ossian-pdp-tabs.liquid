@@ -1,62 +1,297 @@
+{{ 'section-ossian-pdp-tabs.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  # Pre-pass: a tab is shown only when it has something to say for this product,
+  # so products without the tab metafields don't get empty panels.
+  assign tabs_with_content = ''
+  for block in section.blocks
+    if block.type != 'tab' or block.settings.label == blank
+      continue
+    endif
+
+    assign tab_value = blank
+    assign tab_field = block.settings.metaobject_metafield | strip | remove_first: 'product.metafields.'
+    assign tab_parts = tab_field | split: '.'
+    if tab_parts[0] != blank and tab_parts[1] != blank
+      assign tab_value = product.metafields[tab_parts[0]][tab_parts[1]].value
+    endif
+
+    assign tab_has_content = false
+    if tab_value != blank or block.settings.content != blank or block.settings.features_list != blank or block.settings.featured_image != blank
+      assign tab_has_content = true
+    elsif product.description != blank
+      if block.settings.use_product_description or block.settings.description_fallback
+        assign tab_has_content = true
+      endif
+    endif
+
+    if tab_has_content
+      assign tabs_with_content = tabs_with_content | append: '|' | append: block.id | append: '|'
+    endif
+  endfor
+-%}
+
+{%- if tabs_with_content != blank -%}
 <section class="pdp-tabs" id="pdp-tabs-{{ section.id }}">
   <div class="page-width pdp-tabs__inner">
 
     <div class="pdp-tabs__nav" role="tablist" aria-label="Product information">
-      {%- assign first_tab = true -%}
+      {%- assign nav_index = 0 -%}
       {%- for block in section.blocks -%}
-        {%- if block.type == 'tab' and block.settings.label != blank -%}
+        {%- assign tab_key = '|' | append: block.id | append: '|' -%}
+        {%- if block.type == 'tab' and block.settings.label != blank and tabs_with_content contains tab_key -%}
+          {%- assign nav_index = nav_index | plus: 1 -%}
           <button
-            class="pdp-tabs__nav-btn{% if first_tab %} pdp-tabs__nav-btn--active{% endif %}"
+            class="pdp-tabs__nav-btn{% if nav_index == 1 %} pdp-tabs__nav-btn--active{% endif %}"
             role="tab"
-            aria-selected="{% if first_tab %}true{% else %}false{% endif %}"
-            aria-controls="pdp-tab-panel-{{ section.id }}-{{ forloop.index }}"
-            id="pdp-tab-{{ section.id }}-{{ forloop.index }}"
-            data-tab-index="{{ forloop.index }}"
+            aria-selected="{% if nav_index == 1 %}true{% else %}false{% endif %}"
+            aria-controls="pdp-tab-panel-{{ section.id }}-{{ nav_index }}"
+            id="pdp-tab-{{ section.id }}-{{ nav_index }}"
+            data-tab-index="{{ nav_index }}"
             {{ block.shopify_attributes }}
           >
             {{ block.settings.label }}
           </button>
-          {%- assign first_tab = false -%}
         {%- endif -%}
       {%- endfor -%}
     </div>
 
+    {%- capture check_icon -%}
+      <span class="pdp-tabs__feature-check" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </span>
+    {%- endcapture -%}
+
     {%- assign panel_index = 0 -%}
     {%- for block in section.blocks -%}
-      {%- if block.type == 'tab' and block.settings.label != blank -%}
+      {%- assign tab_key = '|' | append: block.id | append: '|' -%}
+      {%- if block.type == 'tab' and block.settings.label != blank and tabs_with_content contains tab_key -%}
         {%- assign panel_index = panel_index | plus: 1 -%}
+        {%- liquid
+          # ---- Resolve the product metafield this tab points at ----
+          assign mo_mf = nil
+          assign mo_field = block.settings.metaobject_metafield | strip
+          if mo_field != blank
+            assign mo_field = mo_field | remove_first: 'product.metafields.'
+            assign mo_parts = mo_field | split: '.'
+            assign mo_ns = mo_parts[0]
+            assign mo_key = mo_parts[1]
+            if mo_ns != blank and mo_key != blank
+              assign mo_mf = product.metafields[mo_ns][mo_key]
+            endif
+          endif
+
+          # The metafield is either one metaobject entry, a list of entries, or a
+          # plain value. Trust the declared type, then fall back to shape checks
+          # so a tab still renders if the definition is not a reference type.
+          assign mo_kind = nil
+          assign mo_value = mo_mf.value
+          if mo_mf != blank and mo_value != blank
+            if mo_mf.type == 'metaobject_reference'
+              assign mo_kind = 'entry'
+            elsif mo_mf.type == 'list.metaobject_reference'
+              assign mo_kind = 'entry_list'
+            elsif mo_value.system != blank
+              assign mo_kind = 'entry'
+            else
+              assign mo_kind = 'plain'
+            endif
+          endif
+
+          # Candidate key lists: the key set in the theme editor wins, then the
+          # conventional names. Any setting may hold several comma separated keys.
+          assign heading_keys = block.settings.metaobject_label_field | append: ',label,heading,title,name,step_title' | split: ',' | join: ','
+          assign body_keys = block.settings.metaobject_body_field | append: ',body,description,content,text,details,caption,summary,copy' | split: ',' | join: ','
+          assign list_keys = block.settings.metaobject_list_field | append: ',steps,points,bullets,benefits,features,highlights,instructions' | split: ',' | join: ','
+          assign image_keys = block.settings.metaobject_images_field | append: ',image,images,photo,photos,media,gallery' | split: ',' | join: ','
+          assign before_keys = block.settings.comparison_before_field | append: ',before,before_image,image_before,before_photo,left_image' | split: ',' | join: ','
+          assign after_keys = block.settings.comparison_after_field | append: ',after,after_image,image_after,after_photo,right_image' | split: ',' | join: ','
+
+          assign is_comparison = false
+          if block.settings.layout == 'comparison'
+            assign is_comparison = true
+          endif
+
+          assign show_split = false
+          if is_comparison == false and block.settings.featured_image != blank
+            assign show_split = true
+          endif
+
+          assign use_description = block.settings.use_product_description
+          if block.settings.description_fallback and mo_kind == nil and block.settings.content == blank and block.settings.features_list == blank
+            assign use_description = true
+          endif
+
+          assign has_text = false
+          if use_description and product.description != blank
+            assign has_text = true
+          endif
+          if block.settings.content != blank
+            assign has_text = true
+          endif
+          if block.settings.features_list != blank
+            assign has_text = true
+          endif
+
+          assign before_label = block.settings.before_label | default: 'Before'
+          assign after_label = block.settings.after_label | default: 'After'
+
+          # ---- Accordion layout: rows come from a list of metaobjects, either the
+          # tab metafield itself or a list field on the single entry it points at.
+          assign acc_items = nil
+          assign acc_heading = block.settings.accordion_heading
+          if block.settings.layout == 'accordion'
+            if mo_kind == 'entry_list'
+              assign acc_items = mo_value
+            elsif mo_kind == 'entry'
+              assign acc_item_keys = block.settings.accordion_items_field | append: ',items,ingredients,ingredient_list,key_ingredients,rows' | split: ','
+              for acc_key in acc_item_keys
+                assign acc_key = acc_key | strip
+                if acc_key != blank and mo_value[acc_key].type == 'list.metaobject_reference' and mo_value[acc_key].value != blank
+                  assign acc_items = mo_value[acc_key].value
+                  break
+                endif
+              endfor
+
+              assign acc_heading_keys = heading_keys | split: ','
+              for acc_key in acc_heading_keys
+                assign acc_key = acc_key | strip
+                if acc_key != blank and mo_value[acc_key].type == 'single_line_text_field' and mo_value[acc_key].value != blank
+                  assign acc_heading = mo_value[acc_key].value
+                  break
+                endif
+              endfor
+            endif
+          endif
+        -%}
         <div
-          class="pdp-tabs__panel{% if panel_index == 1 %} pdp-tabs__panel--active{% endif %}{% if block.settings.featured_image != blank %} pdp-tabs__panel--split{% endif %}"
+          class="pdp-tabs__panel{% if panel_index == 1 %} pdp-tabs__panel--active{% endif %}{% if show_split %} pdp-tabs__panel--split{% endif %}"
           role="tabpanel"
           id="pdp-tab-panel-{{ section.id }}-{{ panel_index }}"
           aria-labelledby="pdp-tab-{{ section.id }}-{{ panel_index }}"
           {% if panel_index != 1 %}hidden{% endif %}
         >
-          <div class="pdp-tabs__panel-text">
-            {%- if block.settings.use_product_description -%}
-              <div class="pdp-tabs__rte rte">{{ product.description }}</div>
-            {%- elsif block.settings.content != blank -%}
-              <div class="pdp-tabs__rte rte">{{ block.settings.content }}</div>
-            {%- endif -%}
-            {%- if block.settings.features_list != blank -%}
-              <ul class="pdp-tabs__features">
-                {%- assign lines = block.settings.features_list | newline_to_br | split: '<br />' -%}
-                {%- for line in lines -%}
-                  {%- assign trimmed = line | strip -%}
-                  {%- if trimmed != blank -%}
-                    <li class="pdp-tabs__feature-item">
-                      <span class="pdp-tabs__feature-check" aria-hidden="true">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                      </span>
-                      {{ trimmed }}
-                    </li>
-                  {%- endif -%}
-                {%- endfor -%}
-              </ul>
-            {%- endif -%}
-          </div>
+          {%- if has_text -%}
+            <div class="pdp-tabs__panel-text">
+              {%- if use_description and product.description != blank -%}
+                <div class="pdp-tabs__rte rte">{{ product.description }}</div>
+              {%- elsif block.settings.content != blank -%}
+                <div class="pdp-tabs__rte rte">{{ block.settings.content }}</div>
+              {%- endif -%}
+              {%- if block.settings.features_list != blank -%}
+                <ul class="pdp-tabs__features">
+                  {%- assign lines = block.settings.features_list | newline_to_br | split: '<br />' -%}
+                  {%- for line in lines -%}
+                    {%- assign trimmed = line | strip -%}
+                    {%- if trimmed != blank -%}
+                      <li class="pdp-tabs__feature-item">{{ check_icon }}{{ trimmed }}</li>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
 
-          {%- if block.settings.featured_image != blank -%}
+          {%- if acc_items != blank -%}
+            {%- assign acc_title_keys = block.settings.accordion_title_field | append: ',name,title,label,heading' -%}
+            {%- assign acc_summary_keys = block.settings.accordion_summary_field | append: ',summary,short_description,subtitle,tagline' -%}
+            {%- assign acc_details_keys = block.settings.accordion_details_field | append: ',description,details,body,content' -%}
+            {%- assign acc_benefits_keys = block.settings.accordion_benefits_field | append: ',benefits,key_benefits,highlights' -%}
+            {%- assign acc_id_prefix = 'pdp-acc-' | append: block.id -%}
+            {%- unless block.settings.accordion_show_heading -%}
+              {%- assign acc_heading = blank -%}
+            {%- endunless -%}
+            {%- render 'ossian-pdp-tab-accordion',
+              items: acc_items,
+              heading: acc_heading,
+              title_keys: acc_title_keys,
+              summary_keys: acc_summary_keys,
+              details_keys: acc_details_keys,
+              benefits_keys: acc_benefits_keys,
+              benefits_label: block.settings.accordion_benefits_label,
+              open_first: block.settings.accordion_open_first,
+              style: block.settings.accordion_style,
+              id_prefix: acc_id_prefix
+            -%}
+            {%- assign mo_kind = nil -%}
+          {%- endif -%}
+
+          {%- case mo_kind -%}
+            {%- when 'entry' -%}
+              {%- render 'ossian-pdp-tab-metaobject',
+                entry: mo_value,
+                layout: block.settings.layout,
+                heading_keys: heading_keys,
+                body_keys: body_keys,
+                list_keys: list_keys,
+                image_keys: image_keys,
+                before_keys: before_keys,
+                after_keys: after_keys,
+                images_per_row: block.settings.metaobject_images_per_row,
+                before_label: before_label,
+                after_label: after_label,
+                check_icon: check_icon
+              -%}
+            {%- when 'entry_list' -%}
+              {%- for mo_entry in mo_value -%}
+                {%- render 'ossian-pdp-tab-metaobject',
+                  entry: mo_entry,
+                  layout: block.settings.layout,
+                  heading_keys: heading_keys,
+                  body_keys: body_keys,
+                  list_keys: list_keys,
+                  image_keys: image_keys,
+                  before_keys: before_keys,
+                  after_keys: after_keys,
+                  images_per_row: block.settings.metaobject_images_per_row,
+                  before_label: before_label,
+                  after_label: after_label,
+                  check_icon: check_icon
+                -%}
+              {%- endfor -%}
+            {%- when 'plain' -%}
+              {%- comment -%} The metafield is a value, not a metaobject reference. {%- endcomment -%}
+              <div class="pdp-tabs__entry">
+                {%- if mo_mf.type == 'rich_text_field' -%}
+                  <div class="pdp-tabs__rte rte">{{ mo_mf | metafield_tag }}</div>
+                {%- elsif mo_mf.type == 'multi_line_text_field' -%}
+                  <div class="pdp-tabs__rte rte">{{ mo_value | newline_to_br }}</div>
+                {%- elsif mo_mf.type == 'single_line_text_field' -%}
+                  <div class="pdp-tabs__rte rte"><p>{{ mo_value }}</p></div>
+                {%- elsif mo_mf.type == 'list.single_line_text_field' or mo_mf.type == 'list.multi_line_text_field' -%}
+                  <ul class="pdp-tabs__features">
+                    {%- for item in mo_value -%}
+                      {%- assign trimmed = item | strip -%}
+                      {%- if trimmed != blank -%}
+                        <li class="pdp-tabs__feature-item">{{ check_icon }}{{ trimmed }}</li>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </ul>
+                {%- elsif mo_mf.type contains 'file_reference' -%}
+                  {%- assign mo_cols = block.settings.metaobject_images_per_row | default: 3 -%}
+                  <ul class="pdp-tabs__meta-images" style="--pdp-meta-cols: {{ mo_cols }};">
+                    {%- if mo_mf.type contains 'list.' -%}
+                      {%- for mo_image in mo_value -%}
+                        {%- assign mo_img = mo_image.preview_image | default: mo_image -%}
+                        {%- if mo_img != blank -%}
+                          <li class="pdp-tabs__meta-image">
+                            {{ mo_img | image_url: width: 800 | image_tag: class: 'pdp-tabs__meta-img', loading: 'lazy', widths: '200,300,400,600,800', alt: mo_img.alt }}
+                          </li>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- else -%}
+                      {%- assign mo_img = mo_value.preview_image | default: mo_value -%}
+                      <li class="pdp-tabs__meta-image">
+                        {{ mo_img | image_url: width: 800 | image_tag: class: 'pdp-tabs__meta-img', loading: 'lazy', widths: '200,300,400,600,800', alt: mo_img.alt }}
+                      </li>
+                    {%- endif -%}
+                  </ul>
+                {%- else -%}
+                  <div class="pdp-tabs__rte rte">{{ mo_mf | metafield_tag }}</div>
+                {%- endif -%}
+              </div>
+          {%- endcase -%}
+
+          {%- if show_split -%}
             {%- assign img_alt = block.settings.image_heading | default: '' -%}
             <div class="pdp-tabs__panel-image">
               {{ block.settings.featured_image | image_url: width: 900 | image_tag: class: 'pdp-tabs__panel-img', loading: 'lazy', alt: img_alt }}
@@ -78,6 +313,7 @@
     {%- endfor -%}
   </div>
 </section>
+{%- endif -%}
 
 {%- if section.settings.show_reviews -%}
   {%- assign p5 = section.settings.five_star_pct | default: 90 -%}
@@ -194,421 +430,36 @@
       });
     });
   });
+
+  var compares = document.querySelectorAll('[data-pdp-compare]');
+  compares.forEach(function(compare) {
+    var range = compare.querySelector('.pdp-compare__range');
+    if (!range) return;
+    var sync = function() {
+      compare.style.setProperty('--pdp-compare-pos', range.value + '%');
+    };
+    range.addEventListener('input', sync);
+    sync();
+  });
+
+  var toggles = document.querySelectorAll('[data-pdp-accordion] .pdp-accordion__toggle');
+  toggles.forEach(function(toggle) {
+    // The editor re-runs this script on section reloads; bind each toggle once.
+    if (toggle.dataset.bound) return;
+    toggle.dataset.bound = 'true';
+    toggle.addEventListener('click', function() {
+      var item = toggle.closest('.pdp-accordion__item');
+      var panel = document.getElementById(toggle.getAttribute('aria-controls'));
+      if (!item || !panel) return;
+      var open = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      item.classList.toggle('is-open', open);
+      panel.hidden = !open;
+    });
+  });
 })();
 </script>
 
-{% stylesheet %}
-
-/* ===== Tab navigation ===== */
-.pdp-tabs {
-  background: #fff;
-  padding: 0 0 48px;
-  border-top: 1px solid #e8e8e8;
-}
-
-.pdp-tabs__inner {
-  padding-block-start: 0;
-}
-.ossian-pdp-tabs-section {
-  padding: 0;
-}
-
-.pdp-tabs__nav {
-  display: flex;
-  gap: 0;
-  border-bottom: 2px solid #e8e8e8;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.pdp-tabs__nav::-webkit-scrollbar { display: none; }
-
-.pdp-tabs__nav-btn {
-  flex-shrink: 0;
-  background: none;
-  border: none;
-  border-bottom: 3px solid transparent;
-  margin-bottom: -2px;
-  padding: 18px 28px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #888;
-  cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
-  font-family: var(--font-body--family, sans-serif);
-  letter-spacing: 0.06em;
-  white-space: nowrap;
-  text-transform: uppercase;
-}
-
-.pdp-tabs__nav-btn:hover { color: #1e3a5f; }
-
-.pdp-tabs__nav-btn--active {
-  color: #1e3a5f;
-  border-bottom-color: #1e3a5f;
-  font-weight: 700;
-}
-
-/* ===== Tab panels ===== */
-.pdp-tabs__panel {
-  padding-block-start: 36px;
-}
-
-.pdp-tabs__panel-text {
-  max-width: 680px;
-}
-
-/* Split layout when featured image is set */
-.pdp-tabs__panel--split {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
-  align-items: stretch;
-}
-
-.pdp-tabs__panel--split .pdp-tabs__panel-text {
-  max-width: none;
-}
-
-.pdp-tabs__panel-image {
-  position: relative;
-  border-radius: 10px;
-  overflow: hidden;
-  min-height: 340px;
-}
-
-.pdp-tabs__panel-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.pdp-tabs__panel-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(10, 25, 55, 0.88) 0%, rgba(10, 25, 55, 0.3) 55%, transparent 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 36px 28px;
-  text-align: center;
-}
-
-.pdp-tabs__panel-overlay-heading {
-  color: #fff;
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  line-height: 1.3;
-  margin: 0 0 20px;
-  font-family: var(--font-heading--family, sans-serif);
-}
-
-.pdp-tabs__panel-overlay-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: #fff;
-  border: 1.5px solid rgba(255, 255, 255, 0.65);
-  padding: 10px 22px;
-  border-radius: 4px;
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  transition: background 0.2s, border-color 0.2s;
-  font-family: var(--font-body--family, sans-serif);
-}
-
-.pdp-tabs__panel-overlay-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: #fff;
-}
-
-/* RTE */
-.pdp-tabs__rte {
-  font-size: 15px;
-  line-height: 1.75;
-  color: #444;
-  font-family: var(--font-body--family, sans-serif);
-}
-
-.pdp-tabs__rte p { margin-block-end: 1em; }
-.pdp-tabs__rte h3, .pdp-tabs__rte h4 {
-  font-weight: 700;
-  color: #1e3a5f;
-  margin-block-end: 0.5em;
-  margin-block-start: 1.25em;
-}
-.pdp-tabs__rte ul, .pdp-tabs__rte ol { padding-inline-start: 20px; margin-block-end: 1em; }
-.pdp-tabs__rte li { margin-block-end: 0.4em; }
-
-/* Feature checklist */
-.pdp-tabs__features {
-  list-style: none;
-  margin: 16px 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.pdp-tabs__feature-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 14px;
-  color: #333;
-  line-height: 1.5;
-  font-family: var(--font-body--family, sans-serif);
-}
-
-.pdp-tabs__feature-check {
-  flex-shrink: 0;
-  margin-top: 2px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #eff6ff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ===== Reviews section ===== */
-.pdp-reviews {
-  background: #fff;
-  padding: 48px 0 64px;
-  border-top: 1px solid #e8e8e8;
-}
-
-.pdp-reviews__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 32px;
-}
-
-.pdp-reviews__title {
-  font-size: 20px;
-  font-weight: 700;
-  color: #1e3a5f;
-  margin: 0;
-  font-family: var(--font-heading--family, sans-serif);
-}
-
-.pdp-reviews__view-all {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: #1e3a5f;
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-  letter-spacing: 0.02em;
-  transition: opacity 0.2s;
-}
-
-.pdp-reviews__view-all:hover { opacity: 0.65; }
-
-/* Summary row */
-.pdp-reviews__summary {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  margin-bottom: 40px;
-  padding: 32px 36px;
-  background: #f8fafc;
-  border-radius: 10px;
-  border: 1px solid #e2eaf3;
-}
-
-.pdp-reviews__agg {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-right: 40px;
-  border-right: 1px solid #dde4ec;
-  margin-right: 40px;
-  min-width: 148px;
-}
-
-.pdp-reviews__agg-num {
-  font-size: 58px;
-  font-weight: 800;
-  color: #1e3a5f;
-  line-height: 1;
-  margin-bottom: 10px;
-  font-family: var(--font-heading--family, sans-serif);
-}
-
-.pdp-reviews__agg-stars {
-  display: flex;
-  gap: 3px;
-  margin-bottom: 8px;
-}
-
-.pdp-reviews__agg-label {
-  font-size: 12px;
-  color: #888;
-  text-align: center;
-}
-
-/* Breakdown bars */
-.pdp-reviews__breakdown {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-  max-width: 360px;
-}
-
-.pdp-reviews__bar-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.pdp-reviews__bar-label {
-  font-size: 12px;
-  color: #666;
-  width: 22px;
-  flex-shrink: 0;
-  text-align: right;
-}
-
-.pdp-reviews__bar-track {
-  flex: 1;
-  height: 7px;
-  background: #e0e8f0;
-  border-radius: 99px;
-  overflow: hidden;
-}
-
-.pdp-reviews__bar-fill {
-  height: 100%;
-  background: #f5a623;
-  border-radius: 99px;
-}
-
-.pdp-reviews__bar-pct {
-  font-size: 12px;
-  color: #888;
-  width: 30px;
-  text-align: right;
-  flex-shrink: 0;
-}
-
-/* Review cards */
-.pdp-reviews__cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.pdp-reviews__card {
-  background: #fff;
-  border: 1px solid #e2eaf3;
-  border-radius: 8px;
-  padding: 20px 22px;
-}
-
-.pdp-reviews__card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.pdp-reviews__card-stars { display: flex; gap: 2px; }
-
-.pdp-reviews__card-name {
-  font-size: 12px;
-  font-weight: 600;
-  color: #888;
-}
-
-.pdp-reviews__card-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: #1e3a5f;
-  margin: 0 0 6px;
-}
-
-.pdp-reviews__card-text {
-  font-size: 13px;
-  color: #555;
-  line-height: 1.65;
-  margin: 0;
-}
-
-/* ===== Responsive ===== */
-@media (max-width: 899px) {
-  .pdp-tabs__panel--split {
-    grid-template-columns: 1fr;
-    gap: 28px;
-  }
-
-  .pdp-tabs__panel-image {
-    min-height: 280px;
-  }
-
-  .pdp-reviews__cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 749px) {
-  .pdp-tabs { padding-bottom: 32px; }
-
-  .pdp-tabs__nav-btn {
-    padding: 12px 14px;
-    font-size: 11px;
-  }
-
-  .pdp-tabs__panel { padding-block-start: 22px; }
-
-  .pdp-reviews { padding: 36px 0 48px; }
-
-  .pdp-reviews__summary {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    padding: 24px;
-  }
-
-  .pdp-reviews__agg {
-    flex-direction: row;
-    align-items: center;
-    gap: 16px;
-    border-right: none;
-    border-bottom: 1px solid #dde4ec;
-    padding-right: 0;
-    padding-bottom: 24px;
-    margin-right: 0;
-    margin-bottom: 24px;
-    min-width: 0;
-    flex-wrap: wrap;
-  }
-
-  .pdp-reviews__agg-num {
-    font-size: 42px;
-    margin-bottom: 0;
-  }
-
-  .pdp-reviews__agg-stars { margin-bottom: 0; }
-
-  .pdp-reviews__breakdown { max-width: 100%; }
-
-  .pdp-reviews__cards { grid-template-columns: 1fr; }
-}
-
-{% endstylesheet %}
 
 {% schema %}
 {
@@ -616,7 +467,9 @@
   "tag": "section",
   "class": "ossian-pdp-tabs-section",
   "enabled_on": {
-    "templates": ["product"]
+    "templates": [
+      "product"
+    ]
   },
   "settings": [
     {
@@ -696,6 +549,115 @@
           "default": "Description"
         },
         {
+          "type": "select",
+          "id": "layout",
+          "label": "Tab layout",
+          "options": [
+            {
+              "value": "text",
+              "label": "Text + image grid"
+            },
+            {
+              "value": "comparison",
+              "label": "Before / after comparison"
+            },
+            {
+              "value": "accordion",
+              "label": "Numbered accordion (ingredients)"
+            }
+          ],
+          "default": "text"
+        },
+        {
+          "type": "header",
+          "content": "Numbered accordion",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "paragraph",
+          "content": "Rows come from a list of metaobjects: either the product metafield below is a list of entries, or it points at one entry with a list field holding the rows.",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "select",
+          "id": "accordion_style",
+          "label": "Style",
+          "options": [
+            { "value": "cards", "label": "Numbered cards" },
+            { "value": "timeline", "label": "Step timeline" }
+          ],
+          "default": "cards",
+          "info": "Step timeline shows the numbers on a connected rail and the benefits list as numbered sub-steps",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "checkbox",
+          "id": "accordion_show_heading",
+          "label": "Show heading",
+          "default": false,
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "text",
+          "id": "accordion_heading",
+          "label": "Heading",
+          "info": "Used when the metaobject has no heading field, e.g. Key Active Ingredients",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "text",
+          "id": "accordion_items_field",
+          "label": "Rows list field key",
+          "default": "items",
+          "info": "List of metaobjects field on the entry, e.g. items",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "text",
+          "id": "accordion_title_field",
+          "label": "Row title field key",
+          "default": "name",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "text",
+          "id": "accordion_summary_field",
+          "label": "Row summary field key",
+          "default": "summary",
+          "info": "Short line shown on every row",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "text",
+          "id": "accordion_details_field",
+          "label": "Row details field key",
+          "default": "description",
+          "info": "Longer copy shown when a row is expanded",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "text",
+          "id": "accordion_benefits_field",
+          "label": "Row benefits field key",
+          "default": "benefits",
+          "info": "List of text values shown as a checklist when a row is expanded",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "text",
+          "id": "accordion_benefits_label",
+          "label": "Benefits label",
+          "default": "Key benefits",
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
+          "type": "checkbox",
+          "id": "accordion_open_first",
+          "label": "Expand first row",
+          "default": true,
+          "visible_if": "{{ block.settings.layout == 'accordion' }}"
+        },
+        {
           "type": "checkbox",
           "id": "use_product_description",
           "label": "Use product description",
@@ -703,10 +665,17 @@
           "info": "Pulls content from the product description in Shopify admin"
         },
         {
+          "type": "checkbox",
+          "id": "description_fallback",
+          "label": "Use product description when empty",
+          "default": false,
+          "info": "Shows the product description when this tab's metafield and content are empty"
+        },
+        {
           "type": "richtext",
           "id": "content",
           "label": "Tab content",
-          "info": "Used if 'Use product description' is off"
+          "info": "Used if 'Use product description' is off. Leave empty when the content comes from a metaobject."
         },
         {
           "type": "textarea",
@@ -716,29 +685,125 @@
         },
         {
           "type": "header",
-          "content": "Featured image (creates split layout)"
+          "content": "Metaobject content"
+        },
+        {
+          "type": "text",
+          "id": "metaobject_metafield",
+          "label": "Product metafield",
+          "info": "Type the namespace.key by hand, e.g. custom.ingredients — do not use the dynamic source picker here"
+        },
+        {
+          "type": "text",
+          "id": "metaobject_label_field",
+          "label": "Heading field key",
+          "default": "label",
+          "info": "Text field rendered as the centred heading. Accepts several comma separated keys, tried in order."
+        },
+        {
+          "type": "text",
+          "id": "metaobject_body_field",
+          "label": "Body field key",
+          "info": "Rich text or multi-line text field rendered as the tab copy, e.g. description"
+        },
+        {
+          "type": "text",
+          "id": "metaobject_list_field",
+          "label": "Checklist field key",
+          "info": "List of text values rendered as a checkmark list, e.g. steps"
+        },
+        {
+          "type": "text",
+          "id": "metaobject_images_field",
+          "label": "Images field key",
+          "default": "image",
+          "info": "Metaobject field holding the file / image list"
+        },
+        {
+          "type": "range",
+          "id": "metaobject_images_per_row",
+          "label": "Images per row (desktop)",
+          "min": 2,
+          "max": 6,
+          "step": 1,
+          "default": 3,
+          "visible_if": "{{ block.settings.layout != 'comparison' }}"
+        },
+        {
+          "type": "header",
+          "content": "Before / after comparison",
+          "visible_if": "{{ block.settings.layout == 'comparison' }}"
+        },
+        {
+          "type": "text",
+          "id": "comparison_before_field",
+          "label": "Before image field key",
+          "info": "Metaobject file field for the before image. Falls back to the first two images of the images field.",
+          "visible_if": "{{ block.settings.layout == 'comparison' }}"
+        },
+        {
+          "type": "text",
+          "id": "comparison_after_field",
+          "label": "After image field key",
+          "visible_if": "{{ block.settings.layout == 'comparison' }}"
+        },
+        {
+          "type": "image_picker",
+          "id": "before_image",
+          "label": "Before image fallback",
+          "info": "Used when the metaobject has no before image",
+          "visible_if": "{{ block.settings.layout == 'comparison' }}"
+        },
+        {
+          "type": "image_picker",
+          "id": "after_image",
+          "label": "After image fallback",
+          "visible_if": "{{ block.settings.layout == 'comparison' }}"
+        },
+        {
+          "type": "text",
+          "id": "before_label",
+          "label": "Before label",
+          "default": "Before",
+          "visible_if": "{{ block.settings.layout == 'comparison' }}"
+        },
+        {
+          "type": "text",
+          "id": "after_label",
+          "label": "After label",
+          "default": "After",
+          "visible_if": "{{ block.settings.layout == 'comparison' }}"
+        },
+        {
+          "type": "header",
+          "content": "Featured image (creates split layout)",
+          "visible_if": "{{ block.settings.layout != 'comparison' }}"
         },
         {
           "type": "image_picker",
           "id": "featured_image",
-          "label": "Featured image"
+          "label": "Featured image",
+          "visible_if": "{{ block.settings.layout != 'comparison' }}"
         },
         {
           "type": "text",
           "id": "image_heading",
           "label": "Image heading",
-          "default": "ENRICHED WITH MARINE SCIENCE"
+          "default": "ENRICHED WITH MARINE SCIENCE",
+          "visible_if": "{{ block.settings.layout != 'comparison' }}"
         },
         {
           "type": "text",
           "id": "image_cta_text",
           "label": "Button text",
-          "default": "Explore Our Science"
+          "default": "Explore Our Science",
+          "visible_if": "{{ block.settings.layout != 'comparison' }}"
         },
         {
           "type": "url",
           "id": "image_cta_url",
-          "label": "Button URL"
+          "label": "Button URL",
+          "visible_if": "{{ block.settings.layout != 'comparison' }}"
         }
       ]
     },
@@ -782,37 +847,47 @@
           "type": "tab",
           "settings": {
             "label": "Description",
-            "use_product_description": true,
-            "image_heading": "ENRICHED WITH MARINE SCIENCE",
-            "image_cta_text": "Explore Our Science"
+            "layout": "accordion",
+            "use_product_description": false,
+            "metaobject_metafield": "custom.description",
+            "metaobject_label_field": "label",
+            "metaobject_body_field": "description",
+            "metaobject_images_field": "image",
+            "metaobject_images_per_row": 3
           }
         },
         {
           "type": "tab",
           "settings": {
             "label": "Ingredients",
-            "content": "<p>Potassium Persulfate, Ammonium Persulfate, Sodium Persulfate, Kaolin, Sodium Silicate, Polyacrylamide, Silica, Marine Minerals Complex, Hydrolysed Keratin, Panthenol (Vitamin B5), Tocopheryl Acetate (Vitamin E).</p><p><em>Free from PPD, Resorcinol and Ammonia.</em></p>"
+            "layout": "accordion",
+            "accordion_heading": "Key Active Ingredients",
+            "metaobject_metafield": "custom.ingredients",
+            "metaobject_label_field": "label",
+            "metaobject_images_field": "image",
+            "metaobject_images_per_row": 3
           }
         },
         {
           "type": "tab",
           "settings": {
             "label": "How To Use",
-            "content": "<p><strong>Step 1:</strong> Mix the product with the developer in a 1:2 ratio.</p><p><strong>Step 2:</strong> Apply to dry, unwashed hair using a brush. Start from the roots and work towards the ends.</p><p><strong>Step 3:</strong> Leave on for 20–40 minutes depending on desired lift level.</p><p><strong>Step 4:</strong> Rinse thoroughly and follow with a toning shampoo and conditioner.</p><p><em>Professional use recommended. Always perform a strand test before full application.</em></p>"
+            "layout": "accordion",
+            "metaobject_metafield": "custom.how_to_use",
+            "metaobject_label_field": "label",
+            "metaobject_images_field": "image",
+            "metaobject_images_per_row": 3
           }
         },
         {
           "type": "tab",
           "settings": {
             "label": "Marine Technology",
-            "content": "<p>Our exclusive Marine Science complex harnesses the power of deep-sea minerals and marine extracts to protect and strengthen hair during the lightening process. Rich in Sea Minerals, the formula reinforces the hair fibre while delivering brilliant, brass-free results.</p>"
-          }
-        },
-        {
-          "type": "tab",
-          "settings": {
-            "label": "Before & After",
-            "content": "<p>See the transformation possible with OSSION Bleach Plus — delivering beautiful, bright results while maintaining hair integrity. Achieve up to 9 levels of lift with minimal damage thanks to our advanced Marine Science formula.</p>"
+            "layout": "accordion",
+            "metaobject_metafield": "custom.marine_technology",
+            "metaobject_label_field": "label",
+            "metaobject_images_field": "images",
+            "metaobject_images_per_row": 3
           }
         },
         {

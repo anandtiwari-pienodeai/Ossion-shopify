@@ -1,0 +1,210 @@
+{%- doc -%}
+  Renders one Ossian blog card and owns its styles. Used by the homepage
+  blog carousel and the blog listing page.
+
+  @param {object} [image] - image object for the card banner
+  @param {string} [tag] - category pill text
+  @param {string} [date] - article published_at or a date string such as "Oct 12, 2024"
+  @param {string} title - card title
+  @param {string} [excerpt] - plain-text excerpt
+  @param {string} [url] - destination; the card is not a link without it
+  @param {number} [read_time] - estimated minutes to read; hidden when empty
+  @param {boolean} [eager] - load the image eagerly (first visible cards)
+
+  @example
+  {% render 'ossian-blog-card', image: article.image, tag: article.tags.first, date: article.published_at, title: article.title, excerpt: article.excerpt, url: article.url %}
+{%- enddoc -%}
+{%- liquid
+  assign card_tag_name = 'div'
+  assign card_loading = 'lazy'
+  if eager
+    assign card_loading = 'eager'
+  endif
+  if url != blank
+    assign card_tag_name = 'a'
+  endif
+-%}
+<{{ card_tag_name }} class="obl-card"{% if url != blank %} href="{{ url }}"{% endif %}>
+  <span class="obl-card__media">
+    {%- if image != blank -%}
+      {{
+        image
+        | image_url: width: 900
+        | image_tag:
+          loading: card_loading,
+          widths: '360,540,720,900',
+          sizes: '(min-width: 1200px) 300px, (min-width: 750px) 45vw, 82vw',
+          alt: ''
+      }}
+    {%- else -%}
+      {{ 'lifestyle-2' | placeholder_svg_tag: 'obl-card__ph' }}
+    {%- endif -%}
+    {%- if tag != blank -%}
+      <span class="obl-card__tag">{{ tag | escape }}</span>
+    {%- endif -%}
+  </span>
+  <span class="obl-card__body">
+    {%- if date != blank or read_time > 0 -%}
+      <span class="obl-card__meta">
+        {%- if date != blank -%}
+          <time class="obl-card__date" datetime="{{ date | date: '%Y-%m-%d' }}">{{ date | date: '%b %d, %Y' }}</time>
+        {%- endif -%}
+        {%- if read_time > 0 -%}
+          <span class="obl-card__read">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            {{ 'content.ossian_blog.read_time' | t: count: read_time }}
+          </span>
+        {%- endif -%}
+      </span>
+    {%- endif -%}
+    {%- if title != blank -%}
+      <h3 class="obl-card__title">{{ title | escape }}</h3>
+    {%- endif -%}
+    {%- if excerpt != blank -%}
+      <span class="obl-card__excerpt">{{ excerpt | escape }}</span>
+    {%- endif -%}
+    {%- if url != blank -%}
+      <span class="obl-card__more">
+        {{ 'content.ossian_blog.read_more' | t }}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+      </span>
+    {%- endif -%}
+  </span>
+</{{ card_tag_name }}>
+
+{% stylesheet %}
+/* Ossian blog card */
+.obl-card {
+  --obl-card-ink: #13233f;
+  --obl-card-navy: #0f2a55;
+  --obl-card-accent: #2f6fd6;
+  --obl-card-muted: #5b6577;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 8px 26px rgba(20, 40, 74, 0.08);
+  color: inherit;
+  text-decoration: none;
+}
+
+.obl-card__media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #dfe6f1;
+}
+
+.obl-card__media img,
+.obl-card__ph {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.obl-card__ph { fill: rgba(30, 58, 95, 0.25); }
+.obl-card:hover .obl-card__media img { transform: scale(1.04); }
+
+.obl-card__tag {
+  position: absolute;
+  top: 14px;
+  inset-inline-start: 14px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  color: var(--obl-card-navy);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.obl-card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 18px 22px 22px;
+}
+
+.obl-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 0 8px;
+}
+
+.obl-card__read {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: var(--obl-card-muted);
+}
+
+.obl-card__read svg { width: 13px; height: 13px; }
+
+.obl-card__date {
+  display: block;
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--obl-card-muted);
+}
+
+.obl-card__title {
+  margin: 0 0 10px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--obl-card-ink);
+  overflow-wrap: break-word;
+}
+
+.obl-card__excerpt {
+  margin: 0 0 16px;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--obl-card-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.obl-card__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--obl-card-navy);
+}
+
+.obl-card__more svg { width: 18px; height: 18px; transition: transform 0.2s ease; }
+.obl-card:hover .obl-card__more svg { transform: translateX(4px); }
+.obl-card:focus-visible { outline: 2px solid var(--obl-card-accent); outline-offset: 3px; }
+[dir='rtl'] .obl-card__more svg { transform: scaleX(-1); }
+
+@media (max-width: 749px) {
+  .obl-card__body { padding: 16px 18px 18px; }
+  .obl-card__title { font-size: 1.05rem; }
+  .obl-card__excerpt { font-size: 0.84rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .obl-card__media img,
+  .obl-card__more svg { transition: none; }
+}
+{% endstylesheet %}

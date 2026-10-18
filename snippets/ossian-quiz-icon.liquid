@@ -1,0 +1,80 @@
+{%- doc -%}
+  Renders one decorative line icon for the Ossion quiz answer cards and UI.
+  Icons inherit `currentColor` and are hidden from assistive technology.
+
+  @param {string} name - Icon name, e.g. 'drop', 'sparkle', 'pattern-wavy'.
+
+  @example
+  {% render 'ossian-quiz-icon', name: 'drop' %}
+{%- enddoc -%}
+
+<svg
+  class="ossion-quiz__icon-svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.5"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  {%- case name -%}
+    {%- when 'pattern-straight' -%}
+      <path d="M8 3v18M12 3v18M16 3v18"/>
+    {%- when 'pattern-wavy' -%}
+      <path d="M8 3c-3 3 3 6 0 9s3 6 0 9M12 3c-3 3 3 6 0 9s3 6 0 9M16 3c-3 3 3 6 0 9s3 6 0 9"/>
+    {%- when 'pattern-curly' -%}
+      <path d="M9 3c-4 1-4 5 0 5s4 4 0 5-4 4 0 5 3 3 0 3M15 3c-4 1-4 5 0 5s4 4 0 5-4 4 0 5 3 3 0 3"/>
+    {%- when 'pattern-coily' -%}
+      <path d="M12 3a2 2 0 1 1 0 3 2 2 0 1 0 0 3 2 2 0 1 1 0 3 2 2 0 1 0 0 3 2 2 0 1 1 0 3 2 2 0 1 0 0 3"/>
+    {%- when 'strand-fine' -%}
+      <path d="M5 20C9 14 13 9 19 4" stroke-width="1"/>
+    {%- when 'strand-medium' -%}
+      <path d="M5 20C9 14 13 9 19 4" stroke-width="2.25"/>
+    {%- when 'strand-coarse' -%}
+      <path d="M5 20C9 14 13 9 19 4" stroke-width="4"/>
+    {%- when 'drop' -%}
+      <path d="M12 3c3.5 4.5 6 7.7 6 11a6 6 0 0 1-12 0c0-3.3 2.5-6.5 6-11Z"/>
+    {%- when 'drop-oil' -%}
+      <path d="M12 3c3.5 4.5 6 7.7 6 11a6 6 0 0 1-12 0c0-3.3 2.5-6.5 6-11Z"/><path d="M9.5 15a2.5 2.5 0 0 0 2.5 2.5"/>
+    {%- when 'flake' -%}
+      <path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9M10 4.5l2 2 2-2M10 19.5l2-2 2 2"/>
+    {%- when 'balance' -%}
+      <circle cx="12" cy="12" r="8"/><path d="M8 12h8"/>
+    {%- when 'sensitive' -%}
+      <path d="M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6l-7-3Z"/><path d="M9.5 12.5c1-1 1.5-1 2.5 0s1.5 1 2.5 0"/>
+    {%- when 'palette' -%}
+      <path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.5-.8 1.5-1.5 0-1.2-1-1.5-1-2.5s.7-1.5 1.7-1.5H17a4 4 0 0 0 4-4c0-4.7-4-8.5-9-8.5Z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/>
+    {%- when 'sparkle' -%}
+      <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3ZM18.5 15.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8Z"/>
+    {%- when 'smooth' -%}
+      <path d="M4 7c4-2 12-2 16 0M4 12c4-2 12-2 16 0M4 17c4-2 12-2 16 0"/>
+    {%- when 'repair' -%}
+      <path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10Z"/>
+    {%- when 'refresh' -%}
+      <path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v4.5h-4.5"/>
+    {%- when 'flame' -%}
+      <path d="M12 21a6 6 0 0 0 6-6c0-4-3-6-4-10-2 2-3 4-3 6-1-1-1.5-2-1.5-3C7 10 6 12.5 6 15a6 6 0 0 0 6 6Z"/>
+    {%- when 'flame-off' -%}
+      <path d="M12 21a6 6 0 0 0 6-6c0-4-3-6-4-10-2 2-3 4-3 6-1-1-1.5-2-1.5-3C7 10 6 12.5 6 15a6 6 0 0 0 6 6Z"/><path d="M4 4l16 16"/>
+    {%- when 'sun' -%}
+      <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+    {%- when 'leaf' -%}
+      <path d="M5 19c0-8 5-14 15-14 0 10-6 15-14 15"/><path d="M5 19 13 11"/>
+    {%- when 'circle' -%}
+      <circle cx="12" cy="12" r="8"/>
+    {%- when 'arrow-right' -%}
+      <path d="M5 12h14M13 6l6 6-6 6"/>
+    {%- when 'arrow-left' -%}
+      <path d="M19 12H5M11 6l-6 6 6 6"/>
+    {%- when 'check' -%}
+      <path d="M5 12.5 10 17l9-10"/>
+    {%- when 'info' -%}
+      <circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>
+    {%- else -%}
+      <circle cx="12" cy="12" r="3"/>
+  {%- endcase -%}
+</svg>

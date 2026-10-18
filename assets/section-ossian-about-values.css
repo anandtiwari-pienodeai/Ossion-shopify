@@ -1,0 +1,61 @@
+/* Styles for sections/ossian-about-values.liquid. Loaded by that section so pages without it don't download them. */
+.oabv {
+  background: var(--oabv-bg, #eef3fb);
+  padding-block: 44px;
+}
+
+.oabv__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 28px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.oabv__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 0;
+}
+
+.oabv__icon {
+  width: 68px;
+  height: 68px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1.5px solid rgba(30, 58, 95, 0.55);
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--oab-navy);
+}
+
+.oabv__icon svg { width: 30px; height: 30px; }
+
+.oabv__title {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--oab-ink);
+}
+
+.oabv__text {
+  margin: 0;
+  max-width: 22ch;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--oab-muted);
+}
+
+@media (max-width: 749px) {
+  .oabv { padding-block: 32px; }
+  .oabv__list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 12px; }
+  .oabv__icon { width: 56px; height: 56px; margin-bottom: 10px; }
+  .oabv__icon svg { width: 24px; height: 24px; }
+  .oabv__title { font-size: 0.9rem; }
+  .oabv__text { font-size: 0.78rem; }
+}

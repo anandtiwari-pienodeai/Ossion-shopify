@@ -1,0 +1,228 @@
+{{ 'section-ossian-you-may-like.css' | asset_url | stylesheet_tag }}
+{% comment %}
+  Section contract.
+  "You May Also Like" product carousel for the product page: eyebrow with side rules,
+  heading, and cards (framed image, title, subtitle, rating, price, round "+" quick add)
+  with prev/next arrows. Products come from the hand-picked list when set, otherwise the
+  current product's first collection, otherwise all products; the current product is left out.
+  @example
+  <!-- templates/product.json → ossian_you_may_like, below the product details -->
+{% endcomment %}
+
+{%- liquid
+  assign current = closest.product
+  if section.settings.products != blank and section.settings.products.size > 0
+    assign source_products = section.settings.products
+  else
+    assign source_collection = section.settings.collection
+    if source_collection == blank and current != blank
+      for c in current.collections
+        if c.handle != 'frontpage' and c.products_count > 1
+          assign source_collection = c
+          break
+        endif
+      endfor
+    endif
+    if source_collection == blank
+      assign source_collection = collections.all
+    endif
+    assign source_products = source_collection.products
+  endif
+  assign max = section.settings.max_products
+-%}
+
+<section class="oyml" id="oyml-{{ section.id }}">
+  <div class="oyml__wrap">
+    <div class="oyml__head">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="oyml__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="oyml__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+    </div>
+
+    <div class="oyml__carousel">
+      <button type="button" class="oyml__arrow oyml__arrow--prev" data-oyml-prev aria-label="{{ 'accessibility.slideshow_previous' | t }}" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+
+      <ul class="oyml__track" role="list" data-oyml-track>
+        {%- liquid
+          # Hand-picked / collection products first, then top up from all products so the row is never short
+          assign shown = 0
+          assign seen = ','
+          if current != blank
+            assign seen = seen | append: current.id | append: ','
+          endif
+        -%}
+        {%- for pool in (1..2) -%}
+          {%- if pool == 1 -%}
+            {%- assign pool_products = source_products -%}
+          {%- else -%}
+            {%- assign pool_products = collections.all.products -%}
+          {%- endif -%}
+          {%- for product in pool_products -%}
+            {%- if shown >= max -%}{%- break -%}{%- endif -%}
+            {%- assign product_key = ',' | append: product.id | append: ',' -%}
+            {%- if seen contains product_key -%}{%- continue -%}{%- endif -%}
+            {%- if section.settings.hide_sold_out and product.available == false -%}{%- continue -%}{%- endif -%}
+            {%- assign seen = seen | append: product.id | append: ',' -%}
+          {%- liquid
+            assign shown = shown | plus: 1
+            assign variant = product.selected_or_first_available_variant
+            assign subtitle = product.metafields.descriptors.subtitle.value
+            assign rating_value = product.metafields.reviews.rating.value
+            assign rating = rating_value.rating | default: rating_value
+            assign rating_count = product.metafields.reviews.rating_count.value | default: 0
+            assign can_quick_add = false
+            if product.variants.size == 1 and variant.available
+              assign can_quick_add = true
+            endif
+          -%}
+          <li class="oyml__item">
+            <article class="oyml-card">
+              <a class="oyml-card__media" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+                {%- if product.featured_image != blank -%}
+                  {{
+                    product.featured_image
+                    | image_url: width: 800
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '300,450,600,800',
+                      sizes: '(min-width: 990px) 25vw, (min-width: 750px) 40vw, 75vw',
+                      alt: ''
+                  }}
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'oyml-card__ph' }}
+                {%- endif -%}
+              </a>
+
+              <div class="oyml-card__body">
+                <h3 class="oyml-card__title"><a href="{{ product.url }}">{{ product.title | escape }}</a></h3>
+                {%- if subtitle != blank -%}
+                  <p class="oyml-card__sub">{{ subtitle | escape }}</p>
+                {%- endif -%}
+                {%- if rating != blank and rating_count > 0 -%}
+                  {%- assign rating_rounded = rating | times: 2 | round | divided_by: 2.0 -%}
+                  <p class="oyml-card__rating">
+                    <span class="oyml-card__stars" style="--rating: {{ rating_rounded }};" aria-hidden="true"></span>
+                    <span class="oyml-card__rating-value">{{ rating | round: 1 }}</span>
+                    <span class="oyml-card__rating-count">({{ rating_count }} {{ 'content.ossian_ymal.reviews' | t }})</span>
+                    <span class="visually-hidden">{{ 'content.ossian_ymal.rating_label' | t: rating: rating, count: rating_count }}</span>
+                  </p>
+                {%- endif -%}
+
+                <div class="oyml-card__foot">
+                  <span class="oyml-card__price">
+                    {{ variant.price | default: product.price | money }}
+                    {%- if variant.compare_at_price > variant.price -%}
+                      <s class="oyml-card__compare">{{ variant.compare_at_price | money }}</s>
+                    {%- endif -%}
+                  </span>
+
+                  {%- if can_quick_add -%}
+                    {%- assign form_id = 'OymlAtc-' | append: section.id | append: '-' | append: product.id -%}
+                    <product-form-component
+                      class="oyml-card__atc"
+                      data-section-id="{{ section.id }}"
+                      data-product-id="{{ product.id }}"
+                      data-product-url="{{ product.url }}"
+                      on:submit="/handleSubmit"
+                      data-quantity-default="1"
+                      data-quantity-error-max="{{ 'products.product.quantity_error_max' | t }}"
+                    >
+                      <div class="visually-hidden" aria-live="assertive" role="status" aria-atomic="true" ref="liveRegion"></div>
+                      {%- form 'product', product, id: form_id, data-type: 'add-to-cart-form' -%}
+                        <input type="hidden" name="id" value="{{ variant.id }}" ref="variantId">
+                        <input type="hidden" name="quantity" value="1">
+                        <add-to-cart-component ref="addToCartButtonContainer">
+                          <button
+                            type="submit"
+                            name="add"
+                            ref="addToCartButton"
+                            on:click="/handleClick"
+                            class="oyml-card__plus"
+                            aria-label="{{ 'products.product.add_to_cart' | t }}: {{ product.title | escape }}"
+                          >
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                          </button>
+                        </add-to-cart-component>
+                      {%- endform -%}
+                    </product-form-component>
+                  {%- else -%}
+                    <a class="oyml-card__plus" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                  {%- endif -%}
+                </div>
+              </div>
+            </article>
+          </li>
+          {%- endfor -%}
+        {%- endfor -%}
+      </ul>
+
+      <button type="button" class="oyml__arrow oyml__arrow--next" data-oyml-next aria-label="{{ 'accessibility.slideshow_next' | t }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var root = document.getElementById('oyml-{{ section.id }}');
+    if (!root) return;
+    var track = root.querySelector('[data-oyml-track]');
+    var prev = root.querySelector('[data-oyml-prev]');
+    var next = root.querySelector('[data-oyml-next]');
+    if (!track) return;
+    var rtl = getComputedStyle(track).direction === 'rtl';
+
+    function step() {
+      var items = track.children;
+      return items.length > 1 ? Math.abs(items[1].offsetLeft - items[0].offsetLeft) : track.clientWidth;
+    }
+    function update() {
+      var max = track.scrollWidth - track.clientWidth;
+      var pos = Math.abs(track.scrollLeft);
+      root.classList.toggle('oyml--static', max <= 2);
+      if (prev) prev.disabled = pos <= 2;
+      if (next) next.disabled = pos >= max - 2;
+    }
+    function move(dir) {
+      var target = (Math.round(Math.abs(track.scrollLeft) / step()) + dir) * step();
+      track.scrollTo({ left: rtl ? -target : target, behavior: 'smooth' });
+    }
+    if (prev) prev.addEventListener('click', function () { move(-1); });
+    if (next) next.addEventListener('click', function () { move(1); });
+    var ticking = false;
+    track.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { ticking = false; update(); });
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+</script>
+
+
+{% schema %}
+{
+  "name": "Ossian You May Also Like",
+  "tag": "div",
+  "class": "section-ossian-you-may-like",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Complete Your Hair Care Routine" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "You May Also Like" },
+    { "type": "header", "content": "Products" },
+    { "type": "product_list", "id": "products", "label": "Hand-picked products", "limit": 12, "info": "Leave empty to show products from this product's collection. Short lists are topped up with other products." },
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "Used when no products are hand-picked. Defaults to the current product's collection, then all products." },
+    { "type": "range", "id": "max_products", "label": "Number of products", "min": 2, "max": 12, "step": 1, "default": 8 },
+    { "type": "checkbox", "id": "hide_sold_out", "label": "Hide sold-out products", "default": true }
+  ],
+  "presets": [{ "name": "Ossian You May Also Like" }]
+}
+{% endschema %}

@@ -13,6 +13,13 @@
     assign scale_max = product.metafields.reviews.rating.value.scale_max | default: 5
     assign rating_count = product.metafields.reviews.rating_count | default: 3
   endif
+
+  # Editor-only test rating for layout checks before real reviews exist; never rendered to shoppers.
+  if rating == blank and request.design_mode and block_settings.editor_test_rating and product != blank
+    assign rating = product.id | modulo: 4 | times: 0.1 | plus: 4.5 | round: 1
+    assign scale_max = 5
+    assign rating_count = product.id | modulo: 37 | plus: 12
+  endif
 -%}
 
 {%- if rating != blank -%}
@@ -197,6 +204,13 @@
       "id": "show_number",
       "label": "t:settings.review_count",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "editor_test_rating",
+      "label": "t:settings.editor_test_rating",
+      "info": "t:content.editor_test_rating_info",
+      "default": false
     },
     {
       "type": "select",

@@ -1,0 +1,233 @@
+{%- doc -%}
+  Product info accordion under the buy buttons (Description, Shade Description, How To Use,
+  Ingredients, Formula Is Free From, Weight). Up to six rows, each a heading plus rich text
+  that is usually connected to a product metafield. Rows whose content is empty are hidden,
+  so one template works for products that only fill some of the fields.
+{%- enddoc -%}
+{%- liquid
+  # Label + value lines (Manufactured By, Country of Origin, Use Before) shown under row 1.
+  capture detail_lines
+    for d in (1..3)
+      assign label_key = 'detail_label_' | append: d
+      assign value_key = 'detail_value_' | append: d
+      assign detail_label = block.settings[label_key] | escape
+      assign detail_value = block.settings[value_key] | strip | escape
+      if detail_label != blank and detail_value != blank
+        echo '<p class="ossian-pdp-info__detail"><strong>' | append: detail_label | append: '</strong> ' | append: detail_value | append: '</p>'
+      endif
+    endfor
+  endcapture
+  assign detail_lines = detail_lines | strip
+
+  assign has_rows = false
+  for i in (1..6)
+    assign heading_key = 'heading_' | append: i
+    assign content_key = 'content_' | append: i
+    assign content_text = block.settings[content_key] | strip_html | strip
+    if i == 1 and detail_lines != blank
+      assign content_text = detail_lines
+    endif
+    if block.settings[heading_key] != blank and content_text != blank
+      assign has_rows = true
+      break
+    endif
+  endfor
+-%}
+{%- if has_rows or request.design_mode -%}
+  <div class="ossian-pdp-info spacing-style" style="{% render 'spacing-style', settings: block.settings %}" {{ block.shopify_attributes }}>
+    {%- for i in (1..6) -%}
+      {%- liquid
+        assign heading_key = 'heading_' | append: i
+        assign content_key = 'content_' | append: i
+        assign row_heading = block.settings[heading_key]
+        assign row_content = block.settings[content_key]
+        assign content_text = row_content | strip_html | strip
+        assign row_details = ''
+        if forloop.first
+          assign row_details = detail_lines
+        endif
+      -%}
+      {%- if row_heading != blank and content_text != blank or row_heading != blank and row_details != blank -%}
+        <details class="ossian-pdp-info__row"{% if block.settings.open_first and forloop.first %} open{% endif %}>
+          <summary class="ossian-pdp-info__summary">
+            <span class="ossian-pdp-info__heading">{{ row_heading | escape }}</span>
+            <span class="ossian-pdp-info__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </summary>
+          <div class="ossian-pdp-info__content rte">
+            {%- if content_text != blank -%}{{ row_content }}{%- endif -%}
+            {%- if row_details != blank -%}
+              <div class="ossian-pdp-info__details">{{ row_details }}</div>
+            {%- endif -%}
+          </div>
+        </details>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .ossian-pdp-info {
+    width: 100%;
+    border-block-start: 1px solid #d9dee8;
+  }
+
+  .ossian-pdp-info__row {
+    border-block-end: 1px solid #d9dee8;
+  }
+
+  .ossian-pdp-info__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 54px;
+    padding-block: 12px;
+    cursor: pointer;
+    list-style: none;
+    color: #0f1f3d;
+  }
+
+  .ossian-pdp-info__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ossian-pdp-info__summary:focus-visible {
+    outline: 2px solid #1e3a8a;
+    outline-offset: 2px;
+  }
+
+  .ossian-pdp-info__heading {
+    min-width: 0;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .ossian-pdp-info__icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    transition: transform var(--animation-speed, 0.2s) var(--animation-easing, ease);
+  }
+
+  .ossian-pdp-info__row[open] .ossian-pdp-info__icon {
+    transform: rotate(180deg);
+  }
+
+  .ossian-pdp-info__content {
+    padding-block: 4px 24px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: #1f2937;
+    overflow-wrap: anywhere;
+  }
+
+  /* Merchant rich text: bold sub-heading, spaced paragraphs, dash bullets. */
+  .ossian-pdp-info__content :is(h1, h2, h3, h4, h5, h6) {
+    margin-block: 0 12px;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: #0f1f3d;
+  }
+
+  .ossian-pdp-info__content :is(p, ul, ol) {
+    margin-block: 0 20px;
+  }
+
+  .ossian-pdp-info__content ul {
+    padding-inline-start: 0;
+    list-style: none;
+  }
+
+  .ossian-pdp-info__content ul > li::before {
+    content: '- ';
+  }
+
+  .ossian-pdp-info__content ol {
+    padding-inline-start: 20px;
+  }
+
+  .ossian-pdp-info__content :is(strong, b) {
+    font-weight: 700;
+    color: #0f1f3d;
+  }
+
+  .ossian-pdp-info__content :is(p, ul, ol, div):last-child,
+  .ossian-pdp-info__content .metafield-rich_text_field > :last-child {
+    margin-block-end: 0;
+  }
+
+  .ossian-pdp-info__details {
+    display: grid;
+    gap: 16px;
+    margin-block-start: 24px;
+  }
+
+  .ossian-pdp-info__content > .ossian-pdp-info__details:first-child {
+    margin-block-start: 0;
+  }
+
+  .ossian-pdp-info__details .ossian-pdp-info__detail {
+    margin: 0;
+  }
+
+  @media (max-width: 749px) {
+    .ossian-pdp-info__heading {
+      font-size: 16px;
+    }
+
+    .ossian-pdp-info__summary {
+      min-height: 48px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ossian-pdp-info__icon {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Info Accordion",
+  "tag": null,
+  "settings": [
+    { "type": "paragraph", "content": "Rows with empty content are hidden. Connect each row's content to a product metafield with the dynamic source button." },
+    { "type": "checkbox", "id": "open_first", "label": "Open first row by default", "default": false },
+    { "type": "header", "content": "Row 1" },
+    { "type": "text", "id": "heading_1", "label": "Heading", "default": "Description" },
+    { "type": "richtext", "id": "content_1", "label": "Content" },
+    { "type": "paragraph", "content": "Label and value lines shown at the end of row 1. Lines with an empty value are hidden." },
+    { "type": "text", "id": "detail_label_1", "label": "Detail 1 label", "default": "Manufactured By:" },
+    { "type": "text", "id": "detail_value_1", "label": "Detail 1 value" },
+    { "type": "text", "id": "detail_label_2", "label": "Detail 2 label", "default": "Country of Origin:" },
+    { "type": "text", "id": "detail_value_2", "label": "Detail 2 value" },
+    { "type": "text", "id": "detail_label_3", "label": "Detail 3 label", "default": "Use Before:" },
+    { "type": "text", "id": "detail_value_3", "label": "Detail 3 value" },
+    { "type": "header", "content": "Row 2" },
+    { "type": "text", "id": "heading_2", "label": "Heading", "default": "Shade Description" },
+    { "type": "richtext", "id": "content_2", "label": "Content" },
+    { "type": "header", "content": "Row 3" },
+    { "type": "text", "id": "heading_3", "label": "Heading", "default": "How To Use" },
+    { "type": "richtext", "id": "content_3", "label": "Content" },
+    { "type": "header", "content": "Row 4" },
+    { "type": "text", "id": "heading_4", "label": "Heading", "default": "Ingredients" },
+    { "type": "richtext", "id": "content_4", "label": "Content" },
+    { "type": "header", "content": "Row 5" },
+    { "type": "text", "id": "heading_5", "label": "Heading", "default": "Formula Is Free From" },
+    { "type": "richtext", "id": "content_5", "label": "Content" },
+    { "type": "header", "content": "Row 6" },
+    { "type": "text", "id": "heading_6", "label": "Heading", "default": "Weight" },
+    { "type": "richtext", "id": "content_6", "label": "Content" },
+    { "type": "header", "content": "Padding" },
+    { "type": "range", "id": "padding-block-start", "label": "Top", "min": 0, "max": 40, "step": 1, "unit": "px", "default": 8 },
+    { "type": "range", "id": "padding-block-end", "label": "Bottom", "min": 0, "max": 40, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding-inline-start", "label": "Left", "min": 0, "max": 40, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding-inline-end", "label": "Right", "min": 0, "max": 40, "step": 1, "unit": "px", "default": 0 }
+  ],
+  "presets": [{ "name": "PDP Info Accordion" }]
+}
+{% endschema %}

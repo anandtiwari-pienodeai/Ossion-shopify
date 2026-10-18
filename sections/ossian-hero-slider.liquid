@@ -1,4 +1,20 @@
-<div class="hero-carousel" id="hero-carousel-{{ section.id }}" data-autoplay="{{ section.settings.autoplay }}" data-speed="{{ section.settings.autoplay_speed }}">
+{%- liquid
+  comment
+    Mobile "fit image": the banner takes the first slide's mobile image proportions so it
+    is shown whole; other slides are fitted inside that frame (never cropped) and the
+    height stays the same while the carousel rotates.
+  endcomment
+  assign first_slide = section.blocks.first
+  assign first_mobile = first_slide.settings.image_mobile | default: first_slide.settings.image
+  assign mobile_ratio = first_mobile.aspect_ratio | default: 0.8
+-%}
+<div
+  class="hero-carousel{% if section.settings.mobile_fit_image %} hero-carousel--mobile-fit{% endif %}"
+  id="hero-carousel-{{ section.id }}"
+  data-autoplay="{{ section.settings.autoplay }}"
+  data-speed="{{ section.settings.autoplay_speed }}"
+  style="--hero-height: {{ section.settings.banner_height }}vh; --hero-height-mobile: {{ section.settings.banner_height_mobile }}vh; --hero-ratio-mobile: {{ mobile_ratio }};"
+>
   <div class="hero-carousel__track">
     {%- for block in section.blocks -%}
       {%- liquid
@@ -6,6 +22,17 @@
         unless slide_link_label != blank
           assign slide_link_label = 'Slide ' | append: forloop.index
         endunless
+
+        comment
+          Resolve the two image pickers up front so a slide works with either one
+          filled in: mobile-only slides fall back to the mobile file on desktop,
+          and desktop-only slides keep using the desktop file on mobile.
+        endcomment
+        assign desktop_image = block.settings.image
+        assign mobile_image = block.settings.image_mobile
+        if desktop_image == blank
+          assign desktop_image = mobile_image
+        endif
       -%}
       <div class="hero-carousel__slide{% if forloop.first %} is-active{% endif %}" {{ block.shopify_attributes }}>
         {%- if block.settings.link != blank -%}
@@ -33,7 +60,7 @@
               <source src="{{ source.url }}" type="{{ source.mime_type }}">
             {%- endfor -%}
           </video>
-        {%- elsif block.settings.image != blank -%}
+        {%- elsif desktop_image != blank -%}
           {%- liquid
             if forloop.first
               assign img_loading = 'eager'
@@ -43,20 +70,30 @@
               assign img_fetchpriority = 'low'
             endif
           -%}
+          {%- comment -%}
+            Only the first slide's image loads with the page (it is the LCP image). Later slides
+            carry their sources in data-* attributes and the script below swaps them in after the
+            page has loaded, or just before the slide is shown, so they don't compete with slide 1.
+          {%- endcomment -%}
+          {%- capture slide_picture -%}
           <picture>
-            {%- if block.settings.image_mobile != blank -%}
+            {%- if mobile_image != blank and mobile_image != desktop_image -%}
               <source
                 media="(max-width: 768px)"
                 srcset="
-                  {{- block.settings.image_mobile | image_url: width: 400 }} 400w,
-                  {{ block.settings.image_mobile | image_url: width: 700 }} 700w,
-                  {{ block.settings.image_mobile | image_url: width: 900 }} 900w
+                  {{- mobile_image | image_url: width: 400 }} 400w,
+                  {{ mobile_image | image_url: width: 600 }} 600w,
+                  {{ mobile_image | image_url: width: 750 }} 750w,
+                  {{ mobile_image | image_url: width: 900 }} 900w,
+                  {{ mobile_image | image_url: width: 1200 }} 1200w
                 "
                 sizes="100vw"
+                width="{{ mobile_image.width }}"
+                height="{{ mobile_image.height }}"
               >
             {%- endif -%}
             {{
-              block.settings.image
+              desktop_image
               | image_url: width: 1920
               | image_tag:
                 class: 'hero-carousel__media',
@@ -66,6 +103,12 @@
                 sizes: '100vw'
             }}
           </picture>
+          {%- endcapture -%}
+          {%- if forloop.first -%}
+            {{ slide_picture }}
+          {%- else -%}
+            {{ slide_picture | replace: ' srcset=', ' data-srcset=' | replace: ' src=', ' data-src=' }}
+          {%- endif -%}
         {%- else -%}
           <div class="hero-carousel__placeholder">{{ 'lifestyle-1' | placeholder_svg_tag: 'hero-carousel__media hero-carousel__placeholder-svg' }}</div>
         {%- endif -%}
@@ -100,8 +143,25 @@
   var dots   = el.querySelectorAll('.hero-carousel__dot');
   var current = 0;
   var autoplay = el.dataset.autoplay === 'true';
-  var speed = parseInt(el.dataset.speed) || 5000;
+  var speed = parseInt(el.dataset.speed) || 3000;
   var timer;
+
+  /* Swap deferred (data-*) image sources in for a slide; see the markup comment above */
+  function loadSlide(slide) {
+    if (!slide) return;
+    slide.querySelectorAll('[data-srcset]').forEach(function (node) {
+      node.setAttribute('srcset', node.getAttribute('data-srcset'));
+      node.removeAttribute('data-srcset');
+    });
+    slide.querySelectorAll('[data-src]').forEach(function (node) {
+      node.setAttribute('src', node.getAttribute('data-src'));
+      node.removeAttribute('data-src');
+    });
+  }
+
+  function loadAllSlides() { slides.forEach(loadSlide); }
+  if (document.readyState === 'complete') loadAllSlides();
+  else window.addEventListener('load', loadAllSlides, { once: true });
 
   function goTo(n) {
     var outgoing = slides[current];
@@ -113,6 +173,8 @@
     current = (n + slides.length) % slides.length;
 
     var incoming = slides[current];
+    loadSlide(incoming);
+    loadSlide(slides[(current + 1) % slides.length]);
     incoming.classList.add('is-active');
     if (dots[current]) dots[current].classList.add('is-active');
     var nv = incoming.querySelector('video');
@@ -131,6 +193,24 @@
     dot.addEventListener('click', function () { stop(); goTo(parseInt(dot.dataset.index)); start(); });
   });
 
+  /* Swipe left/right (the arrow + dots bar is hidden on mobile) */
+  var touchStartX = null;
+  var touchStartY = null;
+  el.addEventListener('touchstart', function (event) {
+    touchStartX = event.touches[0].clientX;
+    touchStartY = event.touches[0].clientY;
+  }, { passive: true });
+  el.addEventListener('touchend', function (event) {
+    if (touchStartX === null) return;
+    var dx = event.changedTouches[0].clientX - touchStartX;
+    var dy = event.changedTouches[0].clientY - touchStartY;
+    touchStartX = null;
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+    stop();
+    goTo(dx < 0 ? current + 1 : current - 1);
+    start();
+  }, { passive: true });
+
   var firstVideo = slides[0] && slides[0].querySelector('video');
   if (firstVideo) firstVideo.play().catch(function () {});
   start();
@@ -146,12 +226,16 @@
   line-height: 0;
 }
 
+/* Fixed height: every slide fills the same frame, so the banner never resizes */
 .hero-carousel__track {
   position: relative;
   width: 100%;
+  height: var(--hero-height, 80vh);
 }
 
 .hero-carousel__slide {
+  position: absolute;
+  inset: 0;
   display: none;
 }
 
@@ -159,21 +243,29 @@
   display: block;
 }
 
+.hero-carousel__slide picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .hero-carousel__media {
   width: 100%;
-  height: auto;
-  max-height: 90vh;
+  height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
 }
 
 .hero-carousel__link {
   display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .hero-carousel__placeholder {
   width: 100%;
-  height: 60vh;
+  height: 100%;
   background: #111;
   display: flex;
   align-items: center;
@@ -259,24 +351,22 @@
 }
 
 @media (max-width: 768px) {
-  .hero-carousel__media {
-    max-height: 60vh;
+  .hero-carousel__track {
+    height: var(--hero-height-mobile, 50vh);
   }
 
+  .hero-carousel--mobile-fit .hero-carousel__track {
+    height: auto;
+    aspect-ratio: var(--hero-ratio-mobile, 0.8);
+  }
+
+  .hero-carousel--mobile-fit .hero-carousel__media {
+    object-fit: contain;
+  }
+
+  /* No arrow + dots bar on mobile; slides change by swipe and autoplay */
   .hero-carousel__controls {
-    bottom: 14px;
-    padding: 5px 8px;
-    gap: 4px;
-  }
-
-  .hero-carousel__arrow {
-    width: 24px;
-    height: 24px;
-  }
-
-  .hero-carousel__dot::after {
-    width: 7px;
-    height: 7px;
+    display: none;
   }
 }
 {% endstylesheet %}
@@ -303,7 +393,36 @@
         { "value": "5000", "label": "5 seconds" },
         { "value": "7000", "label": "7 seconds" }
       ],
-      "default": "5000"
+      "default": "3000"
+    },
+    {
+      "type": "range",
+      "id": "banner_height",
+      "label": "Banner height (desktop)",
+      "info": "Percentage of the screen height. All slides use this height; images are cropped to fill it.",
+      "min": 40,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "banner_height_mobile",
+      "label": "Banner height (mobile)",
+      "info": "Used when \"Show full image on mobile\" is off.",
+      "min": 40,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 50
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_fit_image",
+      "label": "Show full image on mobile",
+      "info": "Banner follows the first slide's mobile image proportions, so images are never cropped. Upload all mobile slides at the same size.",
+      "default": true
     }
   ],
   "blocks": [
@@ -324,13 +443,14 @@
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Desktop image"
+          "label": "Desktop image",
+          "info": "Shown at 769px and above. Use a wide crop — around 1920x800."
         },
         {
           "type": "image_picker",
           "id": "image_mobile",
           "label": "Mobile image (optional)",
-          "info": "Shown below 768px width. If left blank, the desktop image is used on mobile too."
+          "info": "Shown at 768px and below. Use a taller crop — around 900x1100. If left blank, the desktop image is used on mobile too."
         },
         {
           "type": "video",

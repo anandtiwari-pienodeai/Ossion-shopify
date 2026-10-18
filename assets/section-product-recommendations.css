@@ -1,0 +1,13 @@
+/* Styles for sections/product-recommendations.liquid. Loaded by that section so pages without it don't download them. */
+  /* Heading row above the recommendations grid: centred, with breathing room on top */
+  .product-recommendations .section-resource-list__content {
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Keep the h3 preset from overflowing on phones */
+  @media screen and (max-width: 749px) {
+    .product-recommendations .section-resource-list__content .text-block :is(h1, h2, h3, h4, h5, h6) {
+      font-size: clamp(1.25rem, 5vw, 1.75rem);
+    }
+  }

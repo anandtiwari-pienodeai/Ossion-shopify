@@ -1,0 +1,60 @@
+{%- doc -%}
+  Renders one selectable Ossion quiz answer card: a native radio input wrapped
+  in its label, so the whole card is clickable and keyboard navigation follows
+  radio-group behaviour. Styles live in assets/section-ossian-quiz.css.
+
+  @param {string} question - Question id used as the radio group name.
+  @param {string} value - Answer value submitted for the question.
+  @param {string} label - Visible answer text.
+  @param {string} [hint] - Optional supporting line under the label.
+  @param {string} [icon] - Icon name for ossian-quiz-icon.
+  @param {object} [image] - Optional image shown instead of the icon (tile cards).
+  @param {string} [reason] - Recommendation reason carried to the result engine.
+  @param {string} id_prefix - Unique prefix (section id) for the input id.
+
+  @example
+  {% render 'ossian-quiz-answer', question: 'scalp_condition', value: 'normal', label: 'Normal – Balanced', hint: 'Not too oily, not too dry', icon: 'balance', id_prefix: section.id %}
+{%- enddoc -%}
+
+{%- assign input_id = 'OssionQuiz-' | append: id_prefix | append: '-' | append: question | append: '-' | append: value -%}
+
+<label
+  class="ossion-quiz__answer{% if image != blank %} ossion-quiz__answer--image{% endif %}"
+  for="{{ input_id }}"
+>
+  <input
+    class="ossion-quiz__answer-input"
+    type="radio"
+    id="{{ input_id }}"
+    name="{{ question }}"
+    value="{{ value }}"
+    {% if reason != blank %}
+      data-reason="{{ reason | escape }}"
+    {% endif %}
+  >
+  <span class="ossion-quiz__answer-media" aria-hidden="true">
+    {%- if image != blank -%}
+      {{
+        image
+        | image_url: width: 480
+        | image_tag:
+          class: 'ossion-quiz__answer-img',
+          widths: '200,320,480',
+          sizes: '(min-width: 990px) 200px, 45vw',
+          loading: 'lazy',
+          alt: ''
+      }}
+    {%- else -%}
+      <span class="ossion-quiz__answer-icon">{% render 'ossian-quiz-icon', name: icon %}</span>
+    {%- endif -%}
+  </span>
+  <span class="ossion-quiz__answer-text">
+    <span class="ossion-quiz__answer-label">{{ label }}</span>
+    {%- if hint != blank -%}
+      <span class="ossion-quiz__answer-hint">{{ hint }}</span>
+    {%- endif -%}
+  </span>
+  <span class="ossion-quiz__answer-check" aria-hidden="true">
+    {%- render 'ossian-quiz-icon', name: 'check' -%}
+  </span>
+</label>

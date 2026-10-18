@@ -1,0 +1,599 @@
+/* Styles for sections/main-collection.liquid. Loaded by that section so pages without it don't download them. */
+  .ossian-plp {
+    width: 100%;
+    position: relative;
+    padding-block: var(--ossian-plp-padding-block-start) var(--ossian-plp-padding-block-end);
+  }
+
+  /* ── Toolbar ── */
+  .ossian-plp__toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-inline: var(--page-margin, 16px);
+    padding-block-end: 16px;
+  }
+
+  .ossian-plp--full-width .ossian-plp__toolbar {
+    padding-inline: 16px;
+  }
+
+  .ossian-plp__filter-toggle {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    border: 1.5px solid #d0d0d0;
+    border-radius: 8px;
+    padding: 9px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1e3a5f;
+    cursor: pointer;
+    font-family: var(--font-body--family, sans-serif);
+  }
+
+  .ossian-plp__filter-toggle svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .ossian-plp__filter-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding-inline: 4px;
+    border-radius: 999px;
+    background: #1e3a5f;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .ossian-plp__count {
+    margin: 0;
+    font-size: 14px;
+    color: #444;
+    font-family: var(--font-body--family, sans-serif);
+  }
+
+  .ossian-plp__sort-select {
+    font-size: 13px;
+    font-family: var(--font-body--family, sans-serif);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1.5px solid #d0d0d0;
+    background: #fff;
+    color: #1e3a5f;
+    cursor: pointer;
+  }
+
+  /* ── Styled sort menu (enhanced by ossian-plp.js) ── */
+  .ossian-plp__sort {
+    position: relative;
+  }
+
+  .ossian-plp__sort.is-enhanced .ossian-plp__sort-select {
+    display: none;
+  }
+
+  .ossian-plp__sort-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 42px;
+    padding: 0 14px 0 16px;
+    border: 1.5px solid #d6dde8;
+    border-radius: 10px;
+    background: #fff;
+    color: #1e3a5f;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .ossian-plp__sort-trigger:hover,
+  .ossian-plp__sort-trigger[aria-expanded='true'] {
+    border-color: #1e3a5f;
+  }
+
+  .ossian-plp__sort-trigger:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(47 111 214 / 0.3);
+    border-color: #1e3a5f;
+  }
+
+  .ossian-plp__sort-label {
+    color: #6b7587;
+  }
+
+  .ossian-plp__sort-value {
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .ossian-plp__sort-chevron {
+    width: 16px;
+    height: 16px;
+    margin-inline-start: 4px;
+    transition: transform 0.2s ease;
+  }
+
+  .ossian-plp__sort-trigger[aria-expanded='true'] .ossian-plp__sort-chevron {
+    transform: rotate(180deg);
+  }
+
+  .ossian-plp__sort-list {
+    position: absolute;
+    top: calc(100% + 8px);
+    inset-inline-end: 0;
+    z-index: 30;
+    min-width: 240px;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    border: 1px solid #e3e8f1;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 18px 40px rgb(20 40 74 / 0.16);
+    outline: none;
+    animation: ossian-sort-in 0.16s ease-out;
+  }
+
+  @keyframes ossian-sort-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .ossian-plp__sort-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #13233f;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .ossian-plp__sort-option:hover,
+  .ossian-plp__sort-option.is-active {
+    background: #eef3fb;
+  }
+
+  .ossian-plp__sort-option[aria-selected='true'] {
+    font-weight: 700;
+    color: #1e3a5f;
+  }
+
+  .ossian-plp__sort-check {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    visibility: hidden;
+    color: #2f6fd6;
+  }
+
+  .ossian-plp__sort-option[aria-selected='true'] .ossian-plp__sort-check {
+    visibility: visible;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ossian-plp__sort-label {
+      display: none;
+    }
+
+    .ossian-plp__sort-list {
+      min-width: min(260px, calc(100vw - 32px));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ossian-plp__sort-list { animation: none; }
+    .ossian-plp__sort-trigger,
+    .ossian-plp__sort-chevron { transition: none; }
+  }
+
+  /* ── Body: filters + grid, flexbox (no CSS grid) ── */
+  .ossian-plp__body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 24px;
+    padding-inline: var(--page-margin, 16px);
+  }
+
+  .ossian-plp--full-width .ossian-plp__body {
+    padding-inline: 16px;
+  }
+
+  .ossian-plp__backdrop {
+    display: none;
+  }
+
+  /* ── Filter sidebar ── */
+  .ossian-plp__filters {
+    flex: 0 0 220px;
+    width: 220px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    font-family: var(--font-body--family, sans-serif);
+  }
+
+  .ossian-plp__filters-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px 14px;
+    border-bottom: 1.5px solid #e2e8f0;
+  }
+
+  .ossian-plp__filters-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #1e3a5f;
+    letter-spacing: -0.01em;
+  }
+
+  .ossian-plp__filters-close {
+    display: none;
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #1e3a5f;
+  }
+
+  .ossian-plp__filters-close svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .ossian-plp__filters-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ossian-plp__filter-group {
+    padding: 14px 18px 16px;
+    border-bottom: 1.5px solid #e2e8f0;
+  }
+
+  .ossian-plp__filter-group:last-of-type {
+    border-bottom: none;
+  }
+
+  .ossian-plp__filter-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding-block: 4px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e3a5f;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .ossian-plp__filter-title::-webkit-details-marker {
+    display: none;
+  }
+
+  .ossian-plp__filter-title:focus-visible {
+    outline: 2px solid #2f6fd6;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .ossian-plp__filter-active-count {
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: #1e3a5f;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .ossian-plp__filter-chevron {
+    width: 18px;
+    height: 18px;
+    margin-inline-start: auto;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .ossian-plp__filter-group[open] > .ossian-plp__filter-title {
+    margin-bottom: 10px;
+  }
+
+  .ossian-plp__filter-group[open] .ossian-plp__filter-chevron {
+    transform: rotate(180deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ossian-plp__filter-chevron { transition: none; }
+  }
+
+  .ossian-plp__filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .ossian-plp__filter-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #2d3748;
+    cursor: pointer;
+    padding-block: 5px;
+    line-height: 1.4;
+  }
+
+  .ossian-plp__filter-option.is-disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .ossian-plp__filter-option input[type='checkbox'] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    border-radius: 5px;
+    border: 1.5px solid #c8d3e0;
+    background: #fff;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .ossian-plp__filter-option input[type='checkbox']:checked {
+    background: #1e3a5f;
+    border-color: #1e3a5f;
+  }
+
+  .ossian-plp__filter-option input[type='checkbox']:checked::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 2px;
+    width: 6px;
+    height: 10px;
+    border: 2px solid #fff;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg);
+  }
+
+  .ossian-plp__filter-option-count {
+    color: #888;
+    font-size: 12px;
+  }
+
+  .ossian-plp__price-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ossian-plp__price-field {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border: 1.5px solid #c8d3e0;
+    border-radius: 6px;
+    padding: 6px 8px;
+    min-width: 0;
+  }
+
+  .ossian-plp__price-currency {
+    font-size: 12px;
+    color: #888;
+    flex-shrink: 0;
+  }
+
+  .ossian-plp__price-field input {
+    width: 100%;
+    min-width: 0;
+    border: none;
+    outline: none;
+    font-size: 13px;
+    color: #1e3a5f;
+    -moz-appearance: textfield;
+  }
+
+  .ossian-plp__price-field input::-webkit-outer-spin-button,
+  .ossian-plp__price-field input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .ossian-plp__price-sep {
+    color: #888;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  .ossian-plp__price-hint {
+    margin: 10px 0 0;
+    font-size: 12px;
+    color: #888;
+  }
+
+  .ossian-plp__filters-empty {
+    padding: 16px 18px;
+    font-size: 13px;
+    color: #888;
+    margin: 0;
+  }
+
+  .ossian-plp__filters-actions {
+    display: none;
+  }
+
+  /* ── Product grid, flexbox (no CSS grid) ── */
+  .ossian-plp__grid-wrap {
+    flex: 1 1 0%;
+    min-width: 0;
+  }
+
+  .ossian-plp__grid {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: var(--ossian-plp-gap-v) var(--ossian-plp-gap-h);
+  }
+
+  .ossian-plp__grid-item {
+    flex: 0 0 calc((100% - (var(--ossian-plp-columns-desktop) - 1) * var(--ossian-plp-gap-h)) / var(--ossian-plp-columns-desktop));
+    max-width: calc((100% - (var(--ossian-plp-columns-desktop) - 1) * var(--ossian-plp-gap-h)) / var(--ossian-plp-columns-desktop));
+  }
+
+  .ossian-plp__empty {
+    padding-block: 60px;
+    text-align: center;
+    color: #666;
+  }
+
+  .ossian-plp__empty-title {
+    margin: 0 0 8px;
+    color: #1e3a5f;
+  }
+
+  /* ── Mobile ── */
+  @media screen and (max-width: 749px) {
+    .ossian-plp__toolbar {
+      padding-inline: 16px;
+    }
+
+    .ossian-plp__filter-toggle {
+      display: flex;
+    }
+
+    .ossian-plp__count {
+      order: 1;
+      flex-basis: 100%;
+      font-size: 12px;
+    }
+
+    .ossian-plp__body {
+      padding-inline: 0;
+    }
+
+    .ossian-plp--full-width-mobile .ossian-plp__grid-wrap {
+      padding-inline: 10px;
+    }
+
+    /* Filters become an off-canvas drawer */
+    .ossian-plp__filters {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: var(--layer-modal, 100);
+      width: min(85vw, 340px);
+      height: 100dvh;
+      border-radius: 0;
+      border: none;
+      transform: translateX(100%);
+      transition: transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .ossian-plp__filters[data-ossian-plp-drawer].is-open {
+      transform: translateX(0);
+    }
+
+    .ossian-plp__filters-close {
+      display: block;
+    }
+
+    .ossian-plp__filters-form {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .ossian-plp__filters-actions {
+      display: flex;
+      gap: 10px;
+      padding: 14px 18px;
+      border-top: 1.5px solid #e2e8f0;
+      background: #fff;
+      position: sticky;
+      bottom: 0;
+      margin-top: auto;
+    }
+
+    .ossian-plp__clear-all {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e3a5f;
+      text-decoration: none;
+      border: 1.5px solid #1e3a5f;
+      border-radius: 6px;
+    }
+
+    .ossian-plp__apply {
+      flex: 2;
+      background: #1e3a5f;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 12px;
+      cursor: pointer;
+    }
+
+    .ossian-plp__backdrop {
+      display: block;
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 20, 40, 0.5);
+      z-index: calc(var(--layer-modal, 100) - 1);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .ossian-plp__backdrop.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .ossian-plp__grid-item {
+      flex-basis: calc((100% - (var(--ossian-plp-columns-mobile) - 1) * var(--ossian-plp-gap-h)) / var(--ossian-plp-columns-mobile));
+      max-width: calc((100% - (var(--ossian-plp-columns-mobile) - 1) * var(--ossian-plp-gap-h)) / var(--ossian-plp-columns-mobile));
+    }
+  }
+
+  html.ossian-plp-scroll-lock {
+    overflow: hidden;
+  }

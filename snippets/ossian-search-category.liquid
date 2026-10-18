@@ -1,0 +1,17 @@
+{%- doc -%}
+  One "Popular Categories" row in the Ossion search pop-up.
+
+  @param {string} url - Link target
+  @param {string} label - Category name
+  @param {object} [image] - Thumbnail image
+{%- enddoc -%}
+
+<a href="{{ url }}">
+  <span class="ossian-search__category-media">
+    {%- if image != blank -%}
+      {{ image | image_url: width: 140 | image_tag: loading: 'lazy', alt: '', sizes: '68px' }}
+    {%- endif -%}
+  </span>
+  <span class="ossian-search__category-label">{{ label }}</span>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+</a>

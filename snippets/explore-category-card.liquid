@@ -1,0 +1,111 @@
+{%- comment -%}
+  Renders one "Explore More Category" card.
+
+  Accepts:
+    ec_collection - collection the card links to (optional)
+    ec_product    - product used for the image, title and price (optional)
+    ec_image      - image override (optional)
+    ec_label      - small category label, already resolved by the caller
+    ec_name       - title override, used when no product is supplied
+    ec_price      - price text override, used when no product is supplied
+    ec_rating     - fallback rating, used when the product has no review metafield
+    ec_reviews    - fallback review count
+    ec_link       - url override
+    ec_cta        - button label
+    ec_attrs      - block.shopify_attributes string, for the theme editor
+{%- endcomment -%}
+
+{%- liquid
+  assign card_link = ec_link
+  if card_link == blank and ec_collection != blank
+    assign card_link = ec_collection.url
+  endif
+  if card_link == blank and ec_product != blank
+    assign card_link = ec_product.url
+  endif
+  if card_link == blank
+    assign card_link = '#'
+  endif
+
+  assign card_image = ec_image
+  if card_image == blank and ec_product != blank
+    assign card_image = ec_product.featured_image
+  endif
+  if card_image == blank and ec_collection != blank
+    assign card_image = ec_collection.featured_image
+  endif
+
+  assign card_title = ec_name
+  if ec_product != blank
+    assign card_title = ec_product.title
+  endif
+
+  assign rating_val = ec_rating
+  assign review_count_val = ec_reviews
+  if ec_product.metafields.reviews.rating.value.rating != blank
+    assign rating_val = ec_product.metafields.reviews.rating.value.rating
+  endif
+  if ec_product.metafields.reviews.rating_count != blank
+    assign review_count_val = ec_product.metafields.reviews.rating_count
+  endif
+-%}
+
+<div class="explore-cat__card" {{ ec_attrs }}>
+  <div class="explore-cat__media">
+    <a href="{{ card_link }}" class="explore-cat__media-link" aria-hidden="true" tabindex="-1">
+      {%- if card_image != blank -%}
+        {{
+          card_image
+          | image_url: width: 400
+          | image_tag:
+            class: 'explore-cat__img',
+            loading: 'lazy',
+            alt: card_title,
+            widths: '200,300,400'
+        }}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'explore-cat__img explore-cat__img--placeholder' }}
+      {%- endif -%}
+    </a>
+  </div>
+
+  <div class="explore-cat__info">
+    {%- if ec_label != blank -%}
+      <span class="explore-cat__cat-label">{{ ec_label }}</span>
+    {%- endif -%}
+
+    <h3 class="explore-cat__name">{{ card_title | default: 'Product Name' }}</h3>
+
+    {%- if rating_val != blank -%}
+      <div class="explore-cat__rating">
+        <span class="explore-cat__stars" aria-hidden="true">
+          {%- assign r = rating_val | times: 1.0 | round -%}
+          {%- for i in (1..5) -%}
+            {%- if i <= r -%}
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="#f5a623"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            {%- else -%}
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            {%- endif -%}
+          {%- endfor -%}
+        </span>
+        <span class="explore-cat__rating-val">{{ rating_val }}</span>
+        {%- if review_count_val != blank -%}
+          <span class="explore-cat__review-count">({{ review_count_val }})</span>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if ec_product != blank -%}
+      <p class="explore-cat__price">{{ ec_product.price | money }}</p>
+    {%- elsif ec_price != blank -%}
+      <p class="explore-cat__price">{{ ec_price }}</p>
+    {%- endif -%}
+
+    <a href="{{ card_link }}" class="explore-cat__viewall">
+      {{ ec_cta | default: 'View all' }}
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+</div>

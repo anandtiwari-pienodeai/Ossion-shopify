@@ -1,20 +1,507 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "ossian_pdp_breadcrumb": {
       "type": "ossian-pdp-breadcrumb",
+      "custom_css": [
+        ".pdp-breadcrumb {padding: 20px;}"
+      ],
       "settings": {
         "parent_label": "Hair Care",
         "parent_url": "",
         "collection_url": ""
+      }
+    },
+    "main": {
+      "type": "product-information",
+      "blocks": {
+        "media-gallery": {
+          "type": "_product-media-gallery",
+          "static": true,
+          "settings": {
+            "media_presentation": "carousel",
+            "media_columns": "two",
+            "image_gap": 4,
+            "large_first_image": false,
+            "icons_style": "chevron",
+            "slideshow_controls_style": "thumbnails",
+            "slideshow_mobile_controls_style": "thumbnails",
+            "thumbnail_position": "left",
+            "thumbnail_width": 72,
+            "thumbnail_radius": 12,
+            "aspect_ratio": "1",
+            "constrain_to_viewport": false,
+            "media_fit": "cover",
+            "media_radius": 16,
+            "extend_media": false,
+            "zoom": true,
+            "video_loop": true,
+            "hide_variants": false,
+            "show_media_badges": true,
+            "media_badge_1": "pH Balanced",
+            "media_badge_1_icon": "leaf",
+            "media_badge_2": "Scalp-Safe",
+            "media_badge_2_icon": "shield",
+            "media_badge_3": "Cuticle Care",
+            "media_badge_3_icon": "drop",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "product-details": {
+          "type": "_product-details",
+          "static": true,
+          "settings": {
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "details_position": "flex-start",
+            "gap": 16,
+            "sticky_details_desktop": true,
+            "inherit_color_scheme": true,
+            "color_scheme": "scheme-1",
+            "background_media": "none",
+            "video_position": "cover",
+            "background_image_position": "cover",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 32,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "ossian_product_type_badge": {
+              "type": "ossian-product-type",
+              "settings": {
+                "source": "vendor",
+                "custom_text": "",
+                "style": "eyebrow",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_xrnftG": {
+              "type": "text",
+              "name": "Product title",
+              "settings": {
+                "text": "<h1>{{ closest.product.title }}</h1>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "h2",
+                "font": "var(--font-primary--family)",
+                "font_size": "",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_subtitle": {
+              "type": "text",
+              "name": "Product subtitle",
+              "settings": {
+                "text": "<p>{{ closest.product.metafields.descriptors.subtitle.value }}</p>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "paragraph",
+                "font": "var(--font-body--family)",
+                "font_size": "",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "ossian_pdp_size_badge": {
+              "type": "ossian-pdp-size-badge",
+              "settings": {
+                "option_names": "Size, Volume, Weight, Pack size",
+                "label": "Professional size"
+              },
+              "blocks": {}
+            },
+            "review_nniWtf": {
+              "type": "review",
+              "name": "t:names.product_review_stars",
+              "settings": {
+                "stars_style": "shaded",
+                "show_number": true,
+                "editor_test_rating": true,
+                "rating_color": "primary",
+                "type_preset": "paragraph",
+                "width": "100%",
+                "alignment": "left"
+              },
+              "blocks": {}
+            },
+            "price_tVjtKg": {
+              "type": "price",
+              "settings": {
+                "show_sale_price_first": true,
+                "show_installments": false,
+                "show_tax_info": true,
+                "type_preset": "h4",
+                "width": "100%",
+                "alignment": "left",
+                "font": "var(--font-body--family)",
+                "font_size": "1.5rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "color": "var(--color-foreground)",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "variant_picker_R3rGDr": {
+              "type": "variant-picker",
+              "settings": {
+                "variant_style": "buttons",
+                "show_swatches": false,
+                "color_option_style": "numbered_swatches",
+                "alignment": "left",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "ossian_pdp_features_block": {
+              "type": "ossian-pdp-features",
+              "settings": {
+                "use_default_features": false,
+                "features": "Anti-yellow Technology | Keeps hair brighter & healthier | sparkle\nFibre Plex Protection | Protects hair structure | shield\nUp to 9 Levels Lift | Salon-grade performance | arrow-up\nNon-Damaging Formula | Gentle yet effective care | leaf\nEnriched with Marine actives | Nourishes & strengthens hair | coral",
+                "padding-block-start": 8,
+                "padding-block-end": 8,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "buy_buttons_eYQEYi": {
+              "type": "buy-buttons",
+              "settings": {
+                "stacking": false,
+                "show_pickup_availability": false,
+                "gift_card_form": true,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "quantity": {
+                  "type": "quantity",
+                  "static": true,
+                  "settings": {},
+                  "blocks": {}
+                },
+                "add-to-cart": {
+                  "type": "add-to-cart",
+                  "static": true,
+                  "settings": {
+                    "style_class": "button"
+                  },
+                  "blocks": {}
+                },
+                "accelerated-checkout": {
+                  "type": "accelerated-checkout",
+                  "static": true,
+                  "settings": {},
+                  "blocks": {}
+                }
+              },
+              "block_order": []
+            },
+            "ossian_pdp_trust": {
+              "type": "ossian-pdp-trust",
+              "settings": {
+                "item_1_icon": "truck",
+                "item_1_title": "Free Shipping",
+                "item_1_text": "On orders over ₹999",
+                "item_2_icon": "shield",
+                "item_2_title": "Secure Payment",
+                "item_2_text": "100% safe & secure",
+                "item_3_icon": "box",
+                "item_3_title": "Easy Returns",
+                "item_3_text": "7 days return policy",
+                "item_4_icon": "headset",
+                "item_4_title": "Customer Support",
+                "item_4_text": "Mon - Sat, 10AM - 7PM",
+                "padding-block-start": 8,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "ossian_pdp_info_accordion": {
+              "type": "ossian-pdp-info-accordion",
+              "settings": {
+                "open_first": false,
+                "heading_1": "Description",
+                "content_1": "{{ closest.product.description }}",
+                "detail_label_1": "Manufactured By:",
+                "detail_value_1": "{{ closest.product.metafields.custom.manufactured_by.value }}",
+                "detail_label_2": "Country of Origin:",
+                "detail_value_2": "{{ closest.product.metafields.custom.country_of_origin.value }}",
+                "detail_label_3": "Use Before:",
+                "detail_value_3": "{{ closest.product.metafields.custom.use_before.value }}",
+                "heading_2": "Shade Description",
+                "content_2": "{{ closest.product.metafields.custom.shade_description | metafield_tag }}",
+                "heading_3": "How To Use",
+                "content_3": "{{ closest.product.metafields.custom.how_to_use_text | metafield_tag }}",
+                "heading_4": "Ingredients",
+                "content_4": "{{ closest.product.metafields.custom.ingredients_text | metafield_tag }}",
+                "heading_5": "Formula Is Free From",
+                "content_5": "{{ closest.product.metafields.custom.free_from | metafield_tag }}",
+                "heading_6": "Weight",
+                "content_6": "<p>{{ closest.product.metafields.custom.weight_text.value }}</p>",
+                "padding-block-start": 8,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "ossian_pdp_wishlist_mW8kXp": {
+              "type": "ossian-pdp-wishlist",
+              "disabled": true,
+              "settings": {
+                "show_share": false,
+                "show_compare": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "ossian_product_type_badge",
+            "text_xrnftG",
+            "text_subtitle",
+            "ossian_pdp_size_badge",
+            "review_nniWtf",
+            "price_tVjtKg",
+            "variant_picker_R3rGDr",
+            "ossian_pdp_features_block",
+            "buy_buttons_eYQEYi",
+            "ossian_pdp_trust",
+            "ossian_pdp_info_accordion",
+            "ossian_pdp_wishlist_mW8kXp"
+          ]
+        }
+      },
+      "settings": {
+        "content_width": "content-center-aligned",
+        "desktop_media_position": "left",
+        "equal_columns": true,
+        "limit_details_width": false,
+        "gap": 48,
+        "enable_sticky_add_to_cart": true,
+        "color_scheme": "",
+        "padding-block-start": 32,
+        "padding-block-end": 48
+      }
+    },
+    "ossian_pdp_tabs": {
+      "type": "ossian-pdp-tabs",
+      "blocks": {
+        "tab_8wgcGU": {
+          "type": "tab",
+          "settings": {
+            "label": "Ingredients",
+            "layout": "accordion",
+            "accordion_style": "timeline",
+            "accordion_show_heading": false,
+            "accordion_heading": "Key Active Ingredients",
+            "accordion_items_field": "items",
+            "accordion_title_field": "name",
+            "accordion_summary_field": "summary",
+            "accordion_details_field": "description",
+            "accordion_benefits_field": "benefits",
+            "accordion_benefits_label": "Key benefits",
+            "accordion_open_first": true,
+            "use_product_description": false,
+            "description_fallback": false,
+            "content": "",
+            "features_list": "",
+            "metaobject_metafield": "custom.ingredients",
+            "metaobject_label_field": "label",
+            "metaobject_body_field": "",
+            "metaobject_list_field": "",
+            "metaobject_images_field": "image",
+            "metaobject_images_per_row": 3,
+            "comparison_before_field": "",
+            "comparison_after_field": "",
+            "before_label": "Before",
+            "after_label": "After",
+            "image_heading": "ENRICHED WITH MARINE SCIENCE",
+            "image_cta_text": "Explore Our Science",
+            "image_cta_url": ""
+          }
+        },
+        "tab_DCcUq6": {
+          "type": "tab",
+          "settings": {
+            "label": "Marine Technology",
+            "layout": "accordion",
+            "accordion_style": "timeline",
+            "accordion_show_heading": false,
+            "accordion_heading": "",
+            "accordion_items_field": "items",
+            "accordion_title_field": "name",
+            "accordion_summary_field": "summary",
+            "accordion_details_field": "description",
+            "accordion_benefits_field": "benefits",
+            "accordion_benefits_label": "Key benefits",
+            "accordion_open_first": true,
+            "use_product_description": false,
+            "description_fallback": false,
+            "content": "",
+            "features_list": "",
+            "metaobject_metafield": "custom.marine_technology",
+            "metaobject_label_field": "label",
+            "metaobject_body_field": "",
+            "metaobject_list_field": "",
+            "metaobject_images_field": "images",
+            "metaobject_images_per_row": 3,
+            "comparison_before_field": "",
+            "comparison_after_field": "",
+            "before_label": "Before",
+            "after_label": "After",
+            "image_heading": "ENRICHED WITH MARINE SCIENCE",
+            "image_cta_text": "Explore Our Science",
+            "image_cta_url": ""
+          }
+        },
+        "tab_desc": {
+          "type": "tab",
+          "settings": {
+            "label": "Description",
+            "layout": "accordion",
+            "accordion_style": "timeline",
+            "accordion_show_heading": false,
+            "accordion_heading": "Product Description",
+            "accordion_items_field": "items",
+            "accordion_title_field": "name",
+            "accordion_summary_field": "summary",
+            "accordion_details_field": "description",
+            "accordion_benefits_field": "benefits",
+            "accordion_benefits_label": "Key benefits",
+            "accordion_open_first": true,
+            "use_product_description": false,
+            "description_fallback": true,
+            "content": "",
+            "features_list": "",
+            "metaobject_metafield": "custom.description",
+            "metaobject_label_field": "label",
+            "metaobject_body_field": "description",
+            "metaobject_list_field": "",
+            "metaobject_images_field": "image",
+            "metaobject_images_per_row": 3,
+            "comparison_before_field": "",
+            "comparison_after_field": "",
+            "before_label": "Before",
+            "after_label": "After",
+            "image_heading": "ENRICHED WITH MARINE SCIENCE",
+            "image_cta_text": "Explore Our Science",
+            "image_cta_url": ""
+          }
+        },
+        "tab_how": {
+          "type": "tab",
+          "settings": {
+            "label": "How To Use",
+            "layout": "accordion",
+            "accordion_style": "timeline",
+            "accordion_show_heading": false,
+            "accordion_heading": "",
+            "accordion_items_field": "items",
+            "accordion_title_field": "name",
+            "accordion_summary_field": "summary",
+            "accordion_details_field": "description",
+            "accordion_benefits_field": "benefits",
+            "accordion_benefits_label": "Key benefits",
+            "accordion_open_first": true,
+            "use_product_description": false,
+            "description_fallback": false,
+            "content": "",
+            "features_list": "",
+            "metaobject_metafield": "custom.how_to_use",
+            "metaobject_label_field": "label",
+            "metaobject_body_field": "",
+            "metaobject_list_field": "",
+            "metaobject_images_field": "image",
+            "metaobject_images_per_row": 3,
+            "comparison_before_field": "",
+            "comparison_after_field": "",
+            "before_label": "Before",
+            "after_label": "After",
+            "image_heading": "ENRICHED WITH MARINE SCIENCE",
+            "image_cta_text": "Explore Our Science",
+            "image_cta_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "tab_8wgcGU",
+        "tab_DCcUq6",
+        "tab_desc",
+        "tab_how"
+      ],
+      "disabled": true,
+      "custom_css": [
+        ".pdp-tabs__nav {border-top: 0px;}",
+        ".pdp-tabs {padding: 10px;}"
+      ],
+      "settings": {
+        "show_reviews": false,
+        "reviews_heading": "Customer Reviews",
+        "reviews_link": "",
+        "aggregate_rating": "4.9",
+        "review_count": 240,
+        "five_star_pct": 90,
+        "four_star_pct": 5,
+        "three_star_pct": 2,
+        "two_star_pct": 1,
+        "one_star_pct": 2
       }
     },
     "ossian_trust_ticker_c6cjNm": {
@@ -67,305 +554,100 @@
         "padding_bottom": 20
       }
     },
-    "main": {
-      "type": "product-information",
+    "ossian_pdp_reviews": {
+      "type": "ossian-pdp-reviews",
       "blocks": {
-        "media-gallery": {
-          "type": "_product-media-gallery",
-          "static": true,
+        "r1": {
+          "type": "review",
           "settings": {
-            "media_presentation": "carousel",
-            "media_columns": "one",
-            "image_gap": 4,
-            "large_first_image": false,
-            "icons_style": "chevron",
-            "slideshow_controls_style": "thumbnails",
-            "slideshow_mobile_controls_style": "dots",
-            "thumbnail_position": "left",
-            "thumbnail_width": 72,
-            "thumbnail_radius": 4,
-            "aspect_ratio": "adapt",
-            "constrain_to_viewport": false,
-            "media_fit": "contain",
-            "media_radius": 8,
-            "extend_media": false,
-            "zoom": true,
-            "video_loop": false,
-            "hide_variants": false,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "product-details": {
-          "type": "_product-details",
-          "static": true,
-          "settings": {
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "details_position": "flex-start",
-            "gap": 16,
-            "sticky_details_desktop": true,
-            "inherit_color_scheme": true,
-            "color_scheme": "scheme-1",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 32,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "ossian_product_type_badge": {
-              "type": "ossian-product-type",
-              "settings": {
-                "padding-block-start": 0,
-                "padding-block-end": 4,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_subtitle": {
-              "type": "text",
-              "name": "Product subtitle",
-              "settings": {
-                "text": "<p>{{ closest.product.metafields.descriptors.subtitle.value }}</p>",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "paragraph",
-                "font": "var(--font-body--family)",
-                "font_size": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "ossian_pdp_features_block": {
-              "type": "ossian-pdp-features",
-              "settings": {
-                "features": "Anti-yellow Technology\nFibre Plex Protection\nUp to 9 Levels Lift\nNon-Damaging Formula\nEnriched with Marine actives",
-                "padding-block-start": 4,
-                "padding-block-end": 4,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_xrnftG": {
-              "type": "text",
-              "name": "Product title",
-              "settings": {
-                "text": "<h1>{{ closest.product.title }}</h1>",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h2",
-                "font": "var(--font-primary--family)",
-                "font_size": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "review_stars_R9xNsK": {
-              "type": "review",
-              "settings": {
-                "stars_style": "shaded",
-                "show_number": true,
-                "rating_color": "primary",
-                "type_preset": "paragraph",
-                "width": "100%",
-                "alignment": "left"
-              },
-              "blocks": {}
-            },
-            "price_tVjtKg": {
-              "type": "price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": true,
-                "type_preset": "h4",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1.5rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "color": "var(--color-foreground)",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "variant_picker_R3rGDr": {
-              "type": "variant-picker",
-              "settings": {
-                "variant_style": "buttons",
-                "show_swatches": false,
-                "alignment": "left",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "buy_buttons_eYQEYi": {
-              "type": "buy-buttons",
-              "settings": {
-                "stacking": false,
-                "show_pickup_availability": false,
-                "gift_card_form": true,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {
-                "quantity": {
-                  "type": "quantity",
-                  "static": true,
-                  "settings": {},
-                  "blocks": {}
-                },
-                "add-to-cart": {
-                  "type": "add-to-cart",
-                  "static": true,
-                  "settings": {
-                    "style_class": "button"
-                  },
-                  "blocks": {}
-                },
-                "accelerated-checkout": {
-                  "type": "accelerated-checkout",
-                  "static": true,
-                  "settings": {},
-                  "blocks": {}
-                }
-              },
-              "block_order": []
-            },
-            "ossian_pdp_wishlist_mW8kXp": {
-              "type": "ossian-pdp-wishlist",
-              "settings": {
-                "show_share": false,
-                "show_compare": false,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "ossian_product_type_badge",
-            "text_xrnftG",
-            "text_subtitle",
-            "review_stars_R9xNsK",
-            "price_tVjtKg",
-            "variant_picker_R3rGDr",
-            "ossian_pdp_features_block",
-            "buy_buttons_eYQEYi",
-            "ossian_pdp_wishlist_mW8kXp"
-          ]
-        }
-      },
-      "settings": {
-        "content_width": "content-center-aligned",
-        "desktop_media_position": "left",
-        "equal_columns": true,
-        "limit_details_width": false,
-        "gap": 48,
-        "enable_sticky_add_to_cart": true,
-        "color_scheme": "",
-        "padding-block-start": 32,
-        "padding-block-end": 48
-      }
-    },
-    "ossian_pdp_tabs": {
-      "type": "ossian-pdp-tabs",
-      "blocks": {
-        "tab_desc": {
-          "type": "tab",
-          "settings": {
-            "label": "Description",
-            "use_product_description": true,
-            "content": "",
-            "features_list": ""
+            "author": "Anjali S.",
+            "rating": "5",
+            "date": "12 Aug 2026",
+            "title": "Salon results at home",
+            "body": "Hair felt smoother from the very first wash. Three weeks in and the frizz is genuinely gone. My stylist asked what I had changed.",
+            "verified": true
           }
         },
-        "tab_benefits": {
-          "type": "tab",
+        "r2": {
+          "type": "review",
           "settings": {
-            "label": "Key Benefits",
-            "use_product_description": false,
-            "content": "",
-            "features_list": "Anti-Yellow Technology for bright, clean results\nFiber Plex Protection for stronger hair\nUp to 9 levels of lift in one application\nNon-Damaging Formula with Marine Minerals\nAdvanced Plex & Sea Minerals complex"
+            "author": "Rohit M.",
+            "rating": "5",
+            "date": "04 Aug 2026",
+            "title": "Worth every rupee",
+            "body": "I was sceptical about the price, but a little goes a long way. One bottle has lasted me almost two months of daily use.",
+            "verified": true
           }
         },
-        "tab_how": {
-          "type": "tab",
+        "r3": {
+          "type": "review",
           "settings": {
-            "label": "How To Use",
-            "use_product_description": false,
-            "content": "<p><strong>Step 1:</strong> Mix the product with the developer in a 1:2 ratio.</p><p><strong>Step 2:</strong> Apply to dry, unwashed hair using a brush. Start from the roots and work towards the ends.</p><p><strong>Step 3:</strong> Leave on for 20–40 minutes depending on desired lift level.</p><p><strong>Step 4:</strong> Rinse thoroughly and follow with a toning shampoo and conditioner.</p>",
-            "features_list": ""
+            "author": "Priya K.",
+            "rating": "4",
+            "date": "29 Jul 2026",
+            "title": "Lovely texture, subtle scent",
+            "body": "Leaves my hair soft without weighing it down. Would have given five stars if the fragrance lasted a bit longer.",
+            "verified": true
           }
         },
-        "tab_ingredients": {
-          "type": "tab",
+        "r4": {
+          "type": "review",
           "settings": {
-            "label": "Ingredients",
-            "use_product_description": false,
-            "content": "<p>Potassium Persulfate, Ammonium Persulfate, Sodium Persulfate, Kaolin, Marine Minerals Complex, Hydrolysed Keratin, Panthenol (Vitamin B5), Tocopheryl Acetate (Vitamin E).</p>",
-            "features_list": ""
+            "author": "Meera D.",
+            "rating": "5",
+            "date": "21 Jul 2026",
+            "title": "Finally something that works on colour-treated hair",
+            "body": "My highlights were turning brassy within weeks. Since switching, the tone has held and the ends look far healthier.",
+            "verified": true
+          }
+        },
+        "r5": {
+          "type": "review",
+          "settings": {
+            "author": "Sahil T.",
+            "rating": "5",
+            "date": "15 Jul 2026",
+            "title": "Noticeably less hair fall",
+            "body": "Used it through a full monsoon. Far less hair in the drain than usual and the scalp feels much calmer.",
+            "verified": true
+          }
+        },
+        "r6": {
+          "type": "review",
+          "settings": {
+            "author": "Nikita R.",
+            "rating": "4",
+            "date": "08 Jul 2026",
+            "title": "Great product, premium feel",
+            "body": "The packaging alone makes it feel like a salon product. Results built up gradually over about a month for me.",
+            "verified": true
+          }
+        },
+        "r7": {
+          "type": "review",
+          "settings": {
+            "author": "Karan V.",
+            "rating": "5",
+            "date": "30 Jun 2026",
+            "title": "Repurchasing without a second thought",
+            "body": "Second bottle already. Shine is the biggest difference — my hair catches the light in a way it never used to.",
+            "verified": true
           }
         }
       },
       "block_order": [
-        "tab_desc",
-        "tab_benefits",
-        "tab_how",
-        "tab_ingredients"
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5",
+        "r6",
+        "r7"
       ],
-      "settings": {}
+      "settings": {
+        "eyebrow": "REAL RESULTS",
+        "heading": "Customer Reviews"
+      }
     },
     "ossian_pdp_benefits": {
       "type": "ossian-pdp-benefits",
@@ -415,6 +697,164 @@
         "subheading": "Powered by Marine Technology with advanced science for professional-grade results."
       }
     },
+    "ossian_instagram_VgRpe7": {
+      "type": "ossian-instagram",
+      "blocks": {
+        "reel_BqGyhU": {
+          "type": "reel",
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/dfc06861678847a8b50cde8d042e294e.mp4",
+            "reel_label": "",
+            "product": "amber-glow-permanent-hair-color-creme-100ml",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "custom_compare_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
+        },
+        "reel_zjzibq": {
+          "type": "reel",
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/65ad5c9836f945a4aea9b1b8bc8fef87.mp4",
+            "reel_label": "",
+            "product": "chromatic-dream-permanent-hair-color-creme-100ml",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "custom_compare_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
+        },
+        "reel_YPYAVg": {
+          "type": "reel",
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/355d10e3f86b4de59f7ff41ffe412ae6.mp4",
+            "reel_label": "",
+            "product": "crimson-veil-permanent-hair-color-creme-100ml",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "custom_compare_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
+        },
+        "reel_kpMfmg": {
+          "type": "reel",
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/65ad5c9836f945a4aea9b1b8bc8fef87.mp4",
+            "reel_label": "",
+            "product": "golden-luster-permanent-hair-color-creme-100ml",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "custom_compare_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
+        },
+        "reel_PdaGit": {
+          "type": "reel",
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/dfc06861678847a8b50cde8d042e294e.mp4",
+            "reel_label": "",
+            "product": "silver-mist-permanent-hair-color-creme-100ml",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "custom_compare_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
+        },
+        "reel_ABTDFB": {
+          "type": "reel",
+          "settings": {
+            "video_url": "",
+            "reel_label": "",
+            "product": "",
+            "product_subtitle": "",
+            "product_category": "",
+            "product_url": "",
+            "custom_price": "",
+            "custom_compare_price": "",
+            "discount_label": "",
+            "rating": 0,
+            "review_count": 0,
+            "product_description": "",
+            "product_highlights": "",
+            "feature_1": "",
+            "feature_2": "",
+            "feature_3": "",
+            "feature_4": "",
+            "sizes": ""
+          }
+        }
+      },
+      "block_order": [
+        "reel_BqGyhU",
+        "reel_zjzibq",
+        "reel_YPYAVg",
+        "reel_kpMfmg",
+        "reel_PdaGit",
+        "reel_ABTDFB"
+      ],
+      "name": "Ossion Reels",
+      "settings": {
+        "heading": "OSSION",
+        "heading_accent": "gram",
+        "subheading": "Real people. Real results. Real stories",
+        "instagram_handle": "ossion.care"
+      }
+    },
     "ossian_marine_banner_pdp": {
       "type": "ossian-marine-banner",
       "settings": {
@@ -425,6 +865,17 @@
         "cta_url": ""
       }
     },
+    "ossian_you_may_like": {
+      "type": "ossian-you-may-like",
+      "settings": {
+        "eyebrow": "Complete Your Hair Care Routine",
+        "heading": "You May Also Like",
+        "products": [],
+        "collection": "",
+        "max_products": 8,
+        "hide_sold_out": true
+      }
+    },
     "product_recommendations_qggXJq": {
       "type": "product-recommendations",
       "blocks": {
@@ -433,10 +884,10 @@
           "name": "t:names.header",
           "settings": {
             "text": "<h3>You May Also Like</h3>",
-            "width": "fit-content",
+            "width": "100%",
             "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h4",
+            "alignment": "center",
+            "type_preset": "h3",
             "font": "var(--font-primary--family)",
             "font_size": "",
             "line_height": "normal",
@@ -447,7 +898,7 @@
             "background": false,
             "background_color": "#00000026",
             "corner_radius": 0,
-            "padding-block-start": 0,
+            "padding-block-start": 24,
             "padding-block-end": 0,
             "padding-inline-start": 0,
             "padding-inline-end": 0
@@ -467,7 +918,7 @@
             "border_opacity": 100,
             "border_radius": 0,
             "padding-block-start": 0,
-            "padding-block-end": 8,
+            "padding-block-end": 12,
             "padding-inline-start": 0,
             "padding-inline-end": 0
           },
@@ -559,6 +1010,7 @@
       "block_order": [
         "text_cbcgyb"
       ],
+      "disabled": true,
       "name": "t:names.product_recommendations",
       "settings": {
         "product": "{{ closest.product }}",
@@ -573,26 +1025,35 @@
         "icons_style": "arrow",
         "icons_shape": "none",
         "section_width": "page-width",
-        "gap": 28,
+        "gap": 40,
         "color_scheme": "scheme-1",
-        "padding-block-start": 48,
+        "padding-block-start": 80,
         "padding-block-end": 48
       }
     },
     "ossian_explore_category_pdp": {
       "type": "ossian-explore-category",
+      "disabled": true,
       "settings": {
-        "heading": "EXPLORE MORE CATEGORY"
+        "heading": "",
+        "max_cards": 4,
+        "hide_current": true,
+        "cta_label": "View all",
+        "auto_collections": true,
+        "exclude_handles": "frontpage, test"
       }
     }
   },
   "order": [
     "ossian_pdp_breadcrumb",
     "main",
-    "ossian_trust_ticker_c6cjNm",
     "ossian_pdp_tabs",
+    "ossian_trust_ticker_c6cjNm",
+    "ossian_pdp_reviews",
     "ossian_pdp_benefits",
+    "ossian_instagram_VgRpe7",
     "ossian_marine_banner_pdp",
+    "ossian_you_may_like",
     "product_recommendations_qggXJq",
     "ossian_explore_category_pdp"
   ]

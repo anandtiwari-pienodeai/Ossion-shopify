@@ -1,0 +1,221 @@
+/* Styles for sections/ossian-explore-category.liquid. Loaded by that section so pages without it don't download them. */
+.explore-cat {
+  background: #fff;
+  padding: 20px 40px;
+}
+
+.explore-cat__heading {
+  text-align: center;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #1e3a5f;
+  margin: 0 0 36px;
+  font-style: italic;
+  font-family: var(--font-primary--family, sans-serif);
+}
+
+.explore-cat__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  padding: 0 20px;
+}
+
+.explore-cat__card {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  background: #f7f7f7;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.explore-cat__card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(30,58,95,0.12);
+}
+
+.explore-cat__media {
+  flex: 0 0 42%;
+  min-height: 140px;
+  overflow: hidden;
+  position: relative;
+  background: #ececec;
+}
+
+.explore-cat__media-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.explore-cat__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.explore-cat__img--placeholder {
+  width: 100%;
+  height: 100%;
+}
+
+.explore-cat__card:hover .explore-cat__img {
+  transform: scale(1.05);
+}
+
+.explore-cat__info {
+  flex: 1;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+}
+
+.explore-cat__cat-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #1e3a5f;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.explore-cat__name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e3a5f;
+  margin: 0;
+  line-height: 1.3;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.explore-cat__rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.explore-cat__stars {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.explore-cat__rating-val,
+.explore-cat__review-count {
+  font-size: 11px;
+  color: #666;
+  font-weight: 500;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.explore-cat__price {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e3a5f;
+  margin: 0;
+  margin-top: 2px;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.explore-cat__viewall {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1e3a5f;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: #e6ecf5;
+  border-radius: 4px;
+  padding: 5px 10px;
+  margin-top: 6px;
+  align-self: flex-start;
+  transition: background 0.2s, color 0.2s;
+  font-family: var(--font-body--family, sans-serif);
+}
+
+.explore-cat__viewall:hover {
+  background: #1e3a5f;
+  color: #fff;
+}
+
+@media (max-width: 1024px) {
+  .explore-cat__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .explore-cat {
+    padding: 28px 0 36px;
+  }
+
+  .explore-cat__inner {
+    padding-inline: 0;
+  }
+
+  .explore-cat__heading {
+    font-size: clamp(1.1rem, 5vw, 1.5rem);
+    margin-bottom: 20px;
+    padding-inline: 16px;
+  }
+
+  /* ── Scrollable carousel ── */
+  .explore-cat__grid {
+    display: flex;
+    flex-direction: row;
+    grid-template-columns: unset;
+    gap: 12px;
+    padding: 4px 16px 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .explore-cat__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Each card: fixed width, snaps into place */
+  .explore-cat__card {
+    flex: 0 0 72vw;
+    max-width: 280px;
+    scroll-snap-align: start;
+    flex-direction: column;
+    border-radius: 10px;
+  }
+
+  .explore-cat__media {
+    flex: none;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    min-height: unset;
+  }
+
+  .explore-cat__info {
+    padding: 10px 12px 14px;
+    gap: 4px;
+  }
+
+  .explore-cat__name {
+    font-size: 12px;
+  }
+
+  .explore-cat__viewall {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+}

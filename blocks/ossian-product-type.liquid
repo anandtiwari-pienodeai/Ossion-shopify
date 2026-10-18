@@ -1,6 +1,13 @@
 {% liquid
   assign product = closest.product
-  assign type_label = product.type
+  case block.settings.source
+    when 'vendor'
+      assign type_label = product.vendor
+    when 'custom'
+      assign type_label = block.settings.custom_text
+    else
+      assign type_label = product.type
+  endcase
   if request.visual_preview_mode and product == blank
     assign type_label = 'LIGHTENING & BLEACHING'
   endif
@@ -8,7 +15,7 @@
 
 {%- if type_label != blank -%}
   <p
-    class="ossian-product-type spacing-style"
+    class="ossian-product-type ossian-product-type--{{ block.settings.style | default: 'pill' }} spacing-style"
     style="{% render 'spacing-style', settings: block.settings %}"
     {{ block.shopify_attributes }}
   >
@@ -33,6 +40,18 @@
   line-height: 1.4;
   font-family: var(--font-body--family, sans-serif);
 }
+
+/* Plain uppercase eyebrow (e.g. the brand above the product title) */
+.ossian-product-type--eyebrow {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  color: #13233f;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+}
 {% endstylesheet %}
 
 {% schema %}
@@ -40,6 +59,48 @@
   "name": "Product Type Label",
   "tag": null,
   "settings": [
+    {
+      "type": "select",
+      "id": "source",
+      "label": "Show",
+      "default": "type",
+      "options": [
+        {
+          "value": "type",
+          "label": "Product type"
+        },
+        {
+          "value": "vendor",
+          "label": "Vendor / brand"
+        },
+        {
+          "value": "custom",
+          "label": "Custom text"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "custom_text",
+      "label": "Custom text",
+      "visible_if": "{{ block.settings.source == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "default": "pill",
+      "options": [
+        {
+          "value": "pill",
+          "label": "Pill"
+        },
+        {
+          "value": "eyebrow",
+          "label": "Plain uppercase label"
+        }
+      ]
+    },
     {
       "type": "header",
       "content": "Padding"

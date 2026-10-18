@@ -31,7 +31,8 @@
       "@theme/component-quantity-selector": "{{ 'component-quantity-selector.js' | asset_url }}",
       "@theme/comparison-slider": "{{ 'comparison-slider.js' | asset_url }}",
       "@theme/sticky-add-to-cart": "{{ 'sticky-add-to-cart.js' | asset_url }}",
-      "@theme/fly-to-cart": "{{ 'fly-to-cart.js' | asset_url }}"
+      "@theme/fly-to-cart": "{{ 'fly-to-cart.js' | asset_url }}",
+      "@theme/ossian-quiz-rules": "{{ 'ossian-quiz-rules.js' | asset_url }}"
     }
   }
 </script>
@@ -198,11 +199,6 @@
   fetchpriority="low"
 ></script>
 <script
-  src="{{ 'layered-slideshow.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
-<script
   src="{{ 'anchored-popover.js' | asset_url }}"
   type="module"
   fetchpriority="low"
@@ -257,11 +253,6 @@
 {% endif %}
 
 {% if template == 'product' or template.name == 'product' or request.page_type == 'product' %}
-  <script
-    src="{{ 'fly-to-cart.js' | asset_url }}"
-    type="module"
-    fetchpriority="low"
-  ></script>
   <script
     src="{{ 'sticky-add-to-cart.js' | asset_url }}"
     type="module"

@@ -1,0 +1,53 @@
+{%- doc -%}
+  Responsive picture with separate desktop and mobile images. Either image
+  falls back to the other, so one upload still fills both breakpoints.
+
+  @param {object} desktop - image object for viewports 750px and wider
+  @param {object} [mobile] - image object for viewports below 750px
+  @param {string} [sizes] - sizes attribute for the desktop image
+  @param {string} [mobile_sizes] - sizes attribute for the mobile image
+  @param {boolean} [eager] - load eagerly with high fetch priority (above the fold)
+  @param {string} [alt] - alt text; empty for decorative banners
+
+  @example
+  {% render 'ossian-about-picture', desktop: section.settings.image, mobile: section.settings.image_mobile, sizes: '100vw', eager: true %}
+{%- enddoc -%}
+{%- liquid
+  assign pic_desktop = desktop | default: mobile
+  assign pic_mobile = mobile | default: desktop
+  assign pic_sizes = sizes | default: '100vw'
+  assign pic_mobile_sizes = mobile_sizes | default: '100vw'
+  assign pic_alt = alt | default: ''
+  if eager
+    assign pic_loading = 'eager'
+    assign pic_priority = 'high'
+  else
+    assign pic_loading = 'lazy'
+    assign pic_priority = 'auto'
+  endif
+-%}
+{%- if pic_desktop != blank -%}
+  <picture class="oab-picture">
+    <source
+      media="(max-width: 749px)"
+      srcset="
+        {{ pic_mobile | image_url: width: 500 }} 500w,
+        {{ pic_mobile | image_url: width: 750 }} 750w,
+        {{ pic_mobile | image_url: width: 1100 }} 1100w
+      "
+      sizes="{{ pic_mobile_sizes }}"
+      width="{{ pic_mobile.width }}"
+      height="{{ pic_mobile.height }}"
+    >
+    {{
+      pic_desktop
+      | image_url: width: 2400
+      | image_tag:
+        loading: pic_loading,
+        fetchpriority: pic_priority,
+        widths: '750,1100,1500,1900,2400',
+        sizes: pic_sizes,
+        alt: pic_alt
+    }}
+  </picture>
+{%- endif -%}

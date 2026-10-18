@@ -26,14 +26,65 @@ export class ZoomDialog extends Component {
 
   #highResImagesLoaded = /** @type {Set<string>} */ (new Set());
 
+  /** @type {HTMLElement | null} */
+  #mediaList = null;
+
   connectedCallback() {
     super.connectedCallback();
     this.refs.dialog.addEventListener('scroll', this.handleScroll);
+    // When the media list is its own (horizontal) scroller, track that too. Not a capturing listener:
+    // the thumbnail strip scrolling must not re-derive the selection from a media list that hasn't moved yet.
+    this.#mediaList = this.refs.dialog.querySelector('.dialog-zoomed-gallery');
+    this.#mediaList?.addEventListener('scroll', this.handleScroll);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.refs.dialog.removeEventListener('scroll', this.handleScroll);
+    this.#mediaList?.removeEventListener('scroll', this.handleScroll);
+  }
+
+  /**
+   * Brings a media item into view. A horizontally scrolling media list is scrolled directly, so other
+   * scroll animations (thumbnail strip, page gallery sync) can't cancel it mid-way.
+   * @param {HTMLElement} targetImage
+   * @param {ScrollBehavior} behavior
+   */
+  #scrollMediaIntoView(targetImage, behavior) {
+    const list = targetImage.parentElement;
+    if (list && this.#isHorizontalList(list)) {
+      // Jump instantly: a smooth scroll here gets cancelled part-way by the page gallery syncing to the
+      // selection (ZoomMediaSelectedEvent). A short fade on the incoming slide keeps the change soft.
+      list.scrollTo({ left: targetImage.offsetLeft - list.offsetLeft, behavior: 'instant' });
+      if (behavior !== 'instant' && !prefersReducedMotion()) {
+        targetImage.animate([{ opacity: 0.25 }, { opacity: 1 }], { duration: 220, easing: 'ease-out' });
+      }
+      return;
+    }
+    targetImage.scrollIntoView({ behavior, block: 'nearest', inline: 'start' });
+  }
+
+  /**
+   * The media item currently in view. With a horizontal one-per-view list the scroll position says exactly
+   * which item that is; otherwise fall back to measuring visibility.
+   * @returns {Promise<HTMLElement>}
+   */
+  async #currentMedia() {
+    const { media } = this.refs;
+    const list = this.#mediaList;
+    if (list && this.#isHorizontalList(list) && list.clientWidth > 0) {
+      const index = Math.min(media.length - 1, Math.max(0, Math.round(list.scrollLeft / list.clientWidth)));
+      return /** @type {HTMLElement} */ (media[index]);
+    }
+    return getMostVisibleElement(media);
+  }
+
+  /**
+   * @param {HTMLElement} list
+   * @returns {boolean} Whether the media list scrolls horizontally (one item per view)
+   */
+  #isHorizontalList(list) {
+    return list.scrollWidth > list.clientWidth + 1;
   }
 
   /**
@@ -52,9 +103,8 @@ export class ZoomDialog extends Component {
     const open = () => {
       dialog.showModal();
 
-      for (const target of [targetThumbnail, targetImage]) {
-        target?.scrollIntoView({ behavior: 'instant' });
-      }
+      targetThumbnail?.scrollIntoView({ behavior: 'instant', block: 'nearest', inline: 'nearest' });
+      if (targetImage) this.#scrollMediaIntoView(targetImage, 'instant');
     };
 
     /** @type {HTMLElement | null} */
@@ -119,7 +169,7 @@ export class ZoomDialog extends Component {
   handleScroll = debounce(async () => {
     const { media, thumbnails } = this.refs;
 
-    const mostVisibleElement = await getMostVisibleElement(media);
+    const mostVisibleElement = await this.#currentMedia();
     const activeIndex = media.indexOf(mostVisibleElement);
     const targetThumbnail = thumbnails.children[activeIndex];
 
@@ -141,8 +191,8 @@ export class ZoomDialog extends Component {
 
     if (!supportsViewTransitions() || isLowPowerDevice()) return this.closeDialog();
 
-    // Find the most visible image using IntersectionObserver
-    const mostVisibleElement = await getMostVisibleElement(media);
+    // Find the image currently in view
+    const mostVisibleElement = await this.#currentMedia();
 
     // Get the index and set up transition
     const activeIndex = media.indexOf(mostVisibleElement);
@@ -168,15 +218,21 @@ export class ZoomDialog extends Component {
 
     mostVisibleElement.style.setProperty('view-transition-name', itemTransitionName);
 
-    await startViewTransition(() => {
+    try {
+      await startViewTransition(() => {
+        mostVisibleElement.style.removeProperty('view-transition-name');
+        slide.style.setProperty('view-transition-name', itemTransitionName);
+        this.closeDialog();
+      });
+    } catch {
+      // The transition can be aborted (e.g. the tab was hidden mid-close); don't leave the dialog half-closed
+    } finally {
+      if (dialog.open) this.closeDialog();
       mostVisibleElement.style.removeProperty('view-transition-name');
-      slide.style.setProperty('view-transition-name', itemTransitionName);
-      this.closeDialog();
-    });
-
-    slide.style.removeProperty('view-transition-name');
-    dialog.classList.remove('dialog--closed');
-    document.documentElement.style.removeProperty('--gallery-media-focal-point');
+      slide.style.removeProperty('view-transition-name');
+      dialog.classList.remove('dialog--closed');
+      document.documentElement.style.removeProperty('--gallery-media-focal-point');
+    }
   }
 
   closeDialog() {
@@ -191,10 +247,62 @@ export class ZoomDialog extends Component {
    * @param {KeyboardEvent} event - The keyboard event.
    */
   handleKeyDown(event) {
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      this.showNext();
+      return;
+    }
+
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      this.showPrevious();
+      return;
+    }
+
     if (event.key !== 'Escape') return;
 
     event.preventDefault();
     this.close();
+  }
+
+  /**
+   * Index of the currently selected media, read from the thumbnail state.
+   * @returns {number}
+   */
+  get currentIndex() {
+    const buttons = Array.from(this.refs.thumbnails?.querySelectorAll('button') ?? []);
+    const index = buttons.findIndex((button) => button.getAttribute('aria-selected') === 'true');
+    return Math.max(0, index);
+  }
+
+  /**
+   * Shows the next media, wrapping to the first after the last.
+   */
+  showNext() {
+    const count = this.refs.media.length;
+    if (count < 2) return;
+    this.handleThumbnailClick((this.currentIndex + 1) % count);
+  }
+
+  /**
+   * Shows the previous media, wrapping to the last before the first.
+   */
+  showPrevious() {
+    const count = this.refs.media.length;
+    if (count < 2) return;
+    this.handleThumbnailClick((this.currentIndex - 1 + count) % count);
+  }
+
+  /**
+   * Closes the dialog when the click lands on the backdrop (the dialog element itself, outside the panel content).
+   * @param {MouseEvent} event - The click event.
+   */
+  handleBackdropClick(event) {
+    if (event.target !== this.refs.dialog) return;
+    const rect = this.refs.dialog.getBoundingClientRect();
+    const inside =
+      event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;
+    if (!inside) this.close();
   }
 
   /**
@@ -248,9 +356,7 @@ export class ZoomDialog extends Component {
     const targetImage = media[index];
 
     if (targetImage) {
-      targetImage.scrollIntoView({
-        behavior: options.behavior,
-      });
+      this.#scrollMediaIntoView(targetImage, options.behavior);
 
       this.loadHighResolutionImage(targetImage);
     }
