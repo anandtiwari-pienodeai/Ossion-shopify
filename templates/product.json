@@ -277,25 +277,18 @@
               },
               "blocks": {}
             },
-            "ossian_pdp_wishlist_mW8kXp": {
-              "type": "ossian-pdp-wishlist",
-              "disabled": true,
-              "settings": {
-                "show_share": false,
-                "show_compare": false,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
             "ossian_pdp_info_accordion": {
               "type": "ossian-pdp-info-accordion",
               "settings": {
                 "open_first": false,
                 "heading_1": "Description",
                 "content_1": "{{ closest.product.description }}",
+                "detail_label_1": "Manufactured By:",
+                "detail_value_1": "{{ closest.product.metafields.custom.manufactured_by.value }}",
+                "detail_label_2": "Country of Origin:",
+                "detail_value_2": "{{ closest.product.metafields.custom.country_of_origin.value }}",
+                "detail_label_3": "Use Before:",
+                "detail_value_3": "{{ closest.product.metafields.custom.use_before.value }}",
                 "heading_2": "Shade Description",
                 "content_2": "{{ closest.product.metafields.custom.shade_description | metafield_tag }}",
                 "heading_3": "How To Use",
@@ -309,14 +302,22 @@
                 "padding-block-start": 8,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0,
-                "detail_label_1": "Manufactured By:",
-                "detail_value_1": "{{ closest.product.metafields.custom.manufactured_by.value }}",
-                "detail_label_2": "Country of Origin:",
-                "detail_value_2": "{{ closest.product.metafields.custom.country_of_origin.value }}",
-                "detail_label_3": "Use Before:",
-                "detail_value_3": "{{ closest.product.metafields.custom.use_before.value }}"
-              }
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "ossian_pdp_wishlist_mW8kXp": {
+              "type": "ossian-pdp-wishlist",
+              "disabled": true,
+              "settings": {
+                "show_share": false,
+                "show_compare": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
             }
           },
           "block_order": [
@@ -354,10 +355,17 @@
           "type": "tab",
           "settings": {
             "label": "Ingredients",
-            "accordion_show_heading": false,
-            "accordion_style": "timeline",
             "layout": "accordion",
+            "accordion_style": "timeline",
+            "accordion_show_heading": false,
             "accordion_heading": "Key Active Ingredients",
+            "accordion_items_field": "items",
+            "accordion_title_field": "name",
+            "accordion_summary_field": "summary",
+            "accordion_details_field": "description",
+            "accordion_benefits_field": "benefits",
+            "accordion_benefits_label": "Key benefits",
+            "accordion_open_first": true,
             "use_product_description": false,
             "description_fallback": false,
             "content": "",
@@ -381,9 +389,17 @@
           "type": "tab",
           "settings": {
             "label": "Marine Technology",
-            "accordion_show_heading": false,
-            "accordion_style": "timeline",
             "layout": "accordion",
+            "accordion_style": "timeline",
+            "accordion_show_heading": false,
+            "accordion_heading": "",
+            "accordion_items_field": "items",
+            "accordion_title_field": "name",
+            "accordion_summary_field": "summary",
+            "accordion_details_field": "description",
+            "accordion_benefits_field": "benefits",
+            "accordion_benefits_label": "Key benefits",
+            "accordion_open_first": true,
             "use_product_description": false,
             "description_fallback": false,
             "content": "",
@@ -407,10 +423,17 @@
           "type": "tab",
           "settings": {
             "label": "Description",
-            "accordion_show_heading": false,
-            "accordion_style": "timeline",
             "layout": "accordion",
+            "accordion_style": "timeline",
+            "accordion_show_heading": false,
             "accordion_heading": "Product Description",
+            "accordion_items_field": "items",
+            "accordion_title_field": "name",
+            "accordion_summary_field": "summary",
+            "accordion_details_field": "description",
+            "accordion_benefits_field": "benefits",
+            "accordion_benefits_label": "Key benefits",
+            "accordion_open_first": true,
             "use_product_description": false,
             "description_fallback": true,
             "content": "",
@@ -434,9 +457,17 @@
           "type": "tab",
           "settings": {
             "label": "How To Use",
-            "accordion_show_heading": false,
-            "accordion_style": "timeline",
             "layout": "accordion",
+            "accordion_style": "timeline",
+            "accordion_show_heading": false,
+            "accordion_heading": "",
+            "accordion_items_field": "items",
+            "accordion_title_field": "name",
+            "accordion_summary_field": "summary",
+            "accordion_details_field": "description",
+            "accordion_benefits_field": "benefits",
+            "accordion_benefits_label": "Key benefits",
+            "accordion_open_first": true,
             "use_product_description": false,
             "description_fallback": false,
             "content": "",
@@ -463,6 +494,7 @@
         "tab_desc",
         "tab_how"
       ],
+      "disabled": true,
       "custom_css": [
         ".pdp-tabs__nav {border-top: 0px;}",
         ".pdp-tabs {padding: 10px;}"
