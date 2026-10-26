@@ -156,6 +156,8 @@
     slide.querySelectorAll('[data-src]').forEach(function (node) {
       node.setAttribute('src', node.getAttribute('data-src'));
       node.removeAttribute('data-src');
+      /* The sources are already deferred, so fetch now rather than waiting for the slide to show */
+      if (node.tagName === 'IMG') node.loading = 'eager';
     });
   }
 
@@ -163,22 +165,56 @@
   if (document.readyState === 'complete') loadAllSlides();
   else window.addEventListener('load', loadAllSlides, { once: true });
 
-  function goTo(n) {
+  /* Resolves once the slide's image is downloaded and decoded (or after 3s / on error) */
+  function whenReady(slide) {
+    var img = slide.querySelector('img');
+    if (!img) return Promise.resolve();
+    var loaded = img.complete ? Promise.resolve() : new Promise(function (resolve) {
+      img.addEventListener('load', resolve, { once: true });
+      img.addEventListener('error', resolve, { once: true });
+      setTimeout(resolve, 3000);
+    });
+    return loaded.then(function () { return img.decode ? img.decode().catch(function () {}) : null; });
+  }
+
+  var leaveTimer;
+  var switchId = 0;
+
+  function show(target) {
     var outgoing = slides[current];
     var v = outgoing.querySelector('video');
     if (v) v.pause();
+
+    /* Keep the outgoing slide visible underneath while the incoming one fades in */
+    clearTimeout(leaveTimer);
+    slides.forEach(function (slide) { slide.classList.remove('is-leaving'); });
     outgoing.classList.remove('is-active');
+    outgoing.classList.add('is-leaving');
+    leaveTimer = setTimeout(function () { outgoing.classList.remove('is-leaving'); }, 600);
     if (dots[current]) dots[current].classList.remove('is-active');
 
-    current = (n + slides.length) % slides.length;
+    current = target;
 
     var incoming = slides[current];
-    loadSlide(incoming);
-    loadSlide(slides[(current + 1) % slides.length]);
     incoming.classList.add('is-active');
     if (dots[current]) dots[current].classList.add('is-active');
     var nv = incoming.querySelector('video');
     if (nv) nv.play().catch(function () {});
+  }
+
+  function goTo(n) {
+    var target = (n + slides.length) % slides.length;
+    var id = ++switchId;
+    if (target === current) return;
+
+    var incoming = slides[target];
+    loadSlide(incoming);
+    loadSlide(slides[(target + 1) % slides.length]);
+
+    /* Only switch once the image is ready; a newer click or tick supersedes this one */
+    whenReady(incoming).then(function () {
+      if (id === switchId) show(target);
+    });
   }
 
   function start() { if (autoplay) timer = setInterval(function () { goTo(current + 1); }, speed); }
@@ -229,18 +265,45 @@
 /* Fixed height: every slide fills the same frame, so the banner never resizes */
 .hero-carousel__track {
   position: relative;
+  /* Contains the slides' z-index stacking so the controls bar always sits above them */
+  isolation: isolate;
   width: 100%;
   height: var(--hero-height, 80vh);
 }
 
+/*
+  Inactive slides stay laid out (hidden, not display: none) so their images actually load;
+  browsers never fetch a lazy image inside display: none, which left the black background
+  showing on every switch. The incoming slide fades in on top of the outgoing one.
+*/
 .hero-carousel__slide {
   position: absolute;
   inset: 0;
-  display: none;
+  z-index: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s var(--animation-easing, ease-in-out), visibility 0s linear 0.5s;
+}
+
+.hero-carousel__slide.is-leaving {
+  z-index: 1;
+  opacity: 1;
+  visibility: visible;
+  transition: none;
 }
 
 .hero-carousel__slide.is-active {
-  display: block;
+  z-index: 2;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s var(--animation-easing, ease-in-out), visibility 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-carousel__slide,
+  .hero-carousel__slide.is-active {
+    transition: none;
+  }
 }
 
 .hero-carousel__slide picture {
@@ -284,7 +347,7 @@
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1;
+  z-index: 3;
   display: flex;
   align-items: center;
   gap: 40px;
