@@ -74,7 +74,7 @@
         "pillar_science": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/Untitled_design_36.jpg",
+            "image": "shopify://shop_images/verticle.svg",
             "label": "Our Science",
             "heading_line1": "From the Depths of",
             "heading_line2": "Marine Science",
@@ -102,7 +102,7 @@
         "pillar_promise": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/24.svg",
+            "image": "shopify://shop_images/3.svg",
             "label": "Styling",
             "heading_line1": "Style with",
             "heading_line2": "Confidence",
@@ -116,7 +116,7 @@
         "pillar_sustainability": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/3.svg",
+            "image": "shopify://shop_images/15_b7ca715b-0505-459f-87c6-11cc3e287a53.svg",
             "label": "Real Results",
             "heading_line1": "Trusted by",
             "heading_line2": "Professionals",
@@ -190,7 +190,7 @@
       ],
       "name": "Hair Solutions",
       "settings": {
-        "background_image": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_56_32_PM.png",
+        "background_image": "shopify://shop_images/theme_5.svg",
         "background_image_mobile": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.12.22.jpg",
         "background_link": "",
         "eyebrow": "Professional Hair Care",
@@ -264,7 +264,7 @@
       ],
       "name": "Hair Solutions",
       "settings": {
-        "background_image": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_10_25_12_PM.png",
+        "background_image": "shopify://shop_images/theme_6_8503fee7-c1f4-4e81-8ef6-5663027e030d.svg",
         "background_image_mobile": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_10_39_06_PM.png",
         "background_link": "",
         "eyebrow": "Professional Skin Care",

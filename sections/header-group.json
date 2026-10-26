@@ -54,7 +54,34 @@
     "header_section": {
       "type": "ossian-header",
       "settings": {
-        "menu": "main-menu"
+        "logo_image": "shopify://shop_images/ossion_professional_1.png",
+        "logo_height": 48,
+        "logo_height_mobile": 38,
+        "menu": "main-menu",
+        "search_modal_placeholder": "Search for products, categories or solutions...",
+        "search_trending_heading": "Trending Searches",
+        "search_trending": "Shampoo\nHair Serum\nHair Mask\nKeratin Treatment\nHair Colour\nAnti Dandruff Shampoo\nHair Wax",
+        "search_categories_heading": "Popular Categories",
+        "search_promo_eyebrow": "Professional Hair Care",
+        "search_promo_heading": "Find Your",
+        "search_promo_heading_accent": "Perfect Hair Solution",
+        "search_promo_text": "Explore professional hair care products for stronger, smoother and healthier hair.",
+        "search_promo_button": "Shop Hair Care",
+        "search_promo_link": "",
+        "search_products_heading": "Products",
+        "search_products_collection": "",
+        "search_recent_heading": "Recent Searches",
+        "sticky_header": true,
+        "search_placeholder": "Search products, collections...",
+        "drawer_highlight_1": "Free delivery above Rs. 999",
+        "drawer_highlight_1_link": "",
+        "drawer_highlight_2": "Trusted by Salon Professionals",
+        "drawer_highlight_2_link": "",
+        "drawer_highlight_3": "Professional Salon Solutions",
+        "drawer_highlight_3_link": "",
+        "drawer_promo_heading": "Professional Care for Every You",
+        "drawer_promo_cta": "Explore Ossion",
+        "drawer_promo_link": ""
       }
     }
   },

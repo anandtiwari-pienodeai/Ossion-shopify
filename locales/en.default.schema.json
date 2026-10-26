@@ -151,7 +151,6 @@
     "width": "Width",
     "width_is_automatically_optimized": "Width is automatically optimized for mobile.",
     "app_required_for_ratings": "An app is required for product ratings. [Learn more](https://help.shopify.com/manual/apps)",
-    "editor_test_rating_info": "Shows a 4.5–4.8 test rating on products without reviews, only in the theme editor. Shoppers never see it.",
     "navigation": "Navigation"
   },
   "html_defaults": {
@@ -1065,7 +1064,6 @@
     // Font weight option (400 weight, not bold or light)
     "regular": "Regular",
     "review_count": "Review count",
-    "editor_test_rating": "Show test rating in editor",
     "right": "Right",
     "right_padding": "Right padding",
     "row": "Row",
