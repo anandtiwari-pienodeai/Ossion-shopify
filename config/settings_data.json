@@ -9,6 +9,10 @@
  */
 {
   "current": {
+    "type_body_custom_font": "gotham",
+    "type_subheading_custom_font": "gotham",
+    "type_heading_custom_font": "alexio_ace_display",
+    "type_accent_custom_font": "gotham",
     "logo": "shopify://shop_images/OSSION_PROFESSIONAL.png",
     "logo_height": 36,
     "logo_height_mobile": 28,

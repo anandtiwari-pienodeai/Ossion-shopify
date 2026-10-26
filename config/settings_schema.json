@@ -377,6 +377,270 @@
       },
       {
         "type": "header",
+        "content": "t:content.custom_fonts"
+      },
+      {
+        "type": "paragraph",
+        "content": "t:info.custom_fonts"
+      },
+      {
+        "type": "select",
+        "id": "type_body_custom_font",
+        "label": "t:options.body",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:options.custom_font_none"
+          },
+          {
+            "value": "gotham",
+            "label": "t:options.custom_font_gotham"
+          },
+          {
+            "value": "gotham_narrow",
+            "label": "t:options.custom_font_gotham_narrow"
+          },
+          {
+            "value": "alexio_ace_display",
+            "label": "t:options.custom_font_alexio_ace_display"
+          },
+          {
+            "value": "albert_sans",
+            "label": "t:options.custom_font_albert_sans"
+          },
+          {
+            "value": "bahnschrift",
+            "label": "t:options.custom_font_bahnschrift"
+          },
+          {
+            "value": "bebas",
+            "label": "t:options.custom_font_bebas"
+          },
+          {
+            "value": "bebas_kai",
+            "label": "t:options.custom_font_bebas_kai"
+          },
+          {
+            "value": "bebas_neue",
+            "label": "t:options.custom_font_bebas_neue"
+          },
+          {
+            "value": "calibri",
+            "label": "t:options.custom_font_calibri"
+          },
+          {
+            "value": "cambria",
+            "label": "t:options.custom_font_cambria"
+          },
+          {
+            "value": "century_gothic",
+            "label": "t:options.custom_font_century_gothic"
+          },
+          {
+            "value": "capsule_x_pro",
+            "label": "t:options.custom_font_capsule_x_pro"
+          },
+          {
+            "value": "magnolia_script",
+            "label": "t:options.custom_font_magnolia_script"
+          }
+        ],
+        "default": "gotham"
+      },
+      {
+        "type": "select",
+        "id": "type_subheading_custom_font",
+        "label": "t:options.subheading",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:options.custom_font_none"
+          },
+          {
+            "value": "gotham",
+            "label": "t:options.custom_font_gotham"
+          },
+          {
+            "value": "gotham_narrow",
+            "label": "t:options.custom_font_gotham_narrow"
+          },
+          {
+            "value": "alexio_ace_display",
+            "label": "t:options.custom_font_alexio_ace_display"
+          },
+          {
+            "value": "albert_sans",
+            "label": "t:options.custom_font_albert_sans"
+          },
+          {
+            "value": "bahnschrift",
+            "label": "t:options.custom_font_bahnschrift"
+          },
+          {
+            "value": "bebas",
+            "label": "t:options.custom_font_bebas"
+          },
+          {
+            "value": "bebas_kai",
+            "label": "t:options.custom_font_bebas_kai"
+          },
+          {
+            "value": "bebas_neue",
+            "label": "t:options.custom_font_bebas_neue"
+          },
+          {
+            "value": "calibri",
+            "label": "t:options.custom_font_calibri"
+          },
+          {
+            "value": "cambria",
+            "label": "t:options.custom_font_cambria"
+          },
+          {
+            "value": "century_gothic",
+            "label": "t:options.custom_font_century_gothic"
+          },
+          {
+            "value": "capsule_x_pro",
+            "label": "t:options.custom_font_capsule_x_pro"
+          },
+          {
+            "value": "magnolia_script",
+            "label": "t:options.custom_font_magnolia_script"
+          }
+        ],
+        "default": "gotham"
+      },
+      {
+        "type": "select",
+        "id": "type_heading_custom_font",
+        "label": "t:options.heading",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:options.custom_font_none"
+          },
+          {
+            "value": "gotham",
+            "label": "t:options.custom_font_gotham"
+          },
+          {
+            "value": "gotham_narrow",
+            "label": "t:options.custom_font_gotham_narrow"
+          },
+          {
+            "value": "alexio_ace_display",
+            "label": "t:options.custom_font_alexio_ace_display"
+          },
+          {
+            "value": "albert_sans",
+            "label": "t:options.custom_font_albert_sans"
+          },
+          {
+            "value": "bahnschrift",
+            "label": "t:options.custom_font_bahnschrift"
+          },
+          {
+            "value": "bebas",
+            "label": "t:options.custom_font_bebas"
+          },
+          {
+            "value": "bebas_kai",
+            "label": "t:options.custom_font_bebas_kai"
+          },
+          {
+            "value": "bebas_neue",
+            "label": "t:options.custom_font_bebas_neue"
+          },
+          {
+            "value": "calibri",
+            "label": "t:options.custom_font_calibri"
+          },
+          {
+            "value": "cambria",
+            "label": "t:options.custom_font_cambria"
+          },
+          {
+            "value": "century_gothic",
+            "label": "t:options.custom_font_century_gothic"
+          },
+          {
+            "value": "capsule_x_pro",
+            "label": "t:options.custom_font_capsule_x_pro"
+          },
+          {
+            "value": "magnolia_script",
+            "label": "t:options.custom_font_magnolia_script"
+          }
+        ],
+        "default": "alexio_ace_display"
+      },
+      {
+        "type": "select",
+        "id": "type_accent_custom_font",
+        "label": "t:options.accent",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:options.custom_font_none"
+          },
+          {
+            "value": "gotham",
+            "label": "t:options.custom_font_gotham"
+          },
+          {
+            "value": "gotham_narrow",
+            "label": "t:options.custom_font_gotham_narrow"
+          },
+          {
+            "value": "alexio_ace_display",
+            "label": "t:options.custom_font_alexio_ace_display"
+          },
+          {
+            "value": "albert_sans",
+            "label": "t:options.custom_font_albert_sans"
+          },
+          {
+            "value": "bahnschrift",
+            "label": "t:options.custom_font_bahnschrift"
+          },
+          {
+            "value": "bebas",
+            "label": "t:options.custom_font_bebas"
+          },
+          {
+            "value": "bebas_kai",
+            "label": "t:options.custom_font_bebas_kai"
+          },
+          {
+            "value": "bebas_neue",
+            "label": "t:options.custom_font_bebas_neue"
+          },
+          {
+            "value": "calibri",
+            "label": "t:options.custom_font_calibri"
+          },
+          {
+            "value": "cambria",
+            "label": "t:options.custom_font_cambria"
+          },
+          {
+            "value": "century_gothic",
+            "label": "t:options.custom_font_century_gothic"
+          },
+          {
+            "value": "capsule_x_pro",
+            "label": "t:options.custom_font_capsule_x_pro"
+          },
+          {
+            "value": "magnolia_script",
+            "label": "t:options.custom_font_magnolia_script"
+          }
+        ],
+        "default": "gotham"
+      },
+      {
+        "type": "header",
         "content": "t:content.text_presets"
       },
       {

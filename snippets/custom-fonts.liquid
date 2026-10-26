@@ -1,0 +1,328 @@
+{%- doc -%}
+  Declares the bundled brand fonts (assets/font-*.woff2) and exposes each family as
+  `--font-custom--<slug>`. Theme settings → Typography → Custom fonts map these onto the
+  body, subheading, heading, and accent roles in `theme-styles-variables`.
+
+  Browsers only download a face when rendered text uses it, so declaring every family is cheap.
+  Only the body font's regular face is preloaded.
+
+  @example
+  {% render 'custom-fonts' %}
+{%- enddoc -%}
+{%- liquid
+  case settings.type_body_custom_font
+    when 'gotham'
+      assign body_preload = 'font-gotham-book.woff2'
+    when 'gotham_narrow'
+      assign body_preload = 'font-gotham-narrow-book.woff2'
+    when 'alexio_ace_display'
+      assign body_preload = 'font-alexio-ace-display-regular.woff2'
+    when 'albert_sans'
+      assign body_preload = 'font-albert-sans-variable.woff2'
+    when 'bahnschrift'
+      assign body_preload = 'font-bahnschrift-variable.woff2'
+    when 'bebas'
+      assign body_preload = 'font-bebas-regular.woff2'
+    when 'bebas_kai'
+      assign body_preload = 'font-bebas-kai-regular.woff2'
+    when 'bebas_neue'
+      assign body_preload = 'font-bebas-neue-regular.woff2'
+    when 'calibri'
+      assign body_preload = 'font-calibri-regular.woff2'
+    when 'cambria'
+      assign body_preload = 'font-cambria-regular.woff2'
+    when 'century_gothic'
+      assign body_preload = 'font-century-gothic-regular.woff2'
+    when 'capsule_x_pro'
+      assign body_preload = 'font-capsule-x-pro-medium.woff2'
+    when 'magnolia_script'
+      assign body_preload = 'font-magnolia-script-regular.woff2'
+  endcase
+-%}
+{%- if body_preload != blank -%}
+  {{ body_preload | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+{%- endif -%}
+{% style %}
+  @font-face {
+    font-family: 'Gotham';
+    src: url('{{ 'font-gotham-thin.woff2' | asset_url }}') format('woff2');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Gotham';
+    src: url('{{ 'font-gotham-thin-italic.woff2' | asset_url }}') format('woff2');
+    font-weight: 100;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Gotham';
+    src: url('{{ 'font-gotham-light.woff2' | asset_url }}') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Gotham';
+    src: url('{{ 'font-gotham-light-italic.woff2' | asset_url }}') format('woff2');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Gotham';
+    src: url('{{ 'font-gotham-book.woff2' | asset_url }}') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Gotham';
+    src: url('{{ 'font-gotham-book-italic.woff2' | asset_url }}') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Gotham';
+    src: url('{{ 'font-gotham-medium.woff2' | asset_url }}') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Gotham';
+    src: url('{{ 'font-gotham-bold.woff2' | asset_url }}') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Gotham';
+    src: url('{{ 'font-gotham-bold-italic.woff2' | asset_url }}') format('woff2');
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Gotham';
+    src: url('{{ 'font-gotham-black.woff2' | asset_url }}') format('woff2');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Gotham';
+    src: url('{{ 'font-gotham-ultra-italic.woff2' | asset_url }}') format('woff2');
+    font-weight: 950;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Gotham Narrow';
+    src: url('{{ 'font-gotham-narrow-book.woff2' | asset_url }}') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Alexio Ace Display';
+    src: url('{{ 'font-alexio-ace-display-regular.woff2' | asset_url }}') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Alexio Ace Display';
+    src: url('{{ 'font-alexio-ace-display-medium.woff2' | asset_url }}') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Alexio Ace Display';
+    src: url('{{ 'font-alexio-ace-display-semibold.woff2' | asset_url }}') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Alexio Ace Display';
+    src: url('{{ 'font-alexio-ace-display-bold.woff2' | asset_url }}') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Albert Sans';
+    src: url('{{ 'font-albert-sans-variable.woff2' | asset_url }}') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Albert Sans';
+    src: url('{{ 'font-albert-sans-italic-variable.woff2' | asset_url }}') format('woff2');
+    font-weight: 100 900;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Bahnschrift';
+    src: url('{{ 'font-bahnschrift-variable.woff2' | asset_url }}') format('woff2');
+    font-weight: 300 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Bebas';
+    src: url('{{ 'font-bebas-regular.woff2' | asset_url }}') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Bebas Kai';
+    src: url('{{ 'font-bebas-kai-regular.woff2' | asset_url }}') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Bebas Neue';
+    src: url('{{ 'font-bebas-neue-regular.woff2' | asset_url }}') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Calibri';
+    src: url('{{ 'font-calibri-light.woff2' | asset_url }}') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Calibri';
+    src: url('{{ 'font-calibri-light-italic.woff2' | asset_url }}') format('woff2');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Calibri';
+    src: url('{{ 'font-calibri-regular.woff2' | asset_url }}') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Calibri';
+    src: url('{{ 'font-calibri-italic.woff2' | asset_url }}') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Calibri';
+    src: url('{{ 'font-calibri-bold.woff2' | asset_url }}') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Calibri';
+    src: url('{{ 'font-calibri-bold-italic.woff2' | asset_url }}') format('woff2');
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cambria';
+    src: url('{{ 'font-cambria-regular.woff2' | asset_url }}') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cambria';
+    src: url('{{ 'font-cambria-italic.woff2' | asset_url }}') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cambria';
+    src: url('{{ 'font-cambria-bold.woff2' | asset_url }}') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cambria';
+    src: url('{{ 'font-cambria-bold-italic.woff2' | asset_url }}') format('woff2');
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Century Gothic';
+    src: url('{{ 'font-century-gothic-regular.woff2' | asset_url }}') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Century Gothic';
+    src: url('{{ 'font-century-gothic-italic.woff2' | asset_url }}') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Century Gothic';
+    src: url('{{ 'font-century-gothic-bold.woff2' | asset_url }}') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Century Gothic';
+    src: url('{{ 'font-century-gothic-bold-italic.woff2' | asset_url }}') format('woff2');
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Capsule X Pro';
+    src: url('{{ 'font-capsule-x-pro-medium.woff2' | asset_url }}') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Magnolia Script';
+    src: url('{{ 'font-magnolia-script-regular.woff2' | asset_url }}') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    --font-custom--gotham: 'Gotham', sans-serif;
+    --font-custom--gotham_narrow: 'Gotham Narrow', sans-serif;
+    --font-custom--alexio_ace_display: 'Alexio Ace Display', serif;
+    --font-custom--albert_sans: 'Albert Sans', sans-serif;
+    --font-custom--bahnschrift: 'Bahnschrift', sans-serif;
+    --font-custom--bebas: 'Bebas', sans-serif;
+    --font-custom--bebas_kai: 'Bebas Kai', sans-serif;
+    --font-custom--bebas_neue: 'Bebas Neue', sans-serif;
+    --font-custom--calibri: 'Calibri', sans-serif;
+    --font-custom--cambria: 'Cambria', serif;
+    --font-custom--century_gothic: 'Century Gothic', sans-serif;
+    --font-custom--capsule_x_pro: 'Capsule X Pro', sans-serif;
+    --font-custom--magnolia_script: 'Magnolia Script', cursive;
+  }
+{% endstyle %}

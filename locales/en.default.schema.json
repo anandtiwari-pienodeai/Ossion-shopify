@@ -68,6 +68,7 @@
     "follow_on_shop_eligiblity": "For the button to show, the Shop channel must be installed and Shop Pay activated. [Learn more](https://help.shopify.com/en/manual/online-store/themes/customizing-themes/add-shop-buttons)",
     "gift_card_form_description": "Customers can send gift cards to a recipient's email with a personal message. [Learn more](https://help.shopify.com/manual/products/gift-card-products)",
     "fonts": "Fonts",
+    "custom_fonts": "Custom fonts",
     "grid": "Grid",
     "grid_layout": "Grid layout",
     "heading": "Heading",
@@ -211,6 +212,7 @@
     "work_quickly_to_ship": "<p>We will work quickly to ship your order as soon as possible. Once your order has shipped, you will receive an email with further information. Delivery times vary depending on your location.</p>"
   },
   "info": {
+    "custom_fonts": "Brand fonts bundled with the theme. A choice here replaces the font picked above for that role; weights still follow the picker.",
     "color_option_style": "Applies to options named Color, Colour or Shade. Captions read \"Col no: 01\", \"Col no: 02\"…",
     "cart_badge_tag": "Products with this tag show it as a badge in the cart drawer, e.g. Bestseller. Leave empty for no badge.",
     "cart_delivery_compare": "Optional. Shown crossed out next to the delivery text.",
@@ -440,6 +442,20 @@
     "comparison_slider": "Comparison slider"
   },
   "options": {
+    "custom_font_none": "Use font picker",
+    "custom_font_gotham": "Gotham",
+    "custom_font_gotham_narrow": "Gotham Narrow",
+    "custom_font_alexio_ace_display": "Alexio Ace Display",
+    "custom_font_albert_sans": "Albert Sans",
+    "custom_font_bahnschrift": "Bahnschrift",
+    "custom_font_bebas": "Bebas",
+    "custom_font_bebas_kai": "Bebas Kai",
+    "custom_font_bebas_neue": "Bebas Neue",
+    "custom_font_calibri": "Calibri",
+    "custom_font_cambria": "Cambria",
+    "custom_font_century_gothic": "Century Gothic",
+    "custom_font_capsule_x_pro": "Capsule X Pro",
+    "custom_font_magnolia_script": "Magnolia Script",
     "numbered_swatches": "Numbered swatches",
     "same_as_other_options": "Same as other options",
     "above_carousel": "Above carousel",

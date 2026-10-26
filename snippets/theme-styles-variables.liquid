@@ -155,16 +155,32 @@
     --letter-spacing-md: 0.13em;
 
     /* Font families */
+    {%- if settings.type_body_custom_font != blank and settings.type_body_custom_font != 'none' %}
+    --font-body--family: var(--font-custom--{{ settings.type_body_custom_font }});
+    {%- else %}
     --font-body--family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
+    {%- endif %}
     --font-body--style: {{ settings.type_body_font.style }};
     --font-body--weight: {{ settings.type_body_font.weight }};
+    {%- if settings.type_subheading_custom_font != blank and settings.type_subheading_custom_font != 'none' %}
+    --font-subheading--family: var(--font-custom--{{ settings.type_subheading_custom_font }});
+    {%- else %}
     --font-subheading--family: {{ settings.type_subheading_font.family }}, {{ settings.type_subheading_font.fallback_families }};
+    {%- endif %}
     --font-subheading--style: {{ settings.type_subheading_font.style }};
     --font-subheading--weight: {{ settings.type_subheading_font.weight }};
+    {%- if settings.type_heading_custom_font != blank and settings.type_heading_custom_font != 'none' %}
+    --font-heading--family: var(--font-custom--{{ settings.type_heading_custom_font }});
+    {%- else %}
     --font-heading--family: {{ settings.type_heading_font.family }}, {{ settings.type_heading_font.fallback_families }};
+    {%- endif %}
     --font-heading--style: {{ settings.type_heading_font.style }};
     --font-heading--weight: {{ settings.type_heading_font.weight }};
+    {%- if settings.type_accent_custom_font != blank and settings.type_accent_custom_font != 'none' %}
+    --font-accent--family: var(--font-custom--{{ settings.type_accent_custom_font }});
+    {%- else %}
     --font-accent--family: {{ settings.type_accent_font.family }}, {{ settings.type_accent_font.fallback_families }};
+    {%- endif %}
     --font-accent--style: {{ settings.type_accent_font.style }};
     --font-accent--weight: {{ settings.type_accent_font.weight }};
 

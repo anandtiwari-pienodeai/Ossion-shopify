@@ -1,5 +1,5 @@
 {% # theme-check-disable %}
-{%- unless settings.type_body_font.system? -%}
+{%- if settings.type_body_font.system? == false and settings.type_body_custom_font == 'none' -%}
   <link
     rel="preload"
     as="font"
@@ -8,8 +8,8 @@
     crossorigin
     fetchpriority="low"
   >
-{%- endunless -%}
-{%- unless settings.type_subheading_font.system? -%}
+{%- endif -%}
+{%- if settings.type_subheading_font.system? == false and settings.type_subheading_custom_font == 'none' -%}
   <link
     rel="preload"
     as="font"
@@ -18,8 +18,8 @@
     crossorigin
     fetchpriority="low"
   >
-{%- endunless -%}
-{%- unless settings.type_heading_font.system? -%}
+{%- endif -%}
+{%- if settings.type_heading_font.system? == false and settings.type_heading_custom_font == 'none' -%}
   <link
     rel="preload"
     as="font"
@@ -28,8 +28,8 @@
     crossorigin
     fetchpriority="low"
   >
-{%- endunless -%}
-{%- unless settings.type_accent_font.system? -%}
+{%- endif -%}
+{%- if settings.type_accent_font.system? == false and settings.type_accent_custom_font == 'none' -%}
   <link
     rel="preload"
     as="font"
@@ -38,5 +38,5 @@
     crossorigin
     fetchpriority="low"
   >
-{%- endunless -%}
+{%- endif -%}
 {% # theme-check-enable %}
