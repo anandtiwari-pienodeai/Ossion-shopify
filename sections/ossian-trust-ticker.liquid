@@ -3,7 +3,7 @@
   Row of trust markers, each labeled Skin or Hair. Product pages show only the markers
   matching the product; every other page shows all of them. A product is matched by a
   skin or hair tag first, then by its product type, and shows all markers if neither matches.
-  Wide screens show a static row; narrower screens scroll the markers as a ticker.
+  The markers scroll as a continuous carousel at every width and pause on hover.
   @example
   <!-- Add "Trust Ticker" to a template, then choose Skin or Hair on each badge -->
 {% endcomment %}
@@ -50,13 +50,20 @@
       assign visible_count = visible_count | plus: 1
     endif
   endfor
+
+  # Each looped set repeats its markers until it is wider than large screens, so the
+  # carousel never shows a gap. The duration scales with that count to hold the same pace.
+  if visible_count > 0
+    assign repeat_count = 16.0 | divided_by: visible_count | ceil
+    assign ticker_duration = visible_count | times: repeat_count | times: s.scroll_speed | divided_by: 8.0
+  endif
 -%}
 
 {%- if visible_count > 0 -%}
   <div
-    class="trust-ticker{% if visible_count <= 4 %} trust-ticker--compact{% endif %}"
+    class="trust-ticker"
     style="
-      --ticker-speed: {{ s.scroll_speed }}s;
+      --ticker-speed: {{ ticker_duration }}s;
       --trust-color: {{ s.text_color }};
       padding: {{ s.padding_top }}px 0 {{ s.padding_bottom }}px;
       background: {{ s.background_color }};
@@ -64,15 +71,24 @@
   >
     <div class="trust-ticker__track-outer">
       <div class="trust-ticker__track">
-        {%- comment -%} The second pass is a hidden copy that makes the ticker loop seamlessly {%- endcomment -%}
+        {%- comment -%} The second pass is a hidden copy that makes the carousel loop seamlessly {%- endcomment -%}
         {%- for pass in (1..2) -%}
           <div class="trust-ticker__set"{% if pass == 2 %} aria-hidden="true"{% endif %}>
-            {%- for block in section.blocks -%}
-              {%- if trust_category == blank or block.settings.category == trust_category -%}
-                <div class="trust-ticker__item" {% if pass == 1 %}{{ block.shopify_attributes }}{% endif %}>
-                  {%- render 'ossian-trust-badge', badge: block.settings -%}
-                </div>
-              {%- endif -%}
+            {%- for repeat in (1..repeat_count) -%}
+              {%- for block in section.blocks -%}
+                {%- if trust_category == blank or block.settings.category == trust_category -%}
+                  <div
+                    class="trust-ticker__item"
+                    {% if pass == 1 and repeat == 1 %}
+                      {{ block.shopify_attributes }}
+                    {% else %}
+                      aria-hidden="true"
+                    {% endif %}
+                  >
+                    {%- render 'ossian-trust-badge', badge: block.settings -%}
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
             {%- endfor -%}
           </div>
         {%- endfor -%}
@@ -179,55 +195,6 @@
     opacity: 0.8;
   }
 
-  /* All markers fit: show a static row, as a full set or a filtered product page set */
-  @media (min-width: 1360px) {
-    .trust-ticker__track {
-      width: 100%;
-      animation: none;
-    }
-
-    .trust-ticker__set {
-      display: grid;
-      flex: 1 1 auto;
-      grid-auto-columns: minmax(0, 1fr);
-      grid-auto-flow: column;
-    }
-
-    .trust-ticker__set[aria-hidden='true'] {
-      display: none;
-    }
-
-    .trust-ticker__item {
-      flex: 1 1 auto;
-      justify-content: center;
-      padding-inline: 6px;
-    }
-  }
-
-  @media (min-width: 750px) {
-    .trust-ticker--compact .trust-ticker__track {
-      width: 100%;
-      animation: none;
-    }
-
-    .trust-ticker--compact .trust-ticker__set {
-      display: grid;
-      flex: 1 1 auto;
-      grid-auto-columns: minmax(0, 1fr);
-      grid-auto-flow: column;
-    }
-
-    .trust-ticker--compact .trust-ticker__set[aria-hidden='true'] {
-      display: none;
-    }
-
-    .trust-ticker--compact .trust-ticker__item {
-      flex: 1 1 auto;
-      justify-content: center;
-      padding-inline: 6px;
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .trust-ticker__track-outer {
       overflow-x: auto;
@@ -237,7 +204,8 @@
       animation: none;
     }
 
-    .trust-ticker__set[aria-hidden='true'] {
+    .trust-ticker__set[aria-hidden='true'],
+    .trust-ticker__item[aria-hidden='true'] {
       display: none;
     }
   }

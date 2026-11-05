@@ -28,6 +28,7 @@
   endfor
   assign hair_image = section.settings.hair_image | default: hair_fallback_image
   assign skin_image = section.settings.skin_image | default: skin_fallback_image
+  assign heading_html = section.settings.heading | escape | replace: '[', '<span class="ossion-quiz__title-accent">' | replace: ']', '</span>'
 
   # journey|question|shown when|advance mode|layout|answers|icons
   capture step_spec
@@ -70,7 +71,7 @@
         <p class="ossion-quiz__eyebrow">{{ section.settings.eyebrow | escape }}</p>
       {%- endif -%}
       {%- if section.settings.heading != blank -%}
-        <h1 class="ossion-quiz__title ossion-quiz__title--xl">{{ section.settings.heading | escape }}</h1>
+        <h1 class="ossion-quiz__title ossion-quiz__title--xl">{{ heading_html }}</h1>
       {%- endif -%}
       {%- if section.settings.text != blank -%}
         <p class="ossion-quiz__lede">{{ section.settings.text | escape }}</p>
@@ -82,11 +83,15 @@
         {%- liquid
           if forloop.first
             assign j = 'hair'
-            assign j_image = hair_image
+            assign j_icon = 'pattern-wavy'
           else
             assign j = 'skin'
-            assign j_image = skin_image
+            assign j_icon = 'drop'
           endif
+          assign key = j | append: '_card_image'
+          assign j_image = section.settings[key]
+          assign key = j | append: '_card_image_mobile'
+          assign j_image_mobile = section.settings[key] | default: j_image
           assign key = j | append: '_title'
           assign j_title = section.settings[key]
           assign key = j | append: '_brand'
@@ -95,45 +100,84 @@
           assign j_text = section.settings[key]
           assign key = j | append: '_cta'
           assign j_cta = section.settings[key]
+          assign key = j | append: '_explore_label'
+          assign j_explore_label = section.settings[key]
+          assign key = j | append: '_explore_link'
+          assign j_explore_link = section.settings[key]
+          assign j_fallback = 'ossion-quiz-' | append: j | append: '.jpg' | asset_url
         -%}
         <li class="ossion-quiz__journey">
-          <a
-            class="ossion-quiz__journey-link"
-            href="?type={{ j }}"
-            data-journey="{{ j }}"
-            on:click="/handleJourneyClick"
-          >
-            <span class="ossion-quiz__journey-media">
-              {%- if j_image != blank -%}
+          <div class="ossion-quiz__journey-media">
+            {%- if j_image != blank -%}
+              <picture>
+                {%- if j_image_mobile != j_image -%}
+                  <source
+                    media="(max-width: 749px)"
+                    srcset="
+                      {{- j_image_mobile | image_url: width: 500 }} 500w,
+                      {{ j_image_mobile | image_url: width: 750 }} 750w,
+                      {{ j_image_mobile | image_url: width: 1000 }} 1000w
+                    "
+                    sizes="100vw"
+                    width="{{ j_image_mobile.width }}"
+                    height="{{ j_image_mobile.height }}"
+                  >
+                {%- endif -%}
                 {{
                   j_image
                   | image_url: width: 1400
                   | image_tag:
                     class: 'ossion-quiz__journey-img',
-                    widths: '400,600,800,1000,1400',
+                    widths: '500,750,1000,1400',
                     sizes: '(min-width: 990px) 50vw, 100vw',
                     loading: 'eager',
                     fetchpriority: 'high',
                     alt: ''
                 }}
-              {%- else -%}
-                {{ 'image' | placeholder_svg_tag: 'ossion-quiz__journey-img ossion-quiz__journey-img--placeholder' }}
-              {%- endif -%}
-            </span>
-            <span class="ossion-quiz__journey-body">
-              <span class="ossion-quiz__journey-title">{{ j_title | escape }}</span>
-              {%- if j_brand != blank -%}
-                <span class="ossion-quiz__journey-brand">{{ j_brand | escape }}</span>
-              {%- endif -%}
-              {%- if j_text != blank -%}
-                <span class="ossion-quiz__journey-text">{{ j_text | escape }}</span>
-              {%- endif -%}
-              <span class="ossion-quiz__journey-cta">
-                <span class="ossion-quiz__journey-cta-label">{{ j_cta | escape }}</span>
-                <span class="ossion-quiz__round-arrow" aria-hidden="true">{% render 'ossian-quiz-icon', name: 'arrow-right' %}</span>
-              </span>
-            </span>
-          </a>
+              </picture>
+            {%- else -%}
+              {%- comment -%} The CDN resizes theme assets via ?width= {%- endcomment -%}
+              <img
+                class="ossion-quiz__journey-img"
+                src="{{ j_fallback }}&width=938"
+                srcset="{{ j_fallback }}&width=500 500w, {{ j_fallback }}&width=938 938w"
+                sizes="(min-width: 990px) 50vw, 100vw"
+                alt=""
+                width="938"
+                height="472"
+                loading="eager"
+                fetchpriority="high"
+              >
+            {%- endif -%}
+          </div>
+
+          <div class="ossion-quiz__journey-body">
+            <span class="ossion-quiz__journey-icon" aria-hidden="true">{% render 'ossian-quiz-icon', name: j_icon %}</span>
+            <h2 class="ossion-quiz__journey-title">{{ j_title | escape }}</h2>
+            {%- if j_brand != blank -%}
+              <p class="ossion-quiz__journey-brand">{{ j_brand | escape }}</p>
+            {%- endif -%}
+            {%- if j_text != blank -%}
+              <p class="ossion-quiz__journey-text">{{ j_text | escape }}</p>
+            {%- endif -%}
+          </div>
+
+          <div class="ossion-quiz__journey-actions">
+            <a
+              class="ossion-quiz__journey-button ossion-quiz__journey-button--primary"
+              href="?type={{ j }}"
+              data-journey="{{ j }}"
+              on:click="/handleJourneyClick"
+            >
+              {{- j_cta | escape }}
+              <span class="ossion-quiz__journey-arrow" aria-hidden="true">{% render 'ossian-quiz-icon', name: 'arrow-right' %}</span>
+            </a>
+            {%- if j_explore_label != blank and j_explore_link != blank -%}
+              <a class="ossion-quiz__journey-button ossion-quiz__journey-button--outline" href="{{ j_explore_link }}">
+                {{- j_explore_label | escape -}}
+              </a>
+            {%- endif -%}
+          </div>
         </li>
       {%- endfor -%}
     </ul>
@@ -449,21 +493,29 @@
   "class": "ossian-quiz-section",
   "settings": [
     { "type": "header", "content": "Landing" },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Personalised routine" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Choose your Ossion." },
-    { "type": "text", "id": "text", "label": "Text", "default": "A personalised routine, backed by salon expertise." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Personalised Quiz" },
+    { "type": "text", "id": "heading", "label": "Heading", "info": "t:ossian_quiz.info.heading", "default": "Find Your [OSSION] Routine" },
+    { "type": "text", "id": "text", "label": "Text", "default": "Take a quick quiz and discover the right haircare or skincare products, personalised for your needs." },
     { "type": "header", "content": "Hair journey" },
-    { "type": "image_picker", "id": "hair_image", "label": "Hair image", "info": "Used on the landing card and beside hair questions. Falls back to the first hair product image." },
-    { "type": "text", "id": "hair_title", "label": "Title", "default": "Hair" },
-    { "type": "text", "id": "hair_brand", "label": "Range name", "default": "Ossion Professional" },
-    { "type": "text", "id": "hair_text", "label": "Text", "default": "Salon-grade haircare for real results." },
-    { "type": "text", "id": "hair_cta", "label": "Button label", "default": "Explore Hair" },
+    { "type": "image_picker", "id": "hair_image", "label": "Hair image", "info": "Used beside hair questions. Falls back to the first hair product image." },
+    { "type": "image_picker", "id": "hair_card_image", "label": "t:ossian_quiz.settings.card_image", "info": "t:ossian_quiz.info.card_image" },
+    { "type": "image_picker", "id": "hair_card_image_mobile", "label": "t:ossian_quiz.settings.card_image_mobile", "info": "t:ossian_quiz.info.card_image_mobile" },
+    { "type": "text", "id": "hair_title", "label": "Title", "default": "Find Your Hair Routine" },
+    { "type": "text", "id": "hair_brand", "label": "Range name" },
+    { "type": "text", "id": "hair_text", "label": "Text", "default": "Take our quick hair quiz and discover the hair care products best suited to your hair type and needs." },
+    { "type": "text", "id": "hair_cta", "label": "Button label", "default": "Take Hair Quiz" },
+    { "type": "text", "id": "hair_explore_label", "label": "t:ossian_quiz.settings.explore_label", "default": "Explore Hair Care" },
+    { "type": "url", "id": "hair_explore_link", "label": "t:ossian_quiz.settings.explore_link", "info": "t:ossian_quiz.info.explore_link" },
     { "type": "header", "content": "Skin journey" },
-    { "type": "image_picker", "id": "skin_image", "label": "Skin image", "info": "Used on the landing card and beside skin questions. Falls back to the first skin product image." },
-    { "type": "text", "id": "skin_title", "label": "Title", "default": "Skin" },
-    { "type": "text", "id": "skin_brand", "label": "Range name", "default": "Ossion Essentials" },
-    { "type": "text", "id": "skin_text", "label": "Text", "default": "Advanced skincare for healthy, radiant skin." },
-    { "type": "text", "id": "skin_cta", "label": "Button label", "default": "Explore Skin" },
+    { "type": "image_picker", "id": "skin_image", "label": "Skin image", "info": "Used beside skin questions. Falls back to the first skin product image." },
+    { "type": "image_picker", "id": "skin_card_image", "label": "t:ossian_quiz.settings.card_image", "info": "t:ossian_quiz.info.card_image" },
+    { "type": "image_picker", "id": "skin_card_image_mobile", "label": "t:ossian_quiz.settings.card_image_mobile", "info": "t:ossian_quiz.info.card_image_mobile" },
+    { "type": "text", "id": "skin_title", "label": "Title", "default": "Find Your Skin Routine" },
+    { "type": "text", "id": "skin_brand", "label": "Range name" },
+    { "type": "text", "id": "skin_text", "label": "Text", "default": "Take our quick skin quiz and discover the skincare products best suited to your skin type and goals." },
+    { "type": "text", "id": "skin_cta", "label": "Button label", "default": "Take Skin Quiz" },
+    { "type": "text", "id": "skin_explore_label", "label": "t:ossian_quiz.settings.explore_label", "default": "Explore Skin Care" },
+    { "type": "url", "id": "skin_explore_link", "label": "t:ossian_quiz.settings.explore_link", "info": "t:ossian_quiz.info.explore_link" },
     { "type": "header", "content": "Hair pattern images", "info": "Optional photos for the hair pattern question. Icons are shown when empty." },
     { "type": "image_picker", "id": "pattern_image_straight", "label": "Straight" },
     { "type": "image_picker", "id": "pattern_image_wavy", "label": "Wavy" },

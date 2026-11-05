@@ -345,7 +345,6 @@
         "badge_2",
         "badge_3"
       ],
-      "disabled": true,
       "name": "Ossion Science",
       "settings": {
         "background_image": "shopify://shop_images/theme_1.svg",
@@ -388,6 +387,7 @@
         "card_quiz",
         "card_glamsquad"
       ],
+      "disabled": true,
       "name": "Ossion Hair Experience",
       "settings": {
         "show_logo": true,
@@ -763,9 +763,12 @@
       "name": "Trust Ticker",
       "settings": {
         "background_color": "#ffffff",
+        "text_color": "#0b1d4d",
         "scroll_speed": 28,
         "padding_top": 20,
-        "padding_bottom": 20
+        "padding_bottom": 20,
+        "skin_product_types": "Facial Masks, Facial Kit, De-tan, Wax",
+        "hair_product_types": "Shampoo, Conditioner, Hair Mask, Hair Spa, Hair Color, Blonder, Developer, Nano Silk"
       }
     },
     "ossian_product_showcase_LAeCxW": {
