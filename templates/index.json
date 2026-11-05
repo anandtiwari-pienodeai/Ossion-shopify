@@ -30,10 +30,10 @@
       "settings": {
         "autoplay": true,
         "autoplay_speed": "3000",
+        "desktop_fit_image": true,
         "banner_height": 80,
         "banner_height_mobile": 50,
-        "mobile_fit_image": true,
-        "desktop_fit_image": true
+        "mobile_fit_image": true
       }
     },
     "ossian_brand_pillars": {
@@ -345,6 +345,7 @@
         "badge_2",
         "badge_3"
       ],
+      "disabled": true,
       "name": "Ossion Science",
       "settings": {
         "background_image": "shopify://shop_images/theme_1.svg",
@@ -388,7 +389,19 @@
         "card_glamsquad"
       ],
       "name": "Ossion Hair Experience",
-      "settings": {}
+      "settings": {
+        "show_logo": true,
+        "eyebrow": "Personalized care, professional results",
+        "heading": "Discover Your",
+        "heading_accent": "Hair Experience",
+        "description": "Whether you need a personalized haircare routine or a professional styling experience, find what works best for you.",
+        "background_color": "#f8f9fd",
+        "heading_color": "#0b1d4d",
+        "accent_color": "#1a56db",
+        "text_color": "#46536b",
+        "padding_top": 32,
+        "padding_bottom": 48
+      }
     },
     "ossian_transformation_banner_YkfgCY": {
       "type": "ossian-transformation-banner",
@@ -664,44 +677,88 @@
     "ossian_trust_ticker": {
       "type": "ossian-trust-ticker",
       "blocks": {
-        "badge_leaf": {
+        "badge_dermatologically_tested": {
           "type": "badge",
           "settings": {
-            "icon": "leaf",
-            "title": "Skin Loving Ingredients",
-            "description": "Enriched with natural extracts & nutrients."
-          }
-        },
-        "badge_shield": {
-          "type": "badge",
-          "settings": {
+            "category": "skin",
             "icon": "shield",
             "title": "Dermatologically Tested",
-            "description": "Safe and gentle for everyday use."
+            "description": ""
           }
         },
-        "badge_droplet": {
+        "badge_salon_quality": {
           "type": "badge",
           "settings": {
+            "category": "hair",
             "icon": "droplet",
-            "title": "Professional Quality",
-            "description": "Salon trusted, expert recommended."
+            "title": "Salon Professional Quality",
+            "description": ""
           }
         },
-        "badge_sparkle": {
+        "badge_visible_results": {
           "type": "badge",
           "settings": {
+            "category": "hair",
             "icon": "sparkle",
-            "title": "Visible Resultsq11111",
-            "description": "Healthy, glowing skin you can feel."
+            "title": "Visible Results",
+            "description": ""
+          }
+        },
+        "badge_skin_loving": {
+          "type": "badge",
+          "settings": {
+            "category": "skin",
+            "icon": "leaf",
+            "title": "Skin-Loving Ingredients",
+            "description": ""
+          }
+        },
+        "badge_cruelty_free": {
+          "type": "badge",
+          "settings": {
+            "category": "skin",
+            "icon": "rabbit",
+            "title": "Cruelty-Free Products",
+            "description": ""
+          }
+        },
+        "badge_trusted_professionals": {
+          "type": "badge",
+          "settings": {
+            "category": "hair",
+            "icon": "professionals",
+            "title": "Trusted by Professionals",
+            "description": ""
+          }
+        },
+        "badge_safe_everyday": {
+          "type": "badge",
+          "settings": {
+            "category": "skin",
+            "icon": "shield",
+            "title": "Safe for Everyday Use",
+            "description": ""
+          }
+        },
+        "badge_premium_formulations": {
+          "type": "badge",
+          "settings": {
+            "category": "hair",
+            "icon": "lab",
+            "title": "Premium Formulations",
+            "description": ""
           }
         }
       },
       "block_order": [
-        "badge_leaf",
-        "badge_shield",
-        "badge_droplet",
-        "badge_sparkle"
+        "badge_dermatologically_tested",
+        "badge_salon_quality",
+        "badge_visible_results",
+        "badge_skin_loving",
+        "badge_cruelty_free",
+        "badge_trusted_professionals",
+        "badge_safe_everyday",
+        "badge_premium_formulations"
       ],
       "name": "Trust Ticker",
       "settings": {
@@ -919,7 +976,12 @@
         "heading_color": "#ffffff",
         "heading_accent_color": "#7fb2ff",
         "text_color": "#dbe6f5",
-        "feature_title_color": "#ffffff"
+        "feature_title_color": "#ffffff",
+        "eyebrow_color_mobile": "#2f6fd6",
+        "heading_color_mobile": "#13233f",
+        "heading_accent_color_mobile": "#2f6fd6",
+        "text_color_mobile": "#4b5568",
+        "feature_title_color_mobile": "#13233f"
       }
     }
   },

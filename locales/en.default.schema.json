@@ -759,6 +759,21 @@
     },
     "settings": { "desktop_fit_image": "Show full image on desktop" }
   },
+  "ossian_trust_ticker": {
+    "headers": { "product_matching": "Product page matching" },
+    "info": {
+      "category": "Product pages show only the markers that match the product. All other pages show every marker.",
+      "product_matching": "A skin or hair product tag is checked first, then these product types. Products that match neither show every marker.",
+      "product_types": "Separate product types with commas."
+    },
+    "options": { "skin": "Skin", "hair": "Hair", "rabbit": "Rabbit / Cruelty-free", "professionals": "People / Professionals" },
+    "settings": {
+      "category": "Show on",
+      "text_color": "Text and icons",
+      "skin_product_types": "Skin product types",
+      "hair_product_types": "Hair product types"
+    }
+  },
   "ossian_newsletter": {
     "headers": { "text_colors": "Text colors", "text_colors_mobile": "Mobile text colors" },
     "info": {
