@@ -1,7 +1,6 @@
 import { Component } from '@theme/component';
 import { recommend } from '@theme/ossian-quiz-rules';
 
-const AUTO_ADVANCE_DELAY = 280;
 const JOURNEYS = ['hair', 'skin'];
 
 /**
@@ -11,8 +10,7 @@ const JOURNEYS = ['hair', 'skin'];
  * @property {HTMLElement} result
  * @property {HTMLFormElement} form
  * @property {HTMLElement} progress
- * @property {HTMLElement} progressFill
- * @property {HTMLElement} progressCount
+ * @property {HTMLElement} stepCount
  * @property {HTMLButtonElement} continue
  * @property {HTMLButtonElement} skip
  * @property {HTMLElement} resultHeading
@@ -52,31 +50,12 @@ class OssianQuiz extends Component {
   /** @type {QuizState} */
   state = { journey: null, answers: {}, index: 0, view: 'landing' };
 
-  /** @type {ReturnType<typeof setTimeout> | undefined} */
-  #advanceTimer;
-
   /** @type {{ sets: any[], products: any[] } | null} */
   #data = null;
 
-  /** True when the latest answer came from the keyboard; arrow keys select radios, so those wait for Continue. */
-  #keyboardSelection = false;
-
-  /** @type {AbortController | undefined} */
-  #abortController;
-
   connectedCallback() {
     super.connectedCallback();
-    this.#abortController = new AbortController();
-    const { signal } = this.#abortController;
-    this.refs.form.addEventListener('pointerdown', () => (this.#keyboardSelection = false), { signal });
-    this.refs.form.addEventListener('keydown', () => (this.#keyboardSelection = true), { signal });
     this.#restore();
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.#abortController?.abort();
-    clearTimeout(this.#advanceTimer);
   }
 
   get #storageKey() {
@@ -146,14 +125,6 @@ class OssianQuiz extends Component {
       step: this.state.index + 1,
     });
     this.#updateActions();
-
-    const mode = fieldset.dataset.mode;
-    if ((mode === 'auto' || mode === 'optional') && !this.#keyboardSelection) {
-      clearTimeout(this.#advanceTimer);
-      this.#advanceTimer = setTimeout(() => {
-        if (this.#currentQuestion === fieldset) this.#next();
-      }, AUTO_ADVANCE_DELAY);
-    }
   };
 
   /** @param {SubmitEvent} event */
@@ -161,7 +132,7 @@ class OssianQuiz extends Component {
     event.preventDefault();
     const question = this.#currentQuestion;
     if (!question) return;
-    if (!this.state.answers[question.dataset.question ?? ''] && question.dataset.mode !== 'optional') return;
+    if (!this.state.answers[question.dataset.question ?? '']) return;
     this.#next();
   };
 
@@ -176,7 +147,6 @@ class OssianQuiz extends Component {
   };
 
   goBack = () => {
-    clearTimeout(this.#advanceTimer);
     if (this.state.view === 'result') {
       this.state.index = Math.max(this.#sequence.length - 1, 0);
       this.#showFlow(-1);
@@ -221,7 +191,6 @@ class OssianQuiz extends Component {
   }
 
   #next() {
-    clearTimeout(this.#advanceTimer);
     if (this.state.index < this.#sequence.length - 1) {
       this.state.index += 1;
       this.#showFlow(1);
@@ -250,8 +219,6 @@ class OssianQuiz extends Component {
       fieldset.hidden = !active;
       fieldset.disabled = !active;
       if (!active) continue;
-      const label = fieldset.querySelector('[data-step-label]');
-      if (label) label.textContent = stepText;
       fieldset.dataset.direction = direction < 0 ? 'back' : 'forward';
       fieldset.classList.remove('is-entering');
       if (direction !== 0) {
@@ -261,10 +228,10 @@ class OssianQuiz extends Component {
     }
 
     const percent = total ? Math.round((stepNumber / total) * 100) : 0;
-    this.refs.progressFill?.style.setProperty('--ossion-quiz-progress', `${percent}%`);
     this.refs.progress?.setAttribute('aria-valuenow', String(percent));
     this.refs.progress?.setAttribute('aria-valuetext', stepText);
-    if (this.refs.progressCount) this.refs.progressCount.textContent = `${stepNumber}/${total}`;
+    if (this.refs.stepCount) this.refs.stepCount.textContent = stepText;
+    this.#renderProgress(total, stepNumber);
 
     this.#updateActions();
     this.#save();
@@ -272,20 +239,33 @@ class OssianQuiz extends Component {
     if (direction !== 0) this.#focusHeading(current?.querySelector('h2'));
   }
 
+  /**
+   * @param {number} total
+   * @param {number} stepNumber
+   */
+  #renderProgress(total, stepNumber) {
+    const { progress } = this.refs;
+    if (!progress) return;
+    if (progress.children.length !== total) {
+      progress.replaceChildren(
+        ...Array.from({ length: total }, () => {
+          const dot = document.createElement('span');
+          dot.className = 'ossion-quiz__progress-dot';
+          return dot;
+        })
+      );
+    }
+    [...progress.children].forEach((dot, index) => dot.classList.toggle('is-reached', index < stepNumber));
+  }
+
   #updateActions() {
     const question = this.#currentQuestion;
     if (!question) return;
-    const mode = question.dataset.mode;
-    const answered = Boolean(this.state.answers[question.dataset.question ?? '']);
-
-    // Auto-advancing questions only need Continue when revisiting an answered step.
-    this.refs.continue.hidden = mode !== 'continue' && !answered;
-    this.refs.continue.disabled = mode === 'continue' && !answered;
-    if (this.refs.skip) this.refs.skip.hidden = mode !== 'optional';
+    this.refs.continue.disabled = !this.state.answers[question.dataset.question ?? ''];
+    if (this.refs.skip) this.refs.skip.hidden = question.dataset.mode !== 'optional';
   }
 
   #showLanding() {
-    clearTimeout(this.#advanceTimer);
     this.state.view = 'landing';
     this.#setScreen('landing');
     this.#setUrl(null);
@@ -430,9 +410,11 @@ class OssianQuiz extends Component {
     if (!(heading instanceof HTMLElement)) return;
     heading.focus({ preventScroll: true });
     const top = this.getBoundingClientRect().top;
-    if (top < 0 || top > window.innerHeight / 2) {
+    // scroll-margin matches the sticky header, so the top of the quiz stays visible below it.
+    const headerOffset = parseFloat(getComputedStyle(this).scrollMarginBlockStart) || 0;
+    if (top < headerOffset || top > window.innerHeight / 2) {
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      this.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+      window.scrollTo({ top: window.scrollY + top - headerOffset, behavior: reduce ? 'auto' : 'smooth' });
     }
   }
 
@@ -490,7 +472,6 @@ class OssianQuiz extends Component {
   }
 
   #clear() {
-    clearTimeout(this.#advanceTimer);
     this.state = { journey: null, answers: {}, index: 0, view: 'landing' };
     this.#syncInputs();
     try {

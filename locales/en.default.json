@@ -11,7 +11,7 @@
   "ossian_quiz": {
     "eyebrow": "Personalised routine",
     "back": "Back",
-    "continue": "Continue",
+    "next": "Next",
     "skip": "Skip",
     "step_of": "Step {{ current }} of {{ total }}",
     "progress_label": "Quiz progress",
@@ -31,20 +31,24 @@
     "result_ready": "Your recommendation is ready.",
     "questions": {
       "hair_pattern": {
-        "title": "What's your hair pattern?",
-        "description": "This helps us understand your hair's natural behaviour.",
+        "title": "How would you describe your natural hair type?",
+        "description": "Select the option that best matches your natural hair texture.",
         "options": {
           "straight": {
-            "label": "Straight"
+            "label": "Straight",
+            "hint": "Smooth and sleek strands"
           },
           "wavy": {
-            "label": "Wavy"
+            "label": "Wavy",
+            "hint": "Loose, natural waves"
           },
           "curly": {
-            "label": "Curly"
+            "label": "Curly",
+            "hint": "Well-defined, springy curls"
           },
           "coily": {
-            "label": "Coily"
+            "label": "Coily",
+            "hint": "Tight curls with defined texture"
           }
         }
       },

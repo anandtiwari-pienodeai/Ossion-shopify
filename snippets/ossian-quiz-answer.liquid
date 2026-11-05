@@ -8,7 +8,8 @@
   @param {string} label - Visible answer text.
   @param {string} [hint] - Optional supporting line under the label.
   @param {string} [icon] - Icon name for ossian-quiz-icon.
-  @param {object} [image] - Optional image shown instead of the icon (tile cards).
+  @param {object} [image] - Optional image shown instead of the icon.
+  @param {string} [fallback_image] - Asset URL shown when image is empty, instead of the icon.
   @param {string} [reason] - Recommendation reason carried to the result engine.
   @param {string} id_prefix - Unique prefix (section id) for the input id.
 
@@ -19,7 +20,7 @@
 {%- assign input_id = 'OssionQuiz-' | append: id_prefix | append: '-' | append: question | append: '-' | append: value -%}
 
 <label
-  class="ossion-quiz__answer{% if image != blank %} ossion-quiz__answer--image{% endif %}"
+  class="ossion-quiz__answer"
   for="{{ input_id }}"
 >
   <input
@@ -36,14 +37,16 @@
     {%- if image != blank -%}
       {{
         image
-        | image_url: width: 480
+        | image_url: width: 240
         | image_tag:
           class: 'ossion-quiz__answer-img',
-          widths: '200,320,480',
-          sizes: '(min-width: 990px) 200px, 45vw',
+          widths: '80,160,240',
+          sizes: '76px',
           loading: 'lazy',
           alt: ''
       }}
+    {%- elsif fallback_image != blank -%}
+      <img class="ossion-quiz__answer-img" src="{{ fallback_image }}" alt="" width="160" height="160" loading="lazy">
     {%- else -%}
       <span class="ossion-quiz__answer-icon">{% render 'ossian-quiz-icon', name: icon %}</span>
     {%- endif -%}
@@ -54,7 +57,5 @@
       <span class="ossion-quiz__answer-hint">{{ hint }}</span>
     {%- endif -%}
   </span>
-  <span class="ossion-quiz__answer-check" aria-hidden="true">
-    {%- render 'ossian-quiz-icon', name: 'check' -%}
-  </span>
+  <span class="ossion-quiz__answer-check" aria-hidden="true"></span>
 </label>

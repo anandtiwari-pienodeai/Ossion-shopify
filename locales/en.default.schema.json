@@ -759,18 +759,31 @@
     },
     "settings": { "desktop_fit_image": "Show full image on desktop" }
   },
+  "ossian_brand_pillars": {
+    "info": {
+      "show_card_number": "Shows the 01, 02, 03 number and line at the top of each card."
+    },
+    "settings": {
+      "cards_header": "Pillar cards",
+      "show_card_number": "Show card numbers"
+    }
+  },
   "ossian_quiz": {
     "info": {
       "heading": "Wrap words in [brackets] for the blue accent.",
       "card_image": "Shown on the landing card. Keep the left half clear for text. Recommended 1880 x 940 px.",
       "card_image_mobile": "Recommended 1000 x 670 px. Uses the card image when empty.",
-      "explore_link": "The button is hidden until a link is set."
+      "explore_link": "The button is hidden until a link is set.",
+      "aside_image": "Shown in the curved panel beside the questions on desktop. Portrait images work best, at least 1000 x 1400 px.",
+      "quiz_logo": "Shown at the top of the question and result screens. Uses the Ossion logo when empty."
     },
     "settings": {
       "card_image": "Card image",
       "card_image_mobile": "Card image (mobile)",
       "explore_label": "Explore button label",
-      "explore_link": "Explore button link"
+      "explore_link": "Explore button link",
+      "quiz_label": "Quiz name",
+      "quiz_logo": "Quiz logo"
     }
   },
   "ossian_trust_ticker": {

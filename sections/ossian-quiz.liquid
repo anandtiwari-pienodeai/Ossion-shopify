@@ -12,50 +12,67 @@
 
 {%- liquid
   assign sid = section.id
-  assign hair_fallback_image = blank
-  assign skin_fallback_image = blank
-  for block in section.blocks
-    assign journey = block.settings.concern | split: '-' | first
-    for product in block.settings.products
-      if product.featured_image != blank
-        if journey == 'hair' and hair_fallback_image == blank
-          assign hair_fallback_image = product.featured_image
-        elsif journey == 'skin' and skin_fallback_image == blank
-          assign skin_fallback_image = product.featured_image
-        endif
-      endif
-    endfor
-  endfor
-  assign hair_image = section.settings.hair_image | default: hair_fallback_image
-  assign skin_image = section.settings.skin_image | default: skin_fallback_image
   assign heading_html = section.settings.heading | escape | replace: '[', '<span class="ossion-quiz__title-accent">' | replace: ']', '</span>'
 
-  # journey|question|shown when|advance mode|layout|answers|icons
+  # journey|question|shown when|mode|answers|icons
   capture step_spec
-    echo 'hair|hair_pattern||auto|tiles|straight,wavy,curly,coily|pattern-straight,pattern-wavy,pattern-curly,pattern-coily~'
-    echo 'hair|strand_thickness||auto|list|fine,medium,coarse|strand-fine,strand-medium,strand-coarse~'
-    echo 'hair|scalp_condition||auto|list|oily,normal,dry,sensitive|drop-oil,balance,flake,sensitive~'
-    echo 'hair|primary_concern||continue|grid|colour,blonde,smoothing,hydration,scalp|palette,sparkle,smooth,drop,refresh~'
-    echo 'hair|colour_goal|primary_concern:colour|continue|list|vibrancy,grey_coverage,shine,longevity|palette,circle,sparkle,refresh~'
-    echo 'hair|blonde_need|primary_concern:blonde|continue|list|brassiness,brightness,strengthen,hydrate,protect|sparkle,sun,repair,drop,sensitive~'
-    echo 'hair|smooth_result|primary_concern:smoothing|continue|list|frizz,lasting,sleek,manageability,humidity|smooth,refresh,pattern-straight,balance,drop~'
-    echo 'hair|hair_condition|primary_concern:hydration|continue|list|dry,very_dry,chemical,heat,brittle|flake,drop,sparkle,flame,repair~'
-    echo 'hair|scalp_need|primary_concern:scalp|continue|list|buildup,oil,refresh,soothe,deep_cleanse|refresh,drop-oil,leaf,sensitive,drop~'
-    echo 'hair|heat_frequency||optional|list|daily,often,weekly,rarely,never|flame,flame,flame,circle,flame-off~'
-    echo 'skin|skin_feel||auto|list|oily,dry,sensitive,normal|drop-oil,flake,sensitive,balance~'
-    echo 'skin|skin_goal||continue|list|pigmentation,waxing,glow|sun,leaf,sparkle~'
-    echo 'skin|pigment_concern|skin_goal:pigmentation|continue|list|sun_tan,dark_spots,acne_marks,dull|sun,circle,sensitive,refresh~'
-    echo 'skin|wax_need|skin_goal:waxing|continue|list|very_sensitive,normal,first_time|sensitive,balance,leaf~'
-    echo 'skin|glow_type|skin_goal:glow|continue|list|hydration,brightening,calming,antioxidant|drop,sun,leaf,sparkle~'
-    echo 'skin|skin_finish||auto|list|fresh,hydrated,calm,bright|sparkle,drop,balance,sun'
+    echo 'hair|hair_pattern||required|coily,curly,wavy,straight|pattern-coily,pattern-curly,pattern-wavy,pattern-straight~'
+    echo 'hair|strand_thickness||required|fine,medium,coarse|strand-fine,strand-medium,strand-coarse~'
+    echo 'hair|scalp_condition||required|oily,normal,dry,sensitive|drop-oil,balance,flake,sensitive~'
+    echo 'hair|primary_concern||required|colour,blonde,smoothing,hydration,scalp|palette,sparkle,smooth,drop,refresh~'
+    echo 'hair|colour_goal|primary_concern:colour|required|vibrancy,grey_coverage,shine,longevity|palette,circle,sparkle,refresh~'
+    echo 'hair|blonde_need|primary_concern:blonde|required|brassiness,brightness,strengthen,hydrate,protect|sparkle,sun,repair,drop,sensitive~'
+    echo 'hair|smooth_result|primary_concern:smoothing|required|frizz,lasting,sleek,manageability,humidity|smooth,refresh,pattern-straight,balance,drop~'
+    echo 'hair|hair_condition|primary_concern:hydration|required|dry,very_dry,chemical,heat,brittle|flake,drop,sparkle,flame,repair~'
+    echo 'hair|scalp_need|primary_concern:scalp|required|buildup,oil,refresh,soothe,deep_cleanse|refresh,drop-oil,leaf,sensitive,drop~'
+    echo 'hair|heat_frequency||optional|daily,often,weekly,rarely,never|flame,flame,flame,circle,flame-off~'
+    echo 'skin|skin_feel||required|oily,dry,sensitive,normal|drop-oil,flake,sensitive,balance~'
+    echo 'skin|skin_goal||required|pigmentation,waxing,glow|sun,leaf,sparkle~'
+    echo 'skin|pigment_concern|skin_goal:pigmentation|required|sun_tan,dark_spots,acne_marks,dull|sun,circle,sensitive,refresh~'
+    echo 'skin|wax_need|skin_goal:waxing|required|very_sensitive,normal,first_time|sensitive,balance,leaf~'
+    echo 'skin|glow_type|skin_goal:glow|required|hydration,brightening,calming,antioxidant|drop,sun,leaf,sparkle~'
+    echo 'skin|skin_finish||required|fresh,hydrated,calm,bright|sparkle,drop,balance,sun'
   endcapture
   assign steps = step_spec | split: '~'
-  assign hint_questions = 'strand_thickness,scalp_condition,skin_feel' | split: ','
+  assign hint_questions = 'hair_pattern,strand_thickness,scalp_condition,skin_feel' | split: ','
   assign reason_questions = 'primary_concern,skin_goal' | split: ','
 
   assign step_of_template = 'ossian_quiz.step_of' | t: current: '[current]', total: '[total]'
   assign browse_url = section.settings.browse_url | default: routes.all_products_collection_url
+  assign journeys = 'hair,skin' | split: ','
 -%}
+
+{%- capture quiz_brand -%}
+  <div class="ossion-quiz__brand">
+    {%- if section.settings.quiz_logo != blank -%}
+      {{
+        section.settings.quiz_logo
+        | image_url: width: 400
+        | image_tag:
+          class: 'ossion-quiz__brand-logo',
+          widths: '200,400',
+          sizes: '160px',
+          loading: 'lazy',
+          alt: shop.name
+      }}
+    {%- else -%}
+      <img
+        class="ossion-quiz__brand-logo"
+        src="{{ 'ossion-quiz-logo.png' | asset_url }}&width=400"
+        alt="{{ shop.name | escape }}"
+        width="720"
+        height="143"
+        loading="lazy"
+      >
+    {%- endif -%}
+    {%- for journey in journeys -%}
+      {%- assign key = journey | append: '_quiz_label' -%}
+      {%- if section.settings[key] != blank -%}
+        <span class="ossion-quiz__brand-label" data-journey-label="{{ journey }}">{{ section.settings[key] | escape }}</span>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+{%- endcapture -%}
 
 <ossian-quiz
   class="ossion-quiz"
@@ -192,59 +209,62 @@
 
   {%- comment -%} Questions: one fieldset per step, shown one at a time by the component. {%- endcomment -%}
   <div class="ossion-quiz__screen ossion-quiz__flow" ref="flow" data-screen="flow" hidden>
-    <div class="ossion-quiz__flow-inner ossion-quiz__container">
+    <div class="ossion-quiz__flow-inner">
       <div class="ossion-quiz__aside" aria-hidden="true">
-        {%- if hair_image != blank -%}
-          <span class="ossion-quiz__aside-frame" data-journey-image="hair">
-          {{
-            hair_image
-            | image_url: width: 1100
-            | image_tag:
-              class: 'ossion-quiz__aside-img',
-              widths: '500,700,900,1100',
-              sizes: '(min-width: 990px) 40vw, 1px',
-              loading: 'lazy',
-              alt: ''
-          }}
+        {%- for journey in journeys -%}
+          {%- liquid
+            assign key = journey | append: '_image'
+            assign aside_image = section.settings[key]
+            if journey == 'hair'
+              assign aside_fallback = 'ossion-quiz-aside-hair.jpg' | asset_url
+              assign aside_width = 435
+              assign aside_height = 640
+            else
+              assign aside_fallback = 'ossion-quiz-skin.jpg' | asset_url
+              assign aside_width = 938
+              assign aside_height = 472
+            endif
+          -%}
+          <span class="ossion-quiz__aside-frame" data-journey-image="{{ journey }}">
+            {%- if aside_image != blank -%}
+              {{
+                aside_image
+                | image_url: width: 1400
+                | image_tag:
+                  class: 'ossion-quiz__aside-img',
+                  widths: '500,700,900,1100,1400',
+                  sizes: '(min-width: 990px) 36vw, 1px',
+                  loading: 'lazy',
+                  alt: ''
+              }}
+            {%- else -%}
+              <img
+                class="ossion-quiz__aside-img"
+                src="{{ aside_fallback }}"
+                alt=""
+                width="{{ aside_width }}"
+                height="{{ aside_height }}"
+                loading="lazy"
+              >
+            {%- endif -%}
           </span>
-        {%- endif -%}
-        {%- if skin_image != blank -%}
-          <span class="ossion-quiz__aside-frame" data-journey-image="skin">
-          {{
-            skin_image
-            | image_url: width: 1100
-            | image_tag:
-              class: 'ossion-quiz__aside-img',
-              widths: '500,700,900,1100',
-              sizes: '(min-width: 990px) 40vw, 1px',
-              loading: 'lazy',
-              alt: ''
-          }}
-          </span>
-        {%- endif -%}
+        {%- endfor -%}
       </div>
 
       <div class="ossion-quiz__main">
         <div class="ossion-quiz__topbar">
-          <button type="button" class="ossion-quiz__back" on:click="/goBack">
-            {%- render 'ossian-quiz-icon', name: 'arrow-left' -%}
-            <span>{{ 'ossian_quiz.back' | t }}</span>
-          </button>
-          <div class="ossion-quiz__progress">
-            <div
-              class="ossion-quiz__progress-track"
-              role="progressbar"
-              aria-label="{{ 'ossian_quiz.progress_label' | t | escape }}"
-              aria-valuemin="0"
-              aria-valuemax="100"
-              aria-valuenow="0"
-              ref="progress"
-            >
-              <span class="ossion-quiz__progress-fill" ref="progressFill"></span>
-            </div>
-            <span class="ossion-quiz__progress-count" ref="progressCount" aria-hidden="true"></span>
-          </div>
+          {{ quiz_brand }}
+          <p class="ossion-quiz__step-count" ref="stepCount" aria-hidden="true"></p>
         </div>
+        <div
+          class="ossion-quiz__progress"
+          role="progressbar"
+          aria-label="{{ 'ossian_quiz.progress_label' | t | escape }}"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+          ref="progress"
+        ></div>
 
         <form class="ossion-quiz__form" ref="form" on:change="/handleAnswer" on:submit="/handleSubmit" novalidate>
           {%- for step in steps -%}
@@ -254,9 +274,8 @@
               assign s_id = parts[1]
               assign s_when = parts[2]
               assign s_mode = parts[3]
-              assign s_layout = parts[4]
-              assign s_values = parts[5] | split: ','
-              assign s_icons = parts[6] | split: ','
+              assign s_values = parts[4] | split: ','
+              assign s_icons = parts[5] | split: ','
               assign q_key = 'ossian_quiz.questions.' | append: s_id
               assign title_key = q_key | append: '.title'
               assign desc_key = q_key | append: '.description'
@@ -273,11 +292,10 @@
               aria-labelledby="{{ legend_id }}"
               hidden
             >
-              <p class="ossion-quiz__step-label" data-step-label></p>
               <h2 class="ossion-quiz__title" id="{{ legend_id }}" tabindex="-1">{{ title_key | t }}</h2>
               <p class="ossion-quiz__description">{{ desc_key | t }}</p>
 
-              <div class="ossion-quiz__answers ossion-quiz__answers--{{ s_layout }}">
+              <div class="ossion-quiz__answers">
                 {%- for value in s_values -%}
                   {%- liquid
                     assign opt_key = q_key | append: '.options.' | append: value
@@ -292,9 +310,11 @@
                       assign reason = reason_key | t
                     endif
                     assign answer_image = blank
+                    assign answer_fallback = blank
                     if s_id == 'hair_pattern'
                       assign key = 'pattern_image_' | append: value
                       assign answer_image = section.settings[key]
+                      assign answer_fallback = 'ossion-quiz-pattern-' | append: value | append: '.jpg' | asset_url
                     endif
                     assign icon = s_icons[forloop.index0]
                   -%}
@@ -305,6 +325,7 @@
                     hint: hint,
                     icon: icon,
                     image: answer_image,
+                    fallback_image: answer_fallback,
                     reason: reason,
                     id_prefix: sid
                   -%}
@@ -314,13 +335,19 @@
           {%- endfor -%}
 
           <div class="ossion-quiz__actions">
-            <button type="button" class="ossion-quiz__skip" ref="skip" on:click="/skipQuestion" hidden>
-              {{- 'ossian_quiz.skip' | t -}}
+            <button type="button" class="ossion-quiz__button ossion-quiz__button--outline" on:click="/goBack">
+              {%- render 'ossian-quiz-icon', name: 'arrow-left' -%}
+              <span>{{ 'ossian_quiz.back' | t }}</span>
             </button>
-            <button type="submit" class="ossion-quiz__button ossion-quiz__button--primary" ref="continue">
-              <span>{{ 'ossian_quiz.continue' | t }}</span>
-              {%- render 'ossian-quiz-icon', name: 'arrow-right' -%}
-            </button>
+            <div class="ossion-quiz__actions-end">
+              <button type="button" class="ossion-quiz__skip" ref="skip" on:click="/skipQuestion" hidden>
+                {{- 'ossian_quiz.skip' | t -}}
+              </button>
+              <button type="submit" class="ossion-quiz__button ossion-quiz__button--primary" ref="continue">
+                <span>{{ 'ossian_quiz.next' | t }}</span>
+                {%- render 'ossian-quiz-icon', name: 'arrow-right' -%}
+              </button>
+            </div>
           </div>
         </form>
       </div>
@@ -330,6 +357,7 @@
   {%- comment -%} Result: filled by the component from the product data below. {%- endcomment -%}
   <div class="ossion-quiz__screen ossion-quiz__result" ref="result" data-screen="result" hidden>
     <div class="ossion-quiz__result-inner ossion-quiz__container">
+      <div class="ossion-quiz__topbar">{{ quiz_brand }}</div>
       <div class="ossion-quiz__result-intro">
         <h2 class="ossion-quiz__title ossion-quiz__title--xl" ref="resultHeading" tabindex="-1">
           {{- section.settings.result_heading | escape -}}
@@ -493,11 +521,13 @@
   "class": "ossian-quiz-section",
   "settings": [
     { "type": "header", "content": "Landing" },
+    { "type": "image_picker", "id": "quiz_logo", "label": "t:ossian_quiz.settings.quiz_logo", "info": "t:ossian_quiz.info.quiz_logo" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Personalised Quiz" },
     { "type": "text", "id": "heading", "label": "Heading", "info": "t:ossian_quiz.info.heading", "default": "Find Your [OSSION] Routine" },
     { "type": "text", "id": "text", "label": "Text", "default": "Take a quick quiz and discover the right haircare or skincare products, personalised for your needs." },
     { "type": "header", "content": "Hair journey" },
-    { "type": "image_picker", "id": "hair_image", "label": "Hair image", "info": "Used beside hair questions. Falls back to the first hair product image." },
+    { "type": "image_picker", "id": "hair_image", "label": "Hair image", "info": "t:ossian_quiz.info.aside_image" },
+    { "type": "text", "id": "hair_quiz_label", "label": "t:ossian_quiz.settings.quiz_label", "default": "Hair Care Quiz" },
     { "type": "image_picker", "id": "hair_card_image", "label": "t:ossian_quiz.settings.card_image", "info": "t:ossian_quiz.info.card_image" },
     { "type": "image_picker", "id": "hair_card_image_mobile", "label": "t:ossian_quiz.settings.card_image_mobile", "info": "t:ossian_quiz.info.card_image_mobile" },
     { "type": "text", "id": "hair_title", "label": "Title", "default": "Find Your Hair Routine" },
@@ -507,7 +537,8 @@
     { "type": "text", "id": "hair_explore_label", "label": "t:ossian_quiz.settings.explore_label", "default": "Explore Hair Care" },
     { "type": "url", "id": "hair_explore_link", "label": "t:ossian_quiz.settings.explore_link", "info": "t:ossian_quiz.info.explore_link" },
     { "type": "header", "content": "Skin journey" },
-    { "type": "image_picker", "id": "skin_image", "label": "Skin image", "info": "Used beside skin questions. Falls back to the first skin product image." },
+    { "type": "image_picker", "id": "skin_image", "label": "Skin image", "info": "t:ossian_quiz.info.aside_image" },
+    { "type": "text", "id": "skin_quiz_label", "label": "t:ossian_quiz.settings.quiz_label", "default": "Skin Care Quiz" },
     { "type": "image_picker", "id": "skin_card_image", "label": "t:ossian_quiz.settings.card_image", "info": "t:ossian_quiz.info.card_image" },
     { "type": "image_picker", "id": "skin_card_image_mobile", "label": "t:ossian_quiz.settings.card_image_mobile", "info": "t:ossian_quiz.info.card_image_mobile" },
     { "type": "text", "id": "skin_title", "label": "Title", "default": "Find Your Skin Routine" },
@@ -516,7 +547,7 @@
     { "type": "text", "id": "skin_cta", "label": "Button label", "default": "Take Skin Quiz" },
     { "type": "text", "id": "skin_explore_label", "label": "t:ossian_quiz.settings.explore_label", "default": "Explore Skin Care" },
     { "type": "url", "id": "skin_explore_link", "label": "t:ossian_quiz.settings.explore_link", "info": "t:ossian_quiz.info.explore_link" },
-    { "type": "header", "content": "Hair pattern images", "info": "Optional photos for the hair pattern question. Icons are shown when empty." },
+    { "type": "header", "content": "Hair pattern images", "info": "Circular photos on the hair pattern answers. Square images of at least 160 x 160 px work best." },
     { "type": "image_picker", "id": "pattern_image_straight", "label": "Straight" },
     { "type": "image_picker", "id": "pattern_image_wavy", "label": "Wavy" },
     { "type": "image_picker", "id": "pattern_image_curly", "label": "Curly" },
