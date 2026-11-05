@@ -12,8 +12,9 @@
     "collection_hero": {
       "type": "ossian-collection-hero",
       "settings": {
-        "banner_image": "shopify://shop_images/ChatGPT_Image_Sep_19_2026_01_14_49_AM.png",
+        "banner_image": "shopify://shop_images/categor_banner_1.png",
         "banner_link": "",
+        "sizing": "natural",
         "banner_height": 400,
         "banner_height_mobile": 220
       }
@@ -150,6 +151,7 @@
         "cat_1": {
           "type": "category_card",
           "settings": {
+            "collection": "",
             "product": "amber-glow-permanent-hair-color-creme-100ml",
             "category_label": "HAIR CARE",
             "name": "Caviar Mask",
@@ -163,6 +165,7 @@
         "cat_2": {
           "type": "category_card",
           "settings": {
+            "collection": "",
             "product": "chromatic-dream-permanent-hair-color-creme-100ml",
             "category_label": "HAIR CARE",
             "name": "Caviar Mask",
@@ -176,6 +179,7 @@
         "cat_3": {
           "type": "category_card",
           "settings": {
+            "collection": "",
             "product": "crimson-veil-permanent-hair-color-creme-100ml",
             "category_label": "HAIR CARE",
             "name": "Caviar Mask",
@@ -189,6 +193,7 @@
         "cat_4": {
           "type": "category_card",
           "settings": {
+            "collection": "",
             "product": "velvet-noir-permanent-hair-color-creme-100ml",
             "category_label": "HAIR CARE",
             "name": "Caviar Mask",
@@ -208,6 +213,9 @@
       ],
       "settings": {
         "heading": "EXPLORE MORE CATEGORY",
+        "max_cards": 4,
+        "hide_current": true,
+        "cta_label": "View all",
         "auto_collections": true,
         "exclude_handles": "frontpage, test"
       }

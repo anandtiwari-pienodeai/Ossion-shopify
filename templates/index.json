@@ -12,51 +12,18 @@
     "ossian_hero_slider": {
       "type": "ossian-hero-slider",
       "blocks": {
-        "slide_6MWmQQ": {
-          "type": "slide",
-          "settings": {
-            "media_type": "image",
-            "image": "shopify://shop_images/12.svg",
-            "image_mobile": "shopify://shop_images/Pure_Shea_Hair_Care_Advertisement.png",
-            "link": "",
-            "link_label": ""
-          }
-        },
-        "slide_6ehiiH": {
-          "type": "slide",
-          "settings": {
-            "media_type": "image",
-            "image": "shopify://shop_images/7.svg",
-            "image_mobile": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_39_19_PM.png",
-            "link": "",
-            "link_label": ""
-          }
-        },
-        "slide_LhFXGn": {
-          "type": "slide",
-          "settings": {
-            "media_type": "image",
-            "image": "shopify://shop_images/14.svg",
-            "image_mobile": "shopify://shop_images/Natural_Care_Hair_Skin_Essentials.png",
-            "link": "",
-            "link_label": ""
-          }
-        },
         "slide_npPbYc": {
           "type": "slide",
           "settings": {
             "media_type": "image",
-            "image": "shopify://shop_images/24.svg",
-            "image_mobile": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_42_40_PM.png",
+            "image": "shopify://shop_images/Main_Banner_1_3e5aa27c-90c3-4187-91a5-c09c84a65fc9.png",
+            "image_mobile": "shopify://shop_images/magnific__enhance__39476.png",
             "link": "",
             "link_label": ""
           }
         }
       },
       "block_order": [
-        "slide_6MWmQQ",
-        "slide_6ehiiH",
-        "slide_LhFXGn",
         "slide_npPbYc"
       ],
       "name": "Hero Carousel",
@@ -65,7 +32,8 @@
         "autoplay_speed": "3000",
         "banner_height": 80,
         "banner_height_mobile": 50,
-        "mobile_fit_image": true
+        "mobile_fit_image": true,
+        "desktop_fit_image": true
       }
     },
     "ossian_brand_pillars": {
@@ -74,56 +42,56 @@
         "pillar_science": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/verticle.svg",
-            "label": "Our Science",
-            "heading_line1": "From the Depths of",
-            "heading_line2": "Marine Science",
+            "image": "shopify://shop_images/2.png",
+            "label": "",
+            "heading_line1": "",
+            "heading_line2": "",
             "accent_line2": true,
-            "body_text": "Advanced formulations inspired by the ocean. Proven by science.",
+            "body_text": "",
             "overlay_opacity": 80,
-            "button_label": "Our Science",
+            "button_label": "",
             "button_link": ""
           }
         },
         "pillar_haircare": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/Untitled_design_39.jpg",
-            "label": "Hair Care",
-            "heading_line1": "Complete Care for",
-            "heading_line2": "Every Strand",
+            "image": "shopify://shop_images/3.png",
+            "label": "",
+            "heading_line1": "",
+            "heading_line2": "",
             "accent_line2": true,
-            "body_text": "Shampoo, conditioner, treatments and more for stronger, healthier hair.",
+            "body_text": "",
             "overlay_opacity": 50,
-            "button_label": "Shop Hair Care",
+            "button_label": "",
             "button_link": ""
           }
         },
         "pillar_promise": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/3.svg",
-            "label": "Styling",
-            "heading_line1": "Style with",
-            "heading_line2": "Confidence",
+            "image": "shopify://shop_images/4.png",
+            "label": "",
+            "heading_line1": "",
+            "heading_line2": "",
             "accent_line2": true,
-            "body_text": "Professional styling solutions for every look and occasion.",
+            "body_text": "",
             "overlay_opacity": 70,
-            "button_label": "Shop Styling",
+            "button_label": "",
             "button_link": ""
           }
         },
         "pillar_sustainability": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/15_b7ca715b-0505-459f-87c6-11cc3e287a53.svg",
-            "label": "Real Results",
-            "heading_line1": "Trusted by",
-            "heading_line2": "Professionals",
+            "image": "shopify://shop_images/5.png",
+            "label": "",
+            "heading_line1": "",
+            "heading_line2": "",
             "accent_line2": true,
-            "body_text": "Salon performance. Everyday confidence.",
+            "body_text": "",
             "overlay_opacity": 70,
-            "button_label": "Our Promise",
+            "button_label": "",
             "button_link": ""
           }
         }
@@ -137,7 +105,7 @@
       "name": "Brand Pillars",
       "settings": {
         "section_height": 680,
-        "hero_image": "shopify://shop_images/Untitled_design_5.jpg",
+        "hero_image": "shopify://shop_images/1.png",
         "hero_image_mobile": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_36_28_PM.png",
         "hero_alt": "OSSION Professional — Salon science at its best",
         "hero_link": ""
@@ -188,6 +156,7 @@
         "image_card_2",
         "image_card_3"
       ],
+      "disabled": true,
       "name": "Hair Solutions",
       "settings": {
         "background_image": "shopify://shop_images/theme_5.svg",
@@ -217,78 +186,30 @@
         "feature_4_icon": "leaf"
       }
     },
-    "ossian_solutions_showcase_qbdC4a": {
-      "type": "ossian-solutions-showcase",
-      "blocks": {
-        "image_card_jf6CQz": {
-          "type": "image_card",
-          "settings": {
-            "link_type": "product",
-            "product": "ossion-essentials-white-chocolate",
-            "collection": "",
-            "page": "",
-            "link": "",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.24.15.jpg",
-            "alt": "Step 1 White Chocolate Liposoluble Wax — soft skin, zero fuss"
-          }
-        },
-        "image_card_CFMkPe": {
-          "type": "image_card",
-          "settings": {
-            "link_type": "product",
-            "product": "ossion-hair-intense-mask-silk-amino-acid",
-            "collection": "",
-            "page": "",
-            "link": "",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.24.31.jpg",
-            "alt": "Step 2 Hair Intense Mask — up to 10X repair for visibly healthier hair"
-          }
-        },
-        "image_card_qnnXXE": {
-          "type": "image_card",
-          "settings": {
-            "link_type": "product",
-            "product": "ossion-essentials-japanese",
-            "collection": "",
-            "page": "",
-            "link": "",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-10-03_at_22.24.45.jpg",
-            "alt": "Step 3 Japanese Glow Facial Kit — brighten, nourish and glow"
-          }
-        }
-      },
-      "block_order": [
-        "image_card_jf6CQz",
-        "image_card_CFMkPe",
-        "image_card_qnnXXE"
-      ],
-      "name": "Hair Solutions",
+    "ossian_transformation_banner": {
+      "type": "ossian-transformation-banner",
       "settings": {
-        "background_image": "shopify://shop_images/theme_6_8503fee7-c1f4-4e81-8ef6-5663027e030d.svg",
-        "background_image_mobile": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_10_39_06_PM.png",
-        "background_link": "",
-        "eyebrow": "Professional Skin Care",
-        "heading_line1": "Only What Your",
-        "heading_line2": "Skin Needs",
-        "text": "Advanced formulas for smoother and healthier skin.",
-        "button_label": "Explore Collection",
-        "button_link": "shopify://collections/all",
-        "color_eyebrow": "#6b3d41",
-        "color_heading": "#4b3d12",
-        "color_heading_accent": "#f3141f",
-        "color_text": "#5a6981",
-        "color_button_bg": "#f3147c",
-        "color_button_text": "#ffffff",
-        "color_feature_icon": "#14b0f3",
-        "color_feature_text": "#12284b",
-        "feature_1": "Deep\nNourishment",
-        "feature_1_icon": "drop",
-        "feature_2": "Suitable\nfor All Skin Types",
-        "feature_2_icon": "shield",
-        "feature_3": "Visible\nResults",
-        "feature_3_icon": "sparkle",
-        "feature_4": "Clean & Safe\nIngredients",
-        "feature_4_icon": "leaf"
+        "image": "shopify://shop_images/Banner_2_0fdbfef4-768b-414c-801b-af7e3a71191f.png",
+        "alt": "Salon Choice — Real Transformations. Professional care, real results.",
+        "link": "shopify://collections/hair-care"
+      }
+    },
+    "ossian_transformation_banner_NHzkWx": {
+      "type": "ossian-transformation-banner",
+      "name": "Transformation Banner",
+      "settings": {
+        "image": "shopify://shop_images/Banner_3.png",
+        "alt": "",
+        "link": "shopify://collections/skin-care"
+      }
+    },
+    "ossian_best_sellers": {
+      "type": "ossian-best-sellers",
+      "name": "Best Sellers",
+      "settings": {
+        "heading": "Best Sellers",
+        "collection": "best-seller-care-products",
+        "products_count": 12
       }
     },
     "ossian_skin_needs": {
@@ -391,15 +312,6 @@
         "trust_label_3": "Visible Radiance"
       }
     },
-    "ossian_best_sellers": {
-      "type": "ossian-best-sellers",
-      "name": "Best Sellers",
-      "settings": {
-        "heading": "Best Sellers",
-        "collection": "bestseller",
-        "products_count": 12
-      }
-    },
     "ossian_science": {
       "type": "ossian-science",
       "blocks": {
@@ -435,6 +347,7 @@
       ],
       "name": "Ossion Science",
       "settings": {
+        "background_image": "shopify://shop_images/theme_1.svg",
         "background_link": "",
         "heading": "The Ossion Difference",
         "heading_accent": "",
@@ -444,7 +357,40 @@
         "button_url": "/pages/ossionquiz"
       }
     },
-    "ossian_transformation_banner": {
+    "ossian_hair_experience": {
+      "type": "ossian-hair-experience",
+      "blocks": {
+        "card_quiz": {
+          "type": "card",
+          "settings": {
+            "card_style": "light",
+            "icon_type": "quiz",
+            "heading": "Find Your\nHaircare Routine",
+            "text": "Take our personalized hair quiz and discover the right products for your hair type and concerns.",
+            "button_label": "Take the quiz",
+            "button_link": "/pages/ossionquiz"
+          }
+        },
+        "card_glamsquad": {
+          "type": "card",
+          "settings": {
+            "card_style": "dark",
+            "icon_type": "scissors",
+            "heading": "OSSION ×\nGlamsquad",
+            "text": "Discover professional hair styling experiences powered by OSSION haircare.",
+            "button_label": "Explore experience",
+            "button_link": "/pages/ossion-science"
+          }
+        }
+      },
+      "block_order": [
+        "card_quiz",
+        "card_glamsquad"
+      ],
+      "name": "Ossion Hair Experience",
+      "settings": {}
+    },
+    "ossian_transformation_banner_YkfgCY": {
       "type": "ossian-transformation-banner",
       "settings": {
         "alt": "Salon Choice — Real Transformations. Professional care, real results.",
@@ -955,113 +901,25 @@
       ],
       "name": "Available On",
       "settings": {
-        "heading": "WE'RE ALSO AVAILABLE ON"
-      }
-    },
-    "ossian_blog": {
-      "type": "ossian-blog",
-      "blocks": {
-        "post_1": {
-          "type": "post",
-          "settings": {
-            "article": "",
-            "tag": "Hair Care",
-            "date": "Oct 12, 2024",
-            "title": "5 Everyday Habits for Stronger, Healthier Hair",
-            "excerpt": "Small daily habits can make a big difference. Discover expert-backed tips to keep your hair stronger, smoother and healthier.",
-            "link": ""
-          }
-        },
-        "post_2": {
-          "type": "post",
-          "settings": {
-            "article": "",
-            "tag": "Skin Care",
-            "date": "Oct 08, 2024",
-            "title": "How to Build a Simple Skincare Routine",
-            "excerpt": "A step-by-step guide to creating an effective skincare routine for cleaner, brighter and healthier skin — no complicated steps.",
-            "link": ""
-          }
-        },
-        "post_3": {
-          "type": "post",
-          "settings": {
-            "article": "",
-            "tag": "Ingredients",
-            "date": "Sep 28, 2024",
-            "title": "Spotlight on Fiber Plex Technology",
-            "excerpt": "Discover how Fiber Plex works to protect, strengthen and maintain your hair while delivering visible results.",
-            "link": ""
-          }
-        },
-        "post_4": {
-          "type": "post",
-          "settings": {
-            "article": "",
-            "tag": "Tips & Guides",
-            "date": "Sep 20, 2024",
-            "title": "How to Keep Your Hair Color Vibrant for Longer",
-            "excerpt": "Expert tips and care routines to maintain your salon-fresh hair color and prevent fading.",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "post_1",
-        "post_2",
-        "post_3",
-        "post_4"
-      ],
-      "settings": {
-        "eyebrow": "Blog & Articles",
-        "heading": "From Our [Blog]",
-        "text": "Expert tips, hair & skin care routines, ingredient insights and more — curated to help you look and feel your best.",
-        "view_all_label": "View All Articles",
-        "view_all_link": "",
-        "background": "#ffffff",
-        "source": "blog",
-        "blog": "news",
-        "limit": 8
+        "heading": "OUR VALUED SALON CLIENTS"
       }
     },
     "ossian_newsletter": {
       "type": "ossian-newsletter",
-      "blocks": {
-        "benefit_offers": {
-          "type": "feature",
-          "settings": {
-            "icon": "gift",
-            "title": "Exclusive Offers"
-          }
-        },
-        "benefit_launches": {
-          "type": "feature",
-          "settings": {
-            "icon": "bell",
-            "title": "New Launches"
-          }
-        },
-        "benefit_tips": {
-          "type": "feature",
-          "settings": {
-            "icon": "document",
-            "title": "Expert Beauty Tips"
-          }
-        }
-      },
-      "block_order": [
-        "benefit_offers",
-        "benefit_launches",
-        "benefit_tips"
-      ],
       "settings": {
+        "background_image": "shopify://shop_images/email_banner.png",
         "show_sparkles": true,
         "page_background": "#ffffff",
         "eyebrow": "Stay Connected",
         "heading": "Get Beauty Tips,|New Launches & [Exclusive Offers]",
-        "text": "Subscribe to our newsletter and be the first to know about new products, expert tips and special offers.",
+        "text": "Get the latest beauty trends, expert tips and exclusive offers delivered straight to your inbox.",
         "placeholder": "Enter your email address",
-        "button_label": "Subscribe"
+        "button_label": "Subscribe",
+        "eyebrow_color": "#7fb2ff",
+        "heading_color": "#ffffff",
+        "heading_accent_color": "#7fb2ff",
+        "text_color": "#dbe6f5",
+        "feature_title_color": "#ffffff"
       }
     }
   },
@@ -1069,18 +927,19 @@
     "ossian_hero_slider",
     "ossian_brand_pillars",
     "ossian_hair_solutions",
-    "ossian_solutions_showcase_qbdC4a",
-    "ossian_skin_needs",
-    "ossian_best_sellers",
-    "ossian_science",
     "ossian_transformation_banner",
+    "ossian_transformation_banner_NHzkWx",
+    "ossian_best_sellers",
+    "ossian_skin_needs",
+    "ossian_science",
+    "ossian_hair_experience",
+    "ossian_transformation_banner_YkfgCY",
     "ossian_salon_choice",
     "ossian_instagram",
     "ossian_trust_ticker",
     "ossian_product_showcase_LAeCxW",
     "ossian_shop_by_category",
     "ossian_available_on",
-    "ossian_blog",
     "ossian_newsletter"
   ]
 }

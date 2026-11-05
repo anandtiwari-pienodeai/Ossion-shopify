@@ -2,18 +2,24 @@
   comment
     Mobile "fit image": the banner takes the first slide's mobile image proportions so it
     is shown whole; other slides are fitted inside that frame (never cropped) and the
-    height stays the same while the carousel rotates.
+    height stays the same while the carousel rotates. Desktop "fit image" does the same
+    with the first slide's desktop image or video.
   endcomment
   assign first_slide = section.blocks.first
   assign first_mobile = first_slide.settings.image_mobile | default: first_slide.settings.image
   assign mobile_ratio = first_mobile.aspect_ratio | default: 0.8
+  assign first_desktop = first_slide.settings.image | default: first_slide.settings.image_mobile
+  if first_slide.settings.media_type == 'video' and first_slide.settings.video != blank
+    assign first_desktop = first_slide.settings.video
+  endif
+  assign desktop_ratio = first_desktop.aspect_ratio | default: 2
 -%}
 <div
-  class="hero-carousel{% if section.settings.mobile_fit_image %} hero-carousel--mobile-fit{% endif %}"
+  class="hero-carousel{% if section.settings.mobile_fit_image %} hero-carousel--mobile-fit{% endif %}{% if section.settings.desktop_fit_image %} hero-carousel--desktop-fit{% endif %}"
   id="hero-carousel-{{ section.id }}"
   data-autoplay="{{ section.settings.autoplay }}"
   data-speed="{{ section.settings.autoplay_speed }}"
-  style="--hero-height: {{ section.settings.banner_height }}vh; --hero-height-mobile: {{ section.settings.banner_height_mobile }}vh; --hero-ratio-mobile: {{ mobile_ratio }};"
+  style="--hero-height: {{ section.settings.banner_height }}vh; --hero-height-mobile: {{ section.settings.banner_height_mobile }}vh; --hero-ratio-mobile: {{ mobile_ratio }}; --hero-ratio-desktop: {{ desktop_ratio }};"
 >
   <div class="hero-carousel__track">
     {%- for block in section.blocks -%}
@@ -413,6 +419,17 @@
   border-color: rgba(255,255,255,0.9);
 }
 
+@media (min-width: 769px) {
+  .hero-carousel--desktop-fit .hero-carousel__track {
+    height: auto;
+    aspect-ratio: var(--hero-ratio-desktop, 2);
+  }
+
+  .hero-carousel--desktop-fit .hero-carousel__media {
+    object-fit: contain;
+  }
+}
+
 @media (max-width: 768px) {
   .hero-carousel__track {
     height: var(--hero-height-mobile, 50vh);
@@ -459,10 +476,18 @@
       "default": "3000"
     },
     {
+      "type": "checkbox",
+      "id": "desktop_fit_image",
+      "label": "t:ossian_hero_slider.settings.desktop_fit_image",
+      "info": "t:ossian_hero_slider.info.desktop_fit_image",
+      "default": false
+    },
+    {
       "type": "range",
       "id": "banner_height",
       "label": "Banner height (desktop)",
       "info": "Percentage of the screen height. All slides use this height; images are cropped to fill it.",
+      "visible_if": "{{ section.settings.desktop_fit_image == false }}",
       "min": 40,
       "max": 100,
       "step": 5,

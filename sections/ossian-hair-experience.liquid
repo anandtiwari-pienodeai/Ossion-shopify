@@ -1,0 +1,643 @@
+{% comment %}
+  Section contract.
+  Homepage band with a logo, centered intro and two image cards that each lead to
+  a separate experience. Card images fill the card on desktop. On mobile the cards
+  become a swipeable row with the image under the text. The first two cards fall
+  back to bundled photos until images are chosen, and a card button only renders
+  once it has a link.
+  @example
+  <!-- Add "Ossion Hair Experience" to the homepage, then set each card's image and button link -->
+{% endcomment %}
+
+{%- liquid
+  assign s = section.settings
+  assign heading_id = 'hair-exp-heading-' | append: section.id
+  assign has_heading = false
+  if s.heading != blank or s.heading_accent != blank
+    assign has_heading = true
+  endif
+-%}
+
+<section
+  class="hair-exp"
+  {% if has_heading %}
+    aria-labelledby="{{ heading_id }}"
+  {% endif %}
+  style="
+    --hair-exp-bg: {{ s.background_color }};
+    --hair-exp-heading: {{ s.heading_color }};
+    --hair-exp-accent: {{ s.accent_color }};
+    --hair-exp-text: {{ s.text_color }};
+    --hair-exp-pad-top: {{ s.padding_top }}px;
+    --hair-exp-pad-bottom: {{ s.padding_bottom }}px;
+  "
+>
+  <svg class="hair-exp__waves" viewBox="0 0 1774 300" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 0H295C250 45 200 90 140 125C90 155 40 175 0 195Z"/>
+    <path d="M1774 0H1430C1470 30 1490 75 1530 110C1590 160 1690 200 1774 240Z"/>
+  </svg>
+
+  <div class="hair-exp__inner">
+    <div class="hair-exp__intro">
+      {%- if s.show_logo -%}
+        <div class="hair-exp__brand">
+          {%- render 'ossian-logo', image: s.logo, class: 'hair-exp__logo' -%}
+        </div>
+      {%- endif -%}
+      {%- if s.eyebrow != blank -%}
+        <p class="hair-exp__eyebrow">{{ s.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if has_heading -%}
+        <h2 class="hair-exp__heading" id="{{ heading_id }}">
+          {{- s.heading | escape -}}
+          {%- if s.heading_accent != blank %}
+            <span class="hair-exp__heading-accent">{{ s.heading_accent | escape }}</span>
+          {%- endif -%}
+        </h2>
+      {%- endif -%}
+      {%- if s.description != blank -%}
+        <p class="hair-exp__description">{{ s.description | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="hair-exp__grid">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign b = block.settings
+            assign image = b.image | default: b.image_mobile
+            assign image_mobile = b.image_mobile | default: b.image
+            assign fallback = 'ossion-hair-quiz.jpg'
+            if forloop.index == 2
+              assign fallback = 'ossion-hair-glamsquad.jpg'
+            endif
+            assign fallback_url = fallback | asset_url
+          -%}
+          <article class="hair-exp-card hair-exp-card--{{ b.card_style }}" {{ block.shopify_attributes }}>
+            <div class="hair-exp-card__media">
+              {%- if image != blank -%}
+                <picture>
+                  {%- if image_mobile != image -%}
+                    <source
+                      media="(max-width: 749px)"
+                      srcset="
+                        {{- image_mobile | image_url: width: 500 }} 500w,
+                        {{ image_mobile | image_url: width: 750 }} 750w,
+                        {{ image_mobile | image_url: width: 1100 }} 1100w
+                      "
+                      sizes="100vw"
+                      width="{{ image_mobile.width }}"
+                      height="{{ image_mobile.height }}"
+                    >
+                  {%- endif -%}
+                  {{
+                    image
+                    | image_url: width: 1800
+                    | image_tag:
+                      class: 'hair-exp-card__img',
+                      loading: 'lazy',
+                      widths: '500, 750, 1100, 1400, 1800',
+                      sizes: '(min-width: 990px) 50vw, 100vw'
+                  }}
+                </picture>
+              {%- else -%}
+                {%- comment -%} The CDN resizes theme assets via ?width= {%- endcomment -%}
+                <img
+                  class="hair-exp-card__img"
+                  src="{{ fallback_url }}&width=838"
+                  srcset="{{ fallback_url }}&width=500 500w, {{ fallback_url }}&width=838 838w"
+                  sizes="(min-width: 990px) 50vw, 100vw"
+                  alt=""
+                  width="838"
+                  height="546"
+                  loading="lazy"
+                >
+              {%- endif -%}
+            </div>
+
+            <div class="hair-exp-card__content">
+              {%- if b.icon != blank -%}
+                {{
+                  b.icon
+                  | image_url: width: 120
+                  | image_tag: class: 'hair-exp-card__icon', loading: 'lazy', alt: '', widths: '60, 120', sizes: '60px'
+                }}
+              {%- elsif b.icon_type == 'quiz' -%}
+                <svg class="hair-exp-card__icon" viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M31 12H13a4 4 0 0 0-4 4v30a4 4 0 0 0 4 4h24a4 4 0 0 0 4-4V30"/>
+                  <path d="M19 9h10v6H19z"/>
+                  <path d="m16 28 3 3 5-6M16 40l3 3 5-6M29 31h5M29 42h5"/>
+                  <path d="M42 4c.8 5.6 3 7.8 8.6 8.6-5.6.8-7.8 3-8.6 8.6-.8-5.6-3-7.8-8.6-8.6C39 11.8 41.2 9.6 42 4Z"/>
+                  <path d="M52 21c.4 2.6 1.4 3.6 4 4-2.6.4-3.6 1.4-4 4-.4-2.6-1.4-3.6-4-4 2.6-.4 3.6-1.4 4-4Z"/>
+                </svg>
+              {%- elsif b.icon_type == 'scissors' -%}
+                <svg class="hair-exp-card__icon" viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="45" r="6.5"/>
+                  <circle cx="44" cy="45" r="6.5"/>
+                  <path d="M16.5 40.2 46 5M39.5 40.2 10 5"/>
+                  <circle cx="28" cy="26" r="1"/>
+                </svg>
+              {%- endif -%}
+
+              {%- if b.heading != blank -%}
+                <h3 class="hair-exp-card__heading">{{ b.heading | escape | newline_to_br }}</h3>
+              {%- endif -%}
+              {%- if b.text != blank -%}
+                <p class="hair-exp-card__text">{{ b.text | escape }}</p>
+              {%- endif -%}
+              {%- if b.button_label != blank and b.button_link != blank -%}
+                <a class="hair-exp-card__button" href="{{ b.button_link }}">
+                  <span>{{ b.button_label | escape }}</span>
+                  <svg class="hair-exp-card__arrow" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M1 7h15M11 2l5 5-5 5"/>
+                  </svg>
+                </a>
+              {%- endif -%}
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .hair-exp {
+    --hair-exp-navy: #0b1d4d;
+    --hair-exp-light-surface: #e3eaf6;
+    --hair-exp-dark-surface: #11253f;
+
+    position: relative;
+    overflow: hidden;
+    padding-block: var(--hair-exp-pad-top) var(--hair-exp-pad-bottom);
+    background: var(--hair-exp-bg);
+    color: var(--hair-exp-text);
+  }
+
+  .hair-exp__waves {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    width: 100%;
+    height: clamp(120px, 17vw, 300px);
+    fill: #dfe7f5;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .hair-exp__inner {
+    position: relative;
+    max-width: 1800px;
+    margin-inline: auto;
+    padding-inline: clamp(16px, 2vw, 36px);
+  }
+
+  .hair-exp__intro {
+    max-width: 1240px;
+    margin-inline: auto;
+    margin-block-end: clamp(28px, 3.4vw, 56px);
+    text-align: center;
+  }
+
+  .hair-exp__brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(16px, 2vw, 30px);
+    margin-block-end: clamp(14px, 1.4vw, 24px);
+  }
+
+  .hair-exp__brand::before,
+  .hair-exp__brand::after {
+    content: '';
+    width: clamp(36px, 5vw, 84px);
+    height: 1px;
+    background: rgb(11 29 77 / 0.4);
+  }
+
+  /* Doubled scope: the logo snippet also carries the header's .ossian-navbar__logo rules */
+  .hair-exp__brand .hair-exp__logo {
+    display: block;
+    flex: none;
+    width: clamp(130px, 11vw, 190px);
+    margin-inline-end: 0;
+    line-height: 0;
+  }
+
+  .hair-exp__brand .hair-exp__logo img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .hair-exp__eyebrow {
+    margin: 0 0 clamp(8px, 0.8vw, 14px);
+    font-family: var(--font-body--family);
+    font-size: clamp(11px, 1vw, 17px);
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    color: var(--hair-exp-heading);
+  }
+
+  .hair-exp__heading {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: clamp(32px, 4.3vw, 76px);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    color: var(--hair-exp-heading);
+    overflow-wrap: break-word;
+  }
+
+  .hair-exp__heading-accent {
+    color: var(--hair-exp-accent);
+  }
+
+  .hair-exp__description {
+    margin: clamp(10px, 1vw, 18px) 0 0;
+    font-family: var(--font-body--family);
+    font-size: clamp(14px, 1.350vw, 23px);
+    line-height: 1.5;
+  }
+
+  .hair-exp__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(16px, 1.5vw, 26px);
+  }
+
+  .hair-exp-card {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    min-width: 0;
+    aspect-ratio: 840 / 546;
+    overflow: hidden;
+    border-radius: clamp(20px, 2vw, 34px);
+    container-type: inline-size;
+  }
+
+  .hair-exp-card--light {
+    --hair-exp-card-bg: var(--hair-exp-light-surface);
+    --hair-exp-card-fg: var(--hair-exp-navy);
+    --hair-exp-card-muted: #2c4066;
+    --hair-exp-card-scrim: rgb(227 234 246 / 0.55);
+
+    background: var(--hair-exp-card-bg);
+    color: var(--hair-exp-card-fg);
+  }
+
+  .hair-exp-card--dark {
+    --hair-exp-card-bg: var(--hair-exp-dark-surface);
+    --hair-exp-card-fg: #fff;
+    --hair-exp-card-muted: rgb(255 255 255 / 0.9);
+    --hair-exp-card-scrim: rgb(17 37 63 / 0.55);
+
+    background: var(--hair-exp-card-bg);
+    color: var(--hair-exp-card-fg);
+  }
+
+  .hair-exp-card__media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hair-exp-card__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, var(--hair-exp-card-scrim), transparent 55%);
+    pointer-events: none;
+  }
+
+  .hair-exp-card__media picture {
+    display: contents;
+  }
+
+  .hair-exp-card__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: right center;
+  }
+
+  .hair-exp-card__content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 50%;
+    min-width: 0;
+    padding-block: 7cqi 5cqi;
+    padding-inline-start: 6cqi;
+  }
+
+  .hair-exp-card__icon {
+    display: block;
+    flex: none;
+    width: clamp(40px, 7.2cqi, 62px);
+    height: clamp(40px, 7.2cqi, 62px);
+    margin-block-end: 2cqi;
+    object-fit: contain;
+  }
+
+  .hair-exp-card__heading {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: clamp(24px, 5.2cqi, 46px);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.12;
+    color: inherit;
+    overflow-wrap: break-word;
+  }
+
+  .hair-exp-card__text {
+    margin: 2cqi 0 0;
+    max-width: 36cqi;
+    font-family: var(--font-body--family);
+    font-size: clamp(14px, 2.3cqi, 20px);
+    line-height: 1.45;
+    color: var(--hair-exp-card-muted);
+  }
+
+  .hair-exp-card__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    margin-block-start: 3.4cqi;
+    padding: clamp(12px, 1.9cqi, 17px) clamp(22px, 4.2cqi, 36px);
+    border: 1.5px solid transparent;
+    border-radius: 999px;
+    font-family: var(--font-body--family);
+    font-size: clamp(12px, 1.9cqi, 16px);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    line-height: 1.2;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+      background-color var(--hover-transition-duration) var(--hover-transition-timing),
+      color var(--hover-transition-duration) var(--hover-transition-timing),
+      border-color var(--hover-transition-duration) var(--hover-transition-timing);
+  }
+
+  .hair-exp-card--light .hair-exp-card__button {
+    background: var(--hair-exp-navy);
+    color: #fff;
+  }
+
+  .hair-exp-card--light .hair-exp-card__button:hover {
+    border-color: var(--hair-exp-navy);
+    background: transparent;
+    color: var(--hair-exp-navy);
+  }
+
+  .hair-exp-card--dark .hair-exp-card__button {
+    border-color: #fff;
+    background: transparent;
+    color: #fff;
+  }
+
+  .hair-exp-card--dark .hair-exp-card__button:hover {
+    background: #fff;
+    color: var(--hair-exp-dark-surface);
+  }
+
+  .hair-exp-card__button:focus-visible {
+    outline: 2px solid currentcolor;
+    outline-offset: 3px;
+  }
+
+  .hair-exp-card__arrow {
+    flex: none;
+    width: 18px;
+    height: 14px;
+  }
+
+  .hair-exp-card__arrow:dir(rtl) {
+    transform: scaleX(-1);
+  }
+
+  @media (max-width: 989px) {
+    .hair-exp__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* Mobile: swipeable cards, each with the text panel above its photo */
+  @media (max-width: 749px) {
+    .hair-exp {
+      padding-block: calc(var(--hair-exp-pad-top) * 0.75) calc(var(--hair-exp-pad-bottom) * 0.75);
+    }
+
+    .hair-exp__eyebrow {
+      letter-spacing: 0.2em;
+    }
+
+    .hair-exp__grid {
+      display: flex;
+      gap: 12px;
+      margin-inline: -16px;
+      padding-inline: 16px;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-padding-inline: 16px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .hair-exp__grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .hair-exp-card {
+      flex: 0 0 86%;
+      flex-direction: column;
+      align-items: stretch;
+      aspect-ratio: auto;
+      scroll-snap-align: start;
+    }
+
+    .hair-exp-card__content {
+      flex: 1;
+      order: -1;
+      width: 100%;
+      padding: 28px 24px 8px;
+    }
+
+    .hair-exp-card__icon {
+      margin-block-end: 12px;
+    }
+
+    .hair-exp-card__heading {
+      font-size: 28px;
+    }
+
+    .hair-exp-card__text {
+      max-width: none;
+      margin-block-start: 10px;
+      font-size: 15px;
+    }
+
+    .hair-exp-card__button {
+      margin-block-start: 18px;
+      padding: 13px 26px;
+      font-size: 12px;
+    }
+
+    .hair-exp-card__media {
+      position: relative;
+      inset: auto;
+      aspect-ratio: 5 / 4;
+    }
+
+    .hair-exp-card__media::after {
+      background: linear-gradient(to bottom, var(--hair-exp-card-bg), transparent 22%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hair-exp-card__button {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:ossian_hair_experience.name",
+  "class": "ossian-hair-experience-section",
+  "max_blocks": 2,
+  "settings": [
+    { "type": "header", "content": "t:ossian_hair_experience.headers.intro" },
+    { "type": "checkbox", "id": "show_logo", "label": "t:ossian_hair_experience.settings.show_logo", "default": true },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "t:ossian_hair_experience.settings.logo",
+      "info": "t:ossian_hair_experience.info.logo",
+      "visible_if": "{{ section.settings.show_logo }}"
+    },
+    { "type": "text", "id": "eyebrow", "label": "t:ossian_hair_experience.settings.eyebrow", "default": "Personalized care, professional results" },
+    { "type": "text", "id": "heading", "label": "t:ossian_hair_experience.settings.heading", "default": "Discover Your" },
+    { "type": "text", "id": "heading_accent", "label": "t:ossian_hair_experience.settings.heading_accent", "default": "Hair Experience" },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "t:ossian_hair_experience.settings.description",
+      "default": "Whether you need a personalized haircare routine or a professional styling experience, find what works best for you."
+    },
+    { "type": "header", "content": "t:ossian_hair_experience.headers.colors" },
+    { "type": "color", "id": "background_color", "label": "t:ossian_hair_experience.settings.background_color", "default": "#f8f9fd" },
+    { "type": "color", "id": "heading_color", "label": "t:ossian_hair_experience.settings.heading_color", "default": "#0b1d4d" },
+    { "type": "color", "id": "accent_color", "label": "t:ossian_hair_experience.settings.accent_color", "default": "#1a56db" },
+    { "type": "color", "id": "text_color", "label": "t:ossian_hair_experience.settings.text_color", "default": "#46536b" },
+    { "type": "header", "content": "t:ossian_hair_experience.headers.spacing" },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:ossian_hair_experience.settings.padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:ossian_hair_experience.settings.padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "t:ossian_hair_experience.blocks.card",
+      "settings": [
+        {
+          "type": "select",
+          "id": "card_style",
+          "label": "t:ossian_hair_experience.settings.card_style",
+          "options": [
+            { "value": "light", "label": "t:ossian_hair_experience.options.light" },
+            { "value": "dark", "label": "t:ossian_hair_experience.options.dark" }
+          ],
+          "default": "light"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:ossian_hair_experience.settings.image",
+          "info": "t:ossian_hair_experience.info.image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "t:ossian_hair_experience.settings.image_mobile",
+          "info": "t:ossian_hair_experience.info.image_mobile"
+        },
+        {
+          "type": "select",
+          "id": "icon_type",
+          "label": "t:ossian_hair_experience.settings.icon_type",
+          "options": [
+            { "value": "none", "label": "t:ossian_hair_experience.options.none" },
+            { "value": "quiz", "label": "t:ossian_hair_experience.options.quiz" },
+            { "value": "scissors", "label": "t:ossian_hair_experience.options.scissors" }
+          ],
+          "default": "quiz"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "t:ossian_hair_experience.settings.icon",
+          "info": "t:ossian_hair_experience.info.icon"
+        },
+        { "type": "textarea", "id": "heading", "label": "t:ossian_hair_experience.settings.card_heading", "default": "Find Your\nHaircare Routine" },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "t:ossian_hair_experience.settings.card_text",
+          "default": "Take our personalized hair quiz and discover the right products for your hair type and concerns."
+        },
+        { "type": "text", "id": "button_label", "label": "t:ossian_hair_experience.settings.button_label", "default": "Take the quiz" },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "t:ossian_hair_experience.settings.button_link",
+          "info": "t:ossian_hair_experience.info.button_link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:ossian_hair_experience.name",
+      "blocks": [
+        { "type": "card" },
+        {
+          "type": "card",
+          "settings": {
+            "card_style": "dark",
+            "icon_type": "scissors",
+            "heading": "OSSION ×\nGlamsquad",
+            "text": "Discover professional hair styling experiences powered by OSSION haircare.",
+            "button_label": "Explore experience"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

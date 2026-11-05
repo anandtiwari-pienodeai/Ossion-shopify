@@ -54,8 +54,8 @@
     "header_section": {
       "type": "ossian-header",
       "settings": {
-        "logo_image": "shopify://shop_images/ossion_professional_1.png",
-        "logo_height": 48,
+        "logo_image": "shopify://shop_images/ossion_beauty.png",
+        "logo_height": 66,
         "logo_height_mobile": 38,
         "menu": "main-menu",
         "search_modal_placeholder": "Search for products, categories or solutions...",

@@ -753,6 +753,62 @@
     "with_hints": "With hints",
     "below_media": "Below media"
   },
+  "ossian_hero_slider": {
+    "info": {
+      "desktop_fit_image": "Banner follows the first slide's proportions, so images are never cropped. Upload all desktop slides at the same size."
+    },
+    "settings": { "desktop_fit_image": "Show full image on desktop" }
+  },
+  "ossian_newsletter": {
+    "headers": { "text_colors": "Text colors", "text_colors_mobile": "Mobile text colors" },
+    "info": {
+      "heading_accent_color": "Colors the heading words wrapped in [brackets].",
+      "text_colors_mobile": "Used below 750px, where the mobile background shows."
+    },
+    "settings": {
+      "eyebrow_color": "Eyebrow",
+      "heading_color": "Heading",
+      "heading_accent_color": "Heading accent",
+      "text_color": "Text",
+      "feature_title_color": "Benefit titles"
+    }
+  },
+  "ossian_hair_experience": {
+    "name": "Ossion Hair Experience",
+    "blocks": { "card": "Card" },
+    "headers": { "intro": "Intro", "colors": "Colors", "spacing": "Spacing" },
+    "info": {
+      "logo": "Uses the bundled Ossion logo when empty.",
+      "image": "Fills the card. Keep the left half clear for text. Recommended 1680 x 1092 px.",
+      "image_mobile": "Shown under the text on mobile. Recommended 1000 x 800 px. Uses the desktop image when empty.",
+      "icon": "Replaces the built-in icon.",
+      "button_link": "The button is hidden until a link is set."
+    },
+    "options": { "light": "Light", "dark": "Dark", "none": "None", "quiz": "Quiz checklist", "scissors": "Scissors" },
+    "settings": {
+      "show_logo": "Show logo",
+      "logo": "Logo",
+      "eyebrow": "Eyebrow",
+      "heading": "Heading",
+      "heading_accent": "Heading accent",
+      "description": "Description",
+      "background_color": "Background",
+      "heading_color": "Heading",
+      "accent_color": "Heading accent",
+      "text_color": "Description",
+      "padding_top": "Top padding",
+      "padding_bottom": "Bottom padding",
+      "card_style": "Card style",
+      "image": "Image",
+      "image_mobile": "Mobile image",
+      "icon_type": "Icon",
+      "icon": "Custom icon",
+      "card_heading": "Heading",
+      "card_text": "Text",
+      "button_label": "Button label",
+      "button_link": "Button link"
+    }
+  },
   "settings": {
     "color_option_style": "Color option style",
     "accordion": "Accordion",
