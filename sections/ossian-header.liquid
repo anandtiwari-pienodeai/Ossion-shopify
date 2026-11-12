@@ -476,6 +476,14 @@
       });
     }
 
+    /* Keep the wheel inside the open panel: lists that can scroll handle it themselves
+       (overscroll-behavior: contain); anywhere else it must not scroll the page behind. */
+    mega.addEventListener('wheel', function (event) {
+      var scroller = event.target.closest('.ossian-mega__nav, .ossian-mega__products');
+      if (scroller && scroller.scrollHeight > scroller.clientHeight) return;
+      event.preventDefault();
+    }, { passive: false });
+
     mega.querySelectorAll('[data-mega-child]').forEach(function (childLink) {
       childLink.addEventListener('mouseenter', function () { activate(childLink); });
       childLink.addEventListener('focus', function () { activate(childLink); });
@@ -811,10 +819,12 @@
     right: 20px;
     z-index: 60;
     display: grid;
-    grid-template-columns: minmax(230px, 0.85fr) minmax(0, 1.6fr) minmax(0, 1.35fr);
+    /* Menu (left) - bestsellers (center) - promo image (right) */
+    grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1.4fr) minmax(0, 1.5fr);
+    grid-template-rows: minmax(0, 1fr);
     /* Fixed height: the bestsellers list scrolls instead of growing the panel */
     height: clamp(360px, 28vw, 420px);
-    background: linear-gradient(100deg, #fdfeff 0%, #f4f7fc 40%, #e4edf8 68%);
+    background: #f5f8fc;
     border-radius: 18px;
     box-shadow: 0 24px 60px rgba(10, 23, 48, 0.18);
     overflow: hidden;
@@ -843,17 +853,25 @@
     list-style: none;
     margin: 0;
     padding: clamp(20px, 1.8vw, 28px) clamp(18px, 1.8vw, 34px) clamp(20px, 1.8vw, 28px) clamp(18px, 1.9vw, 36px);
+    /* Long menus scroll inside the panel instead of being cut off */
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(30 58 95 / 0.25) transparent;
   }
 
-  /* Short inset divider between the menu and the promo */
-  .ossian-mega__nav::after {
-    content: '';
-    position: absolute;
-    top: 34px;
-    bottom: 34px;
-    right: 0;
-    width: 1px;
-    background: rgb(30 58 95 / 0.1);
+  .ossian-mega__nav::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .ossian-mega__nav::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background: rgb(30 58 95 / 0.25);
+  }
+
+  .ossian-mega__nav > li {
+    flex-shrink: 0;
   }
 
   .ossian-mega__nav-link {
@@ -995,8 +1013,9 @@
     display: flex;
     flex-direction: column;
     min-height: 0;
-    padding: clamp(26px, 2.6vw, 40px) clamp(22px, 2.6vw, 44px);
-    background: #fbfcfe;
+    padding: clamp(24px, 2.2vw, 36px) clamp(20px, 2.2vw, 36px);
+    background: #fff;
+    border-inline: 1px solid rgb(30 58 95 / 0.08);
   }
 
   .ossian-mega__side-panel {

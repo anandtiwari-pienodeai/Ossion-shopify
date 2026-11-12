@@ -1,7 +1,12 @@
+{%- liquid
+  # Desktop split between the before/after slider and the recommended-product card
+  assign sc2_ba_width = section.settings.ba_width | default: 65
+  assign sc2_feat_width = 100 | minus: sc2_ba_width
+-%}
 <section
   class="sc2"
   id="sc2-{{ section.id }}"
-  style="--sc2-strip-bg: {{ section.settings.strip_bg }}; --sc2-bottom-bg: {{ section.settings.bottom_bg }};"
+  style="--sc2-strip-bg: {{ section.settings.strip_bg }}; --sc2-bottom-bg: {{ section.settings.bottom_bg }}; --sc2-ba-cols: {{ sc2_ba_width }}fr; --sc2-feat-cols: {{ sc2_feat_width }}fr;"
 >
 
   {%- comment -%}── 1. Feature Strip ──────────────────────────────{%- endcomment -%}
@@ -90,17 +95,18 @@
       <div class="sc2__ba">
        
 
+        {%- assign sc2_ba_sizes = '(min-width: 901px) ' | append: sc2_ba_width | append: 'vw, 100vw' -%}
         <div class="sc2__bac" id="sc2-ba-{{ section.id }}">
           {%- if section.settings.before_image != blank -%}
-            {{ section.settings.before_image | image_url: width: 1000
-               | image_tag: class: 'sc2__bac-before', loading: 'lazy', widths: '400,700,1000', draggable: 'false', alt: 'Before' }}
+            {{ section.settings.before_image | image_url: width: 1800
+               | image_tag: class: 'sc2__bac-before', loading: 'lazy', widths: '500,800,1100,1400,1800', sizes: sc2_ba_sizes, draggable: 'false', alt: 'Before' }}
           {%- else -%}
             <div class="sc2__bac-before sc2__bac-ph">Before</div>
           {%- endif -%}
 
           {%- if section.settings.after_image != blank -%}
-            {{ section.settings.after_image | image_url: width: 1000
-               | image_tag: class: 'sc2__bac-after', loading: 'lazy', widths: '400,700,1000', draggable: 'false', alt: 'After' }}
+            {{ section.settings.after_image | image_url: width: 1800
+               | image_tag: class: 'sc2__bac-after', loading: 'lazy', widths: '500,800,1100,1400,1800', sizes: sc2_ba_sizes, draggable: 'false', alt: 'After' }}
           {%- else -%}
             <div class="sc2__bac-after sc2__bac-ph">After</div>
           {%- endif -%}
@@ -213,7 +219,7 @@
         <a href="{{ feat_href }}" class="sc2__feat-media" aria-label="{{ feat_alt }}">
           {%- if feat_img != blank -%}
             {{ feat_img | image_url: width: 700
-               | image_tag: class: 'sc2__feat-img', loading: 'lazy', widths: '400,700', alt: feat_alt }}
+               | image_tag: class: 'sc2__feat-img', loading: 'lazy', widths: '300,500,700', sizes: '(min-width: 901px) 360px, (min-width: 581px) 50vw, 46vw', alt: feat_alt }}
           {%- else -%}
             <div class="sc2__feat-ph"></div>
           {%- endif -%}
@@ -403,7 +409,8 @@
 
 .sc2__grid {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
+  /* Slider takes most of the row; the product card keeps enough room for its copy */
+  grid-template-columns: minmax(0, var(--sc2-ba-cols, 65fr)) minmax(260px, var(--sc2-feat-cols, 35fr));
   gap: 0;
   margin: 0 auto;
   align-items: stretch;
@@ -413,6 +420,7 @@
 .sc2__ba {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .sc2__ba-head {
@@ -604,10 +612,15 @@
 }
 
 /* ── Feature card (recommended product) ───────────────── */
+/* Copy and image sit side by side when the card is wide, and stack (copy above image)
+   when it is narrow, e.g. the default 20% desktop column */
 .sc2__feat {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 20px;
+  align-content: center;
+  gap: 0;
+  min-width: 0;
   position: relative;
   overflow: hidden;
   background: #05070d;
@@ -618,9 +631,9 @@
 .sc2__feat-body {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex: 1 1 16rem;
   min-width: 0;
-  padding: 40px 16px 40px 44px;
+  padding: clamp(24px, 2.4vw, 40px) clamp(20px, 2vw, 32px);
 }
 
 .sc2__feat-eyebrow {
@@ -631,7 +644,8 @@
 }
 
 .sc2__feat-heading {
-  font-size: clamp(1.6rem, 2.6vw, 2.5rem);
+  font-size: clamp(1.35rem, 1.75vw, 2.1rem);
+  overflow-wrap: break-word;
   font-weight: 800;
   letter-spacing: -0.01em;
   text-transform: uppercase;
@@ -690,19 +704,19 @@
 }
 
 .sc2__feat-media {
-  flex: 0 0 46%;
+  flex: 1 1 12rem;
   align-self: stretch;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding: 24px 20px 0 0;
+  padding: 0 clamp(16px, 1.6vw, 24px) clamp(12px, 1.2vw, 20px);
   min-width: 0;
 }
 
 .sc2__feat-img {
   width: 100%;
   height: 100%;
-  max-height: 100%;
+  max-height: 20rem;
   object-fit: contain;
   object-position: center bottom;
   display: block;
@@ -713,6 +727,11 @@
   height: 100%;
   min-height: 160px;
   background: #0d2340;
+}
+
+@media (min-width: 901px) {
+  /* Wider slider column, so keep it from getting too tall */
+  .sc2__bac { aspect-ratio: 2 / 1; }
 }
 
 /* ── Tablet ───────────────────────────────────────────── */
@@ -870,6 +889,17 @@
       "type": "image_picker",
       "id": "after_image",
       "label": "After image"
+    },
+    {
+      "type": "range",
+      "id": "ba_width",
+      "label": "Slider width on desktop",
+      "info": "Share of the row taken by the before/after slider. The product card uses the rest (at least 260px).",
+      "min": 50,
+      "max": 85,
+      "step": 5,
+      "unit": "%",
+      "default": 65
     },
     {
       "type": "header",
