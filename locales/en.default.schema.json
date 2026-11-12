@@ -759,15 +759,6 @@
     },
     "settings": { "desktop_fit_image": "Show full image on desktop" }
   },
-  "ossian_brand_pillars": {
-    "info": {
-      "show_card_number": "Shows the 01, 02, 03 number and line at the top of each card."
-    },
-    "settings": {
-      "cards_header": "Pillar cards",
-      "show_card_number": "Show card numbers"
-    }
-  },
   "ossian_quiz": {
     "info": {
       "heading": "Wrap words in [brackets] for the blue accent.",

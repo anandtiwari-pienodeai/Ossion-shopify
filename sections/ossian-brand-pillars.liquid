@@ -95,9 +95,7 @@
               <span class="pillar-card__shade" aria-hidden="true"></span>
 
               <span class="pillar-card__top">
-                {%- if s.show_card_number -%}
-                  <span class="pillar-card__index">{{ card_index }}</span>
-                {%- endif -%}
+                <span class="pillar-card__index">{{ card_index }}</span>
                 {%- if b.label != blank -%}
                   <span class="pillar-card__label">{{ b.label }}</span>
                 {%- endif -%}
@@ -318,10 +316,6 @@
     display: flex;
     flex-direction: column;
     padding: clamp(22px, 2vw, 30px) clamp(20px, 2vw, 30px) 0;
-  }
-
-  .pillar-card__top > :first-child {
-    margin-top: 0;
   }
 
   .pillar-card__index {
@@ -565,17 +559,6 @@
       "type": "url",
       "id": "hero_link",
       "label": "Image link"
-    },
-    {
-      "type": "header",
-      "content": "t:ossian_brand_pillars.settings.cards_header"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_card_number",
-      "label": "t:ossian_brand_pillars.settings.show_card_number",
-      "info": "t:ossian_brand_pillars.info.show_card_number",
-      "default": true
     }
   ],
   "blocks": [

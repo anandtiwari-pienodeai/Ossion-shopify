@@ -12,29 +12,33 @@
     "about_hero": {
       "type": "ossian-about-banner",
       "settings": {
+        "overlay": 55,
+        "min_height": 460,
+        "min_height_mobile": 600,
+        "color_theme": "dark",
+        "card_style": "full",
+        "features_layout": "side",
         "eyebrow": "About Ossion",
         "heading": "Professional|[Care for] Real|People",
         "heading_as_h1": true,
         "text": "<p>Salon-inspired hair and skin care, crafted with science, innovation and a passion for self-care.</p>",
         "button_label": "Our Story",
         "button_link": "#our-story",
-        "button_style": "solid",
-        "overlay": 55,
-        "min_height": 460,
-        "min_height_mobile": 600
+        "button_style": "solid"
       }
     },
     "about_story": {
       "type": "ossian-about-split",
       "settings": {
+        "image": "shopify://shop_images/expo_stall_5714527c-2ce1-4030-a58e-58b82a19a8d8.png",
         "image_side": "right",
         "bleed": true,
         "image_ratio": "16 / 10",
         "image_ratio_mobile": "4 / 3",
         "background": "#f2f6fc",
-        "eyebrow": "Our Story",
-        "heading": "Born in Salons.|Built for You.",
-        "text": "<p>Ossion Professional was created with a simple belief — professional grade hair and skin care should be accessible to everyone. What started as a trusted choice in salons has grown into a complete range of innovative, high-performance products for everyday self-care.</p>",
+        "eyebrow": "about us",
+        "heading": "Professional Roots. Personalised for You.",
+        "text": "<p>The ocean is a symbol of balance, adaptability, and strength, constantly moving yet always in harmony. It renews with every tide and transforms the world around it protecting what lies within.<br/><br/>At Ossion Professional, we bring the same philosophy to beauty. Like the ocean,<br/>our complete range of solutions are designed to flow seamlessly with individuality, respecting the uniqueness of every person.&nbsp;<br/><br/>They adapt to diverse needs, delivering consistent results while safeguarding the natural health of hair and skin.</p>",
         "button_label": "Explore Products",
         "button_link": "shopify://collections/all",
         "anchor_id": "our-story"
@@ -42,9 +46,6 @@
     },
     "about_values": {
       "type": "ossian-about-values",
-      "settings": {
-        "background": "#eef3fb"
-      },
       "blocks": {
         "value_salon": {
           "type": "value",
@@ -84,22 +85,13 @@
         "value_science",
         "value_gentle",
         "value_everyone"
-      ]
+      ],
+      "settings": {
+        "background": "#eef3fb"
+      }
     },
     "about_science": {
       "type": "ossian-about-banner",
-      "settings": {
-        "eyebrow": "The Ossion Science",
-        "heading": "Advanced|[Formulas.]|[Visible Results.]",
-        "heading_as_h1": false,
-        "text": "<p>We combine modern science with carefully selected ingredients to create safe, effective and professional grade solutions for hair and skin care.</p>",
-        "button_label": "Discover Our Science",
-        "button_link": "/pages/ossion-science",
-        "button_style": "outline",
-        "overlay": 55,
-        "min_height": 460,
-        "min_height_mobile": 960
-      },
       "blocks": {
         "sci_performance": {
           "type": "feature",
@@ -135,43 +127,56 @@
         "sci_safe",
         "sci_grade",
         "sci_results"
-      ]
+      ],
+      "settings": {
+        "overlay": 55,
+        "min_height": 460,
+        "min_height_mobile": 960,
+        "color_theme": "dark",
+        "card_style": "full",
+        "features_layout": "side",
+        "eyebrow": "The Ossion Science",
+        "heading": "Advanced|[Formulas.]|[Visible Results.]",
+        "heading_as_h1": false,
+        "text": "<p>We combine modern science with carefully selected ingredients to create safe, effective and professional grade solutions for hair and skin care.</p>",
+        "button_label": "Discover Our Science",
+        "button_link": "/pages/ossion-science",
+        "button_style": "outline"
+      }
     },
     "about_expertise": {
       "type": "ossian-about-expertise",
-      "settings": {
-        "eyebrow": "Our Expertise",
-        "heading": "Complete Care for Hair & Skin",
-        "text": "<p>From hair color to daily care, our range is designed to help you look and feel your best.</p>",
-        "background": "#f2f6fc"
-      },
       "blocks": {
         "card_hair": {
           "type": "card",
           "settings": {
             "collection": "hair-care",
-            "title": "Hair Care"
+            "title": "Hair Care",
+            "link": ""
           }
         },
         "card_skin": {
           "type": "card",
           "settings": {
             "collection": "skin-care",
-            "title": "Skin Care"
+            "title": "Skin Care",
+            "link": ""
           }
         },
         "card_color": {
           "type": "card",
           "settings": {
             "collection": "hair-care",
-            "title": "Hair Color & Treatment"
+            "title": "Hair Color & Treatment",
+            "link": ""
           }
         },
         "card_pro": {
           "type": "card",
           "settings": {
             "collection": "all",
-            "title": "Professional Solutions"
+            "title": "Professional Solutions",
+            "link": ""
           }
         }
       },
@@ -180,22 +185,16 @@
         "card_skin",
         "card_color",
         "card_pro"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "Our Expertise",
+        "heading": "Complete Care for Hair & Skin",
+        "text": "<p>From hair color to daily care, our range is designed to help you look and feel your best.</p>",
+        "background": "#f2f6fc"
+      }
     },
     "about_trust": {
       "type": "ossian-about-split",
-      "settings": {
-        "image_side": "left",
-        "bleed": true,
-        "image_ratio": "4 / 3",
-        "image_ratio_mobile": "4 / 3",
-        "background": "#f2f6fc",
-        "eyebrow": "Why Choose Ossion",
-        "heading": "Beauty Backed|by Trust",
-        "text": "<p>We are committed to creating products that combine innovation, quality and care — so you can enjoy salon-like results, every day.</p>",
-        "button_label": "",
-        "button_link": ""
-      },
       "blocks": {
         "trust_quality": {
           "type": "feature",
@@ -235,21 +234,37 @@
         "trust_ingredients",
         "trust_loved",
         "trust_you"
-      ]
+      ],
+      "settings": {
+        "image_side": "left",
+        "bleed": true,
+        "image_ratio": "4 / 3",
+        "image_ratio_mobile": "4 / 3",
+        "background": "#f2f6fc",
+        "eyebrow": "Why Choose Ossion",
+        "heading": "Beauty Backed|by Trust",
+        "text": "<p>We are committed to creating products that combine innovation, quality and care — so you can enjoy salon-like results, every day.</p>",
+        "button_label": "",
+        "button_link": "",
+        "anchor_id": ""
+      }
     },
     "about_promise": {
       "type": "ossian-about-banner",
       "settings": {
+        "overlay": 55,
+        "min_height": 420,
+        "min_height_mobile": 600,
+        "color_theme": "dark",
+        "card_style": "full",
+        "features_layout": "side",
         "eyebrow": "Our Promise",
         "heading": "Empowering Your|[Everyday Confidence]",
         "heading_as_h1": false,
         "text": "<p>Because true beauty is not just about appearance, but how confident it makes you feel.</p>",
         "button_label": "Shop Now",
         "button_link": "shopify://collections/all",
-        "button_style": "solid",
-        "overlay": 55,
-        "min_height": 420,
-        "min_height_mobile": 600
+        "button_style": "solid"
       }
     }
   },

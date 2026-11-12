@@ -12,11 +12,20 @@
     "ossian_hero_slider": {
       "type": "ossian-hero-slider",
       "blocks": {
+        "slide_8am7XR": {
+          "type": "slide",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/main_banner_3.psd_fb71c2ff-d8d5-47ae-a9ca-e2f6473b0068.png",
+            "link": "",
+            "link_label": ""
+          }
+        },
         "slide_npPbYc": {
           "type": "slide",
           "settings": {
             "media_type": "image",
-            "image": "shopify://shop_images/Main_Banner_1_3e5aa27c-90c3-4187-91a5-c09c84a65fc9.png",
+            "image": "shopify://shop_images/Main_Banner_1_70f9177c-d45b-4992-aaa4-2eceb746aeff.png",
             "image_mobile": "shopify://shop_images/magnific__enhance__39476.png",
             "link": "",
             "link_label": ""
@@ -24,6 +33,7 @@
         }
       },
       "block_order": [
+        "slide_8am7XR",
         "slide_npPbYc"
       ],
       "name": "Hero Carousel",
@@ -42,7 +52,7 @@
         "pillar_science": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/2.png",
+            "image": "shopify://shop_images/Ossion_Professional_Hair_Science_Collection.png",
             "label": "",
             "heading_line1": "",
             "heading_line2": "",
@@ -56,7 +66,7 @@
         "pillar_haircare": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/3.png",
+            "image": "shopify://shop_images/Ossion_Essentials_Glow_Lab_Collection.png",
             "label": "",
             "heading_line1": "",
             "heading_line2": "",
@@ -70,7 +80,7 @@
         "pillar_promise": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/4.png",
+            "image": "shopify://shop_images/Cool_Blue_Lab_Cream_Testing_5b03c34c-825b-4d69-8f4b-0fbc1e07c182.png",
             "label": "",
             "heading_line1": "",
             "heading_line2": "",
@@ -84,7 +94,7 @@
         "pillar_sustainability": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/5.png",
+            "image": "shopify://shop_images/Untitled_design_5.jpg",
             "label": "",
             "heading_line1": "",
             "heading_line2": "",
@@ -105,8 +115,8 @@
       "name": "Brand Pillars",
       "settings": {
         "section_height": 680,
-        "hero_image": "shopify://shop_images/1.png",
-        "hero_image_mobile": "shopify://shop_images/ChatGPT_Image_Oct_3_2026_09_36_28_PM.png",
+        "hero_image": "shopify://shop_images/Untitled-1_a72fc38a-24a7-41da-a9b4-eb8b80fe7e35.png",
+        "hero_image_mobile": "shopify://shop_images/Untitled-1_a72fc38a-24a7-41da-a9b4-eb8b80fe7e35.png",
         "hero_alt": "OSSION Professional — Salon science at its best",
         "hero_link": ""
       }
@@ -403,13 +413,6 @@
         "padding_bottom": 48
       }
     },
-    "ossian_transformation_banner_YkfgCY": {
-      "type": "ossian-transformation-banner",
-      "settings": {
-        "alt": "Salon Choice — Real Transformations. Professional care, real results.",
-        "link": ""
-      }
-    },
     "ossian_salon_choice": {
       "type": "ossian-salon-choice",
       "blocks": {
@@ -417,8 +420,8 @@
           "type": "feature_pill",
           "settings": {
             "icon": "sparkle",
-            "label": "BLONDE LIFT",
-            "subtitle": "Anti-Yellow",
+            "label": "Color",
+            "subtitle": "Want to refresh your color?",
             "collection": "blonde-lift",
             "product": "",
             "link": "shopify://collections/all",
@@ -429,8 +432,8 @@
           "type": "feature_pill",
           "settings": {
             "icon": "sparkle",
-            "label": "BLONDE LIFT",
-            "subtitle": "Anti-Yellow",
+            "label": "nano silk protein",
+            "subtitle": "Want smoother, silkier hair?",
             "collection": "blonde-lift",
             "product": "",
             "link": "shopify://collections/all",
@@ -441,8 +444,8 @@
           "type": "feature_pill",
           "settings": {
             "icon": "waves",
-            "label": "FRIZZ CONTROL",
-            "subtitle": "Smooth & Manageable",
+            "label": "hair repair spa",
+            "subtitle": "Hair feeling dry & damaged?",
             "collection": "frizz-control",
             "product": "",
             "link": "shopify://collections/all",
@@ -453,8 +456,8 @@
           "type": "feature_pill",
           "settings": {
             "icon": "person",
-            "label": "GREY COVERAGE",
-            "subtitle": "100% Coverage",
+            "label": "facial kit",
+            "subtitle": "Need a fresh, glowing look?",
             "collection": "grey-coverage",
             "product": "",
             "link": "shopify://collections/all",
@@ -465,8 +468,8 @@
           "type": "feature_pill",
           "settings": {
             "icon": "drop",
-            "label": "COLOR REVIVAL",
-            "subtitle": "Vibrant & Long-Lasting",
+            "label": "liposoluble wax",
+            "subtitle": "Want smooth, clean skin?",
             "collection": "color-revival",
             "product": "",
             "link": "shopify://collections/all",
@@ -477,8 +480,8 @@
           "type": "feature_pill",
           "settings": {
             "icon": "shield",
-            "label": "DAMAGE REPAIR",
-            "subtitle": "Stronger Hair",
+            "label": "de-tan",
+            "subtitle": "Looking to remove tan?",
             "collection": "damage-repair",
             "product": "",
             "link": "shopify://collections/all",
@@ -499,18 +502,18 @@
         "concern_heading": "Choose Your Concern",
         "strip_bg": "#eef1f8",
         "ba_label": "REAL CLIENT RESULT",
-        "before_image": "shopify://shop_images/57cb6ecf-6647-4106-b8dc-0e3f59a47039.png",
-        "after_image": "shopify://shop_images/ChatGPT_Image_Sep_7_2026_12_14_57_AM.png",
+        "before_image": "shopify://shop_images/Untitled-1_ca0701ac-606c-45b3-b59c-568659c3562d.png",
+        "after_image": "shopify://shop_images/Untitled-2.png",
         "feat_product": "blonder-fiber-plex-500-gm",
         "feat_collection": "",
         "feat_link": "",
-        "feat_image": "shopify://shop_images/image_169_1.png",
+        "feat_image": "shopify://shop_images/Before_after_banner_8b8919ce-7cf5-466b-be03-a85ca7d8a82c.png",
         "feat_alt": "",
-        "feat_eyebrow": "Recommended for this result",
-        "feat_heading_white": "Blonder Fiber Plex",
-        "feat_heading_accent": "Blue",
-        "feat_subheading": "Up to 9 levels up",
-        "feat_body": "Advanced lightening with anti-yellow molecules for bright, cool blonde results.",
+        "feat_eyebrow": "",
+        "feat_heading_white": "Blonder  Fibre Plex",
+        "feat_heading_accent": "[blue]",
+        "feat_subheading": "UP TO 9 LEVELS LIFT",
+        "feat_body": "Anti-yellow molecules to counteract warm & yellow tones\nNon-damaging & dust-free lightening powder\nAdvanced neutralization with fibre plex",
         "feat_cta_label": "Learn more",
         "feat_label": "",
         "bottom_bg": "#1e3a5f"
@@ -928,6 +931,7 @@
           "type": "platform",
           "settings": {
             "platform_name": "Blinkit",
+            "logo": "shopify://shop_images/1_a6cc2015-2df3-4b98-9801-9c9a537dd2c3.png",
             "url": ""
           }
         },
@@ -935,6 +939,7 @@
           "type": "platform",
           "settings": {
             "platform_name": "Amazon",
+            "logo": "shopify://shop_images/c26lyfja_WhatsApp_Image_2026-02-16_at_1.46.23_PM.jpg",
             "url": ""
           }
         },
@@ -942,6 +947,7 @@
           "type": "platform",
           "settings": {
             "platform_name": "Zepto",
+            "logo": "shopify://shop_images/103125405_2325032014469118_7700528770946497110_n.jpg",
             "url": ""
           }
         },
@@ -949,6 +955,7 @@
           "type": "platform",
           "settings": {
             "platform_name": "Swiggy Instamart",
+            "logo": "shopify://shop_images/2_077542ea-c0ac-42e5-8b85-cd9408b58125.png",
             "url": ""
           }
         }
@@ -972,10 +979,10 @@
         "page_background": "#ffffff",
         "eyebrow": "Stay Connected",
         "heading": "Get Beauty Tips,|New Launches & [Exclusive Offers]",
-        "text": "Get the latest beauty trends, expert tips and exclusive offers delivered straight to your inbox.",
+        "text": "Subscribe to our newsletter and be the first to know about new products, expert tips and special offers.",
         "placeholder": "Enter your email address",
         "button_label": "Subscribe",
-        "eyebrow_color": "#7fb2ff",
+        "eyebrow_color": "#1b65d5",
         "heading_color": "#ffffff",
         "heading_accent_color": "#7fb2ff",
         "text_color": "#dbe6f5",
@@ -998,7 +1005,6 @@
     "ossian_skin_needs",
     "ossian_science",
     "ossian_hair_experience",
-    "ossian_transformation_banner_YkfgCY",
     "ossian_salon_choice",
     "ossian_instagram",
     "ossian_trust_ticker",
