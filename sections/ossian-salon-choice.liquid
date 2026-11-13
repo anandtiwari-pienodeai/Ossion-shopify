@@ -681,7 +681,7 @@
 .sc2__feat-body {
   display: flex;
   flex-direction: column;
-  flex: 1 1 16rem;
+  flex: 1 1 14rem;
   min-width: 0;
   padding: clamp(24px, 2.4vw, 40px) clamp(20px, 2vw, 32px);
 }
@@ -796,7 +796,8 @@
 }
 
 .sc2__feat-media {
-  flex: 1 1 12rem;
+  /* The product gets the larger share of the card so it reads clearly */
+  flex: 1.3 1 14rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -810,9 +811,10 @@
   display: grid;
   place-items: center;
   width: 100%;
-  max-width: 20rem;
-  aspect-ratio: 1;
-  padding: 7%;
+  max-width: 26rem;
+  /* Portrait: most products (pouches, tubs, bottles) are taller than wide */
+  aspect-ratio: 4 / 5;
+  padding: 0;
   border-radius: 24px;
   background: radial-gradient(circle at 50% 40%, #ffffff 0%, #eef2f8 75%);
   box-shadow: 0 24px 48px rgb(0 0 0 / 0.45), inset 0 0 0 1px rgb(255 255 255 / 0.6);
@@ -826,11 +828,13 @@
   object-position: center;
   display: block;
   mix-blend-mode: multiply;
+  /* Product photos carry wide white margins; a slight zoom trims them so the product reads larger */
+  transform: scale(1.06);
   transition: transform 0.4s ease;
 }
 
 .sc2__feat-media:hover .sc2__feat-img {
-  transform: scale(1.05);
+  transform: scale(1.11);
 }
 
 .sc2__feat-ph {
@@ -844,7 +848,7 @@
   .sc2__feat-img,
   .sc2__feat-cta,
   .sc2__feat-cta-icon { transition: none; }
-  .sc2__feat-media:hover .sc2__feat-img,
+  .sc2__feat-media:hover .sc2__feat-img { transform: scale(1.06); }
   .sc2__feat-cta:hover .sc2__feat-cta-icon { transform: none; }
 }
 
@@ -907,58 +911,64 @@
   .sc2__bac-handle svg { width: 42px; height: 42px; }
 
   /* Copy sits on the left, product image anchors the bottom-right corner */
+  /* Stacked card: product tile on top, then the copy, then a full-width button */
   .sc2__feat {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    min-height: 0;
+  }
+
+  /* Block (not flex) so the tile's width and 16:9 ratio give it a real height */
+  .sc2__feat-media {
     display: block;
-    min-height: 340px;
+    order: -1;
+    flex: none;
+    padding: 20px 20px 0;
+  }
+
+  /* A wide band instead of a square keeps the card from getting too tall */
+  .sc2__feat-stage {
+    max-width: none;
+    aspect-ratio: 4 / 3;
+    padding: 2% 14%;
+    border-radius: 18px;
+    box-shadow: 0 14px 30px rgb(0 0 0 / 0.4), inset 0 0 0 1px rgb(255 255 255 / 0.6);
   }
 
   .sc2__feat-body {
-    position: relative;
-    z-index: 2;
-    padding: 28px 20px 30px;
+    flex: none;
+    padding: 22px 20px 24px;
   }
 
   .sc2__feat-eyebrow { font-size: 0.68rem; margin-bottom: 10px; }
 
   .sc2__feat-heading {
-    font-size: clamp(1.6rem, 7.6vw, 2rem);
-    line-height: 1.1;
+    font-size: clamp(1.5rem, 7vw, 1.9rem);
+    line-height: 1.12;
     margin-bottom: 10px;
   }
 
-  .sc2__feat-subheading { font-size: 1rem; margin-bottom: 12px; }
+  .sc2__feat-subheading { font-size: 1rem; margin-bottom: 6px; }
 
-  .sc2__feat-desc,
-  .sc2__feat-cta { max-width: 58%; }
+  .sc2__feat-price { margin-bottom: 14px; }
 
   .sc2__feat-desc {
-    font-size: 0.85rem;
-    line-height: 1.55;
+    max-width: none;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    padding-top: 14px;
     margin-bottom: 20px;
   }
 
   .sc2__feat-cta {
-    gap: 10px;
-    padding: 12px 22px;
-    border-radius: 999px;
+    align-self: stretch;
+    justify-content: center;
+    padding: 14px 22px;
     color: #14284a;
     font-size: 0.95rem;
   }
-
-  .sc2__feat-cta-icon { display: block; }
-
-  .sc2__feat-media {
-    position: absolute;
-    z-index: 1;
-    inset-inline-end: 0;
-    bottom: 0;
-    width: 46%;
-    height: 64%;
-    padding: 0 14px 18px 0;
-  }
-
-  .sc2__feat-media { align-items: flex-end; justify-content: flex-end; }
-  .sc2__feat-stage { max-width: 100%; max-height: 100%; border-radius: 18px; }
 
   .sc2__ba-title { font-size: 0.85rem; }
 

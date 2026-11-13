@@ -183,12 +183,12 @@
       {%- if card_image != blank -%}
         {{
           card_image
-          | image_url: width: 700
+          | image_url: width: 900
           | image_tag:
             class: 'sc2__feat-img',
             loading: 'lazy',
-            widths: '300,500,700',
-            sizes: '(min-width: 901px) 360px, (min-width: 581px) 50vw, 46vw',
+            widths: '300,500,700,900',
+            sizes: '(min-width: 901px) 420px, (min-width: 581px) 50vw, 90vw',
             alt: card_alt
         }}
       {%- else -%}
