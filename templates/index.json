@@ -17,6 +17,7 @@
           "settings": {
             "media_type": "image",
             "image": "shopify://shop_images/main_banner_3.psd_fb71c2ff-d8d5-47ae-a9ca-e2f6473b0068.png",
+            "image_mobile": "shopify://shop_images/WhatsApp_Image_2026-11-12_at_21.51.23.jpg",
             "link": "",
             "link_label": ""
           }
@@ -26,7 +27,7 @@
           "settings": {
             "media_type": "image",
             "image": "shopify://shop_images/Main_Banner_1_70f9177c-d45b-4992-aaa4-2eceb746aeff.png",
-            "image_mobile": "shopify://shop_images/magnific__enhance__39476.png",
+            "image_mobile": "shopify://shop_images/WhatsApp_Image_2026-11-12_at_21.53.41.jpg",
             "link": "",
             "link_label": ""
           }
@@ -200,6 +201,7 @@
       "type": "ossian-transformation-banner",
       "settings": {
         "image": "shopify://shop_images/Banner_2_0fdbfef4-768b-414c-801b-af7e3a71191f.png",
+        "image_mobile": "shopify://shop_images/WhatsApp_Image_2026-11-12_at_22.00.04.jpg",
         "alt": "Salon Choice — Real Transformations. Professional care, real results.",
         "link": "shopify://collections/hair-care"
       }
@@ -209,6 +211,7 @@
       "name": "Transformation Banner",
       "settings": {
         "image": "shopify://shop_images/Banner_3.png",
+        "image_mobile": "shopify://shop_images/WhatsApp_Image_2026-11-12_at_22.02.31.jpg",
         "alt": "",
         "link": "shopify://collections/skin-care"
       }
@@ -423,8 +426,8 @@
             "label": "Color",
             "subtitle": "Want to refresh your color?",
             "collection": "blonde-lift",
-            "product": "",
-            "link": "shopify://collections/all",
+            "product": "12-developer",
+            "link": "",
             "highlighted": true
           }
         },
