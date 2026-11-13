@@ -425,10 +425,18 @@
             "icon": "sparkle",
             "label": "Color",
             "subtitle": "Want to refresh your color?",
-            "collection": "blonde-lift",
-            "product": "12-developer",
+            "collection": "",
+            "product": "",
             "link": "",
-            "highlighted": true
+            "highlighted": true,
+            "feat_eyebrow": "",
+            "feat_cta_label": "Learn more",
+            "feat_body": "Anti-yellow molecules to counteract warm & yellow tones\nNon-damaging & dust-free lightening powder\nAdvanced neutralization with fibre plex",
+            "feat_product": "blonder-fiber-plex-500-gm",
+            "feat_image": "shopify://shop_images/Before_after_banner_8b8919ce-7cf5-466b-be03-a85ca7d8a82c.png",
+            "feat_heading_white": "Blonder  Fibre Plex",
+            "feat_heading_accent": "[blue]",
+            "feat_subheading": "UP TO 9 LEVELS LIFT"
           }
         },
         "feature_pill_ymAHji": {
@@ -437,10 +445,17 @@
             "icon": "sparkle",
             "label": "nano silk protein",
             "subtitle": "Want smoother, silkier hair?",
-            "collection": "blonde-lift",
+            "collection": "",
             "product": "",
-            "link": "shopify://collections/all",
-            "highlighted": true
+            "link": "",
+            "highlighted": false,
+            "feat_eyebrow": "",
+            "feat_cta_label": "Learn more",
+            "feat_body": "",
+            "feat_product": "nano-silk-protein-classic",
+            "feat_heading_white": "Nano Silk",
+            "feat_heading_accent": "Protein",
+            "feat_subheading": "Smoother, silkier hair"
           }
         },
         "feature_pill_9hW9Ma": {
@@ -449,10 +464,17 @@
             "icon": "waves",
             "label": "hair repair spa",
             "subtitle": "Hair feeling dry & damaged?",
-            "collection": "frizz-control",
+            "collection": "",
             "product": "",
-            "link": "shopify://collections/all",
-            "highlighted": false
+            "link": "",
+            "highlighted": false,
+            "feat_eyebrow": "",
+            "feat_cta_label": "Learn more",
+            "feat_body": "",
+            "feat_product": "hair-repair-spa-silk-amino-acid",
+            "feat_heading_white": "Hair Repair Spa",
+            "feat_heading_accent": "Silk Amino Acid",
+            "feat_subheading": "Deep repair for dry, damaged hair"
           }
         },
         "feature_pill_b8cGfP": {
@@ -461,10 +483,17 @@
             "icon": "person",
             "label": "facial kit",
             "subtitle": "Need a fresh, glowing look?",
-            "collection": "grey-coverage",
+            "collection": "",
             "product": "",
-            "link": "shopify://collections/all",
-            "highlighted": false
+            "link": "",
+            "highlighted": false,
+            "feat_eyebrow": "",
+            "feat_cta_label": "Learn more",
+            "feat_body": "",
+            "feat_product": "hydra-glow-facial-kits",
+            "feat_heading_white": "Hydra Glow",
+            "feat_heading_accent": "Facial Kit",
+            "feat_subheading": "10-step glow ritual"
           }
         },
         "feature_pill_KMwVhx": {
@@ -473,10 +502,17 @@
             "icon": "drop",
             "label": "liposoluble wax",
             "subtitle": "Want smooth, clean skin?",
-            "collection": "color-revival",
+            "collection": "",
             "product": "",
-            "link": "shopify://collections/all",
-            "highlighted": false
+            "link": "",
+            "highlighted": false,
+            "feat_eyebrow": "",
+            "feat_cta_label": "Learn more",
+            "feat_body": "",
+            "feat_product": "aloe-vera-liposoluble-wax",
+            "feat_heading_white": "Aloe Vera",
+            "feat_heading_accent": "Liposoluble Wax",
+            "feat_subheading": "Smooth, clean skin"
           }
         },
         "pill_6": {
@@ -485,10 +521,17 @@
             "icon": "shield",
             "label": "de-tan",
             "subtitle": "Looking to remove tan?",
-            "collection": "damage-repair",
+            "collection": "",
             "product": "",
-            "link": "shopify://collections/all",
-            "highlighted": false
+            "link": "",
+            "highlighted": false,
+            "feat_eyebrow": "",
+            "feat_cta_label": "Learn more",
+            "feat_body": "",
+            "feat_product": "de-tan-illuminate-500-g",
+            "feat_heading_white": "De-Tan",
+            "feat_heading_accent": "Illuminate",
+            "feat_subheading": "Removes tan, restores glow"
           }
         }
       },

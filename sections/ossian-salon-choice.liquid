@@ -1,3 +1,13 @@
+{% comment %}
+  Section contract.
+  "Choose your concern" pills above a before/after result. Each pill is a tab with its own
+  before/after images and recommended-product card; clicking a pill swaps the result.
+  Pill before/after images fall back to the pill product's custom.before_image /
+  custom.after_image metafields, then to the section's images. The panel markup lives in
+  snippets/ossian-salon-choice-panel.liquid.
+  @example
+  <!-- templates/index.json → ossian_salon_choice -->
+{% endcomment %}
 {%- liquid
   # Desktop split between the before/after slider and the recommended-product card
   assign sc2_ba_width = section.settings.ba_width | default: 65
@@ -10,35 +20,38 @@
 >
 
   {%- comment -%}── 1. Feature Strip ──────────────────────────────{%- endcomment -%}
-  {%- assign pill_blocks = section.blocks | where: 'type', 'feature_pill' -%}
+  {%- liquid
+    assign pill_blocks = section.blocks | where: 'type', 'feature_pill'
+    # The first pill marked "Selected first" opens first, else the first pill
+    assign sc2_active = 0
+    for block in pill_blocks
+      if block.settings.highlighted
+        assign sc2_active = forloop.index0
+        break
+      endif
+    endfor
+  -%}
   {%- if pill_blocks.size > 0 -%}
     <div class="sc2__strip" style="background-color: {{ section.settings.strip_bg }};">
       {%- if section.settings.concern_heading != blank -%}
         <h2 class="sc2__strip-heading">{{ section.settings.concern_heading }}</h2>
       {%- endif -%}
-      <div class="sc2__strip-inner">
+      <div class="sc2__strip-inner" role="tablist" aria-label="{{ section.settings.concern_heading | default: 'Choose your concern' | escape }}">
         {%- for block in pill_blocks -%}
-          {%- liquid
-            # Collection wins over product; custom link is the fallback
-            assign pill_url = ''
-            if block.settings.collection != blank
-              assign pill_url = block.settings.collection.url
-            elsif block.settings.product != blank
-              assign pill_url = block.settings.product.url
-            elsif block.settings.link != blank
-              assign pill_url = block.settings.link
-            endif
-            assign pill_tag = 'div'
-            if pill_url != blank
-              assign pill_tag = 'a'
-            endif
-          -%}
-          <{{ pill_tag }}
-            class="sc2__pill{% if block.settings.highlighted %} sc2__pill--gold{% endif %}{% if pill_tag == 'a' %} sc2__pill--link{% endif %}"
-            {% if pill_tag == 'a' %}href="{{ pill_url }}"{% endif %}
+          {%- assign pill_selected = false -%}
+          {%- if forloop.index0 == sc2_active -%}{%- assign pill_selected = true -%}{%- endif -%}
+          <button
+            type="button"
+            role="tab"
+            id="sc2-tab-{{ block.id }}"
+            class="sc2__pill sc2__pill--link{% if pill_selected %} sc2__pill--gold{% endif %}"
+            aria-selected="{{ pill_selected }}"
+            aria-controls="sc2-panel-{{ block.id }}"
+            tabindex="{% if pill_selected %}0{% else %}-1{% endif %}"
+            data-sc2-tab
             {{ block.shopify_attributes }}
           >
-            <div class="sc2__pill-icon" aria-hidden="true">
+            <span class="sc2__pill-icon" aria-hidden="true">
               {%- case block.settings.icon -%}
                 {%- when 'sparkle' -%}
                   <svg viewBox="0 0 26 26" fill="none">
@@ -74,212 +87,234 @@
                     <path d="M13 3 L14.5 9.5 L21 11 L14.5 12.5 L13 19 L11.5 12.5 L5 11 L11.5 9.5 Z" fill="currentColor"/>
                   </svg>
               {%- endcase -%}
-            </div>
-            <div class="sc2__pill-text">
+            </span>
+            <span class="sc2__pill-text">
               <span class="sc2__pill-label">{{ block.settings.label }}</span>
               {%- if block.settings.subtitle != blank -%}
                 <span class="sc2__pill-sub">{{ block.settings.subtitle }}</span>
               {%- endif -%}
-            </div>
-          </{{ pill_tag }}>
+            </span>
+          </button>
         {%- endfor -%}
       </div>
     </div>
   {%- endif -%}
 
-  {%- comment -%}── 2. Bottom section ─────────────────────────────{%- endcomment -%}
+  {%- comment -%}── 2. Result: one before/after + product panel per pill ──{%- endcomment -%}
+  {%- liquid
+    assign ss = section.settings
+    assign icon_blocks = section.blocks | where: 'type', 'ba_icon'
+    assign sc2_ba_sizes = '(min-width: 901px) ' | append: sc2_ba_width | append: 'vw, 100vw'
+
+    # Section-level result: the default for pills without images or a card of their own
+    assign s_href = ss.feat_link
+    if s_href == blank and ss.feat_product != blank
+      assign s_href = ss.feat_product.url
+    elsif s_href == blank and ss.feat_collection != blank
+      assign s_href = ss.feat_collection.url
+    endif
+    assign s_image = ss.feat_image
+    if s_image == blank and ss.feat_product == blank and ss.feat_collection != blank
+      assign s_image = ss.feat_collection.image
+    endif
+    assign s_alt = ss.feat_alt
+    if s_alt == blank and ss.feat_product == blank and ss.feat_collection != blank
+      assign s_alt = ss.feat_collection.title
+    endif
+  -%}
   <div class="sc2__bottom">
-    <div class="sc2__grid">
-
-      {%- comment -%}── Before / After card ───────────────────────{%- endcomment -%}
-      <div class="sc2__ba">
-       
-
-        {%- assign sc2_ba_sizes = '(min-width: 901px) ' | append: sc2_ba_width | append: 'vw, 100vw' -%}
-        <div class="sc2__bac" id="sc2-ba-{{ section.id }}">
-          {%- if section.settings.before_image != blank -%}
-            {{ section.settings.before_image | image_url: width: 1800
-               | image_tag: class: 'sc2__bac-before', loading: 'lazy', widths: '500,800,1100,1400,1800', sizes: sc2_ba_sizes, draggable: 'false', alt: 'Before' }}
-          {%- else -%}
-            <div class="sc2__bac-before sc2__bac-ph">Before</div>
-          {%- endif -%}
-
-          {%- if section.settings.after_image != blank -%}
-            {{ section.settings.after_image | image_url: width: 1800
-               | image_tag: class: 'sc2__bac-after', loading: 'lazy', widths: '500,800,1100,1400,1800', sizes: sc2_ba_sizes, draggable: 'false', alt: 'After' }}
-          {%- else -%}
-            <div class="sc2__bac-after sc2__bac-ph">After</div>
-          {%- endif -%}
-
-          <div class="sc2__bac-sep"></div>
-          <div class="sc2__bac-handle" aria-hidden="true">
-            <svg viewBox="0 0 44 44" fill="none">
-              <circle cx="22" cy="22" r="21" fill="rgba(0,0,0,0.52)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-              <path d="M16 22 L10 22 M28 22 L34 22 M16 22 L19 19 M16 22 L19 25 M28 22 L25 19 M28 22 L25 25"
-                    stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <input class="sc2__bac-range" type="range" min="0" max="100" value="50"
-                 aria-label="Slide to compare before and after">
-
-          <span class="sc2__bac-tag sc2__bac-tag--b">BEFORE</span>
-          <span class="sc2__bac-tag sc2__bac-tag--a">AFTER</span>
-        </div>
-
-        {%- assign icon_blocks = section.blocks | where: 'type', 'ba_icon' -%}
-        {%- if icon_blocks.size > 0 -%}
-          <div class="sc2__icons">
-            {%- for block in icon_blocks -%}
-              <div class="sc2__icon" {{ block.shopify_attributes }}>
-                <span class="sc2__icon-badge" aria-hidden="true">
-                  {%- case block.settings.icon -%}
-                    {%- when 'flask' -%}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M9 3v7L4 19a1 1 0 00.93 1.37h14.14A1 1 0 0020 19l-5-9V3"/><line x1="6.3" y1="16" x2="17.7" y2="16"/></svg>
-                    {%- when 'shield' -%}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 L4 6.5 L4 12.5 C4 17.5 7.5 20.5 12 22 C16.5 20.5 20 17.5 20 12.5 L20 6.5 Z"/></svg>
-                    {%- when 'check' -%}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5 L10.5 15 L16 9"/></svg>
-                    {%- when 'medal' -%}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="5.5"/><path d="M9 13 L7 21 L12 18.5 L17 21 L15 13"/></svg>
-                    {%- else -%}
-                      <span class="sc2__icon-sym">{{ block.settings.symbol | default: '✦' }}</span>
-                  {%- endcase -%}
-                </span>
-                <span class="sc2__icon-text">
-                  {%- if block.settings.label != blank -%}
-                    <span class="sc2__icon-lbl">{{ block.settings.label }}</span>
-                  {%- endif -%}
-                  {%- if block.settings.subtitle != blank -%}
-                    <span class="sc2__icon-sub">{{ block.settings.subtitle }}</span>
-                  {%- endif -%}
-                </span>
-              </div>
-            {%- endfor -%}
-          </div>
-        {%- endif -%}
-      </div>
-
-      {%- comment -%}── Feature card (recommended product) ────────{%- endcomment -%}
+    {%- for block in pill_blocks -%}
       {%- liquid
-        assign feat_product    = section.settings.feat_product
-        assign feat_collection = section.settings.feat_collection
-        assign feat_img        = section.settings.feat_image
-        assign feat_alt        = section.settings.feat_alt | default: ''
+        assign b = block.settings
+        assign pill_product = b.feat_product | default: b.product
 
-        if section.settings.feat_link != blank
-          assign feat_href = section.settings.feat_link
-        elsif feat_product != blank
-          assign feat_href = feat_product.url
-        elsif feat_collection != blank
-          assign feat_href = feat_collection.url
-        else
-          assign feat_href = '#'
+        # Learn more: the pill's link (collection, product, custom), else its card product
+        assign pill_href = ''
+        if b.collection != blank
+          assign pill_href = b.collection.url
+        elsif b.product != blank
+          assign pill_href = b.product.url
+        elsif b.link != blank
+          assign pill_href = b.link
+        elsif b.feat_product != blank
+          assign pill_href = b.feat_product.url
         endif
 
-        if feat_img == blank and feat_product != blank and feat_product.featured_image != blank
-          assign feat_img = feat_product.featured_image
-        elsif feat_img == blank and feat_collection != blank and feat_collection.image != blank
-          assign feat_img = feat_collection.image
+        # Before/after: pill images, else the product's metafields, else the section's
+        assign p_before = ss.before_image
+        assign p_after = ss.after_image
+        if b.before_image != blank or b.after_image != blank
+          assign p_before = b.before_image
+          assign p_after = b.after_image
+        elsif pill_product.metafields.custom.before_image != blank or pill_product.metafields.custom.after_image != blank
+          assign p_before = pill_product.metafields.custom.before_image.value
+          assign p_after = pill_product.metafields.custom.after_image.value
         endif
 
-        if feat_alt == blank and feat_product != blank
-          assign feat_alt = feat_product.title
-        elsif feat_alt == blank and feat_collection != blank
-          assign feat_alt = feat_collection.title
+        # Card: the pill's own card when any of it is filled in, else the section's
+        assign pill_has_card = false
+        if b.feat_product != blank or b.feat_image != blank or b.feat_heading_white != blank or b.feat_heading_accent != blank
+          assign pill_has_card = true
         endif
-
-        assign feat_alt = feat_alt | default: section.settings.feat_heading_white | default: section.settings.feat_heading_accent | default: 'Shop now'
+        # A card with only a product set uses its title and the start of its description
+        assign pill_heading = b.feat_heading_white
+        if pill_heading == blank and b.feat_heading_accent == blank
+          assign pill_heading = b.feat_product.title
+        endif
+        assign pill_body = b.feat_body
+        if pill_body == blank and b.feat_product != blank
+          assign pill_body = b.feat_product.description | strip_html | strip | truncatewords: 24
+        endif
+        assign pill_hidden = true
+        if forloop.index0 == sc2_active
+          assign pill_hidden = false
+        endif
+        assign panel_id = 'sc2-panel-' | append: block.id
+        assign tab_id = 'sc2-tab-' | append: block.id
       -%}
-      <div class="sc2__feat">
-        <div class="sc2__feat-body">
-          {%- if section.settings.feat_eyebrow != blank -%}
-            <p class="sc2__feat-eyebrow">{{ section.settings.feat_eyebrow }}</p>
-          {%- endif -%}
-          {%- if section.settings.feat_heading_white != blank or section.settings.feat_heading_accent != blank -%}
-            <h3 class="sc2__feat-heading">
-              {%- if section.settings.feat_heading_white != blank -%}<span>{{ section.settings.feat_heading_white }}</span>{%- endif -%}
-              {%- if section.settings.feat_heading_accent != blank -%}<span class="sc2__feat-heading-accent">{{ section.settings.feat_heading_accent }}</span>{%- endif -%}
-            </h3>
-          {%- endif -%}
-          {%- if section.settings.feat_subheading != blank -%}
-            <p class="sc2__feat-subheading">{{ section.settings.feat_subheading }}</p>
-          {%- endif -%}
-          {%- if section.settings.feat_body != blank -%}
-            <p class="sc2__feat-desc">{{ section.settings.feat_body }}</p>
-          {%- endif -%}
-          {%- if section.settings.feat_cta_label != blank -%}
-            <a href="{{ feat_href }}" class="sc2__feat-cta">
-              {{- section.settings.feat_cta_label -}}
-              <svg class="sc2__feat-cta-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M6 3.5 L10.5 8 L6 12.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
-          {%- endif -%}
-        </div>
-        <a href="{{ feat_href }}" class="sc2__feat-media" aria-label="{{ feat_alt }}">
-          {%- if feat_img != blank -%}
-            {{ feat_img | image_url: width: 700
-               | image_tag: class: 'sc2__feat-img', loading: 'lazy', widths: '300,500,700', sizes: '(min-width: 901px) 360px, (min-width: 581px) 50vw, 46vw', alt: feat_alt }}
-          {%- else -%}
-            <div class="sc2__feat-ph"></div>
-          {%- endif -%}
-        </a>
-      </div>
-
-    </div>
+      {%- if pill_has_card -%}
+        {%- render 'ossian-salon-choice-panel',
+          panel_id: panel_id,
+          tab_id: tab_id,
+          hidden: pill_hidden,
+          ba_sizes: sc2_ba_sizes,
+          before_image: p_before,
+          after_image: p_after,
+          icon_blocks: icon_blocks,
+          product: b.feat_product,
+          image: b.feat_image,
+          alt: b.feat_alt,
+          eyebrow: b.feat_eyebrow,
+          heading_white: pill_heading,
+          heading_accent: b.feat_heading_accent,
+          subheading: b.feat_subheading,
+          body: pill_body,
+          cta_label: b.feat_cta_label,
+          href: pill_href
+        -%}
+      {%- else -%}
+        {%- comment -%} The section's card keeps its own link so the button matches the product shown {%- endcomment -%}
+        {%- assign section_card_href = s_href -%}
+        {%- render 'ossian-salon-choice-panel',
+          panel_id: panel_id,
+          tab_id: tab_id,
+          hidden: pill_hidden,
+          ba_sizes: sc2_ba_sizes,
+          before_image: p_before,
+          after_image: p_after,
+          icon_blocks: icon_blocks,
+          product: ss.feat_product,
+          image: s_image,
+          alt: s_alt,
+          eyebrow: ss.feat_eyebrow,
+          heading_white: ss.feat_heading_white,
+          heading_accent: ss.feat_heading_accent,
+          subheading: ss.feat_subheading,
+          body: ss.feat_body,
+          cta_label: ss.feat_cta_label,
+          href: section_card_href
+        -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- assign panel_id = 'sc2-panel-' | append: section.id -%}
+      {%- render 'ossian-salon-choice-panel',
+        panel_id: panel_id,
+        ba_sizes: sc2_ba_sizes,
+        before_image: ss.before_image,
+        after_image: ss.after_image,
+        icon_blocks: icon_blocks,
+        product: ss.feat_product,
+        image: s_image,
+        alt: s_alt,
+        eyebrow: ss.feat_eyebrow,
+        heading_white: ss.feat_heading_white,
+        heading_accent: ss.feat_heading_accent,
+        subheading: ss.feat_subheading,
+        body: ss.feat_body,
+        cta_label: ss.feat_cta_label,
+        href: s_href
+      -%}
+    {%- endfor -%}
   </div>
 
 </section>
 
 <script>
 (function () {
-  var wrap = document.getElementById('sc2-ba-{{ section.id }}');
-  if (!wrap) return;
+  var root = document.getElementById('sc2-{{ section.id }}');
+  if (!root) return;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  var after  = wrap.querySelector('.sc2__bac-after');
-  var sep    = wrap.querySelector('.sc2__bac-sep');
-  var handle = wrap.querySelector('.sc2__bac-handle');
-  var range  = wrap.querySelector('.sc2__bac-range');
-  var cur    = 50;
-
-  function setPos(pct) {
-    cur = Math.max(0, Math.min(100, pct));
-    if (after)  after.style.clipPath = 'inset(0 0 0 ' + cur + '%)';
-    if (sep)    sep.style.left       = cur + '%';
-    if (handle) handle.style.left    = cur + '%';
-    if (range)  range.value          = cur;
+  /* Before/after slider: the invisible range input drives the split (mouse, touch, keyboard) */
+  function setPos(compare, pct) {
+    var cur = Math.max(0, Math.min(100, pct));
+    var after = compare.querySelector('.sc2__bac-after');
+    var sep = compare.querySelector('.sc2__bac-sep');
+    var handle = compare.querySelector('.sc2__bac-handle');
+    var range = compare.querySelector('.sc2__bac-range');
+    if (after) after.style.clipPath = 'inset(0 0 0 ' + cur + '%)';
+    if (sep) sep.style.left = cur + '%';
+    if (handle) handle.style.left = cur + '%';
+    if (range) range.value = cur;
   }
 
-  if (range) range.addEventListener('input', function () { setPos(+this.value); });
+  root.querySelectorAll('[data-sc2-compare]').forEach(function (compare) {
+    var range = compare.querySelector('.sc2__bac-range');
+    if (range) range.addEventListener('input', function () { setPos(compare, +range.value); });
+    setPos(compare, 50);
+  });
 
-  /* drag the handle directly */
-  var dragging = false;
+  /* Concern pills are tabs: selecting one shows its before/after panel */
+  var tabs = Array.prototype.slice.call(root.querySelectorAll('[data-sc2-tab]'));
 
-  function pctFromEvent(clientX) {
-    var rect = wrap.getBoundingClientRect();
-    return ((clientX - rect.left) / rect.width) * 100;
+  function select(tab, focus) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      t.classList.toggle('sc2__pill--gold', on);
+      var panel = document.getElementById(t.getAttribute('aria-controls'));
+      if (!panel) return;
+      panel.hidden = !on;
+      if (on) {
+        var compare = panel.querySelector('[data-sc2-compare]');
+        if (compare) setPos(compare, 50);
+      }
+    });
+    if (focus) tab.focus();
+
+    /* Bring the pill into view inside the scrolling row without scrolling the page */
+    var strip = tab.parentElement;
+    if (strip && strip.scrollWidth > strip.clientWidth) {
+      var stripRect = strip.getBoundingClientRect();
+      var tabRect = tab.getBoundingClientRect();
+      strip.scrollBy({
+        left: tabRect.left - stripRect.left - (stripRect.width - tabRect.width) / 2,
+        behavior: reduceMotion.matches ? 'auto' : 'smooth'
+      });
+    }
   }
 
-  handle.addEventListener('mousedown', function (e) { dragging = true; e.preventDefault(); });
-  document.addEventListener('mouseup',  function ()  { dragging = false; });
-  document.addEventListener('mousemove', function (e) {
-    if (dragging) setPos(pctFromEvent(e.clientX));
+  tabs.forEach(function (tab, index) {
+    tab.addEventListener('click', function () { select(tab, false); });
+    tab.addEventListener('keydown', function (event) {
+      var rtl = getComputedStyle(root).direction === 'rtl';
+      var next = null;
+      if (event.key === (rtl ? 'ArrowLeft' : 'ArrowRight')) next = tabs[(index + 1) % tabs.length];
+      else if (event.key === (rtl ? 'ArrowRight' : 'ArrowLeft')) next = tabs[(index - 1 + tabs.length) % tabs.length];
+      else if (event.key === 'Home') next = tabs[0];
+      else if (event.key === 'End') next = tabs[tabs.length - 1];
+      if (!next) return;
+      event.preventDefault();
+      select(next, true);
+    });
   });
 
-  handle.addEventListener('touchstart', function (e) {
-    dragging = true; e.preventDefault();
-  }, { passive: false });
-  document.addEventListener('touchend', function () { dragging = false; });
-  document.addEventListener('touchmove', function (e) {
-    if (dragging) setPos(pctFromEvent(e.touches[0].clientX));
-  }, { passive: true });
-
-  /* Shopify theme editor reload */
-  document.addEventListener('shopify:section:load', function (e) {
-    if (e.detail && e.detail.sectionId === {{ section.id | json }}) setPos(50);
+  /* Theme editor: selecting a pill block shows its panel */
+  root.addEventListener('shopify:block:select', function (event) {
+    var tab = event.target.closest && event.target.closest('[data-sc2-tab]');
+    if (tab) select(tab, false);
   });
-
-  requestAnimationFrame(function () { setPos(50); });
 }());
 </script>
 
@@ -329,6 +364,10 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  margin: 0;
+  font: inherit;
+  text-align: start;
+  color: inherit;
   padding: 12px 20px;
   border-radius: 50px;
   border: none;
@@ -355,7 +394,13 @@
   outline-offset: 3px;
 }
 
+@keyframes sc2-panel-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .sc2__grid { animation: none; }
   .sc2__pill--link { transition: none; }
   .sc2__pill--link:hover { transform: none; }
 }
@@ -407,7 +452,12 @@
   padding: 0;
 }
 
+.sc2__grid[hidden] {
+  display: none;
+}
+
 .sc2__grid {
+  animation: sc2-panel-in 0.35s ease;
   display: grid;
   /* Slider takes most of the row; the product card keeps enough room for its copy */
   grid-template-columns: minmax(0, var(--sc2-ba-cols, 65fr)) minmax(260px, var(--sc2-feat-cols, 35fr));
@@ -883,7 +933,8 @@
     {
       "type": "image_picker",
       "id": "before_image",
-      "label": "Before image"
+      "label": "Before image",
+      "info": "Default for pills without their own before/after images or product metafields."
     },
     {
       "type": "image_picker",
@@ -1051,32 +1102,110 @@
           "default": "Anti-Yellow"
         },
         {
+          "type": "checkbox",
+          "id": "highlighted",
+          "label": "Selected first",
+          "info": "The first pill with this ticked opens when the page loads. The selected pill is shown in gold.",
+          "default": false
+        },
+        {
           "type": "header",
-          "content": "Pill destination"
+          "content": "Before / after for this pill"
+        },
+        {
+          "type": "paragraph",
+          "content": "Clicking the pill shows these images. Left empty, they come from the pill product's custom.before_image and custom.after_image metafields, then from the section's Before / After images."
+        },
+        {
+          "type": "image_picker",
+          "id": "before_image",
+          "label": "Before image",
+          "info": "About 1800 × 900 (2:1). Phones crop to 7:5, so keep the subject centred."
+        },
+        {
+          "type": "image_picker",
+          "id": "after_image",
+          "label": "After image",
+          "info": "Same size and framing as the before image."
+        },
+        {
+          "type": "header",
+          "content": "Recommended product card"
+        },
+        {
+          "type": "paragraph",
+          "content": "Fill in a product or a heading to give this pill its own card. Otherwise the section's Feature Card is shown. Empty heading and description use the product's title and description."
+        },
+        {
+          "type": "product",
+          "id": "feat_product",
+          "label": "Product",
+          "info": "Card image and Learn more link. Its before/after metafields are used when the images above are empty."
+        },
+        {
+          "type": "image_picker",
+          "id": "feat_image",
+          "label": "Card image (overrides product image)",
+          "info": "Transparent PNG, about 800 × 800."
+        },
+        {
+          "type": "text",
+          "id": "feat_alt",
+          "label": "Card image alt text"
+        },
+        {
+          "type": "text",
+          "id": "feat_eyebrow",
+          "label": "Eyebrow",
+          "default": "Recommended for this result"
+        },
+        {
+          "type": "text",
+          "id": "feat_heading_white",
+          "label": "Heading (white)"
+        },
+        {
+          "type": "text",
+          "id": "feat_heading_accent",
+          "label": "Heading (blue accent)"
+        },
+        {
+          "type": "text",
+          "id": "feat_subheading",
+          "label": "Subheading (gold)"
+        },
+        {
+          "type": "textarea",
+          "id": "feat_body",
+          "label": "Description"
+        },
+        {
+          "type": "text",
+          "id": "feat_cta_label",
+          "label": "Button label",
+          "default": "Learn more"
+        },
+        {
+          "type": "header",
+          "content": "Learn more link"
         },
         {
           "type": "collection",
           "id": "collection",
           "label": "Collection",
-          "info": "Clicking the pill opens this collection page."
+          "info": "The card's Learn more button and image open this collection."
         },
         {
           "type": "product",
           "id": "product",
           "label": "Product",
-          "info": "Used when no collection is selected. Opens the product page."
+          "info": "Used when no collection is selected. Also supplies before/after metafields when no card product is set."
         },
         {
           "type": "url",
           "id": "link",
           "label": "Custom link",
-          "info": "Used only when no collection or product is selected."
-        },
-        {
-          "type": "checkbox",
-          "id": "highlighted",
-          "label": "Gold highlight (active state)",
-          "default": false
+          "info": "Used only when no collection or product is selected. With none set, the card product's page opens."
         }
       ]
     }

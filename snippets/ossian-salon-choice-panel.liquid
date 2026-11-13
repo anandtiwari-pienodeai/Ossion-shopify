@@ -1,0 +1,187 @@
+{%- doc -%}
+  One Salon Choice result: the before/after comparison slider (with the shared icon row
+  under it) beside the recommended-product card. The section renders one per concern pill
+  and shows the selected pill's panel; with no pills it renders a single panel.
+  Styles live in sections/ossian-salon-choice.liquid.
+
+  @param {string} panel_id - Unique element id for the panel
+  @param {string} [tab_id] - Id of the pill (tab) that shows this panel
+  @param {boolean} [hidden] - Render the panel hidden (not the selected pill)
+  @param {string} ba_sizes - `sizes` value for the before/after images
+  @param {object} [before_image] - Before image
+  @param {object} [after_image] - After image
+  @param {object[]} [icon_blocks] - ba_icon blocks for the row under the slider
+  @param {object} [product] - Recommended product (image and alt fallback)
+  @param {object} [image] - Card image; overrides the product image
+  @param {string} [alt] - Card image alt text
+  @param {string} [eyebrow] - Small line above the heading
+  @param {string} [heading_white] - Heading, white part
+  @param {string} [heading_accent] - Heading, accent-colored part
+  @param {string} [subheading] - Gold line under the heading
+  @param {string} [body] - Description
+  @param {string} [cta_label] - Button label
+  @param {string} [href] - Button and image link
+
+  @example
+  {% render 'ossian-salon-choice-panel',
+    panel_id: 'sc2-panel-abc',
+    tab_id: 'sc2-tab-abc',
+    ba_sizes: '(min-width: 901px) 65vw, 100vw',
+    before_image: block.settings.before_image,
+    after_image: block.settings.after_image,
+    product: block.settings.feat_product,
+    heading_white: 'Blonder Fibre Plex',
+    cta_label: 'Learn more',
+    href: block.settings.feat_product.url
+  %}
+{%- enddoc -%}
+
+{%- liquid
+  assign card_image = image
+  if card_image == blank and product != blank
+    assign card_image = product.featured_image
+  endif
+  assign card_alt = alt | default: product.title | default: heading_white | default: heading_accent | default: 'Shop now'
+  assign card_href = href | default: product.url | default: '#'
+-%}
+
+<div
+  class="sc2__grid"
+  id="{{ panel_id }}"
+  {% if tab_id != blank %}
+    role="tabpanel" aria-labelledby="{{ tab_id }}"
+  {% endif %}
+  {% if hidden %}
+    hidden
+  {% endif %}
+>
+  <div class="sc2__ba">
+    <div class="sc2__bac" data-sc2-compare>
+      {%- if before_image != blank -%}
+        {{
+          before_image
+          | image_url: width: 1800
+          | image_tag:
+            class: 'sc2__bac-before',
+            loading: 'lazy',
+            widths: '500,800,1100,1400,1800',
+            sizes: ba_sizes,
+            draggable: 'false',
+            alt: 'Before'
+        }}
+      {%- else -%}
+        <div class="sc2__bac-before sc2__bac-ph">Before</div>
+      {%- endif -%}
+
+      {%- if after_image != blank -%}
+        {{
+          after_image
+          | image_url: width: 1800
+          | image_tag:
+            class: 'sc2__bac-after',
+            loading: 'lazy',
+            widths: '500,800,1100,1400,1800',
+            sizes: ba_sizes,
+            draggable: 'false',
+            alt: 'After'
+        }}
+      {%- else -%}
+        <div class="sc2__bac-after sc2__bac-ph">After</div>
+      {%- endif -%}
+
+      <div class="sc2__bac-sep"></div>
+      <div class="sc2__bac-handle" aria-hidden="true">
+        <svg viewBox="0 0 44 44" fill="none">
+          <circle cx="22" cy="22" r="21" fill="rgba(0,0,0,0.52)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+          <path d="M16 22 L10 22 M28 22 L34 22 M16 22 L19 19 M16 22 L19 25 M28 22 L25 19 M28 22 L25 25" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <input
+        class="sc2__bac-range"
+        type="range"
+        min="0"
+        max="100"
+        value="50"
+        aria-label="Slide to compare before and after"
+      >
+
+      <span class="sc2__bac-tag sc2__bac-tag--b">BEFORE</span>
+      <span class="sc2__bac-tag sc2__bac-tag--a">AFTER</span>
+    </div>
+
+    {%- if icon_blocks.size > 0 -%}
+      <div class="sc2__icons">
+        {%- for icon_block in icon_blocks -%}
+          <div class="sc2__icon" {{ icon_block.shopify_attributes }}>
+            <span class="sc2__icon-badge" aria-hidden="true">
+              {%- case icon_block.settings.icon -%}
+                {%- when 'flask' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M9 3v7L4 19a1 1 0 00.93 1.37h14.14A1 1 0 0020 19l-5-9V3"/><line x1="6.3" y1="16" x2="17.7" y2="16"/></svg>
+                {%- when 'shield' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 L4 6.5 L4 12.5 C4 17.5 7.5 20.5 12 22 C16.5 20.5 20 17.5 20 12.5 L20 6.5 Z"/></svg>
+                {%- when 'check' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5 L10.5 15 L16 9"/></svg>
+                {%- when 'medal' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="5.5"/><path d="M9 13 L7 21 L12 18.5 L17 21 L15 13"/></svg>
+                {%- else -%}
+                  <span class="sc2__icon-sym">{{ icon_block.settings.symbol | default: '✦' }}</span>
+              {%- endcase -%}
+            </span>
+            <span class="sc2__icon-text">
+              {%- if icon_block.settings.label != blank -%}
+                <span class="sc2__icon-lbl">{{ icon_block.settings.label }}</span>
+              {%- endif -%}
+              {%- if icon_block.settings.subtitle != blank -%}
+                <span class="sc2__icon-sub">{{ icon_block.settings.subtitle }}</span>
+              {%- endif -%}
+            </span>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="sc2__feat">
+    <div class="sc2__feat-body">
+      {%- if eyebrow != blank -%}
+        <p class="sc2__feat-eyebrow">{{ eyebrow }}</p>
+      {%- endif -%}
+      {%- if heading_white != blank or heading_accent != blank -%}
+        <h3 class="sc2__feat-heading">
+          {%- if heading_white != blank -%}<span>{{ heading_white }}</span>{%- endif -%}
+          {%- if heading_accent != blank -%}<span class="sc2__feat-heading-accent">{{ heading_accent }}</span>{%- endif -%}
+        </h3>
+      {%- endif -%}
+      {%- if subheading != blank -%}
+        <p class="sc2__feat-subheading">{{ subheading }}</p>
+      {%- endif -%}
+      {%- if body != blank -%}
+        <p class="sc2__feat-desc">{{ body }}</p>
+      {%- endif -%}
+      {%- if cta_label != blank -%}
+        <a href="{{ card_href }}" class="sc2__feat-cta">
+          {{- cta_label -}}
+          <svg class="sc2__feat-cta-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M6 3.5 L10.5 8 L6 12.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      {%- endif -%}
+    </div>
+    <a href="{{ card_href }}" class="sc2__feat-media" aria-label="{{ card_alt | escape }}">
+      {%- if card_image != blank -%}
+        {{
+          card_image
+          | image_url: width: 700
+          | image_tag:
+            class: 'sc2__feat-img',
+            loading: 'lazy',
+            widths: '300,500,700',
+            sizes: '(min-width: 901px) 360px, (min-width: 581px) 50vw, 46vw',
+            alt: card_alt
+        }}
+      {%- else -%}
+        <div class="sc2__feat-ph"></div>
+      {%- endif -%}
+    </a>
+  </div>
+</div>
