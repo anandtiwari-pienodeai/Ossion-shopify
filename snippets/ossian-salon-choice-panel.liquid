@@ -11,7 +11,7 @@
   @param {object} [before_image] - Before image
   @param {object} [after_image] - After image
   @param {object[]} [icon_blocks] - ba_icon blocks for the row under the slider
-  @param {object} [product] - Recommended product (image and alt fallback)
+  @param {object} [product] - Recommended product (image, alt and price)
   @param {object} [image] - Card image; overrides the product image
   @param {string} [alt] - Card image alt text
   @param {string} [eyebrow] - Small line above the heading
@@ -31,7 +31,7 @@
     after_image: block.settings.after_image,
     product: block.settings.feat_product,
     heading_white: 'Blonder Fibre Plex',
-    cta_label: 'Learn more',
+    cta_label: 'Explore product',
     href: block.settings.feat_product.url
   %}
 {%- enddoc -%}
@@ -155,6 +155,16 @@
       {%- if subheading != blank -%}
         <p class="sc2__feat-subheading">{{ subheading }}</p>
       {%- endif -%}
+      {%- if product != blank -%}
+        {%- assign card_price = product.price | money -%}
+        <p class="sc2__feat-price">
+          {%- if product.price_varies -%}
+            {{ 'content.price_from' | t: price: card_price }}
+          {%- else -%}
+            {{ card_price }}
+          {%- endif -%}
+        </p>
+      {%- endif -%}
       {%- if body != blank -%}
         <p class="sc2__feat-desc">{{ body }}</p>
       {%- endif -%}
@@ -168,6 +178,8 @@
       {%- endif -%}
     </div>
     <a href="{{ card_href }}" class="sc2__feat-media" aria-label="{{ card_alt | escape }}">
+      {%- comment -%} The light stage blends white product-photo backgrounds into the card {%- endcomment -%}
+      <span class="sc2__feat-stage">
       {%- if card_image != blank -%}
         {{
           card_image
@@ -180,8 +192,9 @@
             alt: card_alt
         }}
       {%- else -%}
-        <div class="sc2__feat-ph"></div>
+        <span class="sc2__feat-ph"></span>
       {%- endif -%}
+      </span>
     </a>
   </div>
 </div>

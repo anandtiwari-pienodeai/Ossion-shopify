@@ -2,8 +2,8 @@
   Section contract.
   "Choose your concern" pills above a before/after result. Each pill is a tab with its own
   before/after images and recommended-product card; clicking a pill swaps the result.
-  Pill before/after images fall back to the pill product's custom.before_image /
-  custom.after_image metafields, then to the section's images. The panel markup lives in
+  Pill before/after images come from the pill product's custom.before_image /
+  custom.after_image metafields, falling back to the section's images. The panel markup lives in
   snippets/ossian-salon-choice-panel.liquid.
   @example
   <!-- templates/index.json → ossian_salon_choice -->
@@ -128,7 +128,7 @@
         assign b = block.settings
         assign pill_product = b.feat_product | default: b.product
 
-        # Learn more: the pill's link (collection, product, custom), else its card product
+        # Explore product: the pill's link (collection, product, custom), else its card product
         assign pill_href = ''
         if b.collection != blank
           assign pill_href = b.collection.url
@@ -140,13 +140,10 @@
           assign pill_href = b.feat_product.url
         endif
 
-        # Before/after: pill images, else the product's metafields, else the section's
+        # Before/after: the pill product's Before image / After image metafields, else the section's
         assign p_before = ss.before_image
         assign p_after = ss.after_image
-        if b.before_image != blank or b.after_image != blank
-          assign p_before = b.before_image
-          assign p_after = b.after_image
-        elsif pill_product.metafields.custom.before_image != blank or pill_product.metafields.custom.after_image != blank
+        if pill_product.metafields.custom.before_image != blank or pill_product.metafields.custom.after_image != blank
           assign p_before = pill_product.metafields.custom.before_image.value
           assign p_after = pill_product.metafields.custom.after_image.value
         endif
@@ -163,7 +160,7 @@
         endif
         assign pill_body = b.feat_body
         if pill_body == blank and b.feat_product != blank
-          assign pill_body = b.feat_product.description | strip_html | strip | truncatewords: 24
+          assign pill_body = b.feat_product.description | strip_html | strip | truncatewords: 40
         endif
         assign pill_hidden = true
         if forloop.index0 == sc2_active
@@ -673,7 +670,10 @@
   min-width: 0;
   position: relative;
   overflow: hidden;
-  background: #05070d;
+  /* Soft navy glow behind the product, fading to near-black at the copy */
+  background:
+    radial-gradient(90% 70% at 80% 55%, rgb(31 76 140 / 0.45) 0%, transparent 70%),
+    linear-gradient(160deg, #0b1424 0%, #05070d 60%);
   /* stretch to match BA card height inside the grid row */
   align-self: stretch;
 }
@@ -687,15 +687,30 @@
 }
 
 .sc2__feat-eyebrow {
-  font-size: clamp(0.9rem, 1.1vw, 1.05rem);
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
-  margin: 0 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #d9a441;
+  margin: 0 0 16px;
+}
+
+.sc2__feat-eyebrow::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: currentColor;
+  flex-shrink: 0;
 }
 
 .sc2__feat-heading {
-  font-size: clamp(1.35rem, 1.75vw, 2.1rem);
-  overflow-wrap: break-word;
+  font-size: clamp(1.25rem, 1.6vw, 2.1rem);
+  /* Wrap between words; a word too long for the column is hyphenated, not cut anywhere */
+  overflow-wrap: normal;
+  hyphens: auto;
   font-weight: 800;
   letter-spacing: -0.01em;
   text-transform: uppercase;
@@ -716,67 +731,121 @@
   font-size: clamp(0.95rem, 1.2vw, 1.15rem);
   font-weight: 600;
   color: #d9a441;
-  margin: 0 0 14px;
+  margin: 0 0 10px;
 }
 
+.sc2__feat-price {
+  margin: 0 0 18px;
+  font-size: clamp(1rem, 1.15vw, 1.15rem);
+  font-weight: 600;
+  color: #fff;
+}
+
+/* Clean three-line excerpt instead of a word cut mid-sentence */
 .sc2__feat-desc {
-  font-size: clamp(0.85rem, 1vw, 1rem);
-  color: rgba(255, 255, 255, 0.72);
-  line-height: 1.6;
-  max-width: 34ch;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  font-size: clamp(0.85rem, 0.95vw, 0.98rem);
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.65;
+  max-width: 36ch;
   margin: 0 0 26px;
+  padding-top: 16px;
+  border-top: 1px solid rgb(255 255 255 / 0.1);
 }
 
 .sc2__feat-cta {
   display: inline-flex;
   align-items: center;
+  gap: 10px;
   align-self: flex-start;
   background: linear-gradient(135deg, #b8832a 0%, #dba84a 50%, #c9953a 100%);
   color: #fff;
   font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  padding: 14px 30px;
-  border-radius: 8px;
+  padding: 14px 26px;
+  border-radius: 999px;
+  box-shadow: 0 8px 20px rgb(184 131 42 / 0.3);
   text-decoration: none;
-  transition: filter 0.2s;
+  transition: filter 0.2s, transform 0.2s;
 }
 
 .sc2__feat-cta-icon {
-  display: none;
+  display: block;
   width: 16px;
   height: 16px;
   flex-shrink: 0;
+  transition: transform 0.2s;
 }
 
 .sc2__feat-cta:hover {
   filter: brightness(1.08);
 }
 
+.sc2__feat-cta:hover .sc2__feat-cta-icon {
+  transform: translateX(3px);
+}
+
+.sc2__feat-cta:focus-visible,
+.sc2__feat-media:focus-visible {
+  outline: 2px solid #dba84a;
+  outline-offset: 3px;
+}
+
 .sc2__feat-media {
   flex: 1 1 12rem;
-  align-self: stretch;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
-  padding: 0 clamp(16px, 1.6vw, 24px) clamp(12px, 1.2vw, 20px);
+  padding: clamp(14px, 1.6vw, 28px);
+  padding-inline-start: 0;
   min-width: 0;
+}
+
+/* Rounded light tile: white product-photo backgrounds melt into it (multiply) */
+.sc2__feat-stage {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 20rem;
+  aspect-ratio: 1;
+  padding: 7%;
+  border-radius: 24px;
+  background: radial-gradient(circle at 50% 40%, #ffffff 0%, #eef2f8 75%);
+  box-shadow: 0 24px 48px rgb(0 0 0 / 0.45), inset 0 0 0 1px rgb(255 255 255 / 0.6);
+  overflow: hidden;
 }
 
 .sc2__feat-img {
   width: 100%;
   height: 100%;
-  max-height: 20rem;
   object-fit: contain;
-  object-position: center bottom;
+  object-position: center;
   display: block;
+  mix-blend-mode: multiply;
+  transition: transform 0.4s ease;
+}
+
+.sc2__feat-media:hover .sc2__feat-img {
+  transform: scale(1.05);
 }
 
 .sc2__feat-ph {
   width: 100%;
   height: 100%;
-  min-height: 160px;
-  background: #0d2340;
+  border-radius: 16px;
+  background: #dfe6f0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc2__feat-img,
+  .sc2__feat-cta,
+  .sc2__feat-cta-icon { transition: none; }
+  .sc2__feat-media:hover .sc2__feat-img,
+  .sc2__feat-cta:hover .sc2__feat-cta-icon { transform: none; }
 }
 
 @media (min-width: 901px) {
@@ -849,7 +918,7 @@
     padding: 28px 20px 30px;
   }
 
-  .sc2__feat-eyebrow { font-size: 0.85rem; margin-bottom: 10px; }
+  .sc2__feat-eyebrow { font-size: 0.68rem; margin-bottom: 10px; }
 
   .sc2__feat-heading {
     font-size: clamp(1.6rem, 7.6vw, 2rem);
@@ -871,7 +940,7 @@
   .sc2__feat-cta {
     gap: 10px;
     padding: 12px 22px;
-    border-radius: 10px;
+    border-radius: 999px;
     color: #14284a;
     font-size: 0.95rem;
   }
@@ -885,10 +954,11 @@
     bottom: 0;
     width: 46%;
     height: 64%;
-    padding: 0 8px 14px 0;
+    padding: 0 14px 18px 0;
   }
 
-  .sc2__feat-img { object-position: right bottom; }
+  .sc2__feat-media { align-items: flex-end; justify-content: flex-end; }
+  .sc2__feat-stage { max-width: 100%; max-height: 100%; border-radius: 18px; }
 
   .sc2__ba-title { font-size: 0.85rem; }
 
@@ -934,7 +1004,7 @@
       "type": "image_picker",
       "id": "before_image",
       "label": "Before image",
-      "info": "Default for pills without their own before/after images or product metafields."
+      "info": "Shown for pills whose product has no Before image / After image metafields."
     },
     {
       "type": "image_picker",
@@ -1015,7 +1085,7 @@
       "type": "text",
       "id": "feat_cta_label",
       "label": "Button text",
-      "default": "Learn more"
+      "default": "Explore product"
     },
     {
       "type": "text",
@@ -1110,26 +1180,6 @@
         },
         {
           "type": "header",
-          "content": "Before / after for this pill"
-        },
-        {
-          "type": "paragraph",
-          "content": "Clicking the pill shows these images. Left empty, they come from the pill product's custom.before_image and custom.after_image metafields, then from the section's Before / After images."
-        },
-        {
-          "type": "image_picker",
-          "id": "before_image",
-          "label": "Before image",
-          "info": "About 1800 × 900 (2:1). Phones crop to 7:5, so keep the subject centred."
-        },
-        {
-          "type": "image_picker",
-          "id": "after_image",
-          "label": "After image",
-          "info": "Same size and framing as the before image."
-        },
-        {
-          "type": "header",
           "content": "Recommended product card"
         },
         {
@@ -1140,7 +1190,7 @@
           "type": "product",
           "id": "feat_product",
           "label": "Product",
-          "info": "Card image and Learn more link. Its before/after metafields are used when the images above are empty."
+          "info": "Card image and Explore product link. The before/after slider shows this product's Before image and After image metafields (about 1800 × 900 each)."
         },
         {
           "type": "image_picker",
@@ -1183,17 +1233,17 @@
           "type": "text",
           "id": "feat_cta_label",
           "label": "Button label",
-          "default": "Learn more"
+          "default": "Explore product"
         },
         {
           "type": "header",
-          "content": "Learn more link"
+          "content": "Explore product link"
         },
         {
           "type": "collection",
           "id": "collection",
           "label": "Collection",
-          "info": "The card's Learn more button and image open this collection."
+          "info": "The card's Explore product button and image open this collection."
         },
         {
           "type": "product",
