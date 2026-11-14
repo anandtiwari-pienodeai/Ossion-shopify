@@ -149,7 +149,7 @@
 
   <div class="ossian-plp-card__actions">
     {%- if card_product.metafields.custom.salon_only.value == true -%}
-      {%- render 'salon-enquiry-button', product: card_product, variant: variant, class: 'ossian-plp-card__atc' -%}
+      {%- render 'salon-enquiry-button', product: card_product, variant: variant, class: 'ossian-plp-card__atc', compact: true -%}
     {%- elsif variant.available -%}
       {%- assign form_id = 'OssianPlpAtc-' | append: section_id | append: '-' | append: card_product.id -%}
       <product-form-component
@@ -219,14 +219,16 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  background: #f5f0eb;
+  /* White so photos on white backgrounds blend into the letterbox space */
+  background: #fff;
   flex-shrink: 0;
 }
 
+/* contain, not cover: the whole product photo always shows, never cropped */
 .ossian-plp-card__img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
   transition: transform 0.4s ease;
 }
@@ -450,24 +452,71 @@
     border-radius: 12px;
   }
 
+  /* Shorter cards on phones: slightly wide image frame and tighter rows */
+  .ossian-plp-card__img-wrap {
+    aspect-ratio: 6 / 5;
+  }
+
   .ossian-plp-card__info {
-    padding: 12px 12px 10px;
+    padding: 9px 10px 6px;
+  }
+
+  .ossian-plp-card__type {
+    margin-bottom: 3px;
+    font-size: 9px;
   }
 
   .ossian-plp-card__name {
-    font-size: 0.82rem;
+    margin-bottom: 4px;
+    font-size: 0.8rem;
+    line-height: 1.3;
+  }
+
+  .ossian-plp-card__rating {
+    gap: 4px;
+    margin-bottom: 6px;
+  }
+
+  .ossian-plp-card__stars {
+    font-size: 11px;
+  }
+
+  .ossian-plp-card__rating-val,
+  .ossian-plp-card__rating-count {
+    font-size: 11px;
+  }
+
+  /* Smaller tags, at most two, so 2-up cards don't grow one tag per line */
+  .ossian-plp-card__tags {
+    gap: 4px;
+    margin-bottom: 6px;
+  }
+
+  .ossian-plp-card__tag {
+    padding: 3px 5px;
+    font-size: 8.5px;
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
+
+  .ossian-plp-card__tag:nth-child(n + 3) {
+    display: none;
+  }
+
+  .ossian-plp-card__pricing {
+    padding-top: 0;
   }
 
   .ossian-plp-card__price {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   .ossian-plp-card__actions {
-    padding: 10px 10px 12px;
+    padding: 6px 8px 8px;
   }
 
   .ossian-plp-card__atc {
-    padding: 11px 8px;
+    padding: 9px 8px;
     font-size: 10px;
     letter-spacing: 0.08em;
   }

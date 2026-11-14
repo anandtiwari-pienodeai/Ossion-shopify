@@ -10,6 +10,7 @@
   @param {string} [class] - Extra classes, e.g. a card's own button class so it keeps that card's look
   @param {string} [label] - Button text; defaults to the theme setting
   @param {boolean} [icon_only] - Show only the WhatsApp icon (label becomes the accessible name)
+  @param {boolean} [compact] - On phones, shorten the label to "Enquire" so it fits narrow card buttons
 
   @example
   {% render 'salon-enquiry-button', product: product, class: 'salon-enquiry-cta--block' %}
@@ -29,7 +30,7 @@
 
 <button
   type="button"
-  class="salon-enquiry-cta{% if icon_only %} salon-enquiry-cta--icon{% endif %} {{ class }}"
+  class="salon-enquiry-cta{% if icon_only %} salon-enquiry-cta--icon{% endif %}{% if compact %} salon-enquiry-cta--compact{% endif %} {{ class }}"
   data-salon-enquiry
   data-product-id="{{ product.id }}"
   data-product-title="{{ product.title | escape }}"
@@ -41,15 +42,16 @@
   {% endif %}
   aria-haspopup="dialog"
   aria-controls="SalonEnquiryDialog"
-  {% if icon_only %}
-    aria-label="{{ enquiry_label | escape }}: {{ product.title | escape }}"
-  {% endif %}
+  aria-label="{{ enquiry_label | escape }}: {{ product.title | escape }}"
 >
   <svg class="salon-enquiry-cta__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
     {%- render 'icon', icon: 'whatsapp' -%}
   </svg>
   {%- unless icon_only -%}
     <span class="salon-enquiry-cta__label">{{ enquiry_label | escape }}</span>
+    {%- if compact -%}
+      <span class="salon-enquiry-cta__label-short" aria-hidden="true">{{ 'salon_enquiry.cta_short' | t }}</span>
+    {%- endif -%}
   {%- endunless -%}
 </button>
 
@@ -67,6 +69,28 @@
     flex: 0 0 auto;
     width: 1.35em;
     height: 1.35em;
+  }
+
+  .salon-enquiry-cta--compact {
+    white-space: nowrap;
+  }
+
+  .salon-enquiry-cta__label-short {
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .salon-enquiry-cta--compact {
+      gap: 6px;
+    }
+
+    .salon-enquiry-cta--compact .salon-enquiry-cta__label {
+      display: none;
+    }
+
+    .salon-enquiry-cta--compact .salon-enquiry-cta__label-short {
+      display: inline;
+    }
   }
 
   .salon-enquiry-cta--icon .salon-enquiry-cta__icon {

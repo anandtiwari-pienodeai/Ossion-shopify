@@ -38,6 +38,7 @@
     --ossian-plp-gap-h: {{ section.settings.columns_gap_horizontal }}px;
     --ossian-plp-gap-v: {{ section.settings.columns_gap_vertical }}px;
     --ossian-plp-columns-desktop: {{ desktop_columns }};
+    --ossian-plp-columns-tablet: {{ desktop_columns | at_most: 3 }};
     --ossian-plp-columns-mobile: {{ mobile_columns }};
   "
 >

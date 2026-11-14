@@ -184,7 +184,8 @@
   .salon-enquiry {
     --salon-enquiry-accent: #1e3a5f;
     --salon-enquiry-accent-dark: #16304f;
-    --salon-enquiry-whatsapp: #1fa855;
+    --salon-enquiry-gold: #d9a441;
+    --salon-enquiry-whatsapp: #25d366;
     --salon-enquiry-error: #b42318;
     --salon-enquiry-line: #d6dee8;
 
@@ -196,6 +197,7 @@
     border-radius: 18px;
     background: #fff;
     color: #14284a;
+    font-family: var(--font-body--family);
   }
 
   @media screen and (max-width: 749px) {
@@ -218,9 +220,58 @@
     padding: 32px 28px 26px;
   }
 
+  .salon-enquiry__body[hidden] {
+    display: none;
+  }
+
+  @media screen and (min-width: 750px) {
+    .salon-enquiry.dialog-modal {
+      margin: auto;
+    }
+  }
+
+  /* The theme's modal animation animates margin-top to 0, pinning modals to the top.
+     Use transform/opacity so the popup stays centred (bottom sheet on phones). */
+  .salon-enquiry.dialog-modal[open] {
+    animation: salonEnquiryIn var(--animation-speed) var(--animation-easing) forwards;
+  }
+
+  .salon-enquiry.dialog-modal.dialog-closing {
+    animation: salonEnquiryOut var(--animation-speed) var(--animation-easing) forwards;
+  }
+
+  @keyframes salonEnquiryIn {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.98);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes salonEnquiryOut {
+    from {
+      opacity: 1;
+      transform: none;
+    }
+
+    to {
+      opacity: 0;
+      transform: translateY(16px) scale(0.98);
+    }
+  }
+
   @media screen and (max-width: 749px) {
     .salon-enquiry__body {
       padding: 26px 20px calc(20px + env(safe-area-inset-bottom));
+    }
+
+    .salon-enquiry__header {
+      margin: -26px -20px 0;
+      padding: 26px 64px 22px 20px;
     }
   }
 
@@ -235,15 +286,23 @@
     height: 36px;
     padding: 0;
     border: none;
+    border: 1px solid rgb(255 255 255 / 0.25);
     border-radius: 50%;
-    background: #f1f4f8;
-    color: #14284a;
+    background: rgb(255 255 255 / 0.12);
+    color: #fff;
     cursor: pointer;
     transition: background-color 0.2s ease;
   }
 
   .salon-enquiry__close:hover {
-    background: #e2e8f0;
+    background: rgb(255 255 255 / 0.22);
+  }
+
+  /* The success view has no navy band, so the close button turns navy there */
+  .salon-enquiry[data-view='success'] .salon-enquiry__close {
+    border-color: transparent;
+    background: #f1f4f8;
+    color: var(--salon-enquiry-accent);
   }
 
   .salon-enquiry__close svg {
@@ -251,20 +310,44 @@
     height: 18px;
   }
 
+  /* Navy band matching the theme's feature cards (Salon Choice) */
   .salon-enquiry__header {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    padding-inline-end: 36px;
+    gap: 8px;
+    margin: -32px -28px 0;
+    padding: 30px 72px 26px 28px;
+    background:
+      radial-gradient(90% 120% at 100% 0%, rgb(217 164 65 / 0.18) 0%, transparent 60%),
+      linear-gradient(150deg, #1e3a5f 0%, #14284a 100%);
+    color: #fff;
   }
 
   .salon-enquiry__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     margin: 0;
-    color: #a8842c;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
+    color: var(--salon-enquiry-gold);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
+  }
+
+  .salon-enquiry__eyebrow::before {
+    content: '';
+    width: 22px;
+    height: 1px;
+    background: currentColor;
+  }
+
+  .salon-enquiry__header .salon-enquiry__heading {
+    color: #fff;
+  }
+
+  .salon-enquiry__header .salon-enquiry__intro {
+    color: rgb(255 255 255 / 0.78);
   }
 
   .salon-enquiry__heading {
@@ -272,6 +355,7 @@
     color: var(--salon-enquiry-accent);
     font-family: var(--font-heading--family);
     font-size: clamp(1.4rem, 3vw, 1.7rem);
+    font-weight: 600;
     line-height: 1.2;
   }
 
@@ -292,6 +376,7 @@
     gap: 14px;
     padding: 12px 14px;
     border: 1px solid var(--salon-enquiry-line);
+    border-inline-start: 3px solid var(--salon-enquiry-gold);
     border-radius: 12px;
     background: #f5f8fc;
   }
@@ -445,22 +530,24 @@
     min-height: 50px;
     margin-block-start: 4px;
     padding: 0 20px;
-    border: none;
-    border-radius: 999px;
-    background: var(--salon-enquiry-whatsapp);
+    border: 1.5px solid var(--salon-enquiry-accent);
+    border-radius: 10px;
+    background: var(--salon-enquiry-accent);
     color: #fff;
     font: inherit;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     font-weight: 700;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
-    box-shadow: 0 10px 22px rgb(31 168 85 / 0.25);
+    box-shadow: 0 8px 20px rgb(30 58 95 / 0.22);
     transition: background-color 0.2s ease, transform 0.2s ease;
   }
 
   .salon-enquiry__submit:hover {
-    background: #178a45;
+    background: var(--salon-enquiry-accent-dark);
+    border-color: var(--salon-enquiry-accent-dark);
   }
 
   .salon-enquiry__submit:active {
@@ -478,6 +565,7 @@
     width: 22px;
     height: 22px;
     flex: 0 0 auto;
+    color: var(--salon-enquiry-whatsapp);
   }
 
   .salon-enquiry__submit-loading,
@@ -513,9 +601,10 @@
     place-items: center;
     width: 64px;
     height: 64px;
+    border: 1.5px solid var(--salon-enquiry-gold);
     border-radius: 50%;
-    background: #e8f7ee;
-    color: var(--salon-enquiry-whatsapp);
+    background: #eef3f9;
+    color: var(--salon-enquiry-accent);
   }
 
   .salon-enquiry__success-icon svg {

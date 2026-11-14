@@ -194,6 +194,7 @@ class SalonEnquiryComponent extends DialogComponent {
   }
 
   #showForm() {
+    this.refs.dialog.dataset.view = 'form';
     this.refs.formView.hidden = false;
     this.refs.successView.hidden = true;
     this.#setBusy(false);
@@ -350,6 +351,7 @@ class SalonEnquiryComponent extends DialogComponent {
       this.#setBusy(false);
       this.refs.formView.hidden = true;
       this.refs.successView.hidden = false;
+      this.refs.dialog.dataset.view = 'success';
       this.refs.successHeading?.focus();
     }, 400);
   }

@@ -471,6 +471,14 @@
     max-width: calc((100% - (var(--ossian-plp-columns-desktop) - 1) * var(--ossian-plp-gap-h)) / var(--ossian-plp-columns-desktop));
   }
 
+  /* Small laptops and tablets: the filter sidebar leaves less room, so cap at 3 columns */
+  @media screen and (min-width: 750px) and (max-width: 1199px) {
+    .ossian-plp__grid-item {
+      flex-basis: calc((100% - (var(--ossian-plp-columns-tablet) - 1) * var(--ossian-plp-gap-h)) / var(--ossian-plp-columns-tablet));
+      max-width: calc((100% - (var(--ossian-plp-columns-tablet) - 1) * var(--ossian-plp-gap-h)) / var(--ossian-plp-columns-tablet));
+    }
+  }
+
   .ossian-plp__empty {
     padding-block: 60px;
     text-align: center;
@@ -484,8 +492,9 @@
 
   /* ── Mobile ── */
   @media screen and (max-width: 749px) {
-    .ossian-plp__toolbar {
-      padding-inline: 16px;
+    .ossian-plp__toolbar,
+    .ossian-plp--full-width .ossian-plp__toolbar {
+      padding-inline: 10px;
     }
 
     .ossian-plp__filter-toggle {
@@ -498,12 +507,21 @@
       font-size: 12px;
     }
 
-    .ossian-plp__body {
+    /* Also beat the desktop .ossian-plp--full-width rule, which otherwise
+       keeps 16px here on top of the grid's own 10px */
+    .ossian-plp__body,
+    .ossian-plp--full-width .ossian-plp__body {
       padding-inline: 0;
     }
 
     .ossian-plp--full-width-mobile .ossian-plp__grid-wrap {
       padding-inline: 10px;
+    }
+
+    /* Tighter 2-up grid on phones */
+    .ossian-plp__grid-wrap {
+      --ossian-plp-gap-h: 10px;
+      --ossian-plp-gap-v: 12px;
     }
 
     /* Filters become an off-canvas drawer */
