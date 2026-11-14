@@ -24,7 +24,8 @@
   {% content_for 'blocks' %}
 {% endcapture %}
 
-{% if section.settings.enable_sticky_add_to_cart %}
+{%- # Salon-only products have no cart button, so no sticky bar either -%}
+{% if section.settings.enable_sticky_add_to_cart and product.metafields.custom.salon_only.value != true %}
   {% liquid
     assign current_variant = product.selected_or_first_available_variant
     # Get the initial quantity based on quantity rules

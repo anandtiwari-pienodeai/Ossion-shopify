@@ -842,6 +842,15 @@
       "button_link": "Button link"
     }
   },
+  "salon_enquiry": {
+    "name": "Salon enquiry",
+    "intro": "Products whose \"Salon only\" metafield (custom.salon_only) is on show an enquiry button instead of Add to Cart. Shoppers fill in their salon details and send them to you on WhatsApp.",
+    "whatsapp_number": "WhatsApp business number",
+    "whatsapp_number_info": "Country code and number, digits only, e.g. 919876543210. Enquiries can't be sent while this is empty.",
+    "cta_label": "Button label",
+    "heading": "Popup heading",
+    "popup_intro": "Popup intro"
+  },
   "settings": {
     "color_option_style": "Color option style",
     "accordion": "Accordion",

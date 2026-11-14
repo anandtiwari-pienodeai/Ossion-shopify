@@ -1,0 +1,544 @@
+{%- doc -%}
+  Salon enquiry popup, rendered once from layout/theme.liquid. Any
+  snippets/salon-enquiry-button.liquid on the page opens it with that product's details.
+  Validates the salon details, then opens WhatsApp (wa.me) with a pre-filled message to the
+  number in Theme settings → Salon enquiry. Nothing is added to the cart. Behaviour lives in
+  assets/salon-enquiry.js.
+
+  @example
+  {% render 'salon-enquiry-modal' %}
+{%- enddoc -%}
+
+{%- liquid
+  assign wa_number = settings.salon_enquiry_whatsapp | remove: '+' | remove: ' ' | remove: '-' | remove: '(' | remove: ')'
+  assign heading = settings.salon_enquiry_heading | default: 'Salon enquiry'
+-%}
+
+<salon-enquiry-component
+  data-whatsapp-number="{{ wa_number | escape }}"
+>
+  <dialog
+    ref="dialog"
+    id="SalonEnquiryDialog"
+    class="dialog-modal salon-enquiry"
+    aria-labelledby="SalonEnquiryHeading"
+    aria-describedby="SalonEnquiryIntro"
+    scroll-lock
+  >
+    <button
+      type="button"
+      class="salon-enquiry__close"
+      ref="closeButton"
+      on:click="/closeDialog"
+      aria-label="{{ 'accessibility.close_dialog' | t }}"
+    >
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+        <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <div class="salon-enquiry__body" ref="formView">
+      <header class="salon-enquiry__header">
+        <p class="salon-enquiry__eyebrow">{{ 'salon_enquiry.eyebrow' | t }}</p>
+        <h2 class="salon-enquiry__heading" id="SalonEnquiryHeading">{{ heading | escape }}</h2>
+        <p class="salon-enquiry__intro" id="SalonEnquiryIntro">
+          {{- settings.salon_enquiry_intro | default: 'Share your salon details and we will send professional pricing on WhatsApp.' | escape -}}
+        </p>
+      </header>
+
+      <div class="salon-enquiry__product" ref="product">
+        <img class="salon-enquiry__product-img" ref="productImage" alt="" width="64" height="64" hidden>
+        <div class="salon-enquiry__product-text">
+          <span class="salon-enquiry__product-label">{{ 'salon_enquiry.enquiring_about' | t }}</span>
+          <span class="salon-enquiry__product-title" ref="productTitle"></span>
+          <span class="salon-enquiry__product-meta" ref="productMeta"></span>
+        </div>
+      </div>
+
+      <form class="salon-enquiry__form" ref="form" novalidate on:submit="/handleSubmit">
+        <div class="salon-enquiry__field">
+          <label for="SalonEnquiry-salon">{{ 'salon_enquiry.fields.salon_name' | t }} <span aria-hidden="true">*</span></label>
+          <input
+            id="SalonEnquiry-salon"
+            name="salon_name"
+            type="text"
+            autocomplete="organization"
+            maxlength="100"
+            required
+            aria-describedby="SalonEnquiry-salon-error"
+          >
+          <p class="salon-enquiry__error" id="SalonEnquiry-salon-error" hidden></p>
+        </div>
+
+        <div class="salon-enquiry__field">
+          <label for="SalonEnquiry-owner">{{ 'salon_enquiry.fields.owner_name' | t }} <span aria-hidden="true">*</span></label>
+          <input
+            id="SalonEnquiry-owner"
+            name="owner_name"
+            type="text"
+            autocomplete="name"
+            maxlength="80"
+            required
+            aria-describedby="SalonEnquiry-owner-error"
+          >
+          <p class="salon-enquiry__error" id="SalonEnquiry-owner-error" hidden></p>
+        </div>
+
+        <div class="salon-enquiry__field">
+          <label for="SalonEnquiry-gst">{{ 'salon_enquiry.fields.gst_number' | t }} <span aria-hidden="true">*</span></label>
+          <input
+            id="SalonEnquiry-gst"
+            name="gst_number"
+            type="text"
+            inputmode="text"
+            autocapitalize="characters"
+            autocomplete="off"
+            spellcheck="false"
+            maxlength="15"
+            required
+            aria-describedby="SalonEnquiry-gst-hint SalonEnquiry-gst-error"
+          >
+          <p class="salon-enquiry__hint" id="SalonEnquiry-gst-hint">{{ 'salon_enquiry.fields.gst_hint' | t }}</p>
+          <p class="salon-enquiry__error" id="SalonEnquiry-gst-error" hidden></p>
+        </div>
+
+        <div class="salon-enquiry__field">
+          <label for="SalonEnquiry-phone">{{ 'salon_enquiry.fields.contact_number' | t }} <span aria-hidden="true">*</span></label>
+          <div class="salon-enquiry__phone">
+            <span class="salon-enquiry__phone-prefix" aria-hidden="true">+91</span>
+            <input
+              id="SalonEnquiry-phone"
+              name="contact_number"
+              type="tel"
+              inputmode="tel"
+              autocomplete="tel-national"
+              maxlength="16"
+              placeholder="{{ 'salon_enquiry.fields.phone_placeholder' | t }}"
+              required
+              aria-describedby="SalonEnquiry-phone-error"
+            >
+          </div>
+          <p class="salon-enquiry__error" id="SalonEnquiry-phone-error" hidden></p>
+        </div>
+
+        <p class="salon-enquiry__form-error" ref="formError" role="alert" hidden></p>
+
+        <button type="submit" class="salon-enquiry__submit" ref="submitButton">
+          <svg class="salon-enquiry__submit-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+            {%- render 'icon', icon: 'whatsapp' -%}
+          </svg>
+          <span class="salon-enquiry__submit-label">{{ 'salon_enquiry.submit' | t }}</span>
+          <span class="salon-enquiry__submit-loading">{{ 'salon_enquiry.submitting' | t }}</span>
+        </button>
+        <p class="salon-enquiry__fineprint">{{ 'salon_enquiry.fineprint' | t }}</p>
+      </form>
+    </div>
+
+    <div class="salon-enquiry__body salon-enquiry__success" ref="successView" hidden>
+      <span class="salon-enquiry__success-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M6 12.5l4 4 8-9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <h2 class="salon-enquiry__heading" tabindex="-1" ref="successHeading">{{ 'salon_enquiry.success_heading' | t }}</h2>
+      <p class="salon-enquiry__intro">{{ 'salon_enquiry.success_body' | t }}</p>
+      <a class="salon-enquiry__submit" href="#" target="_blank" rel="noopener" ref="whatsappLink">
+        <svg class="salon-enquiry__submit-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+          {%- render 'icon', icon: 'whatsapp' -%}
+        </svg>
+        <span>{{ 'salon_enquiry.open_again' | t }}</span>
+      </a>
+      <button type="button" class="salon-enquiry__secondary" on:click="/closeDialog">{{ 'salon_enquiry.done' | t }}</button>
+    </div>
+
+    {%- comment -%} Message wording comes from locales so it can be translated; JS assembles it. {%- endcomment -%}
+    <script type="application/json" ref="messageStrings">
+      {
+        "intro": {{ 'salon_enquiry.message.intro' | t | json }},
+        "salonDetails": {{ 'salon_enquiry.message.salon_details' | t | json }},
+        "salonName": {{ 'salon_enquiry.fields.salon_name' | t | json }},
+        "ownerName": {{ 'salon_enquiry.fields.owner_name' | t | json }},
+        "gstNumber": {{ 'salon_enquiry.fields.gst_number' | t | json }},
+        "contactNumber": {{ 'salon_enquiry.fields.contact_number' | t | json }},
+        "productDetails": {{ 'salon_enquiry.message.product_details' | t | json }},
+        "productName": {{ 'salon_enquiry.message.product_name' | t | json }},
+        "productSku": {{ 'salon_enquiry.message.product_sku' | t | json }},
+        "variant": {{ 'salon_enquiry.message.variant' | t | json }},
+        "productUrl": {{ 'salon_enquiry.message.product_url' | t | json }},
+        "notApplicable": {{ 'salon_enquiry.message.not_applicable' | t | json }},
+        "outro": {{ 'salon_enquiry.message.outro' | t | json }},
+        "thanks": {{ 'salon_enquiry.message.thanks' | t | json }},
+        "errors": {
+          "required": {{ 'salon_enquiry.errors.required' | t | json }},
+          "gst": {{ 'salon_enquiry.errors.gst' | t | json }},
+          "phone": {{ 'salon_enquiry.errors.phone' | t | json }},
+          "summary": {{ 'salon_enquiry.errors.summary' | t | json }},
+          "notConfigured": {{ 'salon_enquiry.errors.not_configured' | t | json }}
+        }
+      }
+    </script>
+  </dialog>
+</salon-enquiry-component>
+
+<script src="{{ 'salon-enquiry.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+{% stylesheet %}
+  .salon-enquiry {
+    --salon-enquiry-accent: #1e3a5f;
+    --salon-enquiry-accent-dark: #16304f;
+    --salon-enquiry-whatsapp: #1fa855;
+    --salon-enquiry-error: #b42318;
+    --salon-enquiry-line: #d6dee8;
+
+    width: min(480px, calc(100vw - 32px));
+    max-height: calc(100dvh - 32px);
+    padding: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    border-radius: 18px;
+    background: #fff;
+    color: #14284a;
+  }
+
+  @media screen and (max-width: 749px) {
+    /* Bottom sheet on phones instead of the theme's full-screen modal */
+    .salon-enquiry.dialog-modal {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      max-height: 92dvh;
+      margin: auto 0 0;
+      padding: 0;
+      border-radius: 20px 20px 0 0;
+    }
+  }
+
+  .salon-enquiry__body {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 32px 28px 26px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .salon-enquiry__body {
+      padding: 26px 20px calc(20px + env(safe-area-inset-bottom));
+    }
+  }
+
+  .salon-enquiry__close {
+    position: absolute;
+    inset-block-start: 14px;
+    inset-inline-end: 14px;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: #f1f4f8;
+    color: #14284a;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .salon-enquiry__close:hover {
+    background: #e2e8f0;
+  }
+
+  .salon-enquiry__close svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .salon-enquiry__header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-inline-end: 36px;
+  }
+
+  .salon-enquiry__eyebrow {
+    margin: 0;
+    color: #a8842c;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .salon-enquiry__heading {
+    margin: 0;
+    color: var(--salon-enquiry-accent);
+    font-family: var(--font-heading--family);
+    font-size: clamp(1.4rem, 3vw, 1.7rem);
+    line-height: 1.2;
+  }
+
+  .salon-enquiry__heading:focus {
+    outline: none;
+  }
+
+  .salon-enquiry__intro {
+    margin: 0;
+    color: #4a5a70;
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  .salon-enquiry__product {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    border: 1px solid var(--salon-enquiry-line);
+    border-radius: 12px;
+    background: #f5f8fc;
+  }
+
+  .salon-enquiry__product-img {
+    flex: 0 0 auto;
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #fff;
+  }
+
+  .salon-enquiry__product-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .salon-enquiry__product-label {
+    color: #6b7a90;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .salon-enquiry__product-title {
+    color: #14284a;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  .salon-enquiry__product-meta {
+    color: #6b7a90;
+    font-size: 0.8rem;
+  }
+
+  .salon-enquiry__product-meta:empty {
+    display: none;
+  }
+
+  .salon-enquiry__form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .salon-enquiry__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .salon-enquiry__field label {
+    color: #14284a;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .salon-enquiry__field label span {
+    color: var(--salon-enquiry-error);
+  }
+
+  .salon-enquiry__field input {
+    width: 100%;
+    min-height: 46px;
+    padding: 0 14px;
+    border: 1.5px solid var(--salon-enquiry-line);
+    border-radius: 10px;
+    background: #fff;
+    color: #14284a;
+    font: inherit;
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .salon-enquiry__field input:focus {
+    border-color: var(--salon-enquiry-accent);
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(30 58 95 / 0.15);
+  }
+
+  .salon-enquiry__field input[name='gst_number'] {
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .salon-enquiry__field input::placeholder {
+    color: #8a97a8;
+    text-transform: none;
+    letter-spacing: normal;
+  }
+
+  .salon-enquiry__field input[aria-invalid='true'] {
+    border-color: var(--salon-enquiry-error);
+  }
+
+  .salon-enquiry__field input[aria-invalid='true']:focus {
+    box-shadow: 0 0 0 3px rgb(180 35 24 / 0.15);
+  }
+
+  .salon-enquiry__phone {
+    position: relative;
+  }
+
+  .salon-enquiry__phone-prefix {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 14px;
+    display: flex;
+    align-items: center;
+    color: #4a5a70;
+    font-weight: 600;
+    pointer-events: none;
+  }
+
+  .salon-enquiry__phone input {
+    padding-inline-start: 52px;
+  }
+
+  .salon-enquiry__hint {
+    margin: 0;
+    color: #6b7a90;
+    font-size: 0.78rem;
+  }
+
+  .salon-enquiry__error,
+  .salon-enquiry__form-error {
+    margin: 0;
+    color: var(--salon-enquiry-error);
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .salon-enquiry__form-error {
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: #fef3f2;
+  }
+
+  .salon-enquiry__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 50px;
+    margin-block-start: 4px;
+    padding: 0 20px;
+    border: none;
+    border-radius: 999px;
+    background: var(--salon-enquiry-whatsapp);
+    color: #fff;
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 10px 22px rgb(31 168 85 / 0.25);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .salon-enquiry__submit:hover {
+    background: #178a45;
+  }
+
+  .salon-enquiry__submit:active {
+    transform: scale(0.99);
+  }
+
+  .salon-enquiry__submit:focus-visible,
+  .salon-enquiry__secondary:focus-visible,
+  .salon-enquiry__close:focus-visible {
+    outline: 2px solid var(--salon-enquiry-accent);
+    outline-offset: 3px;
+  }
+
+  .salon-enquiry__submit-icon {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 auto;
+  }
+
+  .salon-enquiry__submit-loading,
+  .salon-enquiry__submit[aria-busy='true'] .salon-enquiry__submit-label {
+    display: none;
+  }
+
+  .salon-enquiry__submit[aria-busy='true'] .salon-enquiry__submit-loading {
+    display: inline;
+  }
+
+  .salon-enquiry__submit[aria-busy='true'] {
+    opacity: 0.75;
+    cursor: progress;
+  }
+
+  .salon-enquiry__fineprint {
+    margin: 0;
+    color: #6b7a90;
+    font-size: 0.75rem;
+    line-height: 1.45;
+    text-align: center;
+  }
+
+  .salon-enquiry__success {
+    align-items: center;
+    text-align: center;
+    padding-block-start: 44px;
+  }
+
+  .salon-enquiry__success-icon {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #e8f7ee;
+    color: var(--salon-enquiry-whatsapp);
+  }
+
+  .salon-enquiry__success-icon svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .salon-enquiry__secondary {
+    padding: 10px 18px;
+    border: none;
+    background: none;
+    color: var(--salon-enquiry-accent);
+    font: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .salon-enquiry.dialog-modal[open],
+    .salon-enquiry.dialog-modal.dialog-closing {
+      animation-duration: 1ms;
+    }
+  }
+{% endstylesheet %}

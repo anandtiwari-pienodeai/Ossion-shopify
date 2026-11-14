@@ -1,0 +1,132 @@
+{%- doc -%}
+  "Enquire to Purchase" button shown in place of Add to Cart for salon-only products
+  (product metafield `custom.salon_only` = true). It carries the product details as data
+  attributes; assets/salon-enquiry.js opens the enquiry popup rendered once by
+  snippets/salon-enquiry-modal.liquid. Callers decide salon-only status with
+  `product.metafields.custom.salon_only.value`.
+
+  @param {object} product - Salon-only product
+  @param {object} [variant] - Variant to enquire about; defaults to the selected or first available variant
+  @param {string} [class] - Extra classes, e.g. a card's own button class so it keeps that card's look
+  @param {string} [label] - Button text; defaults to the theme setting
+  @param {boolean} [icon_only] - Show only the WhatsApp icon (label becomes the accessible name)
+
+  @example
+  {% render 'salon-enquiry-button', product: product, class: 'salon-enquiry-cta--block' %}
+{%- enddoc -%}
+
+{%- liquid
+  assign enquiry_variant = variant | default: product.selected_or_first_available_variant
+  assign enquiry_label = label | default: settings.salon_enquiry_cta_label | default: 'Enquire to Purchase'
+  assign enquiry_url = request.origin | append: product.url
+  assign enquiry_variant_title = ''
+  unless product.has_only_default_variant
+    assign enquiry_variant_title = enquiry_variant.title
+    assign enquiry_url = enquiry_url | append: '?variant=' | append: enquiry_variant.id
+  endunless
+  assign enquiry_image = enquiry_variant.featured_image | default: product.featured_image
+-%}
+
+<button
+  type="button"
+  class="salon-enquiry-cta{% if icon_only %} salon-enquiry-cta--icon{% endif %} {{ class }}"
+  data-salon-enquiry
+  data-product-id="{{ product.id }}"
+  data-product-title="{{ product.title | escape }}"
+  data-product-url="{{ enquiry_url | escape }}"
+  data-product-sku="{{ enquiry_variant.sku | escape }}"
+  data-product-variant="{{ enquiry_variant_title | escape }}"
+  {% if enquiry_image != blank %}
+    data-product-image="{{ enquiry_image | image_url: width: 160 }}"
+  {% endif %}
+  aria-haspopup="dialog"
+  aria-controls="SalonEnquiryDialog"
+  {% if icon_only %}
+    aria-label="{{ enquiry_label | escape }}: {{ product.title | escape }}"
+  {% endif %}
+>
+  <svg class="salon-enquiry-cta__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+    {%- render 'icon', icon: 'whatsapp' -%}
+  </svg>
+  {%- unless icon_only -%}
+    <span class="salon-enquiry-cta__label">{{ enquiry_label | escape }}</span>
+  {%- endunless -%}
+</button>
+
+{% stylesheet %}
+  .salon-enquiry-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .salon-enquiry-cta__icon {
+    flex: 0 0 auto;
+    width: 1.35em;
+    height: 1.35em;
+  }
+
+  .salon-enquiry-cta--icon .salon-enquiry-cta__icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Full-width product-page button, sized like the Add to Cart button it replaces */
+  .salon-enquiry-cta--block {
+    width: 100%;
+    min-height: 48px;
+    padding: 0 20px;
+    border: 1.5px solid #1e3a5f;
+    border-radius: 10px;
+    background: #1e3a5f;
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.94rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .salon-enquiry-cta--block:hover {
+    background: #16304f;
+    border-color: #16304f;
+    box-shadow: 0 8px 20px rgb(30 58 95 / 0.22);
+  }
+
+  .salon-enquiry-cta:focus-visible {
+    outline: 2px solid #1e3a5f;
+    outline-offset: 3px;
+  }
+
+  .salon-enquiry-block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .salon-enquiry-block__note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 0.82rem;
+    line-height: 1.4;
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-70));
+  }
+
+  .salon-enquiry-block__badge {
+    flex: 0 0 auto;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: #eef3f9;
+    color: #1e3a5f;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+{% endstylesheet %}

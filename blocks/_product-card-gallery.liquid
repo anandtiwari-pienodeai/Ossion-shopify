@@ -39,8 +39,11 @@
       {%- endif -%}
     </div>
 
-    {%  if settings.quick_add or settings.mobile_quick_add %}
-      {% render 'quick-add', product: product, section_id: section.id %}
+    {%- # Salon-only products are enquiry-only: no quick add -%}
+    {% if settings.quick_add or settings.mobile_quick_add %}
+      {% unless product.metafields.custom.salon_only.value == true %}
+        {% render 'quick-add', product: product, section_id: section.id %}
+      {% endunless %}
     {% endif %}
   {% endunless %}
 {% endcapture %}

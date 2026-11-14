@@ -112,7 +112,9 @@
 
             {%- assign obs_variant = product.selected_or_first_available_variant -%}
             <div class="obs__actions">
-              {%- if product.variants.size > 1 and product.available -%}
+              {%- if product.metafields.custom.salon_only.value == true -%}
+                {%- render 'salon-enquiry-button', product: product, variant: obs_variant, class: 'obs__atc' -%}
+              {%- elsif product.variants.size > 1 and product.available -%}
                 {%- comment -%} Several options: let the shopper choose on the product page {%- endcomment -%}
                 <a class="obs__atc" href="{{ product.url }}" aria-label="Choose options for {{ product.title | escape }}">CHOOSE OPTIONS</a>
               {%- elsif obs_variant.available -%}

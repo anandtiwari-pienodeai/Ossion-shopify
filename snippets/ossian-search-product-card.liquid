@@ -17,7 +17,7 @@
   # Quick add needs exactly one purchasable variant. Products with a single size variant ("300gm") count too:
   # has_only_default_variant is only true when that variant is literally "Default Title".
   assign can_quick_add = false
-  if product.variants.size == 1 and variant.available
+  if product.variants.size == 1 and variant.available and product.metafields.custom.salon_only.value != true
     assign can_quick_add = true
   endif
 -%}

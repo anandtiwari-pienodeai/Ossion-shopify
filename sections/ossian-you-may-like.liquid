@@ -76,7 +76,7 @@
             assign rating = rating_value.rating | default: rating_value
             assign rating_count = product.metafields.reviews.rating_count.value | default: 0
             assign can_quick_add = false
-            if product.variants.size == 1 and variant.available
+            if product.variants.size == 1 and variant.available and product.metafields.custom.salon_only.value != true
               assign can_quick_add = true
             endif
           -%}

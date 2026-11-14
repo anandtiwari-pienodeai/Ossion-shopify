@@ -354,6 +354,46 @@
       "glow": "Delivers a salon-style facial glow with targeted, skin-loving actives."
     }
   },
+  "salon_enquiry": {
+    "eyebrow": "Salon professionals only",
+    "enquiring_about": "Enquiring about",
+    "salon_only_note": "Available to salon professionals. Enquire for trade pricing.",
+    "salon_only_badge": "Salon only",
+    "submit": "Submit Enquiry on WhatsApp",
+    "submitting": "Opening WhatsApp…",
+    "fineprint": "WhatsApp opens with your enquiry ready to send. Nothing is added to your cart.",
+    "success_heading": "Almost done",
+    "success_body": "Your enquiry is ready in WhatsApp. Press send there and our team will reply with professional pricing.",
+    "open_again": "Open WhatsApp again",
+    "done": "Done",
+    "fields": {
+      "salon_name": "Salon Name",
+      "owner_name": "Owner Name",
+      "gst_number": "GST Number",
+      "contact_number": "Contact Number",
+      "gst_hint": "The 15-character GSTIN on your GST registration certificate",
+      "phone_placeholder": "10-digit mobile number"
+    },
+    "errors": {
+      "required": "This field is required.",
+      "gst": "This GSTIN isn't valid. Check the 15 characters for typos.",
+      "phone": "Enter a valid 10-digit Indian mobile number.",
+      "summary": "Please correct the highlighted fields.",
+      "not_configured": "WhatsApp enquiries aren't available right now. Please contact us directly."
+    },
+    "message": {
+      "intro": "Hello, I would like to enquire about purchasing a salon-only product.",
+      "salon_details": "Salon Details:",
+      "product_details": "Product Details:",
+      "product_name": "Product Name",
+      "product_sku": "Product SKU",
+      "variant": "Variant",
+      "product_url": "Product URL",
+      "not_applicable": "N/A",
+      "outro": "Please share the professional pricing and purchasing details.",
+      "thanks": "Thank you."
+    }
+  },
   "accessibility": {
     "account": "Account",
     "active_filters": "Active filters:",

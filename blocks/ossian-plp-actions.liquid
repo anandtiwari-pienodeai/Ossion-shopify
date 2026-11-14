@@ -25,7 +25,11 @@
   style="{% render 'spacing-style', settings: block.settings %}"
   {{ block.shopify_attributes }}
 >
-  {%- if product != blank -%}
+  {%- if product != blank and product.metafields.custom.salon_only.value == true -%}
+    <div class="ossian-card-actions__row">
+      {%- render 'salon-enquiry-button', product: product, variant: variant, class: 'ossian-card-atc-btn' -%}
+    </div>
+  {%- elsif product != blank -%}
     {%- assign form_id = 'ossian-atc-' | append: section.id | append: '-' | append: product.id -%}
     <product-form-component
       data-section-id="{{ section.id }}"

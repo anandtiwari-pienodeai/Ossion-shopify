@@ -148,7 +148,9 @@
   </a>
 
   <div class="ossian-plp-card__actions">
-    {%- if variant.available -%}
+    {%- if card_product.metafields.custom.salon_only.value == true -%}
+      {%- render 'salon-enquiry-button', product: card_product, variant: variant, class: 'ossian-plp-card__atc' -%}
+    {%- elsif variant.available -%}
       {%- assign form_id = 'OssianPlpAtc-' | append: section_id | append: '-' | append: card_product.id -%}
       <product-form-component
         class="ossian-plp-card__atc-form"

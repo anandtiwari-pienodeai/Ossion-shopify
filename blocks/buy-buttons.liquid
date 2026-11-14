@@ -33,13 +33,30 @@
       assign add_to_cart_text = 'products.product.unavailable' | t
     endif
   endif
+
+  # Salon-only products are enquiry-only (see snippets/salon-enquiry-button.liquid)
+  if product.metafields.custom.salon_only.value == true
+    assign can_add_to_cart = false
+  endif
 %}
 
 <span
   class="buy-buttons-block buy-buttons-block--{{ block.id }}"
   {{ block.shopify_attributes }}
 >
-  {%- if product != blank -%}
+  {%- if product != blank and product.metafields.custom.salon_only.value == true -%}
+    {%- # Salon-only: no product form, so no Add to Cart, Buy it now or quantity -%}
+    <div
+      class="salon-enquiry-block spacing-style"
+      style="{% render 'spacing-style', settings: block_settings %}"
+    >
+      {% render 'salon-enquiry-button', product: product, variant: variant, class: 'salon-enquiry-cta--block' %}
+      <p class="salon-enquiry-block__note">
+        <span class="salon-enquiry-block__badge">{{ 'salon_enquiry.salon_only_badge' | t }}</span>
+        {{ 'salon_enquiry.salon_only_note' | t }}
+      </p>
+    </div>
+  {%- elsif product != blank -%}
     {%- assign product_form_id = 'BuyButtons-ProductForm-' | append: section.id -%}
     <product-form-component
       data-section-id="{{ section.id }}"

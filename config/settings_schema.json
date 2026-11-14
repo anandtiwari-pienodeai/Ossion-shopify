@@ -2096,6 +2096,40 @@
     ]
   },
   {
+    "name": "t:salon_enquiry.name",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "t:salon_enquiry.intro"
+      },
+      {
+        "type": "text",
+        "id": "salon_enquiry_whatsapp",
+        "label": "t:salon_enquiry.whatsapp_number",
+        "info": "t:salon_enquiry.whatsapp_number_info",
+        "placeholder": "919876543210"
+      },
+      {
+        "type": "text",
+        "id": "salon_enquiry_cta_label",
+        "label": "t:salon_enquiry.cta_label",
+        "default": "Enquire to Purchase"
+      },
+      {
+        "type": "text",
+        "id": "salon_enquiry_heading",
+        "label": "t:salon_enquiry.heading",
+        "default": "Salon enquiry"
+      },
+      {
+        "type": "textarea",
+        "id": "salon_enquiry_intro",
+        "label": "t:salon_enquiry.popup_intro",
+        "default": "Share your salon details and we will send professional pricing on WhatsApp."
+      }
+    ]
+  },
+  {
     "name": "t:names.product_cards",
     "settings": [
       {
