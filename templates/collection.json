@@ -21,6 +21,7 @@
     },
     "collection_tabs": {
       "type": "ossian-collection-tabs",
+      "disabled": true,
       "blocks": {
         "tab_1": {
           "type": "tab",
