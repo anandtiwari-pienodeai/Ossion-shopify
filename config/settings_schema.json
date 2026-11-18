@@ -1800,6 +1800,61 @@
       },
       {
         "type": "header",
+        "content": "t:ossian_empty_cart.header"
+      },
+      {
+        "type": "text",
+        "id": "empty_cart_button_label",
+        "label": "t:ossian_empty_cart.button_label",
+        "default": "Shop bestsellers"
+      },
+      {
+        "type": "textarea",
+        "id": "empty_cart_text",
+        "label": "t:ossian_empty_cart.text",
+        "default": "Looks like you haven't added anything yet. Discover salon-grade hair and skin care made with marine science."
+      },
+      {
+        "type": "text",
+        "id": "empty_cart_perk_1",
+        "label": "t:ossian_empty_cart.perk_1",
+        "default": "Free delivery above ₹999"
+      },
+      {
+        "type": "text",
+        "id": "empty_cart_perk_2",
+        "label": "t:ossian_empty_cart.perk_2",
+        "default": "Cash on delivery"
+      },
+      {
+        "type": "text",
+        "id": "empty_cart_perk_3",
+        "label": "t:ossian_empty_cart.perk_3",
+        "default": "Salon-grade formulas"
+      },
+      {
+        "type": "collection",
+        "id": "empty_cart_collection",
+        "label": "t:ossian_empty_cart.collection",
+        "info": "t:ossian_empty_cart.collection_info"
+      },
+      {
+        "type": "text",
+        "id": "empty_cart_picks_heading",
+        "label": "t:ossian_empty_cart.picks_heading",
+        "default": "Popular picks"
+      },
+      {
+        "type": "range",
+        "id": "empty_cart_picks_count",
+        "label": "t:ossian_empty_cart.picks_count",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "default": 3
+      },
+      {
+        "type": "header",
         "content": "t:content.product_media"
       },
       {

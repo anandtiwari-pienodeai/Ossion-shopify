@@ -1,0 +1,307 @@
+{%- doc -%}
+  Empty-cart content shared by the cart drawer and the cart page (rendered from
+  snippets/cart-products.liquid under the "Your cart is empty" heading). Text, perks and the
+  popular-picks collection come from Theme settings → Cart. The heading's bag icon is drawn
+  with CSS in this file.
+
+  @example
+  {% render 'ossian-empty-cart' %}
+{%- enddoc -%}
+
+{%- liquid
+  assign picks = settings.empty_cart_collection.products
+  assign picks_limit = settings.empty_cart_picks_count | default: 3
+  assign cta_href = settings.empty_cart_button_link | default: routes.all_products_collection_url
+-%}
+
+<div class="oec">
+  {%- if settings.empty_cart_text != blank -%}
+    <p class="oec__text">{{ settings.empty_cart_text | escape }}</p>
+  {%- endif -%}
+
+  <a class="oec__cta" href="{{ cta_href }}">
+    {{- settings.empty_cart_button_label | default: 'Continue shopping' | escape -}}
+    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="M6 3.5 10.5 8 6 12.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+
+  {%- if shop.customer_accounts_enabled and customer == null -%}
+    <p class="oec__login">{{ 'actions.log_in_html' | t: link: routes.account_login_url }}</p>
+  {%- endif -%}
+
+  {%- if settings.empty_cart_perk_1 != blank or settings.empty_cart_perk_2 != blank or settings.empty_cart_perk_3 != blank -%}
+    <ul class="oec__perks" role="list">
+      {%- if settings.empty_cart_perk_1 != blank -%}
+        <li class="oec__perk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.5"/><circle cx="17" cy="17.5" r="1.5"/></svg>
+          <span>{{ settings.empty_cart_perk_1 | escape }}</span>
+        </li>
+      {%- endif -%}
+      {%- if settings.empty_cart_perk_2 != blank -%}
+        <li class="oec__perk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 9v.01M18 15v.01"/></svg>
+          <span>{{ settings.empty_cart_perk_2 | escape }}</span>
+        </li>
+      {%- endif -%}
+      {%- if settings.empty_cart_perk_3 != blank -%}
+        <li class="oec__perk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5 4 6.5v6c0 5 3.5 8 8 9.5 4.5-1.5 8-4.5 8-9.5v-6z"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>
+          <span>{{ settings.empty_cart_perk_3 | escape }}</span>
+        </li>
+      {%- endif -%}
+    </ul>
+  {%- endif -%}
+
+  {%- if picks.size > 0 -%}
+    <div class="oec__picks">
+      {%- if settings.empty_cart_picks_heading != blank -%}
+        <p class="oec__picks-heading">{{ settings.empty_cart_picks_heading | escape }}</p>
+      {%- endif -%}
+      <ul class="oec__picks-list" role="list">
+        {%- for product in picks limit: picks_limit -%}
+          <li>
+            <a class="oec__pick" href="{{ product.url }}">
+              <span class="oec__pick-media">
+                {%- if product.featured_image != blank -%}
+                  {{
+                    product.featured_image
+                    | image_url: width: 160
+                    | image_tag: loading: 'lazy', widths: '80,160', sizes: '64px', alt: ''
+                  }}
+                {%- endif -%}
+              </span>
+              <span class="oec__pick-text">
+                <span class="oec__pick-title">{{ product.title | escape }}</span>
+                <span class="oec__pick-price">
+                  {%- if product.price_varies -%}
+                    {{ 'content.price_from' | t: price: product.price_min | money }}
+                  {%- else -%}
+                    {{ product.price | money }}
+                  {%- endif -%}
+                </span>
+              </span>
+              <svg class="oec__pick-arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  /* Bag icon above "Your cart is empty" in the drawer and on the cart page */
+  .cart-drawer__heading--empty,
+  .cart-page--empty .cart-title h1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    color: #14284a;
+    font-weight: 600;
+  }
+
+  .cart-drawer__heading--empty::before,
+  .cart-page--empty .cart-title h1::before {
+    content: '';
+    width: 88px;
+    height: 88px;
+    border: 1.5px solid #d9a441;
+    border-radius: 50%;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231e3a5f' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z'/%3E%3Cpath d='M9 8V6.5a3 3 0 0 1 6 0V8'/%3E%3C/svg%3E")
+        center / 40px no-repeat,
+      #eef3f9;
+  }
+
+  .cart-page--empty .cart-title {
+    text-align: center;
+  }
+
+  .oec {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    max-width: 420px;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .oec__text {
+    margin: 0;
+    color: #4a5a70;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .oec__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 320px;
+    min-height: 48px;
+    padding: 0 24px;
+    border-radius: 10px;
+    background: #1e3a5f;
+    color: #fff;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    box-shadow: 0 8px 20px rgb(30 58 95 / 0.22);
+    transition: background-color 0.2s ease;
+  }
+
+  .oec__cta:hover {
+    background: #16304f;
+  }
+
+  .oec__cta svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .oec__cta:focus-visible,
+  .oec__pick:focus-visible {
+    outline: 2px solid #1e3a5f;
+    outline-offset: 3px;
+  }
+
+  .oec__login {
+    margin: 0;
+    color: #6b7a90;
+    font-size: 0.82rem;
+  }
+
+  .oec__login a {
+    color: #1e3a5f;
+    font-weight: 600;
+  }
+
+  .oec__perks {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+    margin: 4px 0 0;
+    padding: 14px 8px;
+    border-block: 1px solid #e3e9f1;
+    list-style: none;
+  }
+
+  .oec__perk {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: #14284a;
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .oec__perk svg {
+    width: 22px;
+    height: 22px;
+    color: #a8842c;
+  }
+
+  .oec__picks {
+    width: 100%;
+    text-align: start;
+  }
+
+  .oec__picks-heading {
+    margin: 0 0 10px;
+    color: #6b7a90;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .oec__picks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .oec__pick {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px 8px 8px;
+    border: 1px solid #e3e9f1;
+    border-radius: 12px;
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .oec__pick:hover {
+    border-color: #1e3a5f;
+    box-shadow: 0 6px 16px rgb(20 40 74 / 0.08);
+  }
+
+  .oec__pick-media {
+    flex: 0 0 auto;
+    width: 56px;
+    height: 56px;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #f5f8fc;
+  }
+
+  .oec__pick-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .oec__pick-text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .oec__pick-title {
+    overflow: hidden;
+    color: #14284a;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .oec__pick-price {
+    color: #4a5a70;
+    font-size: 0.82rem;
+  }
+
+  .oec__pick-arrow {
+    flex: 0 0 auto;
+    width: 14px;
+    height: 14px;
+    color: #1e3a5f;
+  }
+
+  /* The drawer centres the empty state in full height; let it scroll when picks are long */
+  .cart-drawer--empty .cart-drawer__inner {
+    justify-content: flex-start;
+    overflow-y: auto;
+  }
+
+  .cart-drawer--empty .cart-drawer__content {
+    margin-block: auto;
+    padding-block: 8px 24px;
+  }
+{% endstylesheet %}

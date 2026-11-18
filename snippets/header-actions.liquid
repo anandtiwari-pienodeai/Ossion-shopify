@@ -317,19 +317,29 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* Sign-in sheet is Shopify's own component; these documented variables are the only
+     styling hooks. Values match the Ossion brand (navy #1e3a5f, 10px buttons). The
+     "Sign in with Shop" button keeps Shopify's required branding. */
   shopify-account {
     --shopify-account-font-heading: var(--font-heading--family);
-    --shopify-account-font-heading-weight: var(--font-heading--weight);
+    --shopify-account-font-heading-weight: 600;
+    --shopify-account-font-heading-transform: none;
     --shopify-account-font-body: var(--font-body--family);
     --shopify-account-font-body-weight: var(--font-body--weight);
-    --shopify-account-radius-base: var(--style-border-radius-popover);
-    --shopify-account-radius-button: var(--style-border-radius-buttons-primary);
-    --shopify-account-radius-button-small: var(--style-border-radius-buttons-primary);
-    --shopify-account-radius-input: var(--style-border-radius-buttons-primary);
-    --shopify-account-color-background: var(--color-background);
-    --shopify-account-color-text: var(--color-foreground);
-    --shopify-account-color-accent: var(--color-primary-button-background);
-    --shopify-account-color-accent-text: var(--color-primary-button-text);
+    --shopify-account-font-body-transform: none;
+    --shopify-account-radius-base: 16px;
+    --shopify-account-radius-dialog: 16px;
+    --shopify-account-radius-button: 10px;
+    --shopify-account-radius-button-small: 10px;
+    --shopify-account-radius-input: 10px;
+    --shopify-account-color-background: #fff;
+    --shopify-account-color-text: #14284a;
+    --shopify-account-color-text-subdued: #6b7a90;
+    --shopify-account-color-accent: #1e3a5f;
+    --shopify-account-color-accent-text: #fff;
+    --shopify-account-color-control-background: #f5f8fc;
+    --shopify-account-color-control-text: #14284a;
+    --shopify-account-color-shadow: rgb(20 40 74 / 0.18);
     --shopify-account-dialog-position-top: var(--account-offset-top);
 
     &:not(:defined) {
