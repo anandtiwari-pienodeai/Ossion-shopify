@@ -64,9 +64,19 @@
       "settings": {
         "autoplay": true,
         "autoplay_speed": "3000",
+        "desktop_fit_image": false,
         "banner_height": 80,
         "banner_height_mobile": 50,
         "mobile_fit_image": true
+      }
+    },
+    "ossian_transformation_banner_CRgQaF": {
+      "type": "ossian-transformation-banner",
+      "settings": {
+        "image": "shopify://shop_images/sciecne_banner_b071998f-388f-44d4-8bb5-c0255e783114.png",
+        "image_mobile": "shopify://shop_images/WhatsApp_Image_2026-11-12_at_22.00.04.jpg",
+        "alt": "Salon Choice — Real Transformations. Professional care, real results.",
+        "link": "shopify://collections/hair-care"
       }
     },
     "science_hero": {
@@ -99,6 +109,7 @@
         "hero_formulas",
         "hero_salon"
       ],
+      "disabled": true,
       "settings": {
         "image": "shopify://shop_images/Hydration_Science_by_the_Sea.png",
         "overlay": 55,
@@ -122,37 +133,37 @@
         "card_marine": {
           "type": "card",
           "settings": {
-            "image": "shopify://shop_images/image_208_1.png",
+            "image": "shopify://shop_images/Sunlit_Golden_Kelp_Forest.png",
             "icon": "waves",
             "title": "Marine-Based Nourishing Technology",
-            "text": "Powered by ocean-derived actives to deeply nourish, hydrate and strengthen hair from within."
+            "text": "Inspired by the power of the ocean, our marine-derived ingredients help nourish and condition the hair, leaving it softer, healthier-looking and beautifully hydrated."
           }
         },
         "card_plex": {
           "type": "card",
           "settings": {
-            "image": "shopify://shop_images/image_169_1.png",
+            "image": "shopify://shop_images/Microscopic_Blue-Wrapped_Hair_Strand.png",
             "icon": "molecule",
             "title": "Fibre Plex Complex",
-            "text": "Helps protect hair bonds, reduces breakage and maintains hair strength during chemical processes."
+            "text": "Helps care for the hair fibre during chemical treatments, supporting stronger-looking hair and helping reduce the appearance of breakage."
           }
         },
         "card_silk": {
           "type": "card",
           "settings": {
-            "image": "shopify://shop_images/ChatGPT_Image_Sep_7_2026_12_28_04_AM.png",
+            "image": "shopify://shop_images/waterdrops-background.jpg",
             "icon": "waves",
             "title": "Silk Amino Acids",
-            "text": "Penetrates deep into the hair fiber to restore softness, smoothness and natural shine."
+            "text": "Works deep within the hair to help restore softness, smoothness and shine, leaving every strand feeling beautifully conditioned."
           }
         },
         "card_yellow": {
           "type": "card",
           "settings": {
-            "image": "shopify://shop_images/3.jpg",
+            "image": "shopify://shop_images/2.svg",
             "icon": "sparkle",
             "title": "Anti-Yellow Technology",
-            "text": "Helps neutralize unwanted yellow undertones for cleaner, brighter and longer-lasting color results."
+            "text": "Helps balance unwanted yellow tones in blonde and lightened hair, for a cleaner, brighter and more polished finish."
           }
         }
       },
@@ -164,8 +175,8 @@
       ],
       "settings": {
         "eyebrow": "Our Technology",
-        "heading": "Advanced Hair Science",
-        "text": "A powerful blend of marine actives and high-performance ingredients, engineered for complete hair care.",
+        "heading": "Science That Works With Your Hair",
+        "text": "Advanced formulas designed with carefully selected ingredients to care for your hair from root to tip — helping improve strength, softness, smoothness and shine.",
         "background": "#ffffff"
       }
     },
@@ -175,25 +186,25 @@
         "step_actives": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/image_208_1.png",
-            "title": "Active Ingredients",
-            "text": "Marine actives, silk amino acids and advanced complexes work together at a molecular level."
+            "image": "shopify://shop_images/Glossy_Hair_and_Molecular_Serum_Waves.png",
+            "title": "ACTIVATE",
+            "text": "Advanced marine actives and silk amino acids work at the fibre level to condition, replenish and support healthier-looking hair."
           }
         },
         "step_fiber": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/image_209_1.png",
-            "title": "Hair Fiber Protection",
-            "text": "Fibre Plex complex protects hair bonds, strengthens the hair structure and reduces damage."
+            "image": "shopify://shop_images/3d-representation-dna.jpg",
+            "title": "PROTECT",
+            "text": "Our FibrePlex system helps reinforce the hair structure and protect against the stress caused by chemical services and heat."
           }
         },
         "step_results": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/ChatGPT_Image_Sep_7_2026_12_14_57_AM.png",
-            "title": "Visible Salon Results",
-            "text": "Healthier, smoother, shinier and stronger hair with long-lasting colour and texture improvement."
+            "image": "shopify://shop_images/Glossy_Caramel_Waves_in_Blue.png",
+            "title": "TRANSFORM",
+            "text": "Smoother texture. Enhanced shine. Improved strength and manageability — for hair that looks and feels beautifully cared for."
           }
         }
       },
@@ -205,7 +216,7 @@
       "settings": {
         "eyebrow": "The Science Behind The Results",
         "heading": "How Our Technology Works",
-        "text": "From powerful actives to visibly healthier hair — a complete science-driven process.",
+        "text": "Advanced technology meets professional hair care — designed to protect, strengthen and transform hair from within.",
         "background": "#f4f8fe"
       }
     },
@@ -261,30 +272,34 @@
         "result_breakage": {
           "type": "result",
           "settings": {
-            "before_image": "shopify://shop_images/57cb6ecf-6647-4106-b8dc-0e3f59a47039.png",
-            "after_image": "shopify://shop_images/ChatGPT_Image_Sep_7_2026_12_14_57_AM.png",
+            "before_image": "shopify://shop_images/staight_hair_bf1.png",
+            "after_image": "shopify://shop_images/staight_hair_af1.png",
             "before_label": "Before",
             "after_label": "After",
-            "title": "Reduced Breakage",
-            "text": "Stronger, more resilient hair"
+            "title": "Reduced Frizz & Breakage",
+            "text": "Stronger, smoother and more manageable-looking hair"
           }
         },
         "result_colour": {
           "type": "result",
           "settings": {
+            "before_image": "shopify://shop_images/color_bf_1.png",
+            "after_image": "shopify://shop_images/color_af_1.png",
             "before_label": "Before",
             "after_label": "After",
             "title": "Brighter Colour",
-            "text": "Neutralizes yellow undertones"
+            "text": "Rich, vibrant-looking results"
           }
         },
         "result_smooth": {
           "type": "result",
           "settings": {
+            "before_image": "shopify://shop_images/skin_care_bf_1.png",
+            "after_image": "shopify://shop_images/skin_care_af_1_71d59f49-5b22-4ebc-b791-c0fb4f956a1c.png",
             "before_label": "Before",
             "after_label": "After",
-            "title": "Smoother & Shinier",
-            "text": "Visibly healthier, salon-like finish"
+            "title": "Healthier Look",
+            "text": "Soft, glossy, salon-like finish"
           }
         }
       },
@@ -302,6 +317,7 @@
     },
     "science_cta": {
       "type": "ossian-about-banner",
+      "disabled": true,
       "settings": {
         "image": "shopify://shop_images/image_208_1.png",
         "overlay": 55,
@@ -322,6 +338,7 @@
   },
   "order": [
     "science_banner",
+    "ossian_transformation_banner_CRgQaF",
     "science_hero",
     "science_tech",
     "science_steps",

@@ -22,8 +22,8 @@
         "heading": "Professional|[Care for] Real|People",
         "heading_as_h1": true,
         "text": "<p>Salon-inspired hair and skin care, crafted with science, innovation and a passion for self-care.</p>",
-        "button_label": "Our Story",
-        "button_link": "#our-story",
+        "button_label": "Our Range",
+        "button_link": "shopify://collections/best-seller-care-products",
         "button_style": "solid"
       }
     },
@@ -141,7 +141,7 @@
         "text": "<p>We combine modern science with carefully selected ingredients to create safe, effective and professional grade solutions for hair and skin care.</p>",
         "button_label": "Discover Our Science",
         "button_link": "/pages/ossion-science",
-        "button_style": "outline"
+        "button_style": "solid"
       }
     },
     "about_expertise": {
@@ -150,33 +150,37 @@
         "card_hair": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-11-17_155041.png",
             "collection": "hair-care",
             "title": "Hair Care",
-            "link": ""
+            "link": "shopify://products/hair-repair-spa-silk-amino-acid"
           }
         },
         "card_skin": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-11-17_160605.png",
             "collection": "skin-care",
             "title": "Skin Care",
-            "link": ""
+            "link": "shopify://collections/de-tan"
           }
         },
         "card_color": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-11-17_154911.png",
             "collection": "hair-care",
             "title": "Hair Color & Treatment",
-            "link": ""
+            "link": "shopify://products/chromatic-dream-permanent-hair-color-creme"
           }
         },
         "card_pro": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-11-17_161135.png",
             "collection": "all",
             "title": "Professional Solutions",
-            "link": ""
+            "link": "shopify://collections/developer"
           }
         }
       },
@@ -200,32 +204,32 @@
           "type": "feature",
           "settings": {
             "icon": "check",
-            "title": "Quality You Can Trust",
-            "text": "Consistent and reliable performance"
+            "title": "Marine-Based Actives",
+            "text": "Powered by ocean-inspired ingredients selected for hair care"
           }
         },
         "trust_ingredients": {
           "type": "feature",
           "settings": {
             "icon": "leaf",
-            "title": "Thoughtful Ingredients",
-            "text": "Designed for safety and care"
+            "title": "Advanced Hair Science",
+            "text": "Technology-driven formulas for stronger, healthier-looking hair."
           }
         },
         "trust_loved": {
           "type": "feature",
           "settings": {
             "icon": "heart",
-            "title": "Loved by Professionals",
-            "text": "A brand trusted in salons"
+            "title": "Professional Performance",
+            "text": "Salon-inspired care designed to deliver reliable results."
           }
         },
         "trust_you": {
           "type": "feature",
           "settings": {
             "icon": "people",
-            "title": "Made for You",
-            "text": "Effective solutions for everyday self-care"
+            "title": "Made for Every Hair",
+            "text": "Thoughtfully developed for everyday hair care needs."
           }
         }
       },
@@ -236,14 +240,15 @@
         "trust_you"
       ],
       "settings": {
+        "image": "shopify://shop_images/hair-care-concept-nourish-repair-damaged-hair-with-shampoo-oil-vitamin-serum-3d-illust.jpg",
         "image_side": "left",
         "bleed": true,
         "image_ratio": "4 / 3",
         "image_ratio_mobile": "4 / 3",
         "background": "#f2f6fc",
         "eyebrow": "Why Choose Ossion",
-        "heading": "Beauty Backed|by Trust",
-        "text": "<p>We are committed to creating products that combine innovation, quality and care — so you can enjoy salon-like results, every day.</p>",
+        "heading": "Science That Cares for Your Hair",
+        "text": "<p>We combine marine-based actives with advanced hair science to create professional formulas designed for effective, visible hair care.</p>",
         "button_label": "",
         "button_link": "",
         "anchor_id": ""
@@ -251,17 +256,18 @@
     },
     "about_promise": {
       "type": "ossian-about-banner",
+      "name": "Ossion About Banner",
       "settings": {
-        "overlay": 55,
+        "overlay": 90,
         "min_height": 420,
         "min_height_mobile": 600,
         "color_theme": "dark",
         "card_style": "full",
         "features_layout": "side",
         "eyebrow": "Our Promise",
-        "heading": "Empowering Your|[Everyday Confidence]",
+        "heading": "Where Marine Science Meets Hair Care",
         "heading_as_h1": false,
-        "text": "<p>Because true beauty is not just about appearance, but how confident it makes you feel.</p>",
+        "text": "<p>Advanced marine-based actives and thoughtful formulations come together to deliverprofessional care designed for healthier-looking, more beautiful hair.<br/><br/><br/><br/></p>",
         "button_label": "Shop Now",
         "button_link": "shopify://collections/all",
         "button_style": "solid"

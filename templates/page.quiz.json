@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -263,13 +272,13 @@
         "heading": "Find Your [OSSION] Routine",
         "text": "Take a quick quiz and discover the right haircare or skincare products, personalised for your needs.",
         "hair_quiz_label": "Hair Care Quiz",
-        "skin_quiz_label": "Skin Care Quiz",
         "hair_title": "Find Your Hair Routine",
         "hair_brand": "",
         "hair_text": "Take our quick hair quiz and discover the hair care products best suited to your hair type and needs.",
         "hair_cta": "Take Hair Quiz",
         "hair_explore_label": "Explore Hair Care",
         "hair_explore_link": "/collections/hair-care",
+        "skin_quiz_label": "Skin Care Quiz",
         "skin_title": "Find Your Skin Routine",
         "skin_brand": "",
         "skin_text": "Take our quick skin quiz and discover the skincare products best suited to your skin type and goals.",
@@ -280,6 +289,7 @@
         "result_text": "Based on your answers, we've selected the Ossion products that best match your needs.",
         "why_heading": "Why these products?",
         "why_text": "Your recommendations are based on the concerns, results and routine preferences you shared with us.",
+        "include_sold_out": false,
         "browse_url": ""
       }
     }

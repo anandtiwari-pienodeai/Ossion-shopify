@@ -53,57 +53,57 @@
         "pillar_science": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/Ossion_Professional_Hair_Science_Collection.png",
+            "image": "shopify://shop_images/2_c7fb6d8f-f512-49c0-908e-787869bc53eb.png",
             "label": "",
             "heading_line1": "",
             "heading_line2": "",
             "accent_line2": true,
             "body_text": "",
-            "overlay_opacity": 80,
+            "overlay_opacity": 0,
             "button_label": "",
-            "button_link": ""
+            "button_link": "shopify://collections/hair-care"
           }
         },
         "pillar_haircare": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/Ossion_Essentials_Glow_Lab_Collection.png",
+            "image": "shopify://shop_images/3_2cd9d309-9455-43e1-bbb8-9be80112d7fb.png",
             "label": "",
             "heading_line1": "",
             "heading_line2": "",
             "accent_line2": true,
             "body_text": "",
-            "overlay_opacity": 50,
+            "overlay_opacity": 0,
             "button_label": "",
-            "button_link": ""
+            "button_link": "shopify://collections/skin-care"
           }
         },
         "pillar_promise": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/Cool_Blue_Lab_Cream_Testing_5b03c34c-825b-4d69-8f4b-0fbc1e07c182.png",
+            "image": "shopify://shop_images/4_8328d8ff-90aa-4da1-891a-6f5e753c6c06.png",
             "label": "",
             "heading_line1": "",
             "heading_line2": "",
             "accent_line2": true,
             "body_text": "",
-            "overlay_opacity": 70,
+            "overlay_opacity": 0,
             "button_label": "",
-            "button_link": ""
+            "button_link": "shopify://pages/ossion-science"
           }
         },
         "pillar_sustainability": {
           "type": "pillar",
           "settings": {
-            "image": "shopify://shop_images/Untitled_design_5.jpg",
+            "image": "shopify://shop_images/5_d4d61d37-a43c-40d6-8470-424faa9cbac5.png",
             "label": "",
             "heading_line1": "",
             "heading_line2": "",
             "accent_line2": true,
             "body_text": "",
-            "overlay_opacity": 70,
+            "overlay_opacity": 0,
             "button_label": "",
-            "button_link": ""
+            "button_link": "shopify://pages/about-us"
           }
         }
       },
@@ -425,18 +425,19 @@
             "icon": "sparkle",
             "label": "Color",
             "subtitle": "Want to refresh your color?",
-            "collection": "",
-            "product": "",
-            "link": "",
             "highlighted": true,
-            "feat_eyebrow": "Recommended for this result",
-            "feat_cta_label": "Explore product",
-            "feat_body": "Anti-yellow molecules to counteract warm & yellow tones\nNon-damaging & dust-free lightening powder\nAdvanced neutralization with fibre plex",
             "feat_product": "blonder-fiber-plex-500-gm",
             "feat_image": "shopify://shop_images/Before_after_banner_8b8919ce-7cf5-466b-be03-a85ca7d8a82c.png",
+            "feat_alt": "",
+            "feat_eyebrow": "Recommended for this result",
             "feat_heading_white": "Blonder  Fibre Plex",
             "feat_heading_accent": "[blue]",
-            "feat_subheading": "UP TO 9 LEVELS LIFT"
+            "feat_subheading": "UP TO 9 LEVELS LIFT",
+            "feat_body": "Anti-yellow molecules to counteract warm & yellow tones\nNon-damaging & dust-free lightening powder\nAdvanced neutralization with fibre plex",
+            "feat_cta_label": "Explore product",
+            "collection": "",
+            "product": "",
+            "link": ""
           }
         },
         "feature_pill_ymAHji": {
@@ -445,17 +446,18 @@
             "icon": "sparkle",
             "label": "nano silk protein",
             "subtitle": "Want smoother, silkier hair?",
-            "collection": "",
-            "product": "",
-            "link": "",
             "highlighted": false,
-            "feat_eyebrow": "Recommended for this result",
-            "feat_cta_label": "Explore product",
-            "feat_body": "",
             "feat_product": "nano-silk-protein-classic",
+            "feat_alt": "",
+            "feat_eyebrow": "Recommended for this result",
             "feat_heading_white": "Nano Silk",
             "feat_heading_accent": "Protein",
-            "feat_subheading": "Smoother, silkier hair"
+            "feat_subheading": "Smoother, silkier hair",
+            "feat_body": "",
+            "feat_cta_label": "Explore product",
+            "collection": "",
+            "product": "",
+            "link": ""
           }
         },
         "feature_pill_9hW9Ma": {
@@ -464,17 +466,18 @@
             "icon": "waves",
             "label": "hair repair spa",
             "subtitle": "Hair feeling dry & damaged?",
-            "collection": "",
-            "product": "",
-            "link": "",
             "highlighted": false,
-            "feat_eyebrow": "Recommended for this result",
-            "feat_cta_label": "Explore product",
-            "feat_body": "",
             "feat_product": "hair-repair-spa-silk-amino-acid",
+            "feat_alt": "",
+            "feat_eyebrow": "Recommended for this result",
             "feat_heading_white": "Hair Repair Spa",
             "feat_heading_accent": "Silk Amino Acid",
-            "feat_subheading": "Deep repair for dry, damaged hair"
+            "feat_subheading": "Deep repair for dry, damaged hair",
+            "feat_body": "",
+            "feat_cta_label": "Explore product",
+            "collection": "",
+            "product": "",
+            "link": ""
           }
         },
         "feature_pill_b8cGfP": {
@@ -483,17 +486,18 @@
             "icon": "person",
             "label": "facial kit",
             "subtitle": "Need a fresh, glowing look?",
-            "collection": "",
-            "product": "",
-            "link": "",
             "highlighted": false,
-            "feat_eyebrow": "Recommended for this result",
-            "feat_cta_label": "Explore product",
-            "feat_body": "",
             "feat_product": "hydra-glow-facial-kits",
+            "feat_alt": "",
+            "feat_eyebrow": "Recommended for this result",
             "feat_heading_white": "Hydra Glow",
             "feat_heading_accent": "Facial Kit",
-            "feat_subheading": "10-step glow ritual"
+            "feat_subheading": "10-step glow ritual",
+            "feat_body": "",
+            "feat_cta_label": "Explore product",
+            "collection": "",
+            "product": "",
+            "link": ""
           }
         },
         "feature_pill_KMwVhx": {
@@ -502,17 +506,18 @@
             "icon": "drop",
             "label": "liposoluble wax",
             "subtitle": "Want smooth, clean skin?",
-            "collection": "",
-            "product": "",
-            "link": "",
             "highlighted": false,
-            "feat_eyebrow": "Recommended for this result",
-            "feat_cta_label": "Explore product",
-            "feat_body": "",
             "feat_product": "aloe-vera-liposoluble-wax",
+            "feat_alt": "",
+            "feat_eyebrow": "Recommended for this result",
             "feat_heading_white": "Aloe Vera",
             "feat_heading_accent": "Liposoluble Wax",
-            "feat_subheading": "Smooth, clean skin"
+            "feat_subheading": "Smooth, clean skin",
+            "feat_body": "",
+            "feat_cta_label": "Explore product",
+            "collection": "",
+            "product": "",
+            "link": ""
           }
         },
         "pill_6": {
@@ -521,17 +526,18 @@
             "icon": "shield",
             "label": "de-tan",
             "subtitle": "Looking to remove tan?",
-            "collection": "",
-            "product": "",
-            "link": "",
             "highlighted": false,
-            "feat_eyebrow": "Recommended for this result",
-            "feat_cta_label": "Explore product",
-            "feat_body": "",
             "feat_product": "de-tan-illuminate-500-g",
+            "feat_alt": "",
+            "feat_eyebrow": "Recommended for this result",
             "feat_heading_white": "De-Tan",
             "feat_heading_accent": "Illuminate",
-            "feat_subheading": "Removes tan, restores glow"
+            "feat_subheading": "Removes tan, restores glow",
+            "feat_body": "",
+            "feat_cta_label": "Explore product",
+            "collection": "",
+            "product": "",
+            "link": ""
           }
         }
       },
@@ -548,8 +554,8 @@
         "concern_heading": "Choose Your Concern",
         "strip_bg": "#eef1f8",
         "ba_label": "REAL CLIENT RESULT",
-        "before_image": "shopify://shop_images/Untitled-1_ca0701ac-606c-45b3-b59c-568659c3562d.png",
-        "after_image": "shopify://shop_images/Untitled-2.png",
+        "before_image": "shopify://shop_images/hand_bf1.png",
+        "after_image": "shopify://shop_images/hand_af1.png",
         "ba_width": 65,
         "feat_product": "blonder-fiber-plex-500-gm",
         "feat_collection": "",
@@ -683,29 +689,6 @@
             "feature_4": "",
             "sizes": ""
           }
-        },
-        "reel_6": {
-          "type": "reel",
-          "settings": {
-            "video_url": "",
-            "reel_label": "",
-            "product": "",
-            "product_subtitle": "",
-            "product_category": "",
-            "product_url": "",
-            "custom_price": "",
-            "custom_compare_price": "",
-            "discount_label": "",
-            "rating": 0,
-            "review_count": 0,
-            "product_description": "",
-            "product_highlights": "",
-            "feature_1": "",
-            "feature_2": "",
-            "feature_3": "",
-            "feature_4": "",
-            "sizes": ""
-          }
         }
       },
       "block_order": [
@@ -713,8 +696,7 @@
         "reel_2",
         "reel_3",
         "reel_4",
-        "reel_5",
-        "reel_6"
+        "reel_5"
       ],
       "name": "Ossion Reels",
       "settings": {
