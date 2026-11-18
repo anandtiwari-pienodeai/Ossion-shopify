@@ -1,0 +1,65 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "ossian-account-landing",
+      "blocks": {
+        "perk_1": {
+          "type": "perk",
+          "settings": {
+            "title": "Track every order",
+            "text": "See delivery status in one place."
+          }
+        },
+        "perk_2": {
+          "type": "perk",
+          "settings": {
+            "title": "Faster checkout",
+            "text": "Your details are saved for next time."
+          }
+        },
+        "perk_3": {
+          "type": "perk",
+          "settings": {
+            "title": "Salon-pro perks",
+            "text": "Early access to launches and professional offers."
+          }
+        }
+      },
+      "block_order": [
+        "perk_1",
+        "perk_2",
+        "perk_3"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/staight_hair_af1.png",
+        "eyebrow": "Your Ossion account",
+        "heading": "Sign in for a salon-smooth experience",
+        "text": "<p>One account for all your Ossion orders. We'll email you a one-time code, no password needed.</p>",
+        "signin_label": "Sign in or create account",
+        "signin_note": "New here? Entering your email creates your account.",
+        "eyebrow_signed_in": "My account",
+        "welcome_prefix": "Welcome back,",
+        "signed_in_text": "<p>Track your orders, update your details and reorder your favourites.</p>",
+        "orders_label": "My orders",
+        "orders_sub": "Track and reorder",
+        "profile_label": "Profile",
+        "profile_sub": "Addresses and details",
+        "shop_label": "Continue shopping",
+        "shop_link": "",
+        "logout_label": "Sign out"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

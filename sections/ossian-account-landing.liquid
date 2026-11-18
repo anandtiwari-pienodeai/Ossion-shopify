@@ -1,0 +1,510 @@
+{% comment %}
+  Section contract.
+  Branded account landing page (templates/page.account.json, reached at /pages/account).
+  Signed-out visitors see the account benefits and a button to Shopify's hosted sign-in;
+  signed-in customers see a welcome with links to orders, profile and sign-out. Sign-in
+  itself always happens on Shopify's page (new customer accounts), branded in
+  Settings → Checkout → Customize → Sign-in.
+  @example
+  <!-- Online Store → Pages → "Account" with template "page.account" -->
+{% endcomment %}
+
+{%- liquid
+  assign account_base = routes.account_url | split: '?' | first
+  assign image = section.settings.image
+-%}
+
+<div class="oal{% if image == blank %} oal--no-image{% endif %}">
+  <div class="oal__panel">
+    <div class="oal__inner">
+      {%- if customer -%}
+        {%- if section.settings.eyebrow_signed_in != blank -%}
+          <p class="oal__eyebrow">{{ section.settings.eyebrow_signed_in | escape }}</p>
+        {%- endif -%}
+        <h1 class="oal__heading">
+          {%- if customer.first_name != blank -%}
+            {{ section.settings.welcome_prefix | escape }} {{ customer.first_name | escape }}
+          {%- else -%}
+            {{ section.settings.welcome_prefix | escape }}
+          {%- endif -%}
+        </h1>
+        {%- if section.settings.signed_in_text != blank -%}
+          <div class="oal__text">{{ section.settings.signed_in_text }}</div>
+        {%- endif -%}
+
+        <div class="oal__tiles">
+          <a class="oal__tile" href="{{ routes.account_url }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+            <span class="oal__tile-title">{{ section.settings.orders_label | escape }}</span>
+            <span class="oal__tile-sub">{{ section.settings.orders_sub | escape }}</span>
+          </a>
+          <a class="oal__tile" href="{{ account_base }}/profile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+            <span class="oal__tile-title">{{ section.settings.profile_label | escape }}</span>
+            <span class="oal__tile-sub">{{ section.settings.profile_sub | escape }}</span>
+          </a>
+        </div>
+
+        <div class="oal__actions">
+          <a class="oal__btn" href="{{ section.settings.shop_link | default: routes.all_products_collection_url }}">
+            {{- section.settings.shop_label | escape -}}
+          </a>
+          <a class="oal__link" href="{{ routes.account_logout_url }}">{{ section.settings.logout_label | escape }}</a>
+        </div>
+      {%- else -%}
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="oal__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h1 class="oal__heading">{{ section.settings.heading | escape }}</h1>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="oal__text">{{ section.settings.text }}</div>
+        {%- endif -%}
+
+        {%- assign perk_blocks = section.blocks | where: 'type', 'perk' -%}
+        {%- if perk_blocks.size > 0 -%}
+          <ul class="oal__perks" role="list">
+            {%- for block in perk_blocks -%}
+              <li class="oal__perk" {{ block.shopify_attributes }}>
+                <span class="oal__perk-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+                </span>
+                <span class="oal__perk-text">
+                  <span class="oal__perk-title">{{ block.settings.title | escape }}</span>
+                  {%- if block.settings.text != blank -%}
+                    <span class="oal__perk-sub">{{ block.settings.text | escape }}</span>
+                  {%- endif -%}
+                </span>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        <div class="oal__actions">
+          <a class="oal__btn" href="{{ routes.account_login_url }}">
+            {{- section.settings.signin_label | escape -}}
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          {%- if section.settings.signin_note != blank -%}
+            <p class="oal__note">{{ section.settings.signin_note | escape }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if image != blank -%}
+    <div class="oal__media">
+      {{
+        image
+        | image_url: width: 1600
+        | image_tag:
+          class: 'oal__img',
+          loading: 'eager',
+          widths: '600,900,1200,1600',
+          sizes: '(min-width: 990px) 50vw, 100vw',
+          alt: image.alt
+      }}
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .oal {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-height: min(820px, calc(100svh - 120px));
+    background: #f5f8fc;
+    color: #14284a;
+  }
+
+  .oal--no-image {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .oal__panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 64px 32px;
+  }
+
+  .oal__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+    max-width: 460px;
+  }
+
+  .oal__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    color: #a8842c;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .oal__eyebrow::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: currentColor;
+  }
+
+  .oal__heading {
+    margin: 0;
+    color: #1e3a5f;
+    font-family: var(--font-heading--family);
+    font-size: clamp(1.9rem, 4vw, 2.7rem);
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .oal__text {
+    color: #4a5a70;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .oal__text p {
+    margin: 0;
+  }
+
+  .oal__perks {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 6px 0 4px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .oal__perk {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .oal__perk-icon {
+    display: grid;
+    flex: 0 0 auto;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1.5px solid #d9a441;
+    border-radius: 50%;
+    background: #fff;
+    color: #1e3a5f;
+  }
+
+  .oal__perk-icon svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .oal__perk-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .oal__perk-title {
+    color: #14284a;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .oal__perk-sub {
+    color: #6b7a90;
+    font-size: 0.85rem;
+    line-height: 1.45;
+  }
+
+  .oal__tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .oal__tile {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 18px;
+    border: 1px solid #e3e9f1;
+    border-radius: 14px;
+    background: #fff;
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .oal__tile:hover {
+    border-color: #1e3a5f;
+    box-shadow: 0 8px 20px rgb(20 40 74 / 0.08);
+  }
+
+  .oal__tile svg {
+    width: 26px;
+    height: 26px;
+    margin-bottom: 6px;
+    color: #a8842c;
+  }
+
+  .oal__tile-title {
+    color: #14284a;
+    font-weight: 700;
+  }
+
+  .oal__tile-sub {
+    color: #6b7a90;
+    font-size: 0.82rem;
+  }
+
+  .oal__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 20px;
+    margin-top: 6px;
+  }
+
+  .oal__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 50px;
+    padding: 0 28px;
+    border-radius: 10px;
+    background: #1e3a5f;
+    color: #fff;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    box-shadow: 0 8px 20px rgb(30 58 95 / 0.22);
+    transition: background-color 0.2s ease;
+  }
+
+  .oal__btn:hover {
+    background: #16304f;
+  }
+
+  .oal__btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .oal__btn:focus-visible,
+  .oal__link:focus-visible,
+  .oal__tile:focus-visible {
+    outline: 2px solid #1e3a5f;
+    outline-offset: 3px;
+  }
+
+  .oal__link {
+    color: #1e3a5f;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .oal__note {
+    flex-basis: 100%;
+    margin: 0;
+    color: #6b7a90;
+    font-size: 0.82rem;
+  }
+
+  .oal__media {
+    position: relative;
+    min-height: 100%;
+    overflow: hidden;
+  }
+
+  .oal__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media screen and (max-width: 989px) {
+    .oal {
+      grid-template-columns: minmax(0, 1fr);
+      min-height: 0;
+    }
+
+    .oal__media {
+      order: -1;
+      aspect-ratio: 16 / 9;
+      min-height: 0;
+    }
+
+    .oal__panel {
+      padding: 40px 20px 48px;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .oal__tiles {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .oal__btn {
+      width: 100%;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Account landing",
+  "class": "section-ossian-account-landing",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Shown beside the content on desktop, above it on mobile. 1200 × 1500px."
+    },
+    {
+      "type": "header",
+      "content": "Signed out"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Your Ossion account"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Sign in for a salon-smooth experience"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>One account for all your Ossion orders. We'll email you a one-time code, no password needed.</p>"
+    },
+    {
+      "type": "text",
+      "id": "signin_label",
+      "label": "Sign-in button label",
+      "default": "Sign in or create account"
+    },
+    {
+      "type": "text",
+      "id": "signin_note",
+      "label": "Note under the button",
+      "default": "New here? Entering your email creates your account."
+    },
+    {
+      "type": "header",
+      "content": "Signed in"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow_signed_in",
+      "label": "Eyebrow",
+      "default": "My account"
+    },
+    {
+      "type": "text",
+      "id": "welcome_prefix",
+      "label": "Welcome text",
+      "info": "Followed by the customer's first name.",
+      "default": "Welcome back,"
+    },
+    {
+      "type": "richtext",
+      "id": "signed_in_text",
+      "label": "Text",
+      "default": "<p>Track your orders, update your details and reorder your favourites.</p>"
+    },
+    {
+      "type": "text",
+      "id": "orders_label",
+      "label": "Orders tile title",
+      "default": "My orders"
+    },
+    {
+      "type": "text",
+      "id": "orders_sub",
+      "label": "Orders tile text",
+      "default": "Track and reorder"
+    },
+    {
+      "type": "text",
+      "id": "profile_label",
+      "label": "Profile tile title",
+      "default": "Profile"
+    },
+    {
+      "type": "text",
+      "id": "profile_sub",
+      "label": "Profile tile text",
+      "default": "Addresses and details"
+    },
+    {
+      "type": "text",
+      "id": "shop_label",
+      "label": "Shop button label",
+      "default": "Continue shopping"
+    },
+    {
+      "type": "url",
+      "id": "shop_link",
+      "label": "Shop button link"
+    },
+    {
+      "type": "text",
+      "id": "logout_label",
+      "label": "Sign-out link label",
+      "default": "Sign out"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "perk",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Track every order"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "See delivery status in one place."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Account landing",
+      "blocks": [
+        { "type": "perk", "settings": { "title": "Track every order", "text": "See delivery status in one place." } },
+        { "type": "perk", "settings": { "title": "Faster checkout", "text": "Your details are saved for next time." } },
+        { "type": "perk", "settings": { "title": "Salon-pro perks", "text": "Early access to launches and professional offers." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
