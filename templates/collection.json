@@ -12,7 +12,7 @@
     "collection_hero": {
       "type": "ossian-collection-hero",
       "settings": {
-        "banner_image": "shopify://shop_images/categor_banner_1.png",
+        "banner_image": "shopify://shop_images/Ossion_beauty_inc_banner.png",
         "banner_link": "",
         "sizing": "natural",
         "banner_height": 400,
@@ -21,7 +21,6 @@
     },
     "collection_tabs": {
       "type": "ossian-collection-tabs",
-      "disabled": true,
       "blocks": {
         "tab_1": {
           "type": "tab",
@@ -116,6 +115,7 @@
         "tab_9",
         "tab_10"
       ],
+      "disabled": true,
       "settings": {
         "active_tab": ""
       }
