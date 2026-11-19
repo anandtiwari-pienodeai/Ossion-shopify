@@ -140,9 +140,18 @@
                   %}
                 {% elsif variant_style == 'numbered' %}
                   {%- liquid
-                    assign swatch_number = forloop.index
-                    if swatch_number < 10
-                      assign swatch_number = '0' | append: swatch_number
+                    # Caption shows the shade code that starts the value name ("4.35 Mahogany
+                    # Golden Brown" → 4.35, "HL9000 …" → HL9000), so it survives reordering.
+                    # Names without a leading code fall back to the position (01, 02, …).
+                    assign shade_code = product_option_value.name | strip | split: ' ' | first
+                    assign shade_code_digits = shade_code | remove: '0' | remove: '1' | remove: '2' | remove: '3' | remove: '4' | remove: '5' | remove: '6' | remove: '7' | remove: '8' | remove: '9'
+                    if shade_code != blank and shade_code_digits.size < shade_code.size
+                      assign swatch_number = shade_code
+                    else
+                      assign swatch_number = forloop.index
+                      if swatch_number < 10
+                        assign swatch_number = '0' | append: swatch_number
+                      endif
                     endif
                     assign swatch_image = product_option_value.swatch.image
                   -%}
