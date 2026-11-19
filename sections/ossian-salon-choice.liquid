@@ -1,9 +1,10 @@
 {% comment %}
   Section contract.
-  "Choose your concern" pills above a before/after result. Each pill is a tab with its own
-  before/after images and recommended-product card; clicking a pill swaps the result.
-  Pill before/after images come from the pill product's custom.before_image /
-  custom.after_image metafields, falling back to the section's images. The panel markup lives in
+  "Choose your concern" pills above a before/after result. Each pill is a tab mapped to one
+  product; clicking a pill swaps the result. The product supplies the before/after images
+  (custom.before_image / custom.after_image metafields, falling back to the section's images),
+  card image, title, price, description and link. Pills without a product show the section's
+  Feature Card. The panel markup lives in
   snippets/ossian-salon-choice-panel.liquid.
   @example
   <!-- templates/index.json → ossian_salon_choice -->
@@ -125,43 +126,33 @@
   <div class="sc2__bottom">
     {%- for block in pill_blocks -%}
       {%- liquid
+        # One product per pill drives its whole result: before/after (the product's
+        # custom.before_image / custom.after_image metafields), card image, title, price,
+        # description and link. Section settings supply the eyebrow and button label.
         assign b = block.settings
-        assign pill_product = b.feat_product | default: b.product
+        assign pill_product = b.feat_product
 
-        # Explore product: the pill's link (collection, product, custom), else its card product
-        assign pill_href = ''
+        assign pill_href = pill_product.url
         if b.collection != blank
           assign pill_href = b.collection.url
-        elsif b.product != blank
-          assign pill_href = b.product.url
-        elsif b.link != blank
-          assign pill_href = b.link
-        elsif b.feat_product != blank
-          assign pill_href = b.feat_product.url
         endif
 
-        # Before/after: the pill product's Before image / After image metafields, else the section's
+        # Before/after from the product; the section's images only fill a missing side
         assign p_before = ss.before_image
         assign p_after = ss.after_image
-        if pill_product.metafields.custom.before_image != blank or pill_product.metafields.custom.after_image != blank
+        if pill_product.metafields.custom.before_image != blank
           assign p_before = pill_product.metafields.custom.before_image.value
+        endif
+        if pill_product.metafields.custom.after_image != blank
           assign p_after = pill_product.metafields.custom.after_image.value
         endif
 
-        # Card: the pill's own card when any of it is filled in, else the section's
         assign pill_has_card = false
-        if b.feat_product != blank or b.feat_image != blank or b.feat_heading_white != blank or b.feat_heading_accent != blank
+        if pill_product != blank
           assign pill_has_card = true
         endif
-        # A card with only a product set uses its title and the start of its description
-        assign pill_heading = b.feat_heading_white
-        if pill_heading == blank and b.feat_heading_accent == blank
-          assign pill_heading = b.feat_product.title
-        endif
-        assign pill_body = b.feat_body
-        if pill_body == blank and b.feat_product != blank
-          assign pill_body = b.feat_product.description | strip_html | strip | truncatewords: 40
-        endif
+        assign pill_heading = pill_product.title
+        assign pill_body = pill_product.description | strip_html | strip | truncatewords: 40
         assign pill_hidden = true
         if forloop.index0 == sc2_active
           assign pill_hidden = false
@@ -178,15 +169,12 @@
           before_image: p_before,
           after_image: p_after,
           icon_blocks: icon_blocks,
-          product: b.feat_product,
-          image: b.feat_image,
-          alt: b.feat_alt,
-          eyebrow: b.feat_eyebrow,
+          product: pill_product,
+          eyebrow: ss.feat_eyebrow,
           heading_white: pill_heading,
-          heading_accent: b.feat_heading_accent,
           subheading: b.feat_subheading,
           body: pill_body,
-          cta_label: b.feat_cta_label,
+          cta_label: ss.feat_cta_label,
           href: pill_href
         -%}
       {%- else -%}
@@ -1037,6 +1025,10 @@
       "content": "Feature Card"
     },
     {
+      "type": "paragraph",
+      "content": "Fallback card for pills without a product. The eyebrow and button text below are used on every pill."
+    },
+    {
       "type": "product",
       "id": "feat_product",
       "label": "Link to product"
@@ -1065,6 +1057,7 @@
       "type": "text",
       "id": "feat_eyebrow",
       "label": "Eyebrow text",
+      "info": "Shown above the title on every pill's card.",
       "default": "Recommended for this result"
     },
     {
@@ -1095,6 +1088,7 @@
       "type": "text",
       "id": "feat_cta_label",
       "label": "Button text",
+      "info": "Button label on every pill's card.",
       "default": "Explore product"
     },
     {
@@ -1190,82 +1184,25 @@
         },
         {
           "type": "header",
-          "content": "Recommended product card"
-        },
-        {
-          "type": "paragraph",
-          "content": "Fill in a product or a heading to give this pill its own card. Otherwise the section's Feature Card is shown. Empty heading and description use the product's title and description."
+          "content": "Product"
         },
         {
           "type": "product",
           "id": "feat_product",
           "label": "Product",
-          "info": "Card image and Explore product link. The before/after slider shows this product's Before image and After image metafields (about 1800 × 900 each)."
-        },
-        {
-          "type": "image_picker",
-          "id": "feat_image",
-          "label": "Card image (overrides product image)",
-          "info": "Transparent PNG, about 800 × 800."
-        },
-        {
-          "type": "text",
-          "id": "feat_alt",
-          "label": "Card image alt text"
-        },
-        {
-          "type": "text",
-          "id": "feat_eyebrow",
-          "label": "Eyebrow",
-          "default": "Recommended for this result"
-        },
-        {
-          "type": "text",
-          "id": "feat_heading_white",
-          "label": "Heading (white)"
-        },
-        {
-          "type": "text",
-          "id": "feat_heading_accent",
-          "label": "Heading (blue accent)"
+          "info": "Drives this pill's whole result: the before/after slider (the product's Before image and After image metafields), card image, title, price, description and Explore product link."
         },
         {
           "type": "text",
           "id": "feat_subheading",
-          "label": "Subheading (gold)"
-        },
-        {
-          "type": "textarea",
-          "id": "feat_body",
-          "label": "Description"
-        },
-        {
-          "type": "text",
-          "id": "feat_cta_label",
-          "label": "Button label",
-          "default": "Explore product"
-        },
-        {
-          "type": "header",
-          "content": "Explore product link"
+          "label": "Highlight line (optional)",
+          "info": "Short gold line under the title, e.g. UP TO 9 LEVELS LIFT."
         },
         {
           "type": "collection",
           "id": "collection",
-          "label": "Collection",
-          "info": "The card's Explore product button and image open this collection."
-        },
-        {
-          "type": "product",
-          "id": "product",
-          "label": "Product",
-          "info": "Used when no collection is selected. Also supplies before/after metafields when no card product is set."
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Custom link",
-          "info": "Used only when no collection or product is selected. With none set, the card product's page opens."
+          "label": "Button opens collection (optional)",
+          "info": "Leave empty to open the product page."
         }
       ]
     }

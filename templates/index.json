@@ -426,18 +426,9 @@
             "label": "Color",
             "subtitle": "Want to refresh your color?",
             "highlighted": true,
-            "feat_product": "blonder-fiber-plex-500-gm",
-            "feat_image": "shopify://shop_images/Before_after_banner_8b8919ce-7cf5-466b-be03-a85ca7d8a82c.png",
-            "feat_alt": "",
-            "feat_eyebrow": "Recommended for this result",
-            "feat_heading_white": "Blonder  Fibre Plex",
-            "feat_heading_accent": "[blue]",
+            "feat_product": "supreme-straight",
             "feat_subheading": "UP TO 9 LEVELS LIFT",
-            "feat_body": "Anti-yellow molecules to counteract warm & yellow tones\nNon-damaging & dust-free lightening powder\nAdvanced neutralization with fibre plex",
-            "feat_cta_label": "Explore product",
-            "collection": "",
-            "product": "",
-            "link": ""
+            "collection": ""
           }
         },
         "feature_pill_ymAHji": {
@@ -448,16 +439,8 @@
             "subtitle": "Want smoother, silkier hair?",
             "highlighted": false,
             "feat_product": "nano-silk-protein-classic",
-            "feat_alt": "",
-            "feat_eyebrow": "Recommended for this result",
-            "feat_heading_white": "Nano Silk",
-            "feat_heading_accent": "Protein",
             "feat_subheading": "Smoother, silkier hair",
-            "feat_body": "",
-            "feat_cta_label": "Explore product",
-            "collection": "",
-            "product": "",
-            "link": ""
+            "collection": ""
           }
         },
         "feature_pill_9hW9Ma": {
@@ -468,16 +451,8 @@
             "subtitle": "Hair feeling dry & damaged?",
             "highlighted": false,
             "feat_product": "hair-repair-spa-silk-amino-acid",
-            "feat_alt": "",
-            "feat_eyebrow": "Recommended for this result",
-            "feat_heading_white": "Hair Repair Spa",
-            "feat_heading_accent": "Silk Amino Acid",
             "feat_subheading": "Deep repair for dry, damaged hair",
-            "feat_body": "",
-            "feat_cta_label": "Explore product",
-            "collection": "",
-            "product": "",
-            "link": ""
+            "collection": ""
           }
         },
         "feature_pill_b8cGfP": {
@@ -488,16 +463,8 @@
             "subtitle": "Need a fresh, glowing look?",
             "highlighted": false,
             "feat_product": "hydra-glow-facial-kits",
-            "feat_alt": "",
-            "feat_eyebrow": "Recommended for this result",
-            "feat_heading_white": "Hydra Glow",
-            "feat_heading_accent": "Facial Kit",
             "feat_subheading": "10-step glow ritual",
-            "feat_body": "",
-            "feat_cta_label": "Explore product",
-            "collection": "",
-            "product": "",
-            "link": ""
+            "collection": ""
           }
         },
         "feature_pill_KMwVhx": {
@@ -508,16 +475,8 @@
             "subtitle": "Want smooth, clean skin?",
             "highlighted": false,
             "feat_product": "aloe-vera-liposoluble-wax",
-            "feat_alt": "",
-            "feat_eyebrow": "Recommended for this result",
-            "feat_heading_white": "Aloe Vera",
-            "feat_heading_accent": "Liposoluble Wax",
             "feat_subheading": "Smooth, clean skin",
-            "feat_body": "",
-            "feat_cta_label": "Explore product",
-            "collection": "",
-            "product": "",
-            "link": ""
+            "collection": ""
           }
         },
         "pill_6": {
@@ -528,16 +487,8 @@
             "subtitle": "Looking to remove tan?",
             "highlighted": false,
             "feat_product": "de-tan-illuminate-500-g",
-            "feat_alt": "",
-            "feat_eyebrow": "Recommended for this result",
-            "feat_heading_white": "De-Tan",
-            "feat_heading_accent": "Illuminate",
             "feat_subheading": "Removes tan, restores glow",
-            "feat_body": "",
-            "feat_cta_label": "Explore product",
-            "collection": "",
-            "product": "",
-            "link": ""
+            "collection": ""
           }
         }
       },
@@ -562,7 +513,7 @@
         "feat_link": "",
         "feat_image": "shopify://shop_images/Before_after_banner_8b8919ce-7cf5-466b-be03-a85ca7d8a82c.png",
         "feat_alt": "",
-        "feat_eyebrow": "",
+        "feat_eyebrow": "Recommended for this result",
         "feat_heading_white": "Blonder  Fibre Plex",
         "feat_heading_accent": "[blue]",
         "feat_subheading": "UP TO 9 LEVELS LIFT",
@@ -647,7 +598,7 @@
         "reel_4": {
           "type": "reel",
           "settings": {
-            "video_url": "https://cdn.shopify.com/videos/c/o/v/65ad5c9836f945a4aea9b1b8bc8fef87.mp4",
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/355d10e3f86b4de59f7ff41ffe412ae6.mp4",
             "reel_label": "",
             "product": "golden-luster-permanent-hair-color-creme-100ml",
             "product_subtitle": "",
