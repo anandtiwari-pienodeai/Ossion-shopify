@@ -3,9 +3,9 @@
 
   Three columns:
     1. The child links. Hovering/focusing one switches column 2 to that child.
-    2. "Bestsellers": the first products of the hovered child's collection (or the
-       parent's collection when the child isn't a collection link), plus the child's
-       own sub-links when it has any. Product subtitles use the custom.tagline (or
+    2. "Bestsellers": the first products of the hovered child's collection; a child that
+       links to a single product shows only that product (headed by the link title); other
+       links fall back to the parent's collection. Plus the child's own sub-links. Product subtitles use the custom.tagline (or
        custom.subtitle) product metafield, else the start of the description.
     3. A promo image panel (or eyebrow, heading, text, button beside an image). Content
        comes from a matching "Mega menu promo" block, falling back to the linked collection.
@@ -71,14 +71,19 @@
     {%- for child in link.links -%}
       {%- liquid
         assign side_collection = parent_collection
+        assign side_product = null
+        assign side_title = bestsellers_heading
         if child.type == 'collection_link'
           assign side_collection = child.object
+        elsif child.type == 'product_link' and child.object != blank
+          assign side_product = child.object
+          assign side_title = child.title
         endif
         assign side_url = child.url | default: link.url
       -%}
       <div class="ossian-mega__side-panel" data-mega-panel="{{ forloop.index0 }}"{% unless forloop.first %} hidden{% endunless %}>
         <div class="ossian-mega__side-head">
-          <p class="ossian-mega__side-title">{{ bestsellers_heading }}</p>
+          <p class="ossian-mega__side-title">{{ side_title }}</p>
           <a href="{{ side_url }}" class="ossian-mega__side-all">
             View All
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -93,33 +98,15 @@
           </ul>
         {%- endif -%}
 
-        {%- if side_collection.products.size > 0 -%}
+        {%- if side_product != blank -%}
+          {%- comment -%} A product link shows just that product, not the parent's collection {%- endcomment -%}
+          <ul class="ossian-mega__products" role="list">
+            {%- render 'ossian-mega-product', product: side_product -%}
+          </ul>
+        {%- elsif side_collection.products.size > 0 -%}
           <ul class="ossian-mega__products" role="list">
             {%- for product in side_collection.products limit: products_limit -%}
-              {%- liquid
-                assign subtitle = product.metafields.custom.tagline | default: product.metafields.custom.subtitle
-                if subtitle == blank
-                  assign subtitle = product.description | strip_html | remove_first: product.title | strip | truncatewords: 4, ''
-                endif
-              -%}
-              <li>
-                <a href="{{ product.url }}" class="ossian-mega__product">
-                  <span class="ossian-mega__product-media">
-                    {%- if product.featured_image != blank -%}
-                      {{ product.featured_image | image_url: width: 180 | image_tag: loading: 'lazy', alt: product.title, widths: '90, 180, 270', sizes: '116px' }}
-                    {%- endif -%}
-                  </span>
-                  <span class="ossian-mega__product-info">
-                    <span class="ossian-mega__product-title">{{ product.title }}</span>
-                    {%- if subtitle != blank -%}
-                      <span class="ossian-mega__product-sub">{{ subtitle }}</span>
-                    {%- endif -%}
-                  </span>
-                  <span class="ossian-mega__product-arrow" aria-hidden="true">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                  </span>
-                </a>
-              </li>
+              {%- render 'ossian-mega-product', product: product -%}
             {%- endfor -%}
           </ul>
         {%- elsif child.links.size == 0 -%}

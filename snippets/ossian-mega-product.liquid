@@ -1,0 +1,35 @@
+{%- doc -%}
+  One product row in the mega menu's middle column (snippets/ossian-mega-menu.liquid).
+  Subtitle uses the custom.tagline (or custom.subtitle) product metafield, else the start
+  of the description.
+
+  @param {object} product - Product to show
+
+  @example
+  {% render 'ossian-mega-product', product: child.object %}
+{%- enddoc -%}
+
+{%- liquid
+  assign subtitle = product.metafields.custom.tagline | default: product.metafields.custom.subtitle
+  if subtitle == blank
+    assign subtitle = product.description | strip_html | remove_first: product.title | strip | truncatewords: 4, ''
+  endif
+-%}
+<li>
+  <a href="{{ product.url }}" class="ossian-mega__product">
+    <span class="ossian-mega__product-media">
+      {%- if product.featured_image != blank -%}
+        {{ product.featured_image | image_url: width: 180 | image_tag: loading: 'lazy', alt: product.title, widths: '90, 180, 270', sizes: '116px' }}
+      {%- endif -%}
+    </span>
+    <span class="ossian-mega__product-info">
+      <span class="ossian-mega__product-title">{{ product.title }}</span>
+      {%- if subtitle != blank -%}
+        <span class="ossian-mega__product-sub">{{ subtitle }}</span>
+      {%- endif -%}
+    </span>
+    <span class="ossian-mega__product-arrow" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </span>
+  </a>
+</li>
